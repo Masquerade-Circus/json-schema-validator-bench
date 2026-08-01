@@ -1,0 +1,118 @@
+import { createHash } from "node:crypto";
+
+import { addUriSchemePlugin } from "@hyperjump/browser";
+import "@hyperjump/json-schema/formats";
+import * as Draft4 from "@hyperjump/json-schema/draft-04";
+import * as Draft6 from "@hyperjump/json-schema/draft-06";
+import * as Draft7 from "@hyperjump/json-schema/draft-07";
+import * as Draft201909 from "@hyperjump/json-schema/draft-2019-09";
+import * as Draft202012 from "@hyperjump/json-schema/draft-2020-12";
+
+import { defineAdapter } from "../adapter-api.js";
+import { resourceIdentifiers } from "./helpers.js";
+
+const dialects = {
+  draft4: {
+    api: Draft4,
+    uri: "http://json-schema.org/draft-04/schema#"
+  },
+  draft6: {
+    api: Draft6,
+    uri: "http://json-schema.org/draft-06/schema#"
+  },
+  draft7: {
+    api: Draft7,
+    uri: "http://json-schema.org/draft-07/schema#"
+  },
+  "draft2019-09": {
+    api: Draft201909,
+    uri: "https://json-schema.org/draft/2019-09/schema"
+  },
+  "draft2020-12": {
+    api: Draft202012,
+    uri: "https://json-schema.org/draft/2020-12/schema"
+  }
+};
+
+function forbidNetwork(uri) {
+  const error = new Error(`network access forbidden: ${uri}`);
+  error.code = "NETWORK_ACCESS_FORBIDDEN";
+  throw error;
+}
+
+addUriSchemePlugin("http", { retrieve: forbidNetwork });
+addUriSchemePlugin("https", { retrieve: forbidNetwork });
+
+function register(api, schema, uri, dialect) {
+  api.unregisterSchema(uri);
+  api.registerSchema(schema, uri, dialect);
+}
+
+function createImplementation({ draft, formatProfile, resources }) {
+  const { api, uri: dialect } = dialects[draft];
+  const validateFormat =
+    formatProfile === "format-assertion" ||
+    draft === "draft4" ||
+    draft === "draft6" ||
+    draft === "draft7";
+  api.setShouldValidateFormat(validateFormat);
+  const uniqueResources = new Map();
+  for (const resource of resources) {
+    const { canonicalUri } = resourceIdentifiers(resource);
+    if (typeof canonicalUri === "string") {
+      uniqueResources.set(canonicalUri, resource);
+    }
+  }
+  for (const resource of uniqueResources.values()) {
+    const { aliases, canonicalUri } = resourceIdentifiers(resource);
+    for (const alias of aliases) {
+      api.unregisterSchema(alias);
+    }
+    register(
+      api,
+      resource.schema,
+      canonicalUri,
+      resource.dialect ?? dialect
+    );
+  }
+
+  return {
+    reportOptions: {
+      draft,
+      formatProfile,
+      validateFormat,
+      network: "forbidden"
+    },
+    async compile(schema) {
+      const objectSchema =
+        schema !== null && typeof schema === "object" && !Array.isArray(schema);
+      const id = objectSchema ? schema.$id ?? schema.id : null;
+      const uri =
+        typeof id === "string" && /^https?:/.test(id)
+          ? id.split("#")[0]
+          : `https://benchmark.invalid/hyperjump/${createHash("sha256")
+              .update(JSON.stringify(schema))
+              .digest("hex")}`;
+      register(api, schema, uri, dialect);
+      return await api.validate(uri);
+    },
+    validate(compiled, data) {
+      return compiled(data).valid;
+    },
+    getError({ compiled, data }) {
+      const detail = compiled(data, "BASIC");
+      return detail.valid ? null : JSON.stringify(detail);
+    }
+  };
+}
+
+export const adapter = defineAdapter(
+  {
+    id: "hyperjump",
+    packageName: "@hyperjump/json-schema",
+    displayName: "Hyperjump",
+    drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
+    unsupported: []
+  },
+  createImplementation
+);

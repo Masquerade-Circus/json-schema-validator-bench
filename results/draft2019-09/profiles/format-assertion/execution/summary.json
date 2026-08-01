@@ -1,0 +1,988 @@
+{
+  "benchmarkVersion": 3,
+  "summaryVersion": 7,
+  "phase": "execution",
+  "draft": "draft2019-09",
+  "formatProfile": "format-assertion",
+  "performanceEligibility": {
+    "policyVersion": 3,
+    "scope": [
+      "draft",
+      "phase"
+    ],
+    "thresholdPercent": "98",
+    "thresholdFraction": {
+      "numerator": 49,
+      "denominator": 50
+    },
+    "exactComparison": "PASS * 50 >= total * 49",
+    "requiredProfiles": [
+      "base",
+      "format-assertion"
+    ]
+  },
+  "intersectionSha256": "bdceb6dbae75a9778fde0f71672cbad109b2320831f26f8cac0d68b62d419f4a",
+  "primaryUnit": "operations per second",
+  "units": {
+    "throughput": "operations per second",
+    "mutations": "unique mutation findings detected during conformance",
+    "peakRss": "bytes"
+  },
+  "centerFormula": "(round_1_throughput + round_2_throughput) / 2",
+  "scoreFormula": "midpoint_validator / best_midpoint_in_scope * 100",
+  "mutationCountFormula": "count distinct (validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)",
+  "peakRssFormula": "max(sample.memory.peak.rss across valid rounds)",
+  "ranking": {
+    "status": "COMPETITIVE",
+    "competitorCount": 3
+  },
+  "eligibility": {
+    "policy": {
+      "policyVersion": 3,
+      "scope": [
+        "draft",
+        "phase"
+      ],
+      "thresholdPercent": "98",
+      "thresholdFraction": {
+        "numerator": 49,
+        "denominator": 50
+      },
+      "exactComparison": "PASS * 50 >= total * 49",
+      "requiredProfiles": [
+        "base",
+        "format-assertion"
+      ]
+    },
+    "roster": {
+      "candidates": [
+        "cfworker-json-schema",
+        "ajv",
+        "hyperjump",
+        "redocly-ajv",
+        "schema-shield",
+        "json-schema-library",
+        "schemasafe",
+        "z-schema"
+      ],
+      "eligible": [
+        "hyperjump",
+        "schema-shield",
+        "z-schema"
+      ],
+      "excluded": [
+        {
+          "id": "cfworker-json-schema",
+          "counts": {
+            "PASS": 549,
+            "WRONG": 106,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 1397,
+              "WRONG": 9,
+              "COMPILE": 5,
+              "RUNTIME": 6,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 549,
+              "WRONG": 106,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 549,
+              "total": 655,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "ajv",
+          "counts": {
+            "PASS": 565,
+            "WRONG": 90,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 1382,
+              "WRONG": 16,
+              "COMPILE": 19,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 565,
+              "WRONG": 90,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "base",
+              "pass": 1382,
+              "total": 1417,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            },
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 565,
+              "total": 655,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "redocly-ajv",
+          "counts": {
+            "PASS": 565,
+            "WRONG": 90,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 1382,
+              "WRONG": 16,
+              "COMPILE": 19,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 565,
+              "WRONG": 90,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "base",
+              "pass": 1382,
+              "total": 1417,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            },
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 565,
+              "total": 655,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "json-schema-library",
+          "counts": {
+            "PASS": 477,
+            "WRONG": 178,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 1411,
+              "WRONG": 2,
+              "COMPILE": 0,
+              "RUNTIME": 4,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 477,
+              "WRONG": 178,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 477,
+              "total": 655,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "schemasafe",
+          "counts": {
+            "PASS": 485,
+            "WRONG": 31,
+            "COMPILE": 139,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 1404,
+              "WRONG": 0,
+              "COMPILE": 9,
+              "RUNTIME": 4,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 485,
+              "WRONG": 31,
+              "COMPILE": 139,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 485,
+              "total": 655,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        }
+      ],
+      "size": {
+        "candidates": 8,
+        "eligible": 3
+      },
+      "retention": "3/8",
+      "degenerate": false,
+      "sha256": "6ea15ba8d3dc4dd30f4f31d5d0d99da8afb58dc654ebb84e55059da73934eb3a"
+    }
+  },
+  "mutations": {
+    "countKey": [
+      "validator",
+      "draft",
+      "scope",
+      "subjectId",
+      "mutationTarget",
+      "mutationClass",
+      "difference"
+    ],
+    "validators": {
+      "cfworker-json-schema": {
+        "count": 22,
+        "records": [
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/date-time.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/date-time.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/date.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/date.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/duration.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/duration.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/email.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/email.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/hostname.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/hostname.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/hostname.json#/groups/1",
+            "schemaId": "draft2019-09:optional/format/hostname.json#/groups/1",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/idn-email.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/idn-email.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/idn-hostname.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/idn-hostname.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/idn-hostname.json#/groups/1",
+            "schemaId": "draft2019-09:optional/format/idn-hostname.json#/groups/1",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/ipv4.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/ipv4.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/ipv6.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/ipv6.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/iri-reference.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/iri-reference.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/iri.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/iri.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/json-pointer.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/json-pointer.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/regex.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/regex.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/relative-json-pointer.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/relative-json-pointer.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/time.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/time.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/unknown.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/unknown.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/uri-reference.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/uri-reference.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/uri-template.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/uri-template.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/uri.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/uri.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft2019-09",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft2019-09:optional/format/uuid.json#/groups/0",
+            "schemaId": "draft2019-09:optional/format/uuid.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ajv": {
+        "count": 0,
+        "records": []
+      },
+      "hyperjump": {
+        "count": 0,
+        "records": []
+      },
+      "redocly-ajv": {
+        "count": 0,
+        "records": []
+      },
+      "schema-shield": {
+        "count": 0,
+        "records": []
+      },
+      "json-schema-library": {
+        "count": 0,
+        "records": []
+      },
+      "schemasafe": {
+        "count": 0,
+        "records": []
+      },
+      "z-schema": {
+        "count": 0,
+        "records": []
+      }
+    }
+  },
+  "validators": {
+    "hyperjump": {
+      "roundThroughputs": [
+        306152.18643601786,
+        307655.99887718883
+      ],
+      "midpoint": 306904.0926566033,
+      "absoluteSpread": 1503.8124411709723,
+      "relativeSpread": 0.0048999426112365215,
+      "minimum": 306152.18643601786,
+      "maximum": 307655.99887718883,
+      "nanosecondsPerOperation": 3258.3469035680328,
+      "mutationCount": 0,
+      "peakRssBytes": 217473024,
+      "scoreRelativeToBest": 2.1121550294897333
+    },
+    "schema-shield": {
+      "roundThroughputs": [
+        13873912.081393259,
+        15186842.30184413
+      ],
+      "midpoint": 14530377.191618694,
+      "absoluteSpread": 1312930.2204508707,
+      "relativeSpread": 0.09035761447460466,
+      "minimum": 13873912.081393259,
+      "maximum": 15186842.30184413,
+      "nanosecondsPerOperation": 68.82133800193519,
+      "mutationCount": 0,
+      "peakRssBytes": 193310720,
+      "scoreRelativeToBest": 100
+    },
+    "z-schema": {
+      "roundThroughputs": [
+        104972.171471784,
+        108853.86130909111
+      ],
+      "midpoint": 106913.01639043755,
+      "absoluteSpread": 3881.6898373071162,
+      "relativeSpread": 0.036306990190338506,
+      "minimum": 104972.171471784,
+      "maximum": 108853.86130909111,
+      "nanosecondsPerOperation": 9353.398059110803,
+      "mutationCount": 0,
+      "peakRssBytes": 197685248,
+      "scoreRelativeToBest": 0.7357896837812741
+    }
+  }
+}

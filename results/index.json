@@ -1,0 +1,22 @@
+{
+  "resultsVersion": 10,
+  "benchmarkMode": "full",
+  "eligibilityThresholdPercent": "98",
+  "publicationWarning": null,
+  "drafts": [
+    "draft4",
+    "draft6",
+    "draft7",
+    "draft2019-09",
+    "draft2020-12"
+  ],
+  "formatProfiles": [
+    "base",
+    "format-assertion"
+  ],
+  "mutationDocuments": {
+    "manifest": "mutations/index.json",
+    "count": 2,
+    "mutationReportVersion": 2
+  }
+}

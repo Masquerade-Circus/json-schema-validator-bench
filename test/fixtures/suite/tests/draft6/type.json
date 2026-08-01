@@ -1,0 +1,10 @@
+[
+  {
+    "description": "integer type",
+    "schema": { "type": "integer" },
+    "tests": [
+      { "description": "an integer", "data": 1, "valid": true },
+      { "description": "a string", "data": "1", "valid": false }
+    ]
+  }
+]

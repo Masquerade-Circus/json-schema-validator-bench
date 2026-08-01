@@ -1,0 +1,2221 @@
+{
+  "draft4/cfworker-json-schema": {
+    "version": "4.1.1",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "draft": "4",
+        "shortCircuit": true
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "draft": "4",
+        "shortCircuit": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "9dac22846732aa36f3cfba116b7fb084206df4488df74b5d97da58d5032d12de",
+      "format-assertion": "e8fb29ec6dae2965356ba160c983cf90859d3cc5af4abe68fd2ad9e2d83c5ed7"
+    }
+  },
+  "draft4/ajv": {
+    "version": "8.20.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv-draft-04",
+            "version": "1.0.0",
+            "entrypoint": "ajv-draft-04"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv-draft-04",
+            "version": "1.0.0",
+            "entrypoint": "ajv-draft-04"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "72e285f3adb03f5a8338a6ec7dc116375c2ddce2a1ba7c87a6da8c249ba5374a",
+      "format-assertion": "259dd5af2c2309798aaf03710a42fc4ddb8cfc0fbc85a78e86e776b6a6cac976"
+    }
+  },
+  "draft4/hyperjump": {
+    "version": "1.17.7",
+    "reportOptions": {
+      "base": {
+        "draft": "draft4",
+        "formatProfile": "base",
+        "validateFormat": true,
+        "network": "forbidden"
+      },
+      "format-assertion": {
+        "draft": "draft4",
+        "formatProfile": "format-assertion",
+        "validateFormat": true,
+        "network": "forbidden"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "f78a8ab3794e6a0770182869b14d0c06c5f3f7cfaeafcc00e17a7ee7afbb4964",
+      "format-assertion": "b2b13ed13976775f770990672618d4a4fb2b2348fdebbc12bbca838355fd267c"
+    }
+  },
+  "draft4/redocly-ajv": {
+    "version": "8.18.3",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv/dist/draft4.js"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv/dist/draft4.js"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "7afcbb6e15a58ae1d1f674edc867e3cc2c768cebcaa5f3b1d0cfdbfc93a7d9b7",
+      "format-assertion": "73fe8ee6d39ec896725ee34e8955c0f6d6100f1d527df949eccf68b59e52446d"
+    }
+  },
+  "draft4/schema-shield": {
+    "version": "1.2.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "defaultDialect": "http://json-schema.org/draft-04/schema#",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "defaultDialect": "http://json-schema.org/draft-04/schema#",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "998a55057459165345c0eb6d240f62e8438c5ba7d2861959ffb858709d6dc108",
+      "format-assertion": "7120c464ff74a165c37c3aa2831c35e5385ad32a22a2f84eb843abf358990c93"
+    }
+  },
+  "draft4/json-schema-library": {
+    "version": "11.6.2",
+    "reportOptions": {
+      "base": {
+        "drafts": [
+          "draft4"
+        ],
+        "draft": "draft4",
+        "formatAssertion": true,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      },
+      "format-assertion": {
+        "drafts": [
+          "draft4"
+        ],
+        "draft": "draft4",
+        "formatAssertion": true,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "974dcc1d72e2bfcccf5b7ec74537381cf75fbb8c490b3bb3caff2acc7cf33df7",
+      "format-assertion": "974dcc1d72e2bfcccf5b7ec74537381cf75fbb8c490b3bb3caff2acc7cf33df7"
+    }
+  },
+  "draft4/jsonschema": {
+    "version": "1.5.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "nestedErrors": false
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "nestedErrors": false
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
+      "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+    }
+  },
+  "draft4/schemasafe": {
+    "version": "1.3.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-04/schema#",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-04/schema#",
+          "includeErrors": true
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-04/schema#",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-04/schema#",
+          "includeErrors": true
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "b3dc17c5b87349296ad3579c78bf270d6745dd5385fe5caf7df60047f5527d55",
+      "format-assertion": "cd2ee745efe41ff7c75ce0b753f4b17b11e9b4ac1527a865a1ac933306ed7257"
+    }
+  },
+  "draft4/z-schema": {
+    "version": "12.4.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "reuse": "public-schema-cache",
+        "version": "draft-04",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": null
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "reuse": "public-schema-cache",
+        "version": "draft-04",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": null
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "33f0bf01c495e68e9a6e4c9bea30a30d62ecd190d068d787e23ab8c1524c67d6",
+      "format-assertion": "3c355174d5ff56ef75002c317f3085457c3188d9a4f2a3b5028d872eccb68fdf"
+    }
+  },
+  "draft6/ajv": {
+    "version": "8.20.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv",
+            "version": "8.20.0",
+            "entrypoint": "ajv"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv",
+            "version": "8.20.0",
+            "entrypoint": "ajv"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "ee82c4cf5340b0788ac004ca2575ebd6eb93f59cf3edef9b343cb0649a60eb59",
+      "format-assertion": "e72785a3681d8188f48b63ed9262bfdb2798373c6e79f595a70948f17b8ba4bb"
+    }
+  },
+  "draft6/hyperjump": {
+    "version": "1.17.7",
+    "reportOptions": {
+      "base": {
+        "draft": "draft6",
+        "formatProfile": "base",
+        "validateFormat": true,
+        "network": "forbidden"
+      },
+      "format-assertion": {
+        "draft": "draft6",
+        "formatProfile": "format-assertion",
+        "validateFormat": true,
+        "network": "forbidden"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "c518206085df7bd6fadfaa45fd126b151f414c72e2d30552a90f3ee1fbc6d05c",
+      "format-assertion": "a2ee8fbf1dba732e73aab59f92c4dc3b7210deae2f485e80600c1bdbff92676a"
+    }
+  },
+  "draft6/redocly-ajv": {
+    "version": "8.18.3",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "83e0b57d9adce9dd5b8a06e3fe39d1fde444120c987cb133bb732f0307c4384d",
+      "format-assertion": "262b2b712de664740fdbc6ebd1311506d42977620c7a0dcb60710016a683e893"
+    }
+  },
+  "draft6/schema-shield": {
+    "version": "1.2.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "defaultDialect": "http://json-schema.org/draft-06/schema#",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "defaultDialect": "http://json-schema.org/draft-06/schema#",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "afa1358308a7a4df3c301472a3cddaf552c6ba5aa99e606b5a3cbfbc8888fcd4",
+      "format-assertion": "cc9853a79fdbcbfb2331807f5de5d5467ecbfa1bd00ab50d1d383ca98158ea88"
+    }
+  },
+  "draft6/djv": {
+    "version": "2.1.4",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "version": "draft-06"
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "version": "draft-06"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "7c5dd4b23815e3dcd63a401cc6651900cd9a9e67d7f1726b2ed0937e66e2054e",
+      "format-assertion": "b26c80e9f4478f71b3b2aa9cc859835a6e18c1c2c9827b0a1db2abbe72e214cc"
+    }
+  },
+  "draft6/json-schema-library": {
+    "version": "11.6.2",
+    "reportOptions": {
+      "base": {
+        "drafts": [
+          "draft6"
+        ],
+        "draft": "draft6",
+        "formatAssertion": true,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      },
+      "format-assertion": {
+        "drafts": [
+          "draft6"
+        ],
+        "draft": "draft6",
+        "formatAssertion": true,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "c4db81528153f9a735c36d6dffef67d1d8570cef0a5a95b03eb7115d954c8df2",
+      "format-assertion": "c4db81528153f9a735c36d6dffef67d1d8570cef0a5a95b03eb7115d954c8df2"
+    }
+  },
+  "draft6/jsonschema": {
+    "version": "1.5.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "nestedErrors": false
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "nestedErrors": false
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
+      "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+    }
+  },
+  "draft6/schemasafe": {
+    "version": "1.3.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-06/schema#",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-06/schema#",
+          "includeErrors": true
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-06/schema#",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-06/schema#",
+          "includeErrors": true
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "79e71bac062c685ffc225694d13a929bb8c9f2ffcb3cfd4541f39204475a03f5",
+      "format-assertion": "eb3874216c0ce93adf65f84ec066a9c98faa7966b4f62463944e8bc19405c445"
+    }
+  },
+  "draft6/z-schema": {
+    "version": "12.4.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "reuse": "public-schema-cache",
+        "version": "draft-06",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": null
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "reuse": "public-schema-cache",
+        "version": "draft-06",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": null
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "a2ce2f647920d58aa4612db4022ae09a365ddfd2c18964ce02cc111267a219f9",
+      "format-assertion": "e53f1d7312ba5665459937c815062818a598e541fd536582542d03a10afc897c"
+    }
+  },
+  "draft7/cfworker-json-schema": {
+    "version": "4.1.1",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "draft": "7",
+        "shortCircuit": true
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "draft": "7",
+        "shortCircuit": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "3c3be95d3b7336b88a4477e891cadc86f4b749b328ec4edf183d8aba3311da88",
+      "format-assertion": "6886d26e75cc388763c454add3cd3d3d370df9dc2e5f5245f83b778f1142b385"
+    }
+  },
+  "draft7/ajv": {
+    "version": "8.20.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv",
+            "version": "8.20.0",
+            "entrypoint": "ajv"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv",
+            "version": "8.20.0",
+            "entrypoint": "ajv"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "ee82c4cf5340b0788ac004ca2575ebd6eb93f59cf3edef9b343cb0649a60eb59",
+      "format-assertion": "e72785a3681d8188f48b63ed9262bfdb2798373c6e79f595a70948f17b8ba4bb"
+    }
+  },
+  "draft7/hyperjump": {
+    "version": "1.17.7",
+    "reportOptions": {
+      "base": {
+        "draft": "draft7",
+        "formatProfile": "base",
+        "validateFormat": true,
+        "network": "forbidden"
+      },
+      "format-assertion": {
+        "draft": "draft7",
+        "formatProfile": "format-assertion",
+        "validateFormat": true,
+        "network": "forbidden"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "02edf4ec6981477a43acf50b51d1e3d8735538a4deadc5b5db034ce76988cdd9",
+      "format-assertion": "703cb013fc5e07f4858487288a5466773c9f3808b4ddd6e98655f61357de5717"
+    }
+  },
+  "draft7/redocly-ajv": {
+    "version": "8.18.3",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "83e0b57d9adce9dd5b8a06e3fe39d1fde444120c987cb133bb732f0307c4384d",
+      "format-assertion": "262b2b712de664740fdbc6ebd1311506d42977620c7a0dcb60710016a683e893"
+    }
+  },
+  "draft7/schema-shield": {
+    "version": "1.2.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "defaultDialect": "http://json-schema.org/draft-07/schema#",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "defaultDialect": "http://json-schema.org/draft-07/schema#",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "caaa45379bd31ec7b862208c234aa1ea6522a72037511376f56536e448427d4e",
+      "format-assertion": "988662ecb5ca17541d5a23b41413256db90ce533f5dee08cde99be1541da29fb"
+    }
+  },
+  "draft7/json-schema-library": {
+    "version": "11.6.2",
+    "reportOptions": {
+      "base": {
+        "drafts": [
+          "draft7"
+        ],
+        "draft": "draft7",
+        "formatAssertion": true,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      },
+      "format-assertion": {
+        "drafts": [
+          "draft7"
+        ],
+        "draft": "draft7",
+        "formatAssertion": true,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "f145b7391d02a28a1a767da1f09a97a47aaa004f0e0fe95c387a6ed336d3633b",
+      "format-assertion": "f145b7391d02a28a1a767da1f09a97a47aaa004f0e0fe95c387a6ed336d3633b"
+    }
+  },
+  "draft7/jsonschema": {
+    "version": "1.5.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "nestedErrors": false
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "nestedErrors": false
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
+      "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+    }
+  },
+  "draft7/schemasafe": {
+    "version": "1.3.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-07/schema#",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-07/schema#",
+          "includeErrors": true
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-07/schema#",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "http://json-schema.org/draft-07/schema#",
+          "includeErrors": true
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "f8c90242a46c3453f212fbf6fc5bbb22bed8d5d7877d434ebe95acea90b5df6e",
+      "format-assertion": "afd1a870fcb99e09904e4b244bdc94a9fb2c56ab4aebdab3a12ea5c2aa9d8a22"
+    }
+  },
+  "draft7/z-schema": {
+    "version": "12.4.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "reuse": "public-schema-cache",
+        "version": "draft-07",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": null
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "reuse": "public-schema-cache",
+        "version": "draft-07",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": null
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "b1c0ce5d4e150e9a418f7385a28416f99622436075cd5336c82b74f473503939",
+      "format-assertion": "982c6a4de44b6ef2cc445013d704b94ebc5f52c41e0b1cb433130fa4be030fad"
+    }
+  },
+  "draft2019-09/cfworker-json-schema": {
+    "version": "4.1.1",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "draft": "2019-09",
+        "shortCircuit": true
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "draft": "2019-09",
+        "shortCircuit": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "375ed37365f681f4b1fb7077566c3d44a75847f0faf92503fab1928df0418abc",
+      "format-assertion": "d2ce8f41640bf6aa0ee3d7f0264cb236f51fa2dfc8a964e958dd15db0c235501"
+    }
+  },
+  "draft2019-09/ajv": {
+    "version": "8.20.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": false,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": false,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv",
+            "version": "8.20.0",
+            "entrypoint": "ajv/dist/2019.js"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv",
+            "version": "8.20.0",
+            "entrypoint": "ajv/dist/2019.js"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "886dd32efe7ba3447b441f34e95a15fe495882b94765f058290def1e66befa8a",
+      "format-assertion": "887e103d314becd26ca343ae5f40ac45f6655b9742bfe791307a51c61863ec4d"
+    }
+  },
+  "draft2019-09/hyperjump": {
+    "version": "1.17.7",
+    "reportOptions": {
+      "base": {
+        "draft": "draft2019-09",
+        "formatProfile": "base",
+        "validateFormat": false,
+        "network": "forbidden"
+      },
+      "format-assertion": {
+        "draft": "draft2019-09",
+        "formatProfile": "format-assertion",
+        "validateFormat": true,
+        "network": "forbidden"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "e9ed494d7948cfd0ddaf014efc9ee7e28be3d84d67c00c891a5ca30f4065da18",
+      "format-assertion": "06fc668d4fbb1dea73f7c9eb365262525ee8a4f76acac962a8ae1787f6668932"
+    }
+  },
+  "draft2019-09/redocly-ajv": {
+    "version": "8.18.3",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": false,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": false,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv/dist/2019.js"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv/dist/2019.js"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "d1e0f7407ba2766a2122a78833d42e49540b3c76eca938a0b6886c9bdccea608",
+      "format-assertion": "c571376811c8d3e403646a21d0aa3097e8e7964ff1c0151f12d006f6fa7f84dc"
+    }
+  },
+  "draft2019-09/schema-shield": {
+    "version": "1.2.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "defaultDialect": "https://json-schema.org/draft/2019-09/schema",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "defaultDialect": "https://json-schema.org/draft/2019-09/schema",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "1fe9f10c982512174612de573d4a145acbb1b9bcdb42fc711e586e73094b73cf",
+      "format-assertion": "7a39f912f7707787be7bd8f7f483b804a6a327aa1425fbea19a066475cde5667"
+    }
+  },
+  "draft2019-09/json-schema-library": {
+    "version": "11.6.2",
+    "reportOptions": {
+      "base": {
+        "drafts": [
+          "draft2019-09"
+        ],
+        "draft": "draft2019-09",
+        "formatAssertion": false,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      },
+      "format-assertion": {
+        "drafts": [
+          "draft2019-09"
+        ],
+        "draft": "draft2019-09",
+        "formatAssertion": true,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "c05f1a1cd84bd434a9fb111f6782d7a229f97bdf58c46800713ba3266d814dc1",
+      "format-assertion": "9e5d608fcaa899d38387f2e6ae2ae85a9d3a970a76f29ab70d7e55edd680fb52"
+    }
+  },
+  "draft2019-09/schemasafe": {
+    "version": "1.3.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": false,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "https://json-schema.org/draft/2019-09/schema",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": false,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "https://json-schema.org/draft/2019-09/schema",
+          "includeErrors": true
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "https://json-schema.org/draft/2019-09/schema",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "https://json-schema.org/draft/2019-09/schema",
+          "includeErrors": true
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "bab1e9e1e87b5e87ba3bcef31f8a0ea527dff17d47a0706f30e0c72a0679ad9d",
+      "format-assertion": "5ef9b7e509c5bc187bedff5f8b5d3dcee7b6f6bc2548b27ada514fd27e9d9f23"
+    }
+  },
+  "draft2019-09/z-schema": {
+    "version": "12.4.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "reuse": "public-schema-cache",
+        "version": "draft2019-09",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": false
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "reuse": "public-schema-cache",
+        "version": "draft2019-09",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": null
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "0c0f7b5b613aee5a29b4b3c79dd0f2fdfea870c3147377a6759e0e144a4b398b",
+      "format-assertion": "c3598a24c5fe8f7eced7bdb60b5e2e7c64f43e9a5e92dc6e6b78fea1b515acc6"
+    }
+  },
+  "draft2020-12/cfworker-json-schema": {
+    "version": "4.1.1",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "draft": "2020-12",
+        "shortCircuit": true
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "draft": "2020-12",
+        "shortCircuit": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "a1c7b2a5d8a66dbe01b639293a687bae6e613a7b62cbce06acb94574bef8ffab",
+      "format-assertion": "0c6bf1ff7f5659d16f3801a92c4cc9a29e2a1540aa19fffe9b8e1ce94ca6bdd5"
+    }
+  },
+  "draft2020-12/ajv": {
+    "version": "8.20.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": false,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": false,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv",
+            "version": "8.20.0",
+            "entrypoint": "ajv/dist/2020.js"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": false,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "ajv",
+            "version": "8.20.0"
+          },
+          "constructor": {
+            "packageName": "ajv",
+            "version": "8.20.0",
+            "entrypoint": "ajv/dist/2020.js"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "055900e4ccf8a2da45676385f13c8d7b34d3345d570b5f1a494a4cebc1c1ba93",
+      "format-assertion": "a77eee69ef65f64c263449171aae3bd4cc9b17687798c43c8834e7ccda5ee789"
+    }
+  },
+  "draft2020-12/hyperjump": {
+    "version": "1.17.7",
+    "reportOptions": {
+      "base": {
+        "draft": "draft2020-12",
+        "formatProfile": "base",
+        "validateFormat": false,
+        "network": "forbidden"
+      },
+      "format-assertion": {
+        "draft": "draft2020-12",
+        "formatProfile": "format-assertion",
+        "validateFormat": true,
+        "network": "forbidden"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "167a97c413cae73a692ab6d745cd5c19553b2d88fa17fd785865ec610f65157b",
+      "format-assertion": "023620bcd2fe5213aba4b3bf811a2ef8d3ec6dbf2c72d7ce5b8bfa9f3613bb69"
+    }
+  },
+  "draft2020-12/redocly-ajv": {
+    "version": "8.18.3",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": false,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": false,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv/dist/2020.js"
+          }
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": false
+        },
+        "detailed": {
+          "allErrors": true,
+          "coerceTypes": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "strict": false,
+          "validateFormats": true,
+          "messages": true
+        },
+        "formats": {
+          "mode": "full",
+          "names": [
+            "date",
+            "time",
+            "date-time",
+            "duration",
+            "email",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "uuid",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "regex",
+            "json-pointer",
+            "relative-json-pointer"
+          ],
+          "keywords": false
+        },
+        "implementation": {
+          "core": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3"
+          },
+          "constructor": {
+            "packageName": "@redocly/ajv",
+            "version": "8.18.3",
+            "entrypoint": "@redocly/ajv/dist/2020.js"
+          }
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "fedc1952deffcbdff7ab2eac2bcc545ddc1e9e1236d3a8013d200aeef38af2bf",
+      "format-assertion": "c60741bd967cd6ec8bfd3bcd399b408647af5d1633964eda6851615ecab7f745"
+    }
+  },
+  "draft2020-12/schema-shield": {
+    "version": "1.2.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "defaultDialect": "https://json-schema.org/draft/2020-12/schema",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "defaultDialect": "https://json-schema.org/draft/2020-12/schema",
+        "fast": {
+          "failFast": true,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "detailed": {
+          "failFast": false,
+          "useDefaults": false,
+          "immutable": false
+        },
+        "resources": "registered"
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "4118a4d82872113c3dc4006c1c06cc099892b09e07bc47c5cce5436a635d4ca9",
+      "format-assertion": "6508e817cb2694397922a8013a362f14fcb3a026342dbb5792189ae86e208726"
+    }
+  },
+  "draft2020-12/json-schema-library": {
+    "version": "11.6.2",
+    "reportOptions": {
+      "base": {
+        "drafts": [
+          "draft2020-12"
+        ],
+        "draft": "draft2020-12",
+        "formatAssertion": false,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      },
+      "format-assertion": {
+        "drafts": [
+          "draft2020-12"
+        ],
+        "draft": "draft2020-12",
+        "formatAssertion": true,
+        "throwOnInvalidSchema": true,
+        "throwOnInvalidRef": true
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "4bde5d6a708b4bbc06eebae619404e93a3a94170325d399cf8097abcf22a20b9",
+      "format-assertion": "2c39fceb62757a8cb2464139645d1d79aa68ee041639c7b3faf0f04ec2c7406e"
+    }
+  },
+  "draft2020-12/schemasafe": {
+    "version": "1.3.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": false,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "https://json-schema.org/draft/2020-12/schema",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": false,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "https://json-schema.org/draft/2020-12/schema",
+          "includeErrors": true
+        }
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "fast": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "https://json-schema.org/draft/2020-12/schema",
+          "includeErrors": false
+        },
+        "detailed": {
+          "mode": "lax",
+          "allErrors": false,
+          "useDefaults": false,
+          "removeAdditional": false,
+          "contentValidation": false,
+          "formatAssertion": true,
+          "extraFormats": false,
+          "weakFormats": true,
+          "allowUnusedKeywords": true,
+          "allowUnreachable": true,
+          "$schemaDefault": "https://json-schema.org/draft/2020-12/schema",
+          "includeErrors": true
+        }
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "9220c41402fc50d9f34a25300eae9682cf50ecc0a2a2a141b6d2c61451dd3509",
+      "format-assertion": "2f4cc70a079861858a5823e870c366a75973018100dce6bdf29d495e57113c33"
+    }
+  },
+  "draft2020-12/z-schema": {
+    "version": "12.4.0",
+    "reportOptions": {
+      "base": {
+        "formatProfile": "base",
+        "reuse": "public-schema-cache",
+        "version": "draft2020-12",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": false
+      },
+      "format-assertion": {
+        "formatProfile": "format-assertion",
+        "reuse": "public-schema-cache",
+        "version": "draft2020-12",
+        "safe": true,
+        "breakOnFirstError": true,
+        "ignoreUnknownFormats": true,
+        "formatAssertions": null
+      }
+    },
+    "reportOptionsSha256": {
+      "base": "03e12040a358d0f04e7f3b77b61720b04d1859382959017b911c27d55fc4462f",
+      "format-assertion": "e864ac82ccf03360de57a6b02cbf0369fe1e94f99df3e339f2934590611ee64f"
+    }
+  }
+}

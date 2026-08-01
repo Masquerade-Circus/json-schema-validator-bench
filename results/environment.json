@@ -1,0 +1,534 @@
+{
+  "startedAt": "2026-08-01T07:06:20.396Z",
+  "endedAt": "2026-08-01T07:06:30.439Z",
+  "durationMilliseconds": 10043,
+  "node": {
+    "version": "v24.18.0",
+    "v8": "13.6.233.17-node.50"
+  },
+  "platform": "linux",
+  "architecture": "x64",
+  "osRelease": "6.8.0-136-generic",
+  "cpu": {
+    "count": 12,
+    "models": [
+      "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics"
+    ]
+  },
+  "totalMemoryBytes": 14531260416,
+  "powerState": null,
+  "lastRun": {
+    "mode": "full",
+    "completedAt": "2026-08-01T07:06:30.439Z",
+    "totalDurationMilliseconds": 607532,
+    "peakBenchmarkRssBytes": 326402048
+  },
+  "packages": {
+    "@cfworker/json-schema": {
+      "version": "4.1.1",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og==",
+      "tarball": "https://registry.npmjs.org/@cfworker/json-schema/-/json-schema-4.1.1.tgz",
+      "weeklyDownloads": 5891999,
+      "downloadsResponseSha256": "2dfd973400d9824ad023378d9aa4bf6940e9f227daee1a470b9e6d296ce3976c",
+      "registryResponseSha256": "ae474e5b08b09be3c2d8388583eb0b7807c9d80805b7a1172f3eb4f119148d75"
+    },
+    "@exodus/schemasafe": {
+      "version": "1.3.0",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-5Aap/GaRupgNx/feGBwLLTVv8OQFfv3pq2lPRzPg9R+IOBnDgghTGW7l7EuVXOvg5cc/xSAlRW8rBrjIC3Nvqw==",
+      "tarball": "https://registry.npmjs.org/@exodus/schemasafe/-/schemasafe-1.3.0.tgz",
+      "weeklyDownloads": 4742721,
+      "downloadsResponseSha256": "dddae50f18348291c746c79d08136b3629431b1d4388358d0b711c2e0d22cc80",
+      "registryResponseSha256": "6ae5beaa85ad0ba5bc70d015bdd8bf75a1ebcee6631bcbddaf367cdf6cefcaf2"
+    },
+    "@hyperjump/json-schema": {
+      "version": "1.17.7",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-CP4OTm4y5U200z3Ir6SAQk9aGM61m1LZpd4TMNXTZbOgHg02TvYFhtQLQcG2WPx6nmmM6DPS9ha+N7poY6e+uA==",
+      "tarball": "https://registry.npmjs.org/@hyperjump/json-schema/-/json-schema-1.17.7.tgz",
+      "weeklyDownloads": 247240,
+      "downloadsResponseSha256": "fddce230204e16fba31d486ec64720e1fb1de5ee89c2fc34b479ce8d19f4c3f7",
+      "registryResponseSha256": "8cad4c3a22900f525b455fc7147325894e648b1fa091aa534c79ed01953bfd43"
+    },
+    "@redocly/ajv": {
+      "version": "8.18.3",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-l42u0of3hY98sN2A+M4qTX1O/KrpgGH32Hu9kP2GtHyD5Dfqq86PKFLe5dwaD8DEnNmlOlll2BAmeEtf0DaySg==",
+      "tarball": "https://registry.npmjs.org/@redocly/ajv/-/ajv-8.18.3.tgz",
+      "weeklyDownloads": 7551204,
+      "downloadsResponseSha256": "5832b082e9918a582255f40f804c242dd1ee586e241f87f27599cb770009f955",
+      "registryResponseSha256": "b6cfa7388417c31a3ed82961d2d4929cfa2f69dbcaeda94de905a02176e09544"
+    },
+    "ajv": {
+      "version": "8.20.0",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==",
+      "tarball": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz",
+      "weeklyDownloads": 351242149,
+      "downloadsResponseSha256": "6a02eef92865026240287d7baec1b22d50aa8d8de11fdec308c152062c7ebfed",
+      "registryResponseSha256": "da1e811c437dcaed32870e5023e0a1fc6e672027023a0648fddfbc122fb84c58"
+    },
+    "ajv-draft-04": {
+      "version": "1.0.0",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-mv00Te6nmYbRp5DCwclxtt7yV/joXJPGS7nM+97GdxvuttCOfgI3K4U25zboyeX0O+myI8ERluxQe5wljMmVIw==",
+      "tarball": "https://registry.npmjs.org/ajv-draft-04/-/ajv-draft-04-1.0.0.tgz",
+      "weeklyDownloads": 14981015,
+      "downloadsResponseSha256": "d26bf9a32b3d8baefb29f1dd31bfb2c6017215800178ce0a523f4d296496ad1c",
+      "registryResponseSha256": "265a6eea392d1e4e0fcf1b15f4280c9c285210a1dc8de09a899d7865109fca04"
+    },
+    "ajv-formats": {
+      "version": "3.0.1",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==",
+      "tarball": "https://registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz",
+      "weeklyDownloads": 114476160,
+      "downloadsResponseSha256": "8aa2bf3c5c6389810aa71127a04f909b841d5b5be9eabeefa38ae3da8a873f44",
+      "registryResponseSha256": "4285e5c887c98572f0aef6736cc2908e68c0f7a4656292b3004d3ddb6b8420d1"
+    },
+    "djv": {
+      "version": "2.1.4",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-giDn+BVbtLlwtkvtcsZjbjzpALHB77skiv3FIu6Wp8b5j8BunDcVJYH0cGUaexp6s0Sb7IkquXXjsLBJhXwQpA==",
+      "tarball": "https://registry.npmjs.org/djv/-/djv-2.1.4.tgz",
+      "weeklyDownloads": 81251,
+      "downloadsResponseSha256": "6ecf574cf5cb544f88e5a57498ab7bc0dc01a9e2583ee71b5d25920230d8c03c",
+      "registryResponseSha256": "ca4a9f60851d41b99d2f09833f0fceb90425dc438d111e6ee05b8591e7bfba55"
+    },
+    "json-schema-library": {
+      "version": "11.6.2",
+      "license": "MIT",
+      "engines": null,
+      "integrity": "sha512-BwvoJfc6RNrYRxQ9AujaTMaLdQosdceRe0huKMnnIJa2b4QZlnmPgQm7iUMoyxS2ioTsTMVPWjuoqvFYF0HZ4Q==",
+      "tarball": "https://registry.npmjs.org/json-schema-library/-/json-schema-library-11.6.2.tgz",
+      "weeklyDownloads": 513747,
+      "downloadsResponseSha256": "4df43662255658d766819d506183bc8cf2350d1e3c9c9c042b8ae486fadae546",
+      "registryResponseSha256": "d96e5efdb489bb9be7b2632231042e183eb269003c9a89f8911bc8c5de15a3c8"
+    },
+    "jsonschema": {
+      "version": "1.5.0",
+      "license": "MIT",
+      "engines": {
+        "node": "*"
+      },
+      "integrity": "sha512-K+A9hhqbn0f3pJX17Q/7H6yQfD/5OXgdrR5UE12gMXCiN9D5Xq2o5mddV2QEcX/bjla99ASsAAQUyMCCRWAEhw==",
+      "tarball": "https://registry.npmjs.org/jsonschema/-/jsonschema-1.5.0.tgz",
+      "weeklyDownloads": 6227344,
+      "downloadsResponseSha256": "2d5a55bc89064c485721a80ff4395c9444b9eaaebf29e180acd6db4f5859a6a9",
+      "registryResponseSha256": "73a54f080038c51a71e2088eb3292a431455d47e88d7c4fff32e7652e4e840dd"
+    },
+    "schema-shield": {
+      "version": "1.2.0",
+      "license": "Apache-2.0",
+      "engines": {
+        "node": ">=18"
+      },
+      "integrity": "sha512-rpofsEjiSccPt2pXJCBVaswdJfpLAgmXZCtFAtcYwktNt/YFBiehBkvjfSyY+I6ty4/OC/ShvAs9kMII6+9GMA==",
+      "tarball": "https://registry.npmjs.org/schema-shield/-/schema-shield-1.2.0.tgz",
+      "weeklyDownloads": 261,
+      "downloadsResponseSha256": "6298bc929a99669baa9b5b11d5977008c5857c02cabf16f74e42ed618ff548e0",
+      "registryResponseSha256": "fd024d2af12ffe7ce6930ecb5e6b12e2e02fbd2a7c57fdc27fd46940298b48ce"
+    },
+    "z-schema": {
+      "version": "12.4.0",
+      "license": "MIT",
+      "engines": {
+        "node": ">=22.0.0"
+      },
+      "integrity": "sha512-rJ23I1iy23FD4bOBrtHJI2UyTqDRemdEdBlUl3h3i8iyHGKig5vzmc3tuyetzBeRUNXbarJLnhQ3lVBzX56qGg==",
+      "tarball": "https://registry.npmjs.org/z-schema/-/z-schema-12.4.0.tgz",
+      "weeklyDownloads": 3436312,
+      "downloadsResponseSha256": "c2bb43f69f67cd7408d2cc490aaef7aa44fd2d58e90e1364f03e38b1e4f021ed",
+      "registryResponseSha256": "688da2383dd7367bf3e52bb12b9a02f3139eb210b818982633978e15beaff862"
+    }
+  },
+  "suite": {
+    "commit": "0c7b65dc16dd8eaa7bd83e21099c76610c3b246a",
+    "tree": "58b582c8c67aae71d27aafba0fb7120037289d4d"
+  },
+  "hashes": {
+    "packageLock": "b316d67ff1a0ddea53b15fba8d5ac23cde82789703b73216ae20056eeb6b67b8",
+    "suiteLock": "70fb662fad5d0dd329ecda51db2eb572726b275e866a6897810c67131e57cb4a",
+    "suiteManifest": "4be736c32a78981386365b82390a9df2df102e0b4645627b06f8157110db7033",
+    "conformance": {
+      "draft4/cfworker-json-schema": "4bacd9c75b2a46fb4bf6cf785b19f440567a81cd5cabd7a1056d59d2156b220b",
+      "draft4/ajv": "d19143339811129cbaa6b724c03cea15654e9e8243882b1e204c446457e96b46",
+      "draft4/hyperjump": "488c90b1970cf319d198a176005e23d5b30142f3f65fea44a85966a79965d3b4",
+      "draft4/redocly-ajv": "8f3a7202fa478eb2a18101d0e095b7982969ac674a8bb3ae8afcf8e5f1acea1e",
+      "draft4/schema-shield": "6785bf25b79e4ccb9470cf70ce397ea3755e08352f15458d84e283c22caac9c9",
+      "draft4/json-schema-library": "42214d5b7e469b2e414221e6ebe81fc3a88af9cfff3cf51555bc9d42a4c53eb8",
+      "draft4/jsonschema": "ee6194676fe22a8bf208a5a42ca1fa52b68fe317209d464c02ce858319d49150",
+      "draft4/schemasafe": "97e0bd77220941761f9f715c277b889f46dcc4ce3708bd04d0683a6a527000b8",
+      "draft4/z-schema": "60c568523753127e0afeb5a670294c261c47290bec5fafe2767271a13ba2fb1a",
+      "draft6/ajv": "db00eb59b126d8b62cd7fb6072deeb5e2d2dd1c1e5ca1701de1b09c1a41e59b9",
+      "draft6/hyperjump": "01eea7e0984889f1f5a838857b2caa3c2830cb488a5d62e88581926855ff5f45",
+      "draft6/redocly-ajv": "de906f851879cfeac459f0b483b222181bae5ada7c74795c8beca99e1742f935",
+      "draft6/schema-shield": "ddc454ce017d5f316f5a052112b4175deda16f8c0f90bc66904d2f4bc147dfc5",
+      "draft6/djv": "9d25ea9c9709a0521865f3411968af3f865d9792571fec1dbd503232b03e9431",
+      "draft6/json-schema-library": "335d3e91f4a66f131d08c99caffec5eeb5c0d3b1f756ebe7f030876a8f826d6b",
+      "draft6/jsonschema": "d2c9895b01d31c6bdf10572744d4f42564ed66144b60020d23cf11dd82a408e9",
+      "draft6/schemasafe": "aff94bc9508f4e4cf74ba8bd55cafd00b19461652d84a9263e4d8e809a32683b",
+      "draft6/z-schema": "1197baae5abfbc83c70a249aa0ce7d1b34b2392ad6d8ef4cfaa57a7feb56e922",
+      "draft7/cfworker-json-schema": "8d8ec400398af96d86e213f068a26a7431939a8890f7fc65fb053364ae77f2d7",
+      "draft7/ajv": "3f4f3c29584f6a4d6a15867396bee430e6416e2bd468c2582f0ef79e5be7c445",
+      "draft7/hyperjump": "66f10981054d8605b476694b7c1b346713a9dba6186bdb371cca070bb8d832b0",
+      "draft7/redocly-ajv": "e04d937f4f0d25d7ec7eddbcd2c9de7e023ff16c792319be66d77faeadf6f76b",
+      "draft7/schema-shield": "091bc4e838987308441d84c7de93a596c2972786108d21ee554e1afd36246bb8",
+      "draft7/json-schema-library": "811739aa18229aa3cca81daee1282f8aaeb589cbcc2c63fc1830aa6eb5c5f811",
+      "draft7/jsonschema": "85aee9a0a831a9af772fc2e081138e4a315d785bc0d808f174a7f77fc7a415ce",
+      "draft7/schemasafe": "14f985c37cabfc6ca48e117eb960349f2e4d1d7539ee5fedc728b970902ee52f",
+      "draft7/z-schema": "bba14af61c2649b331424f77c242a381c7fb3abece6d589713c0690dbbb05820",
+      "draft2019-09/cfworker-json-schema": "1af3ddf23df50d3199eee32e8a42f79d9515140bfd1fb5649c7a3f640566dd14",
+      "draft2019-09/ajv": "beadb04175c7ab2675b678e14839d90bc74267613622853329c86070dde4c024",
+      "draft2019-09/hyperjump": "33b7ceb5fa80a0be3a5d59f56b4ba766f3a73f12e821bc9e6c131e356df4a611",
+      "draft2019-09/redocly-ajv": "655a8197bb9c3fe5d97c25d27971f6541bbebb2b700b248c279675998df1815c",
+      "draft2019-09/schema-shield": "d659b43f53881e0c6d6d820b61e4a4ee6df3918c30ae98ced9395535522126c8",
+      "draft2019-09/json-schema-library": "22f5b3a40ddfed4981c4d8927464ce8be41b9e193e61a892de193cda696d7cc7",
+      "draft2019-09/schemasafe": "6d3d6aa39a359e28ccc52d60f84e835bf9bd7e6baa93edb2748456e5c7ee89ed",
+      "draft2019-09/z-schema": "08d5d44707aee7226d2e2e53d8b51170c9a7f5aa647f11e35c1aa582043019b0",
+      "draft2020-12/cfworker-json-schema": "e62345f34b8d2705cfbf81a3400e062d9f401f01ac94e4aef6d9d808684d72d1",
+      "draft2020-12/ajv": "99b0d9a3f3323c6cab83063f05fa4014adcda785aab0ef69368f9407c73fd635",
+      "draft2020-12/hyperjump": "de3df4fd9c4f859dbe1e65c226d7821f1d9e3ece6d8af823993d64ce193f64bc",
+      "draft2020-12/redocly-ajv": "ee07b78551afacdb5d835665145bfb34137856f7fb710ae4b65c46539c4b8ca1",
+      "draft2020-12/schema-shield": "8f8bcceb2f1e38fb66cb609178f9d8294bf8cb69b9052d37c7bb64ad907d5e04",
+      "draft2020-12/json-schema-library": "74c22c0a2b80a305584e9fa50005cc7885a09313e65a682503770beaa1d74e17",
+      "draft2020-12/schemasafe": "359b09d64710f59afd42005c0212e618b9494bd121d0861048134390b6750227",
+      "draft2020-12/z-schema": "33152594345fc52f1e66c9e090e8f376d2dbe705cc1ec02a90da72aad982188a"
+    },
+    "performance": {
+      "draft4/base": {
+        "compileSamples": "04dadd799cc448dea4f9c4ef23be618a36d4d4788d0c0dcf42fc762a9127aa21",
+        "executionSamples": "4ea08fed2e8d73a56ad04acff5b0059f7169e631a87b5d77c58e67d784a5247c",
+        "intersections": {
+          "compile": "8e182c0c85d07889ceef1260bc249c083fad11a8752c9fd4da0465d0719066a3",
+          "execution": "59083b76945af88c9b7e6f59a018dd668f788b3d529429336702ed7dc5410f15"
+        },
+        "intersectionArtifacts": {
+          "compile": "104b86e9d6fb1f0102e8a6558ad30846e5f10fdfe4ee17d11a0ca6edfcda4cc7",
+          "execution": "1d3b7fbafbb4402700f4b670e3384becf61594dd6e485ce90d7ee5d8d10711e1"
+        }
+      },
+      "draft4/format-assertion": {
+        "compileSamples": "ace397180da30c15580a7d65d13a553ce57c169d0f9c511bda5d286445ad8722",
+        "executionSamples": "6fbe73e25ac7f1fe7d3bcac355a809aaa8f78dbea11d52c13d3193843f4a8cb0",
+        "intersections": {
+          "compile": "fd1fce7be25f9921a51dd81fe0e98d9159b4bbd4f90a45dec30ec60c5f085a01",
+          "execution": "ac4e52f6f2e7389f8c211091b45b61ce0aff15a12f89bd513d46dcd22d665bf8"
+        },
+        "intersectionArtifacts": {
+          "compile": "21f184207ca84289f15da9a5cc81771001388976e7f8b2e7c7aa2a8a9ece23cc",
+          "execution": "eaaa1518c9628c6d6fd0fa65bd8c1ccc5d85924bb3cd76516e2b909fe20c62ef"
+        }
+      },
+      "draft6/base": {
+        "compileSamples": "027e5887318e2ab6134a1edfb634ca94ca2d0150d0fd5af5a8aca06ef679b94f",
+        "executionSamples": "27bb2e5131d5678ebc864987a5a3b283fe1915b208688d0aa222cac9a187fd3f",
+        "intersections": {
+          "compile": "cb46978269a5ec23a7ef21fad4b16006543e7362be3bab44f826e5e530173230",
+          "execution": "7e81a001ff0d313ab2bdf6bbeb43fb432ef5293ecdcf05cc64c3c48c8d34c779"
+        },
+        "intersectionArtifacts": {
+          "compile": "d2afd21cf98f9efa0af0e68d1075782ece4718f9036ab8e22b937e1ecac9212d",
+          "execution": "665fdec3feb25a3f35ebde17f820c7fa67c33af5cfba828267f6db1386f3e09e"
+        }
+      },
+      "draft6/format-assertion": {
+        "compileSamples": "b4c8fd293d8a39e3d1211e46b84e8253c50b4050cfbc7a27c93cb6d0271a4e5d",
+        "executionSamples": "53d3b656474ecf88462b19f18b6392bd178163d843867cf15f88f6453584864b",
+        "intersections": {
+          "compile": "64a19cbf96c45b556c6e9116a102f80df8abaf0665e4accc9ee50221b9bfca5c",
+          "execution": "eb49b9a9333b6e5871eda47ceb927bca73bfe8273d0014518bd0c19311886604"
+        },
+        "intersectionArtifacts": {
+          "compile": "66d0724485101a9666dd08cc8694cbf97d0ab7d5959638131bd5402aaab5028c",
+          "execution": "015b73d181c04132abbf4daef7dd3b69391bde194e889404f3f153e6fe3cbcd9"
+        }
+      },
+      "draft7/base": {
+        "compileSamples": "027a83117d175494e5ae5f67f7a3210c8f265b195d2ca7b29132922f433589c0",
+        "executionSamples": "9ab6ad111c35d5731e0c759479adbf49efec3f3e1410703fc242029e5c0a1364",
+        "intersections": {
+          "compile": "08ebb359b447e85f2bafd67e7b663aed8d931c27984187fb66866297d6f84f89",
+          "execution": "4f52e09855975f5ea137909929f01a1fdba37e4f945de7d5e0ce0bd7430fb118"
+        },
+        "intersectionArtifacts": {
+          "compile": "c5584cfddd473a84fab7ceca33120c81724eb612f58b56ef8522d4cfdcc24af8",
+          "execution": "7173eff86415bf9017a8c3f0a0b0451cfba27742a1822558a21fd17ac537437f"
+        }
+      },
+      "draft7/format-assertion": {
+        "compileSamples": "9af080258b057d37c326649e317817f268e0a9b148fc3f4770aefd3e4a1abfe7",
+        "executionSamples": "66210ac62ffab31a4881b9ac80874b96240b5a0c4bfec85b1753a82be2683f18",
+        "intersections": {
+          "compile": "52d40b8bca4156f0be8f5bc958d9ecf24712bc05969d44fd077373e0ab4449eb",
+          "execution": "b352913be23b1f65b80568ece20626ce94ff5077461769fc99c4da28b537db93"
+        },
+        "intersectionArtifacts": {
+          "compile": "c0a8df608c892ad6959f8588f0d4fd4f41e1a227f15a3e8dbe22f74113f4ed31",
+          "execution": "a539709c3826da2220668f5a102c46f2f79504416dc10814252e875e196d2a08"
+        }
+      },
+      "draft2019-09/base": {
+        "compileSamples": "a646425e414f7b8b2b3e24ca2d0e0168fb9d28934e5f6da9975c1a0482423047",
+        "executionSamples": "0cd0edf29abb609d192d95f473d80526943a59490d6e46732b8f2c4d65662f02",
+        "intersections": {
+          "compile": "fa6fd5a2eac6e6afc171e12b60598fee00e07c67e8ccbbfb384a7a88f36eb861",
+          "execution": "c2f3723a869b4dbfde73fb5e0e164734b4f5777e8b587fa005a3876c04df9c97"
+        },
+        "intersectionArtifacts": {
+          "compile": "614a9f9dbf6568326e129fcf669fc47db06927fa3f48a1c5eab261124dc7192a",
+          "execution": "9b7b17b3a4f12e6c305ecb8abc4c51a2d927d1928d7056c5f6b67389dc15d192"
+        }
+      },
+      "draft2019-09/format-assertion": {
+        "compileSamples": "fb6a667168220068ca8d36942ebb9078fdf429011666b3c3c1d4336f01d7eced",
+        "executionSamples": "790544159c70b9c87c65b9e3c0539c8b4b49241f9d31cad7dcbe41ca313f3ff7",
+        "intersections": {
+          "compile": "0d81e6107568d6d867d2a11a41d44d5072a0efab679d4409ae5005fcabe991bd",
+          "execution": "bdceb6dbae75a9778fde0f71672cbad109b2320831f26f8cac0d68b62d419f4a"
+        },
+        "intersectionArtifacts": {
+          "compile": "1c8e04cf29ce7a831e713bcf8d5de314d73a29f9385d0b4f6f165cf750f83c72",
+          "execution": "25213e37e510e3935ac2c12ac2e729a2896a67e7bcc089d0dc89804f3c836d80"
+        }
+      },
+      "draft2020-12/base": {
+        "compileSamples": "eba0bb3ef4f2ed4a2ce9dd28b9e7d450188453a9c8c77e13cff85f231aabe86e",
+        "executionSamples": "03f54bebc4367ad19da91aa4a8efe411dd6ad8c5ec6658dd0ccec63bdd35fb60",
+        "intersections": {
+          "compile": "f410709650a0daffafbe325134d9ec4b2e6312944e3c2405afbd4c29f01b1d60",
+          "execution": "5b6a0aaf26ee3bb392e8a6ef7d02127184d3d66d205bab94b794546bcb30ae1e"
+        },
+        "intersectionArtifacts": {
+          "compile": "3e60a59f200f9c719a411ba261c081e1c018097db65eab3d1a2eec8cd9887b4f",
+          "execution": "29b188231ab8af312e3e81332e38d5148440265784292661cc35f18439fa00e1"
+        }
+      },
+      "draft2020-12/format-assertion": {
+        "compileSamples": "578f6be9e6fa5819c4eeee2662a59a84315f4b3294041dcb6885119cd1e50d5f",
+        "executionSamples": "70d48521b7e5664506a7814e22dde46188ed2c89edcf602a7b83138962ab9e26",
+        "intersections": {
+          "compile": "be5402de08ccf0f3b52c3e08d3c452baa6316fa271ec132e72e122d9bc85fb2c",
+          "execution": "ccfc908a3dc6f38b4813736b6a674808e333240a99da79f6ec5de431d82777c6"
+        },
+        "intersectionArtifacts": {
+          "compile": "6ec3652d083bdeb8b3879174d2b522c9473bdd873a6b0e225e3bf1e236eca3c3",
+          "execution": "1d5e14bee2c3b0904712c8b4199442c2e1a11e0fa19a319cb75d4d2b43cee644"
+        }
+      }
+    },
+    "mutationDocuments": {
+      "manifest": "0afc24d563bb6393db9a995bad15689afd2c2894a4bb960cf486f14f673218e4",
+      "documents": {
+        "mutations/cfworker-json-schema-4bd87c51443c94f8.md": "c95fdd5c146fac0e674eacad1825ce4204946b3987130ef69dfa6b9938818d7b",
+        "mutations/jsonschema-9bbbc0e7d004cda6.md": "6bd8ef50df14bc03b7117606a5bf53c7f4580e9e9f023fb5913795f1b8dda098"
+      }
+    }
+  },
+  "performanceCorpora": {
+    "draft4/base": {
+      "compile": null,
+      "execution": null
+    },
+    "draft4/format-assertion": {
+      "compile": null,
+      "execution": null
+    },
+    "draft6/base": {
+      "compile": null,
+      "execution": null
+    },
+    "draft6/format-assertion": {
+      "compile": null,
+      "execution": null
+    },
+    "draft7/base": {
+      "compile": null,
+      "execution": null
+    },
+    "draft7/format-assertion": {
+      "compile": null,
+      "execution": null
+    },
+    "draft2019-09/base": {
+      "compile": null,
+      "execution": null
+    },
+    "draft2019-09/format-assertion": {
+      "compile": null,
+      "execution": null
+    },
+    "draft2020-12/base": {
+      "compile": null,
+      "execution": null
+    },
+    "draft2020-12/format-assertion": {
+      "compile": null,
+      "execution": null
+    }
+  },
+  "benchmarkMode": "full",
+  "publicationWarning": null,
+  "cohortIdentity": {
+    "cohortIdentityVersion": 1,
+    "benchmarkMode": "full",
+    "rounds": 2,
+    "benchmarkContractSha256": "735082ce918aba7028dc534b44ddc458215cda534e18bdd1852a9426bad6cefe",
+    "eligibilityThresholdPercent": "98",
+    "sharedHarnessSha256": "e8b9d07e0c6c211c907f93599e554358b79216d3892777f5421c1cb23b1c7f42",
+    "packageLockSha256": "b316d67ff1a0ddea53b15fba8d5ac23cde82789703b73216ae20056eeb6b67b8",
+    "npmSnapshotLockSha256": "d116d60f811ca037841f67b1c27014bf8f1716d44186320d4cfa9441dee60ef1",
+    "suiteLockSha256": "70fb662fad5d0dd329ecda51db2eb572726b275e866a6897810c67131e57cb4a",
+    "runtimeEnvironment": {
+      "versions": {
+        "acorn": "8.16.0",
+        "ada": "3.4.4",
+        "amaro": "1.1.9",
+        "ares": "1.34.6",
+        "brotli": "1.2.0",
+        "cldr": "48.0",
+        "icu": "78.3",
+        "llhttp": "9.4.2",
+        "merve": "1.2.2",
+        "modules": "137",
+        "napi": "10",
+        "nbytes": "0.1.4",
+        "ncrypto": "0.0.1",
+        "nghttp2": "1.69.0",
+        "nghttp3": "",
+        "ngtcp2": "",
+        "node": "24.18.0",
+        "openssl": "3.5.7",
+        "simdjson": "4.6.4",
+        "simdutf": "6.4.0",
+        "sqlite": "3.53.1",
+        "tz": "2026b",
+        "undici": "7.28.0",
+        "unicode": "17.0",
+        "uv": "1.52.1",
+        "uvwasi": "0.0.23",
+        "v8": "13.6.233.17-node.50",
+        "zlib": "1.3.1-e00f703",
+        "zstd": "1.5.7"
+      },
+      "execArgv": [],
+      "platform": "linux",
+      "architecture": "x64",
+      "operatingSystemType": "Linux",
+      "operatingSystemRelease": "6.8.0-136-generic",
+      "endianness": "LE",
+      "cpuModels": [
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+        "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics"
+      ],
+      "totalMemory": 14531260416,
+      "nodeOptions": null,
+      "uvThreadpoolSize": null
+    },
+    "validatorRuntimeSha256": {
+      "draft4/cfworker-json-schema": "9208c9d7a3f65cc184d68bb8d20163d7a49f566c22148b4bfafdfe3defcdbba8",
+      "draft7/cfworker-json-schema": "9208c9d7a3f65cc184d68bb8d20163d7a49f566c22148b4bfafdfe3defcdbba8",
+      "draft2019-09/cfworker-json-schema": "9208c9d7a3f65cc184d68bb8d20163d7a49f566c22148b4bfafdfe3defcdbba8",
+      "draft2020-12/cfworker-json-schema": "9208c9d7a3f65cc184d68bb8d20163d7a49f566c22148b4bfafdfe3defcdbba8",
+      "draft4/ajv": "4ad99600f0bed8bffdb8cbd9f6ae78f140fd917c760062e43dbdf85b786848ca",
+      "draft6/ajv": "4ad99600f0bed8bffdb8cbd9f6ae78f140fd917c760062e43dbdf85b786848ca",
+      "draft7/ajv": "4ad99600f0bed8bffdb8cbd9f6ae78f140fd917c760062e43dbdf85b786848ca",
+      "draft2019-09/ajv": "4ad99600f0bed8bffdb8cbd9f6ae78f140fd917c760062e43dbdf85b786848ca",
+      "draft2020-12/ajv": "4ad99600f0bed8bffdb8cbd9f6ae78f140fd917c760062e43dbdf85b786848ca",
+      "draft4/hyperjump": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc",
+      "draft6/hyperjump": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc",
+      "draft7/hyperjump": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc",
+      "draft2019-09/hyperjump": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc",
+      "draft2020-12/hyperjump": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc",
+      "draft4/redocly-ajv": "4784150406a1e605d47b686bc3373bca7263b636c8b52b245b6f401a79b285c8",
+      "draft6/redocly-ajv": "4784150406a1e605d47b686bc3373bca7263b636c8b52b245b6f401a79b285c8",
+      "draft7/redocly-ajv": "4784150406a1e605d47b686bc3373bca7263b636c8b52b245b6f401a79b285c8",
+      "draft2019-09/redocly-ajv": "4784150406a1e605d47b686bc3373bca7263b636c8b52b245b6f401a79b285c8",
+      "draft2020-12/redocly-ajv": "4784150406a1e605d47b686bc3373bca7263b636c8b52b245b6f401a79b285c8",
+      "draft4/schema-shield": "6b2e9e14d9fa88e1e964595316fa3e0b86673effbd13670fd1d7835b7aea1292",
+      "draft6/schema-shield": "6bad865069740aedc13fe672092cf0122670c0a8235ec593b1ecf2aeb60a2b19",
+      "draft7/schema-shield": "4c9024f395f62c3edc5f3196725e815d76e0adaf0dc49632c6b17ed0b2fe7571",
+      "draft2019-09/schema-shield": "0d7abf5216478f4be39cbaaf3c0bf692450601b9f44bb8201634b3e2be472e55",
+      "draft2020-12/schema-shield": "7de902229c238d0fd89307dbfcff0515cf921040b7ff58f117876a636ea1ebec",
+      "draft6/djv": "53b103a53f5ff3c7333473e3a96bb833056e71c18aedbd83e2a3a3c94a97359c",
+      "draft4/json-schema-library": "eae4252b3f945115761af21bba44cb6c5bb82576e44ebf73ab701e73e4d8c59b",
+      "draft6/json-schema-library": "eae4252b3f945115761af21bba44cb6c5bb82576e44ebf73ab701e73e4d8c59b",
+      "draft7/json-schema-library": "eae4252b3f945115761af21bba44cb6c5bb82576e44ebf73ab701e73e4d8c59b",
+      "draft2019-09/json-schema-library": "eae4252b3f945115761af21bba44cb6c5bb82576e44ebf73ab701e73e4d8c59b",
+      "draft2020-12/json-schema-library": "eae4252b3f945115761af21bba44cb6c5bb82576e44ebf73ab701e73e4d8c59b",
+      "draft4/jsonschema": "7f1e70c4e8ebd7165c1a262a1cb87b4bc995ed2183758ffbe28af7cdc1501e69",
+      "draft6/jsonschema": "7f1e70c4e8ebd7165c1a262a1cb87b4bc995ed2183758ffbe28af7cdc1501e69",
+      "draft7/jsonschema": "7f1e70c4e8ebd7165c1a262a1cb87b4bc995ed2183758ffbe28af7cdc1501e69",
+      "draft4/schemasafe": "b3e55a32c90e666125c3395879d35772e4cedd93143cb91fd81f5407514ca3bc",
+      "draft6/schemasafe": "b3e55a32c90e666125c3395879d35772e4cedd93143cb91fd81f5407514ca3bc",
+      "draft7/schemasafe": "b3e55a32c90e666125c3395879d35772e4cedd93143cb91fd81f5407514ca3bc",
+      "draft2019-09/schemasafe": "b3e55a32c90e666125c3395879d35772e4cedd93143cb91fd81f5407514ca3bc",
+      "draft2020-12/schemasafe": "b3e55a32c90e666125c3395879d35772e4cedd93143cb91fd81f5407514ca3bc",
+      "draft4/z-schema": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465",
+      "draft6/z-schema": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465",
+      "draft7/z-schema": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465",
+      "draft2019-09/z-schema": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465",
+      "draft2020-12/z-schema": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465"
+    }
+  },
+  "benchmarkConstants": {
+    "mode": "full",
+    "rounds": 2,
+    "compileWarmupMinimumMilliseconds": 100,
+    "compileTargetMilliseconds": 500,
+    "compileMinimumSampleMilliseconds": 350,
+    "executionWarmupMinimumMilliseconds": 100,
+    "executionTargetMilliseconds": 500,
+    "executionMinimumSampleMilliseconds": 350,
+    "workerDeadlineMilliseconds": 120000,
+    "controllerDeadlineMilliseconds": 840000,
+    "maxWallMilliseconds": 900000,
+    "completeCorpusPasses": true,
+    "checksumRequired": true,
+    "workerConcurrency": 1,
+    "memoryBudget": {
+      "maxRssGrowthBytes": 536870912,
+      "maxHeapGrowthBytes": 268435456,
+      "sustainedGrowthPasses": 50,
+      "minimumGrowthBytesPerPass": 1048576,
+      "sustainedGrowthPressureRatio": 0.5
+    }
+  },
+  "performanceEligibility": {
+    "policyVersion": 3,
+    "scope": [
+      "draft",
+      "phase"
+    ],
+    "thresholdPercent": "98",
+    "thresholdFraction": {
+      "numerator": 49,
+      "denominator": 50
+    },
+    "exactComparison": "PASS * 50 >= total * 49",
+    "requiredProfiles": [
+      "base",
+      "format-assertion"
+    ]
+  },
+  "benchmarkContractSha256": "735082ce918aba7028dc534b44ddc458215cda534e18bdd1852a9426bad6cefe"
+}

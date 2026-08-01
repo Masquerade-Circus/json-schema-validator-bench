@@ -1,0 +1,391 @@
+{
+  "benchmarkVersion": 3,
+  "summaryVersion": 7,
+  "phase": "execution",
+  "draft": "draft6",
+  "formatProfile": "format-assertion",
+  "performanceEligibility": {
+    "policyVersion": 3,
+    "scope": [
+      "draft",
+      "phase"
+    ],
+    "thresholdPercent": "98",
+    "thresholdFraction": {
+      "numerator": 49,
+      "denominator": 50
+    },
+    "exactComparison": "PASS * 50 >= total * 49",
+    "requiredProfiles": [
+      "base",
+      "format-assertion"
+    ]
+  },
+  "intersectionSha256": "eb49b9a9333b6e5871eda47ceb927bca73bfe8273d0014518bd0c19311886604",
+  "primaryUnit": "operations per second",
+  "units": {
+    "throughput": "operations per second",
+    "mutations": "unique mutation findings detected during conformance",
+    "peakRss": "bytes"
+  },
+  "centerFormula": "(round_1_throughput + round_2_throughput) / 2",
+  "scoreFormula": "midpoint_validator / best_midpoint_in_scope * 100",
+  "mutationCountFormula": "count distinct (validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)",
+  "peakRssFormula": "max(sample.memory.peak.rss across valid rounds)",
+  "ranking": {
+    "status": "COMPETITIVE",
+    "competitorCount": 5
+  },
+  "eligibility": {
+    "policy": {
+      "policyVersion": 3,
+      "scope": [
+        "draft",
+        "phase"
+      ],
+      "thresholdPercent": "98",
+      "thresholdFraction": {
+        "numerator": 49,
+        "denominator": 50
+      },
+      "exactComparison": "PASS * 50 >= total * 49",
+      "requiredProfiles": [
+        "base",
+        "format-assertion"
+      ]
+    },
+    "roster": {
+      "candidates": [
+        "ajv",
+        "hyperjump",
+        "redocly-ajv",
+        "schema-shield",
+        "djv",
+        "json-schema-library",
+        "jsonschema",
+        "schemasafe",
+        "z-schema"
+      ],
+      "eligible": [
+        "ajv",
+        "hyperjump",
+        "redocly-ajv",
+        "schema-shield",
+        "z-schema"
+      ],
+      "excluded": [
+        {
+          "id": "djv",
+          "counts": {
+            "PASS": 217,
+            "WRONG": 54,
+            "COMPILE": 0,
+            "RUNTIME": 2,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 807,
+              "WRONG": 98,
+              "COMPILE": 15,
+              "RUNTIME": 25,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 217,
+              "WRONG": 54,
+              "COMPILE": 0,
+              "RUNTIME": 2,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "base",
+              "pass": 807,
+              "total": 945,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            },
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 217,
+              "total": 273,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "json-schema-library",
+          "counts": {
+            "PASS": 179,
+            "WRONG": 94,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 938,
+              "WRONG": 1,
+              "COMPILE": 0,
+              "RUNTIME": 6,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 179,
+              "WRONG": 94,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 179,
+              "total": 273,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "jsonschema",
+          "counts": {
+            "PASS": 248,
+            "WRONG": 25,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 922,
+              "WRONG": 1,
+              "COMPILE": 0,
+              "RUNTIME": 22,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 248,
+              "WRONG": 25,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "base",
+              "pass": 922,
+              "total": 945,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            },
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 248,
+              "total": 273,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "schemasafe",
+          "counts": {
+            "PASS": 263,
+            "WRONG": 3,
+            "COMPILE": 7,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 941,
+              "WRONG": 0,
+              "COMPILE": 4,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 263,
+              "WRONG": 3,
+              "COMPILE": 7,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 263,
+              "total": 273,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        }
+      ],
+      "size": {
+        "candidates": 9,
+        "eligible": 5
+      },
+      "retention": "5/9",
+      "degenerate": false,
+      "sha256": "09e3a45b0fd3b8ead7b3f5a940d9236b97d6df40c34ab217add257429616b3d4"
+    }
+  },
+  "mutations": {
+    "countKey": [
+      "validator",
+      "draft",
+      "scope",
+      "subjectId",
+      "mutationTarget",
+      "mutationClass",
+      "difference"
+    ],
+    "validators": {
+      "ajv": {
+        "count": 0,
+        "records": []
+      },
+      "hyperjump": {
+        "count": 0,
+        "records": []
+      },
+      "redocly-ajv": {
+        "count": 0,
+        "records": []
+      },
+      "schema-shield": {
+        "count": 0,
+        "records": []
+      },
+      "djv": {
+        "count": 0,
+        "records": []
+      },
+      "json-schema-library": {
+        "count": 0,
+        "records": []
+      },
+      "jsonschema": {
+        "count": 0,
+        "records": []
+      },
+      "schemasafe": {
+        "count": 0,
+        "records": []
+      },
+      "z-schema": {
+        "count": 0,
+        "records": []
+      }
+    }
+  },
+  "validators": {
+    "ajv": {
+      "roundThroughputs": [
+        5060074.540503896,
+        4885453.8413972575
+      ],
+      "midpoint": 4972764.190950576,
+      "absoluteSpread": 174620.69910663832,
+      "relativeSpread": 0.03511541919168672,
+      "minimum": 4885453.8413972575,
+      "maximum": 5060074.540503896,
+      "nanosecondsPerOperation": 201.09539917854892,
+      "mutationCount": 0,
+      "peakRssBytes": 186834944,
+      "scoreRelativeToBest": 35.98973459769137
+    },
+    "hyperjump": {
+      "roundThroughputs": [
+        2108078.253894868,
+        2093649.0682354053
+      ],
+      "midpoint": 2100863.6610651365,
+      "absoluteSpread": 14429.185659462586,
+      "relativeSpread": 0.00686821611838771,
+      "minimum": 2093649.0682354053,
+      "maximum": 2108078.253894868,
+      "nanosecondsPerOperation": 475.99471518918114,
+      "mutationCount": 0,
+      "peakRssBytes": 194539520,
+      "scoreRelativeToBest": 15.204727729752907
+    },
+    "redocly-ajv": {
+      "roundThroughputs": [
+        5064673.782027754,
+        4805343.033392085
+      ],
+      "midpoint": 4935008.407709919,
+      "absoluteSpread": 259330.74863566924,
+      "relativeSpread": 0.05254920097613596,
+      "minimum": 4805343.033392085,
+      "maximum": 5064673.782027754,
+      "nanosecondsPerOperation": 202.63389996209713,
+      "mutationCount": 0,
+      "peakRssBytes": 187691008,
+      "scoreRelativeToBest": 35.71648202303038
+    },
+    "schema-shield": {
+      "roundThroughputs": [
+        13971923.166790443,
+        13662424.496721162
+      ],
+      "midpoint": 13817173.831755802,
+      "absoluteSpread": 309498.670069281,
+      "relativeSpread": 0.022399564038049873,
+      "minimum": 13662424.496721162,
+      "maximum": 13971923.166790443,
+      "nanosecondsPerOperation": 72.37370045252779,
+      "mutationCount": 0,
+      "peakRssBytes": 186904576,
+      "scoreRelativeToBest": 100
+    },
+    "z-schema": {
+      "roundThroughputs": [
+        124260.90082689843,
+        119168.03609135676
+      ],
+      "midpoint": 121714.46845912759,
+      "absoluteSpread": 5092.864735541676,
+      "relativeSpread": 0.041842722562206225,
+      "minimum": 119168.03609135676,
+      "maximum": 124260.90082689843,
+      "nanosecondsPerOperation": 8215.950105683662,
+      "mutationCount": 0,
+      "peakRssBytes": 194371584,
+      "scoreRelativeToBest": 0.8808926480999543
+    }
+  }
+}

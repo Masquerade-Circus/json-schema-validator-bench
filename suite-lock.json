@@ -1,0 +1,9 @@
+{
+  "lockVersion": 1,
+  "repository": "https://github.com/json-schema-org/JSON-Schema-Test-Suite.git",
+  "commit": "0c7b65dc16dd8eaa7bd83e21099c76610c3b246a",
+  "tree": "58b582c8c67aae71d27aafba0fb7120037289d4d",
+  "drafts": ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
+  "testsRoot": "tests",
+  "remotesRoot": "remotes"
+}

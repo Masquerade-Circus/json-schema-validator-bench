@@ -1,0 +1,500 @@
+{
+  "benchmarkVersion": 3,
+  "summaryVersion": 7,
+  "phase": "execution",
+  "draft": "draft6",
+  "formatProfile": "base",
+  "performanceEligibility": {
+    "policyVersion": 3,
+    "scope": [
+      "draft",
+      "phase"
+    ],
+    "thresholdPercent": "98",
+    "thresholdFraction": {
+      "numerator": 49,
+      "denominator": 50
+    },
+    "exactComparison": "PASS * 50 >= total * 49",
+    "requiredProfiles": [
+      "base",
+      "format-assertion"
+    ]
+  },
+  "intersectionSha256": "7e81a001ff0d313ab2bdf6bbeb43fb432ef5293ecdcf05cc64c3c48c8d34c779",
+  "primaryUnit": "operations per second",
+  "units": {
+    "throughput": "operations per second",
+    "mutations": "unique mutation findings detected during conformance",
+    "peakRss": "bytes"
+  },
+  "centerFormula": "(round_1_throughput + round_2_throughput) / 2",
+  "scoreFormula": "midpoint_validator / best_midpoint_in_scope * 100",
+  "mutationCountFormula": "count distinct (validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)",
+  "peakRssFormula": "max(sample.memory.peak.rss across valid rounds)",
+  "ranking": {
+    "status": "COMPETITIVE",
+    "competitorCount": 5
+  },
+  "eligibility": {
+    "policy": {
+      "policyVersion": 3,
+      "scope": [
+        "draft",
+        "phase"
+      ],
+      "thresholdPercent": "98",
+      "thresholdFraction": {
+        "numerator": 49,
+        "denominator": 50
+      },
+      "exactComparison": "PASS * 50 >= total * 49",
+      "requiredProfiles": [
+        "base",
+        "format-assertion"
+      ]
+    },
+    "roster": {
+      "candidates": [
+        "ajv",
+        "hyperjump",
+        "redocly-ajv",
+        "schema-shield",
+        "djv",
+        "json-schema-library",
+        "jsonschema",
+        "schemasafe",
+        "z-schema"
+      ],
+      "eligible": [
+        "ajv",
+        "hyperjump",
+        "redocly-ajv",
+        "schema-shield",
+        "z-schema"
+      ],
+      "excluded": [
+        {
+          "id": "djv",
+          "counts": {
+            "PASS": 807,
+            "WRONG": 98,
+            "COMPILE": 15,
+            "RUNTIME": 25,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 807,
+              "WRONG": 98,
+              "COMPILE": 15,
+              "RUNTIME": 25,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 217,
+              "WRONG": 54,
+              "COMPILE": 0,
+              "RUNTIME": 2,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "base",
+              "pass": 807,
+              "total": 945,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            },
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 217,
+              "total": 273,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "json-schema-library",
+          "counts": {
+            "PASS": 938,
+            "WRONG": 1,
+            "COMPILE": 0,
+            "RUNTIME": 6,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 938,
+              "WRONG": 1,
+              "COMPILE": 0,
+              "RUNTIME": 6,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 179,
+              "WRONG": 94,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 179,
+              "total": 273,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "jsonschema",
+          "counts": {
+            "PASS": 922,
+            "WRONG": 1,
+            "COMPILE": 0,
+            "RUNTIME": 22,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 922,
+              "WRONG": 1,
+              "COMPILE": 0,
+              "RUNTIME": 22,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 248,
+              "WRONG": 25,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "base",
+              "pass": 922,
+              "total": 945,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            },
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 248,
+              "total": 273,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "schemasafe",
+          "counts": {
+            "PASS": 941,
+            "WRONG": 0,
+            "COMPILE": 4,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 941,
+              "WRONG": 0,
+              "COMPILE": 4,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 263,
+              "WRONG": 3,
+              "COMPILE": 7,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 263,
+              "total": 273,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        }
+      ],
+      "size": {
+        "candidates": 9,
+        "eligible": 5
+      },
+      "retention": "5/9",
+      "degenerate": false,
+      "sha256": "09e3a45b0fd3b8ead7b3f5a940d9236b97d6df40c34ab217add257429616b3d4"
+    }
+  },
+  "mutations": {
+    "countKey": [
+      "validator",
+      "draft",
+      "scope",
+      "subjectId",
+      "mutationTarget",
+      "mutationClass",
+      "difference"
+    ],
+    "validators": {
+      "ajv": {
+        "count": 0,
+        "records": []
+      },
+      "hyperjump": {
+        "count": 0,
+        "records": []
+      },
+      "redocly-ajv": {
+        "count": 0,
+        "records": []
+      },
+      "schema-shield": {
+        "count": 0,
+        "records": []
+      },
+      "djv": {
+        "count": 0,
+        "records": []
+      },
+      "json-schema-library": {
+        "count": 0,
+        "records": []
+      },
+      "jsonschema": {
+        "count": 4,
+        "records": [
+          {
+            "validator": "jsonschema",
+            "draft": "draft6",
+            "formatProfile": "base",
+            "phase": "conformance",
+            "scope": "case",
+            "subjectId": "draft6:properties.json#/groups/5/tests/2",
+            "caseId": "draft6:properties.json#/groups/5/tests/2",
+            "schemaId": "draft6:properties.json#/groups/5",
+            "mutationTarget": "data",
+            "mutationClass": "validation",
+            "moment": "fast validation",
+            "difference": {
+              "path": "$.toString",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": true,
+                "enumerable": true,
+                "writable": true,
+                "value": {
+                  "type": "undefined"
+                }
+              }
+            }
+          },
+          {
+            "validator": "jsonschema",
+            "draft": "draft6",
+            "formatProfile": "base",
+            "phase": "conformance",
+            "scope": "case",
+            "subjectId": "draft6:properties.json#/groups/5/tests/3",
+            "caseId": "draft6:properties.json#/groups/5/tests/3",
+            "schemaId": "draft6:properties.json#/groups/5",
+            "mutationTarget": "data",
+            "mutationClass": "validation",
+            "moment": "fast validation",
+            "difference": {
+              "path": "$.toString",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": true,
+                "enumerable": true,
+                "writable": true,
+                "value": {
+                  "type": "undefined"
+                }
+              }
+            }
+          },
+          {
+            "validator": "jsonschema",
+            "draft": "draft6",
+            "formatProfile": "base",
+            "phase": "conformance",
+            "scope": "case",
+            "subjectId": "draft6:properties.json#/groups/5/tests/4",
+            "caseId": "draft6:properties.json#/groups/5/tests/4",
+            "schemaId": "draft6:properties.json#/groups/5",
+            "mutationTarget": "data",
+            "mutationClass": "validation",
+            "moment": "fast validation",
+            "difference": {
+              "path": "$.constructor",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": true,
+                "enumerable": true,
+                "writable": true,
+                "value": {
+                  "type": "undefined"
+                }
+              }
+            }
+          },
+          {
+            "validator": "jsonschema",
+            "draft": "draft6",
+            "formatProfile": "base",
+            "phase": "conformance",
+            "scope": "case",
+            "subjectId": "draft6:properties.json#/groups/5/tests/5",
+            "caseId": "draft6:properties.json#/groups/5/tests/5",
+            "schemaId": "draft6:properties.json#/groups/5",
+            "mutationTarget": "data",
+            "mutationClass": "validation",
+            "moment": "fast validation",
+            "difference": {
+              "path": "$.toString",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": true,
+                "enumerable": true,
+                "writable": true,
+                "value": {
+                  "type": "undefined"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "schemasafe": {
+        "count": 0,
+        "records": []
+      },
+      "z-schema": {
+        "count": 0,
+        "records": []
+      }
+    }
+  },
+  "validators": {
+    "ajv": {
+      "roundThroughputs": [
+        4974384.992427509,
+        5304950.787444217
+      ],
+      "midpoint": 5139667.889935863,
+      "absoluteSpread": 330565.79501670785,
+      "relativeSpread": 0.06431656715874552,
+      "minimum": 4974384.992427509,
+      "maximum": 5304950.787444217,
+      "nanosecondsPerOperation": 194.56510058911195,
+      "mutationCount": 0,
+      "peakRssBytes": 315129856,
+      "scoreRelativeToBest": 100
+    },
+    "hyperjump": {
+      "roundThroughputs": [
+        685733.762386863,
+        654498.1720931582
+      ],
+      "midpoint": 670115.9672400106,
+      "absoluteSpread": 31235.590293704765,
+      "relativeSpread": 0.046612216124850725,
+      "minimum": 654498.1720931582,
+      "maximum": 685733.762386863,
+      "nanosecondsPerOperation": 1492.2790216724343,
+      "mutationCount": 0,
+      "peakRssBytes": 203231232,
+      "scoreRelativeToBest": 13.03811805724227
+    },
+    "redocly-ajv": {
+      "roundThroughputs": [
+        4271798.726535414,
+        4595522.992379775
+      ],
+      "midpoint": 4433660.859457595,
+      "absoluteSpread": 323724.2658443609,
+      "relativeSpread": 0.07301511687656792,
+      "minimum": 4271798.726535414,
+      "maximum": 4595522.992379775,
+      "nanosecondsPerOperation": 225.54724677844166,
+      "mutationCount": 0,
+      "peakRssBytes": 326402048,
+      "scoreRelativeToBest": 86.26356710983755
+    },
+    "schema-shield": {
+      "roundThroughputs": [
+        3663267.1044879933,
+        3475174.457003357
+      ],
+      "midpoint": 3569220.780745675,
+      "absoluteSpread": 188092.6474846364,
+      "relativeSpread": 0.052698518539203515,
+      "minimum": 3475174.457003357,
+      "maximum": 3663267.1044879933,
+      "nanosecondsPerOperation": 280.17319785723146,
+      "mutationCount": 0,
+      "peakRssBytes": 199450624,
+      "scoreRelativeToBest": 69.44458002305309
+    },
+    "z-schema": {
+      "roundThroughputs": [
+        102366.5195285922,
+        102782.77748252329
+      ],
+      "midpoint": 102574.64850555774,
+      "absoluteSpread": 416.2579539310973,
+      "relativeSpread": 0.004058097785326981,
+      "minimum": 102366.5195285922,
+      "maximum": 102782.77748252329,
+      "nanosecondsPerOperation": 9748.997579512228,
+      "mutationCount": 0,
+      "peakRssBytes": 201281536,
+      "scoreRelativeToBest": 1.9957446804376642
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "mutationReportVersion": 2,
+  "deduplication": "validator,draft,scope,subjectId,mutationTarget,mutationClass,path,kind,stable-before,stable-after",
+  "documents": [
+    {
+      "validator": "cfworker-json-schema",
+      "version": "4.1.1",
+      "relativePath": "mutations/cfworker-json-schema-4bd87c51443c94f8.md",
+      "eventCount": 1454,
+      "anchors": [
+        "mutation-event-3044a0c2c85dbaf96b99d0fd122b0d8e7cc18c5d9645041c32156b372933cd90",
+        "mutation-event-30c59bcb7b475cccaf2ed82fd00eb153cbc8f10639cf9450988131dc9652b910",
+        "mutation-event-3e584411d843fd3f6be193c9d5faf77ed6aa7cd78d9ff35f8dca835bde90e944",
+        "mutation-event-3f15f5a4769f577774851bf9fa1f3e485df461a15f3fee695d4d924604ce243d",
+        "mutation-event-40cb110725b8dd1f860994fbddb95605591dcefb12f82f050e061412afec58a4",
+        "mutation-event-8d39b406539ce5f05865f87807369b31173e5eee431fe35f0ceb7f963fe39b21",
+        "mutation-event-97ac32466d7d15fa5e2a080b3b060cd6715bb09d59817d6842eab3c75402584b",
+        "mutation-event-b6af8b56984b26354b3db4c19fc41fd31ae0286acd08424c2bec669063c97bc4",
+        "mutation-event-d1e8e738db2b80fe1bad3d313d9845d2e6d4e3b20a95e81ac93718cbd233a8de",
+        "mutation-event-e9428fb9ed42c6dc82cc895544b59e07a02397ae8bbb8ec9a46345c03e8e1c13",
+        "mutation-view-0acea4341b726484469ceaef7695a0f19af54ec10cc1cebf404be88b4e9cec99",
+        "mutation-view-0fbf5ebc2224e90d6930be7e250e136c318e6515c1f587617188d1410dc4fc21",
+        "mutation-view-213ff59f4482ae08c1de1695176aa1996a48dd8be9af032a47fbfd5195063af2",
+        "mutation-view-41210bd3d4370cfb573d8a04155caebc0c8f1d776815f08ca8501e0cf52d3d10",
+        "mutation-view-536cbcb7c56e21de37040aa770c7a7a12b6f3935ecdc63fbca781864d3e14b33",
+        "mutation-view-6dbb59ab08d978d7a5eea881ba576389cab7b9a445a05b132b8f757edb55b475",
+        "mutation-view-7970d2584e33ac673130cc0fefca3543192abc8a319c22d6c3c33e73f6e1bbef",
+        "mutation-view-9b5b5b1a922831eea1eb61ed26880e579d8bc40ebc023c433f2107ed29701c61",
+        "mutation-view-adfba42c92469421de6b4c3a65ecf948e06f57bc78ec45bf3c610957c597ce72",
+        "mutation-view-d92695ba0cd6af69610741ad5f2f0f418ab0dbcc6580d72e2d22fc41627273fb",
+        "mutation-view-f109ce5109ec9111c8a0fbab08d7d02f6816bf8f87cc3e6bf24ca2c280215a6f",
+        "mutation-view-f6bddd0a037fe3eb9f68eddd16af7f57af80e8bb2e7b694c1d21babc7cf4597e",
+        "mutation-view-fb9000ce54d322d7be6d2593ff22d943d70be4b047a8e1549a5e817ae7a15e94"
+      ],
+      "sha256": "c95fdd5c146fac0e674eacad1825ce4204946b3987130ef69dfa6b9938818d7b"
+    },
+    {
+      "validator": "jsonschema",
+      "version": "1.5.0",
+      "relativePath": "mutations/jsonschema-9bbbc0e7d004cda6.md",
+      "eventCount": 12,
+      "anchors": [
+        "mutation-event-3885a4b41ffba00fce111dfa838512b6ee594ec64984506d9aa598c093f00085",
+        "mutation-event-497495ad06ae19bce54ad9b5556f1f42d6ff7761514606b19b2c99458beaafcd",
+        "mutation-event-781318811522fe9fe345d43cddf25fd4a9718f2c5ae35095b5d44f08ca509be5",
+        "mutation-event-85abb657a71422ac7f1bed5032cb4fea47834d07d1f187ab90f0c54e5a5a361a",
+        "mutation-event-b4cd94b4f0fff3bdf41aeb1be0b3703a5846e7c26f8c50fe25db80aa4c3453cb",
+        "mutation-event-b96a860fb65da173f0f93627781a23a15aea7b7e1e6e9d645418e41d68872bf6",
+        "mutation-event-beb2366c882969098a03ef0e5a98d3bda49bab9eb4058a67a2f8ead28517becc",
+        "mutation-event-d225a8e8e26d67cf1bc42782c0ceffb6796cc84becbf4bf6d499ab3e76a1e001",
+        "mutation-event-d632b9c709e5b27b836fe1b2b1609f08fe780d9e1b33e4d2880717991621b691",
+        "mutation-event-dcac4b0c26dea89d47c7a40ef6629e5f3a61a7747cdc9b7b2c4afde4d315ede8",
+        "mutation-view-213ff59f4482ae08c1de1695176aa1996a48dd8be9af032a47fbfd5195063af2",
+        "mutation-view-36704b9c44d181a4097c9b025b14a2f8eb77be2eb04a5e93b00406e9f653466e",
+        "mutation-view-536cbcb7c56e21de37040aa770c7a7a12b6f3935ecdc63fbca781864d3e14b33",
+        "mutation-view-adfba42c92469421de6b4c3a65ecf948e06f57bc78ec45bf3c610957c597ce72",
+        "mutation-view-d92695ba0cd6af69610741ad5f2f0f418ab0dbcc6580d72e2d22fc41627273fb",
+        "mutation-view-e1c8792ef89991bc9294679c04e72f6da05340ac259c82993af0ae13bef1052a",
+        "mutation-view-f6bddd0a037fe3eb9f68eddd16af7f57af80e8bb2e7b694c1d21babc7cf4597e"
+      ],
+      "sha256": "6bd8ef50df14bc03b7117606a5bf53c7f4580e9e9f023fb5913795f1b8dda098"
+    }
+  ]
+}
