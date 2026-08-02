@@ -1,5 +1,5 @@
 {
-  "resultsVersion": 10,
+  "resultsVersion": 14,
   "benchmarkMode": "full",
   "eligibilityThresholdPercent": "98",
   "publicationWarning": null,
@@ -14,6 +14,16 @@
     "base",
     "format-assertion"
   ],
+  "performancePhases": [
+    "setup",
+    "execution",
+    "cold-execution"
+  ],
+  "performanceScopes": {
+    "setup": "draft",
+    "execution": "draft-profile",
+    "cold-execution": "draft-profile"
+  },
   "mutationDocuments": {
     "manifest": "mutations/index.json",
     "count": 2,

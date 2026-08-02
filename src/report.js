@@ -19,6 +19,7 @@ import {
   getBenchmarkMode,
   loadBenchmarkArtifacts,
   memoryBudgetFromEnvironment,
+  performancePhases,
   validateGranularSample
 } from "./benchmark.js";
 import {
@@ -26,12 +27,17 @@ import {
   draftIds,
   formatProfiles,
   getCompileParticipants,
+  getColdExecutionParticipants,
   getParticipants,
   getRoundOrder,
   sortParticipantsByName,
   sortValidatorIds,
   validators as validatorMatrix
 } from "./matrix.js";
+import {
+  participantImplementations,
+  rotateRoundOrder
+} from "./adapters/index.js";
 import { canonicalJson, sha256 } from "./suite.js";
 import { getResultsRoot } from "./paths.js";
 import {
@@ -44,7 +50,10 @@ import {
   defaultEligibilityThresholdPercent,
   parseEligibilityThresholdPercent
 } from "./eligibility.js";
-import { createDiagnosticPublication } from "./diagnostic.js";
+import {
+  createDiagnosticPublication,
+  createSampleRuntimeProvenance
+} from "./diagnostic.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const statuses = [
@@ -61,6 +70,14 @@ const whySection = [
   "",
   "Maintainers can reproduce each run, inspect exact conformance records, compare qualified performance scopes, and use the results to target validator improvements."
 ];
+
+function phaseSummaryName(phase) {
+  return phase === "cold-execution" ? "coldExecutionSummary" : `${phase}Summary`;
+}
+
+function phaseSummary(scope, phase) {
+  return scope[phaseSummaryName(phase)] ?? null;
+}
 
 export function assertBenchmarkPath(targetPath) {
   const resolved = path.resolve(targetPath);
@@ -248,58 +265,59 @@ export async function publishBenchmarkArtifacts({
   }
 }
 
-export function summarizeTwoRoundThroughputs(samples) {
-  if (!Array.isArray(samples) || samples.length !== 2) {
-    throw new Error("throughput summary requires exactly two rounds");
+function median(values) {
+  const ordered = [...values].sort((left, right) => left - right);
+  const middle = Math.floor(ordered.length / 2);
+  return ordered.length % 2 === 0
+    ? (ordered[middle - 1] + ordered[middle]) / 2
+    : ordered[middle];
+}
+
+export function summarizeThroughputs(samples, rounds) {
+  if (
+    ![1, 6].includes(rounds) ||
+    !Array.isArray(samples) ||
+    samples.length !== rounds
+  ) {
+    throw new Error(`throughput summary requires exactly ${rounds} valid rounds`);
   }
   const ordered = [...samples].sort((left, right) => left.round - right.round);
   if (
-    ordered[0].round === ordered[1].round ||
+    ordered.some(({ round }, index) => round !== index + 1) ||
     ordered.some(
       ({ throughput }) => !Number.isFinite(throughput) || throughput <= 0
     )
   ) {
-    throw new Error("throughput summary requires two distinct valid rounds");
+    throw new Error("throughput summary requires distinct sequential valid rounds");
   }
   const roundThroughputs = ordered.map(({ throughput }) => throughput);
   const minimum = Math.min(...roundThroughputs);
   const maximum = Math.max(...roundThroughputs);
-  const midpoint = (minimum + maximum) / 2;
-  const absoluteSpread = maximum - minimum;
+  const center = median(roundThroughputs);
+  const mean = roundThroughputs.reduce((total, value) => total + value, 0) / rounds;
+  const medianAbsoluteDeviation = median(
+    roundThroughputs.map((value) => Math.abs(value - center))
+  );
+  const sampleStandardDeviation = rounds === 1
+    ? 0
+    : Math.sqrt(
+        roundThroughputs.reduce(
+          (total, value) => total + (value - mean) ** 2,
+          0
+        ) /
+          (rounds - 1)
+      );
   return {
     roundThroughputs,
-    midpoint,
-    absoluteSpread,
-    relativeSpread: absoluteSpread / midpoint,
+    median: center,
+    mean,
+    medianAbsoluteDeviation,
+    relativeMedianAbsoluteDeviation: medianAbsoluteDeviation / center,
+    sampleStandardDeviation,
+    coefficientOfVariation: sampleStandardDeviation / mean,
     minimum,
     maximum,
-    nanosecondsPerOperation: 1e9 / midpoint
-  };
-}
-
-function summarizeThroughputs(samples, rounds) {
-  if (rounds === 2) {
-    return summarizeTwoRoundThroughputs(samples);
-  }
-  if (
-    rounds !== 1 ||
-    !Array.isArray(samples) ||
-    samples.length !== 1 ||
-    samples[0].round !== 1 ||
-    !Number.isFinite(samples[0].throughput) ||
-    samples[0].throughput <= 0
-  ) {
-    throw new Error("quick throughput summary requires exactly one valid round");
-  }
-  const throughput = samples[0].throughput;
-  return {
-    roundThroughputs: [throughput],
-    midpoint: throughput,
-    absoluteSpread: 0,
-    relativeSpread: 0,
-    minimum: throughput,
-    maximum: throughput,
-    nanosecondsPerOperation: 1e9 / throughput
+    nanosecondsPerOperation: 1e9 / center
   };
 }
 
@@ -333,7 +351,7 @@ export function validateSampleSet({
     throw new Error(`${phase} result declares another phase`);
   }
   if (
-    result.benchmarkVersion !== 3 ||
+    result.benchmarkVersion !== 9 ||
     result.benchmarkMode !== mode ||
     result.draft !== intersection.draft ||
     result.formatProfile !== intersection.formatProfile
@@ -374,11 +392,12 @@ export function validateSampleSet({
   }
   for (let round = 1; round <= config.rounds; round += 1) {
     const eligible = new Set(participantIds);
-    const expectedOrder = getRoundOrder({
+    const canonicalOrder = getRoundOrder({
       draft: intersection.draft,
       phase,
-      round
+      round: 1
     }).filter((validator) => eligible.has(validator));
+    const expectedOrder = rotateRoundOrder(canonicalOrder, round);
     const observedOrder = result.participantOrderByRound.find(
       (entry) => entry.round === round
     )?.validators;
@@ -436,7 +455,7 @@ export function validateSampleSet({
           throw new Error(`${phase} sample has invalid ${field}`);
         }
       }
-      const prefix = phase === "compile" ? "compile" : "execution";
+      const prefix = phase === "cold-execution" ? "coldExecution" : phase;
       if (
         sample.warmupMinimumMilliseconds !==
           config[`${prefix}WarmupMinimumMilliseconds`] ||
@@ -454,7 +473,7 @@ export function validateSampleSet({
       ) {
         throw new Error(`${phase} sample timing contract is invalid`);
       }
-      if (phase === "compile") {
+      if (phase === "setup") {
         if (
           sample.checksum !== intersection.compileChecksum ||
           sample.corpusCompileEntries !== intersection.compileEntries ||
@@ -836,9 +855,13 @@ function mutationViewsForValidator(scopes, validator) {
   )) {
     const separator = scopeName.indexOf("/");
     const draft = scopeName.slice(0, separator);
-    const formatProfile = scopeName.slice(separator + 1);
+    const scopeKind = scopeName.slice(separator + 1);
+    if (scopeKind === "setup") {
+      continue;
+    }
+    const formatProfile = scopeKind === "setup" ? null : scopeKind;
     const records = uniqueMutationRecords(
-      [scope.compileSummary, scope.executionSummary].flatMap((summary) =>
+      performancePhases.map((phase) => phaseSummary(scope, phase)).flatMap((summary) =>
         mutationRecordsFromSummary(summary, validator)
       )
     );
@@ -1006,8 +1029,8 @@ function renderMutationDocument({ validator, version, views, reports }) {
 export function createMutationDocuments({ scopes, reports = [], versions }) {
   const validatorIds = new Set();
   for (const scope of scopes.values()) {
-    for (const phase of ["compile", "execution"]) {
-      const validators = scope[`${phase}Summary`]?.mutations?.validators ?? {};
+    for (const phase of performancePhases) {
+      const validators = phaseSummary(scope, phase)?.mutations?.validators ?? {};
       for (const [validator, details] of Object.entries(validators)) {
         if (Array.isArray(details.records) && details.records.length > 0) {
           validatorIds.add(validator);
@@ -1177,16 +1200,16 @@ export function summarizePhase(result, mode, intersection = null) {
   const rankingStatus =
     competitorCount < 2 ? "INSUFFICIENT_COMPETITORS" : "COMPETITIVE";
   if (rankingStatus === "COMPETITIVE") {
-    const bestMidpoint = Math.max(
-      ...Object.values(validators).map(({ midpoint }) => midpoint)
+    const bestMedian = Math.max(
+      ...Object.values(validators).map(({ median }) => median)
     );
     for (const values of Object.values(validators)) {
-      values.scoreRelativeToBest = (values.midpoint / bestMidpoint) * 100;
+      values.scoreRelativeToBest = (values.median / bestMedian) * 100;
     }
   }
   return {
-    benchmarkVersion: 3,
-    summaryVersion: 7,
+    benchmarkVersion: 9,
+    summaryVersion: 10,
     phase: result.phase,
     draft: result.draft,
     formatProfile: result.formatProfile,
@@ -1201,8 +1224,8 @@ export function summarizePhase(result, mode, intersection = null) {
     centerFormula:
       rounds === 1
         ? "round_1_throughput"
-        : "(round_1_throughput + round_2_throughput) / 2",
-    scoreFormula: "midpoint_validator / best_midpoint_in_scope * 100",
+        : "median(round_throughputs)",
+    scoreFormula: "median_validator / best_median_in_scope * 100",
     mutationCountFormula:
       "count distinct (validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)",
     peakRssFormula: "max(sample.memory.peak.rss across valid rounds)",
@@ -1406,18 +1429,14 @@ export function globalConformanceTable(summary, versions) {
   return lines.join("\n");
 }
 
-function performanceChart(title, rows) {
+function performanceChart(title, rows, scoreLabel = "Balanced score") {
   const series = buildPerformanceChartSeries(rows);
-  const chartTitle =
-    typeof series.unit === "string"
-      ? `${title} (Higher is better, values in ${series.unit})`
-      : `${title} (Higher is better)`;
   return [
     "```mermaid",
     "xychart horizontal",
-    `    title "${escapeMermaidText(chartTitle)}"`,
+    `    title "${escapeMermaidText(`${title} (Higher is better)`)}"`,
     `    x-axis [${series.labels.map((label) => `"${label}"`).join(", ")}]`,
-    `    y-axis "Average ops/s" 0 --> ${series.yAxisMaximum}`,
+    `    y-axis "${scoreLabel}" 0 --> 100`,
     `    bar [${series.values.join(", ")}]`,
     "```"
   ].join("\n");
@@ -1495,18 +1514,18 @@ function compareIds(left, right) {
 }
 
 function phaseErrorStatus(phase) {
-  if (phase === "compile") {
+  if (phase === "setup") {
     return "COMPILE";
   }
-  if (phase === "execution") {
+  if (phase === "execution" || phase === "cold-execution") {
     return "RUNTIME";
   }
   throw new Error(`unknown consolidated phase: ${phase}`);
 }
 
-function measuredMidpoint(summary, validatorId) {
-  const midpoint = summary?.validators?.[validatorId]?.midpoint;
-  return Number.isFinite(midpoint) && midpoint > 0 ? midpoint : null;
+function measuredMedian(summary, validatorId) {
+  const median = summary?.validators?.[validatorId]?.median;
+  return Number.isFinite(median) && median > 0 ? median : null;
 }
 
 export function normalizedGeometricScore(rates, references) {
@@ -1547,11 +1566,12 @@ function globalErrorRecords(reports, validator, profile, status) {
       report.cases
         .filter(
           (record) =>
-            record.formatProfile === profile && record.status === status
+            (profile === null || record.formatProfile === profile) &&
+            record.status === status
         )
         .map((record) => ({
           draft: report.draft,
-          profile,
+          profile: record.formatProfile,
           caseId: record.id,
           description: record.description,
           status: record.status,
@@ -1576,7 +1596,7 @@ export function createGlobalPerformanceSummary(
     parseEligibilityThresholdPercent(eligibilityThresholdPercent)
   );
   for (const scope of scopes.values()) {
-    for (const phase of ["compile", "execution"]) {
+    for (const phase of performancePhases) {
       const observedPolicy = scope.intersections?.[phase]?.eligibility?.policy;
       if (
         observedPolicy !== undefined &&
@@ -1599,12 +1619,48 @@ export function createGlobalPerformanceSummary(
   }
   const phases = {};
 
-  for (const phase of ["compile", "execution"]) {
+  for (const phase of performancePhases) {
+    const setupPhase = phase === "setup";
     const evaluated = validatorMatrix.map((participant) => {
       const inputsByDraft = {};
       const scopeStates = {};
       const phaseSummaries = [];
       for (const draft of draftIds) {
+        if (setupPhase) {
+          const scopeName = `${draft}/setup`;
+          const scope = scopes.get(scopeName);
+          if (scope === undefined) {
+            throw new Error(`global summary lacks scope ${scopeName}`);
+          }
+          const supportsDraft = participant.drafts.includes(draft);
+          const supportsPhase = getCompileParticipants(draft).some(
+            ({ id }) => id === participant.id
+          );
+          const eligibility = scope.intersections?.setup?.eligibility ?? null;
+          const excluded = eligibility?.roster?.excluded?.find(
+            ({ id }) => id === participant.id
+          );
+          const summary = phaseSummary(scope, phase);
+          const median = measuredMedian(summary, participant.id);
+          phaseSummaries.push(summary);
+          inputsByDraft[draft] = { setupMedian: median };
+          if (!supportsDraft) {
+            scopeStates[scopeName] = {
+              eligible: false,
+              reasons: [{ code: "DRAFT_UNSUPPORTED" }]
+            };
+          } else if (!supportsPhase || median === null) {
+            scopeStates[scopeName] = {
+              eligible: false,
+              reasons: excluded?.reasons ?? [{ code: "MEASUREMENT_UNAVAILABLE" }]
+            };
+          } else if (excluded !== undefined) {
+            scopeStates[scopeName] = { eligible: false, reasons: excluded.reasons };
+          } else {
+            scopeStates[scopeName] = { eligible: true, reasons: [] };
+          }
+          continue;
+        }
         const draftInputs = {};
         for (const profile of formatProfiles) {
           const scopeName = `${draft}/${profile}`;
@@ -1614,22 +1670,22 @@ export function createGlobalPerformanceSummary(
           }
           const supportsDraft = participant.drafts.includes(draft);
           const supportsPhase =
-            phase !== "compile" ||
+            phase !== "setup" ||
             getCompileParticipants(draft).some(({ id }) => id === participant.id);
           const eligibility = scope.intersections?.[phase]?.eligibility ?? null;
           const excluded = eligibility?.roster?.excluded?.find(
             ({ id }) => id === participant.id
           );
-          const midpoint = measuredMidpoint(
-            scope[`${phase}Summary`],
+          const median = measuredMedian(
+            phaseSummary(scope, phase),
             participant.id
           );
-          phaseSummaries.push(scope[`${phase}Summary`]);
-          draftInputs[profile === "base" ? "baseMidpoint" : "formatsMidpoint"] =
-            midpoint;
+          phaseSummaries.push(phaseSummary(scope, phase));
+          draftInputs[profile === "base" ? "baseMedian" : "formatsMedian"] =
+            median;
           if (!supportsDraft) {
             scopeStates[scopeName] = { eligible: false, reasons: [{ code: "DRAFT_UNSUPPORTED" }] };
-          } else if (!supportsPhase || midpoint === null) {
+          } else if (!supportsPhase || median === null) {
             scopeStates[scopeName] = {
               eligible: false,
               reasons: excluded?.reasons ?? [{ code: "MEASUREMENT_UNAVAILABLE" }]
@@ -1662,9 +1718,11 @@ export function createGlobalPerformanceSummary(
       };
     });
     function createRanking() {
-      const requiredScopes = draftIds.flatMap((draft) =>
-        formatProfiles.map((profile) => `${draft}/${profile}`)
-      );
+      const requiredScopes = setupPhase
+        ? draftIds.map((draft) => `${draft}/setup`)
+        : draftIds.flatMap((draft) =>
+            formatProfiles.map((profile) => `${draft}/${profile}`)
+          );
       const prepared = evaluated.map((participant) => {
         const missingScopes = requiredScopes
           .filter((scope) => participant.scopeStates[scope].eligible !== true)
@@ -1685,38 +1743,78 @@ export function createGlobalPerformanceSummary(
       const referencesByDraft = Object.fromEntries(
         draftIds.map((draft) => [
           draft,
-          {
-            baseMidpoint:
+          setupPhase
+            ? {
+                setupMedian:
+                  includedCandidates.length === 0
+                    ? null
+                    : Math.max(
+                        ...includedCandidates.map(
+                          ({ inputsByDraft }) =>
+                            inputsByDraft[draft].setupMedian
+                        )
+                      )
+              }
+            : {
+                baseMedian:
               includedCandidates.length === 0
                 ? null
                 : Math.max(
                     ...includedCandidates.map(
-                      ({ inputsByDraft }) => inputsByDraft[draft].baseMidpoint
+                      ({ inputsByDraft }) => inputsByDraft[draft].baseMedian
                     )
                   ),
-            formatsMidpoint:
+            formatsMedian:
               includedCandidates.length === 0
                 ? null
                 : Math.max(
                     ...includedCandidates.map(
-                      ({ inputsByDraft }) => inputsByDraft[draft].formatsMidpoint
+                      ({ inputsByDraft }) => inputsByDraft[draft].formatsMedian
                     )
                   )
-          }
+              }
         ])
       );
       const included = includedCandidates.map((participant) => {
+        if (setupPhase) {
+          const setupRates = draftIds.map(
+            (draft) => participant.inputsByDraft[draft].setupMedian
+          );
+          const setupReferences = draftIds.map(
+            (draft) => referencesByDraft[draft].setupMedian
+          );
+          const records = globalErrorRecords(
+            reports,
+            participant.id,
+            null,
+            phaseErrorStatus(phase)
+          );
+          return {
+            ...participant,
+            setupOpsPerSecond: setupRates.reduce(
+              (total, rate) => total + rate,
+              0
+            ),
+            setupScore: normalizedGeometricScore(
+              setupRates,
+              setupReferences
+            ),
+            errors: {
+              setup: { count: records.length, records }
+            }
+          };
+        }
         const baseRates = draftIds.map(
-          (draft) => participant.inputsByDraft[draft].baseMidpoint
+          (draft) => participant.inputsByDraft[draft].baseMedian
         );
         const formatsRates = draftIds.map(
-          (draft) => participant.inputsByDraft[draft].formatsMidpoint
+          (draft) => participant.inputsByDraft[draft].formatsMedian
         );
         const baseReferences = draftIds.map(
-          (draft) => referencesByDraft[draft].baseMidpoint
+          (draft) => referencesByDraft[draft].baseMedian
         );
         const formatsReferences = draftIds.map(
-          (draft) => referencesByDraft[draft].formatsMidpoint
+          (draft) => referencesByDraft[draft].formatsMedian
         );
         const baseOpsPerSecond = baseRates.reduce((total, rate) => total + rate, 0);
         const formatsOpsPerSecond = formatsRates.reduce(
@@ -1756,7 +1854,9 @@ export function createGlobalPerformanceSummary(
       const rankingStatus =
         included.length < 2 ? "INSUFFICIENT_COMPETITORS" : "COMPETITIVE";
       included.sort((left, right) => {
-        const difference = right.balancedScore - left.balancedScore;
+        const difference = setupPhase
+          ? right.setupScore - left.setupScore
+          : right.balancedScore - left.balancedScore;
         return difference === 0 ? compareIds(left, right) : difference;
       });
       const excluded = prepared
@@ -1774,27 +1874,33 @@ export function createGlobalPerformanceSummary(
     }
     phases[phase] = createRanking();
   }
-
   return {
-    globalSummaryVersion: 11,
+    globalSummaryVersion: 15,
     drafts: draftIds,
-    requiredCoverage: `${draftIds.length * formatProfiles.length}/${draftIds.length * formatProfiles.length}`,
+    requiredCoverageByPhase: {
+      setup: `${draftIds.length}/${draftIds.length}`,
+      execution: `${draftIds.length * formatProfiles.length}/${draftIds.length * formatProfiles.length}`,
+      "cold-execution": `${draftIds.length * formatProfiles.length}/${draftIds.length * formatProfiles.length}`
+    },
     units: {
       throughput: "operations per second",
       allDraftsRawIndices:
-        "operations per second inherited from summed scope midpoint rates",
+        "operations per second inherited from summed scope median rates",
       mutations: "unique mutation findings detected during conformance",
       peakRss: "bytes"
     },
     formulas: {
       reference:
-        "maximum eligible midpoint in each phase, draft and profile scope",
-      ratio: "validator midpoint / scope reference",
+        "maximum eligible median in each phase, draft and profile scope",
+      ratio: "validator median / scope reference",
       baseOpsPerSecond:
-        "sum(base midpoint operations per second across all five drafts)",
+        "sum(base median operations per second across all five drafts)",
       formatsOpsPerSecond:
-        "sum(format-assertion midpoint operations per second across all five drafts)",
+        "sum(format-assertion median operations per second across all five drafts)",
       averageOpsPerSecond: "(baseOpsPerSecond + formatsOpsPerSecond) / 2",
+      setupOpsPerSecond:
+        "sum(setup median operations per second across all five drafts)",
+      setupScore: "100 * exp(sum(log(setup ratio)) / 5)",
       baseScore: "100 * exp(sum(log(base ratio)) / 5)",
       formatsScore: "100 * exp(sum(log(format-assertion ratio)) / 5)",
       balancedScore: "100 * exp(sum(log(all base and format-assertion ratios)) / 10)",
@@ -1805,7 +1911,8 @@ export function createGlobalPerformanceSummary(
     },
     eligibility: {
       policy: eligibilityPolicy,
-      allDrafts: "eligible in base and format-assertion for all five configured drafts in the phase"
+      allDrafts:
+        "eligible in every required Setup draft scope or every Base and Formats scope for the selected phase"
     },
     phases,
     conformance:
@@ -1847,20 +1954,31 @@ export function globalPerformanceTable(
   phaseSummary,
   chartTitle = null
 ) {
-  if (phase !== "compile" && phase !== "execution") {
+  if (!performancePhases.includes(phase)) {
     throw new Error(`unknown global phase: ${phase}`);
   }
   const competitive = phaseSummary.status !== "INSUFFICIENT_COMPETITORS";
-  const best = competitive ? phaseSummary.included[0]?.balancedScore ?? null : null;
+  const best = competitive
+    ? phase === "setup"
+      ? phaseSummary.included[0]?.setupScore ?? null
+      : phaseSummary.included[0]?.balancedScore ?? null
+    : null;
   const winners = phaseSummary.included.filter(
-    ({ balancedScore }) => balancedScore === best
+    (participant) =>
+      (phase === "setup"
+        ? participant.setupScore
+        : participant.balancedScore) === best
   );
-  const phaseLabel = phase === "compile" ? "Compile" : "Execution";
+  const phaseLabel = phase === "setup"
+    ? "Setup"
+    : phase === "cold-execution"
+      ? "Cold execution"
+      : "Execution";
   const lines = [
     `### All Drafts ${phaseLabel}`,
     "",
     competitive
-      ? `Leader: ${winnerNames(winners)} — Balanced score ${score(best)}`
+      ? `Leader global: ${winnerNames(winners)} — ${phase === "setup" ? "Setup score" : "Balanced score"} ${score(best)}`
       : "INSUFFICIENT_COMPETITORS: this ranking requires at least two qualified competitors."
   ];
   if (chartTitle !== null && competitive) {
@@ -1869,36 +1987,56 @@ export function globalPerformanceTable(
       [
         "```mermaid",
         "xychart horizontal",
-        `    title "${escapeMermaidText(`${chartTitle} Balanced score (Higher is better)`)}"`,
+        `    title "${escapeMermaidText(`${chartTitle} ${phase === "setup" ? "Setup" : "Balanced"} score (Higher is better)`)}"`,
         `    x-axis [${phaseSummary.included
           .map((participant) =>
             `"${escapeMermaidText(`${chartParticipant(participant).displayName} (${participant.version})`)}"`
           )
           .join(", ")}]`,
-        '    y-axis "Balanced score" 0 --> 100',
+        `    y-axis "${phase === "setup" ? "Setup score" : "Balanced score"}" 0 --> 100`,
         `    bar [${phaseSummary.included
-          .map(({ balancedScore }) => Number(balancedScore.toFixed(3)))
+          .map((participant) =>
+            Number(
+              (phase === "setup"
+                ? participant.setupScore
+                : participant.balancedScore
+              ).toFixed(3)
+            )
+          )
           .join(", ")}]`,
         "```"
       ].join("\n")
     );
   }
-  lines.push(
-    "",
-    "| Validator | Base ops/s | Formats ops/s | Average ops/s | Base score | Formats score | Balanced score |",
-    "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
-    ...phaseSummary.included.map(
-      (participant) =>
-        `| ${participantLink(participant)} | ${number(participant.baseOpsPerSecond)} | ${number(participant.formatsOpsPerSecond)} | ${number(participant.averageOpsPerSecond)} | ${score(participant.baseScore)} | ${score(participant.formatsScore)} | ${score(participant.balancedScore)} |`
-    ),
-    ...excludedGlobalParticipants(phaseSummary.excluded)
-  );
+  lines.push("");
+  if (phase === "setup") {
+    lines.push(
+      "| Validator | Setup ops/s index | Setup score | Errors | Peak RSS |",
+      "| --- | ---: | ---: | ---: | ---: |",
+      ...phaseSummary.included.map(
+        (participant) =>
+          `| ${participantLink(participant)} | ${number(participant.setupOpsPerSecond)} | ${score(participant.setupScore)} | [${participant.errors.setup.count}](results/global-errors/setup/setup/${participant.id}-COMPILE.md) | ${peakRssMiB(participant.peakRssBytes)} |`
+      )
+    );
+  } else {
+    lines.push(
+      "| Validator | Base ops/s | Formats ops/s | Average ops/s | Base score | Formats score | Balanced score |",
+      "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+      ...phaseSummary.included.map(
+        (participant) =>
+          `| ${participantLink(participant)} | ${number(participant.baseOpsPerSecond)} | ${number(participant.formatsOpsPerSecond)} | ${number(participant.averageOpsPerSecond)} | ${score(participant.baseScore)} | ${score(participant.formatsScore)} | ${score(participant.balancedScore)} |`
+      )
+    );
+  }
+  lines.push(...excludedGlobalParticipants(phaseSummary.excluded));
   return lines.join("\n");
 }
 
 export function createGlobalErrorDocuments(globalSummary) {
   const documents = [];
-  for (const phase of ["compile", "execution"]) {
+  for (const phase of performancePhases.filter(
+    (candidate) => globalSummary.phases[candidate] !== undefined
+  )) {
     const status = phaseErrorStatus(phase);
     const participants = new Map();
     for (const participant of globalSummary.phases[phase].included) {
@@ -1907,13 +2045,16 @@ export function createGlobalErrorDocuments(globalSummary) {
     for (const participant of [...participants.values()].sort(
       (left, right) => compareValidatorIds(left.id, right.id)
     )) {
-      for (const [profile, errorKey] of [
-        ["base", "base"],
-        ["format-assertion", "formats"]
-      ]) {
+      const errorScopes = phase === "setup"
+        ? [[null, "setup"]]
+        : [
+            ["base", "base"],
+            ["format-assertion", "formats"]
+          ];
+      for (const [profile, errorKey] of errorScopes) {
         const records = participant.errors[errorKey].records;
         const lines = [
-          `# All drafts ${profile} ${participantLink(participant)} ${status} errors`,
+          `# All drafts ${profile ?? "Setup"} ${participantLink(participant)} ${status} errors`,
           "",
           `Phase: ${phase}`,
           "",
@@ -1922,7 +2063,7 @@ export function createGlobalErrorDocuments(globalSummary) {
         ];
         if (records.length === 0) {
           lines.push(
-            `Result: 0 matching ${status} errors across all configured drafts for ${profile}/${participantLink(participant)}.`
+            `Result: 0 matching ${status} errors across all configured drafts for ${profile ?? "Setup"}/${participantLink(participant)}.`
           );
         } else {
           lines.push(
@@ -1942,7 +2083,7 @@ export function createGlobalErrorDocuments(globalSummary) {
           status,
           count: records.length,
           records,
-          relativePath: `global-errors/${phase}/${profile}/${participant.id}-${status}.md`,
+          relativePath: `global-errors/${phase}/${profile ?? "setup"}/${participant.id}-${status}.md`,
           content: `${lines.join("\n")}\n`
         });
       }
@@ -1952,19 +2093,23 @@ export function createGlobalErrorDocuments(globalSummary) {
 }
 
 function errorDocumentPath(phase, profile, validatorId, status) {
-  return `errors/${phase}/${profile}/${validatorId}-${status}.md`;
+  return profile === null
+    ? `errors/${phase}/${validatorId}-${status}.md`
+    : `errors/${phase}/${profile}/${validatorId}-${status}.md`;
 }
 
 function recordsForErrorDocument(report, profile, status) {
   return report.cases.filter(
-    (record) => record.formatProfile === profile && record.status === status
+    (record) =>
+      (profile === null || record.formatProfile === profile) &&
+      record.status === status
   );
 }
 
 export function renderErrorMarkdown(document) {
   const validator = participantLink(document.participant);
   const lines = [
-    `# ${document.draft} ${document.profile} ${validator} ${document.status} errors`,
+    `# ${document.draft} ${document.profile ?? "Setup"} ${validator} ${document.status} errors`,
     "",
     `Phase: ${document.phase}`,
     "",
@@ -1973,7 +2118,7 @@ export function renderErrorMarkdown(document) {
   ];
   if (document.records.length === 0) {
     lines.push(
-      `Result: 0 matching ${document.status} errors for ${document.draft}/${document.profile}/${validator}.`
+      `Result: 0 matching ${document.status} errors for ${document.draft}/${document.profile ?? "Setup"}/${validator}.`
     );
     return `${lines.join("\n")}\n`;
   }
@@ -1996,9 +2141,10 @@ export function createErrorDocuments({ draft, reports, participants }) {
       .map((report) => [report.validator, report])
   );
   const documents = [];
-  for (const phase of ["compile", "execution"]) {
+  for (const phase of performancePhases) {
     const status = phaseErrorStatus(phase);
-    for (const profile of formatProfiles) {
+    const profiles = phase === "setup" ? [null] : formatProfiles;
+    for (const profile of profiles) {
       for (const participant of sortParticipantsByName(participants)) {
         const report = reportByValidator.get(participant.id);
         if (report === undefined) {
@@ -2030,6 +2176,102 @@ export function createErrorDocuments({ draft, reports, participants }) {
   return documents;
 }
 
+export function setupPerformanceTable({
+  title,
+  draft,
+  summary,
+  reports,
+  participants,
+  errorLinkPrefix,
+  mutationLinkPrefix = null,
+  headingLevel = 2,
+  chartTitle = null
+}) {
+  const reportByValidator = new Map(
+    reports
+      .filter((report) => report.draft === draft)
+      .map((report) => [report.validator, report])
+  );
+  const eligible = new Set(summary.eligibility?.roster?.eligible ?? []);
+  const measured = participants
+    .filter(({ id }) => eligible.has(id) && summary.validators[id] !== undefined)
+    .map((participant) => {
+      const values = summary.validators[participant.id];
+      const report = reportByValidator.get(participant.id);
+      if (report === undefined) {
+        throw new Error(`missing conformance report for ${draft}/${participant.id}`);
+      }
+      return {
+        participant,
+        values,
+        errors: recordsForErrorDocument(report, null, "COMPILE").length
+      };
+    })
+    .sort((left, right) => {
+      const difference = right.values.median - left.values.median;
+      return difference === 0
+        ? compareIds(left.participant, right.participant)
+        : difference;
+    });
+  const competitive = measured.length >= 2;
+  const bestMedian = competitive ? measured[0].values.median : null;
+  const winners = competitive
+    ? measured
+        .filter(({ values }) => values.median === bestMedian)
+        .map(({ participant }) => participant)
+    : [];
+  const lines = [
+    `${"#".repeat(headingLevel)} ${title}`,
+    "",
+    competitive
+      ? `Leader: ${winnerNames(winners)} — Setup score 100%`
+      : "INSUFFICIENT_COMPETITORS: this ranking requires at least two qualified competitors."
+  ];
+  if (chartTitle !== null && competitive) {
+    lines.push(
+      "",
+      performanceChart(
+        chartTitle,
+        measured.map(({ participant, values }) => ({
+          participant,
+          average: (values.median / bestMedian) * 100
+        })),
+        "Setup score"
+      )
+    );
+  }
+  lines.push(
+    "",
+    "| Validator | Setup ops/s | Score | Errors | Mutations | Peak RSS |",
+    "| --- | ---: | ---: | ---: | ---: | ---: |"
+  );
+  for (const { participant, values, errors } of measured) {
+    const errorHref = `${errorLinkPrefix}/${errorDocumentPath("setup", null, participant.id, "COMPILE").slice("errors/".length)}`;
+    const mutationCell = mutationLinkCell(
+      values.mutationCount ?? 0,
+      participant.id,
+      mutationLinkPrefix,
+      mutationViewAnchor({ view: "draft", draft, phase: "conformance" })
+    );
+    lines.push(
+      `| ${participantLink(participant)} | ${number(values.median)} | ${competitive ? score((values.median / bestMedian) * 100) : "N/A"} | [${errors}](${errorHref}) | ${mutationCell} | ${peakRssMiB(values.peakRssBytes)} |`
+    );
+  }
+  const excluded = summary.eligibility?.roster?.excluded ?? [];
+  if (excluded.length > 0) {
+    lines.push(
+      "",
+      "Excluded from this ranking:",
+      "",
+      ...excluded.map(({ id, reasons }) => {
+        const participant = participants.find((candidate) => candidate.id === id);
+        return `- ${participantLink(participant)}: ${reasons.map(eligibilityReasonLabel).join(", ")}.`;
+      })
+    );
+  }
+  return lines.join("\n");
+}
+
 export function consolidatedPerformanceTable({
   title,
   phase,
@@ -2054,20 +2296,19 @@ export function consolidatedPerformanceTable({
     if (report === undefined) {
       throw new Error(`missing conformance report for ${draft}/${participant.id}`);
     }
-    const baseMidpoint = measuredMidpoint(baseSummary, participant.id);
-    const formatMidpoint = measuredMidpoint(formatSummary, participant.id);
+    const baseMedian = measuredMedian(baseSummary, participant.id);
+    const formatMedian = measuredMedian(formatSummary, participant.id);
     const mutationRecords = mutationRecordsForValidator(
       [baseSummary, formatSummary],
       participant.id
     );
     return {
       participant,
-      baseMidpoint,
-      formatMidpoint,
-      combined:
-        baseMidpoint === null || formatMidpoint === null
-          ? null
-          : (baseMidpoint + formatMidpoint) / 2,
+      baseMedian,
+      formatMedian,
+      balancedScore: null,
+      baseScore: null,
+      formatsScore: null,
       mutationCount: mutationRecords.length,
       peakRssBytes: maximumPeakRss([
         baseSummary?.validators?.[participant.id]?.peakRssBytes,
@@ -2081,36 +2322,46 @@ export function consolidatedPerformanceTable({
       ).length
     };
   });
-  const rows = allRows.filter(({ combined }) => combined !== null);
+  const measured = allRows.filter(
+    ({ baseMedian, formatMedian }) =>
+      baseMedian !== null && formatMedian !== null
+  );
+  const competitive = measured.length >= 2;
+  const baseReference = competitive
+    ? Math.max(...measured.map(({ baseMedian }) => baseMedian))
+    : null;
+  const formatsReference = competitive
+    ? Math.max(...measured.map(({ formatMedian }) => formatMedian))
+    : null;
+  if (competitive) {
+    for (const row of measured) {
+      row.baseScore = (row.baseMedian / baseReference) * 100;
+      row.formatsScore = (row.formatMedian / formatsReference) * 100;
+      row.balancedScore = normalizedGeometricScore(
+        [row.baseMedian, row.formatMedian],
+        [baseReference, formatsReference]
+      );
+    }
+  }
+  const rows = [...measured];
   rows.sort((left, right) => {
-    if (left.combined === null && right.combined !== null) {
-      return 1;
-    }
-    if (left.combined !== null && right.combined === null) {
-      return -1;
-    }
-    if (left.combined !== null && right.combined !== null) {
-      const difference = right.combined - left.combined;
+    if (left.balancedScore !== null && right.balancedScore !== null) {
+      const difference = right.balancedScore - left.balancedScore;
       if (difference !== 0) {
         return difference;
       }
     }
     return compareIds(left.participant, right.participant);
   });
-  const measured = rows.filter(({ combined }) => combined !== null);
-  const competitive = measured.length >= 2;
-  const bestCombined =
-    !competitive
-      ? null
-      : Math.max(...measured.map(({ combined }) => combined));
-  const winners = measured
-    .filter(({ combined }) => combined === bestCombined)
+  const bestCombined = !competitive ? null : rows[0].balancedScore;
+  const winners = rows
+    .filter(({ balancedScore }) => balancedScore === bestCombined)
     .map(({ participant }) => participant);
   const lines = [
     `${"#".repeat(headingLevel)} ${title}`,
     "",
     competitive
-      ? `Leader: ${winnerNames(winners)} — ${number(bestCombined)} ops/s (100%)`
+      ? `Leader: ${winnerNames(winners)} — Balanced score ${score(bestCombined)}`
       : "INSUFFICIENT_COMPETITORS: this ranking requires at least two qualified competitors."
   ];
   if (chartTitle !== null && competitive) {
@@ -2118,17 +2369,17 @@ export function consolidatedPerformanceTable({
       "",
       performanceChart(
         chartTitle,
-        rows.map(({ participant, combined }) => ({
+        rows.map(({ participant, balancedScore }) => ({
           participant,
-          average: combined
+          average: balancedScore
         }))
       )
     );
   }
   lines.push(
     "",
-    "| Validator | Base ops/s | Formats ops/s | Average ops/s | Score | Base errors | Format errors | Mutations | Peak RSS |",
-    "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"
+    "| Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |",
+    "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"
   );
   for (const row of rows) {
     const baseHref = `${errorLinkPrefix}/${errorDocumentPath(phase, "base", row.participant.id, status).slice("errors/".length)}`;
@@ -2140,10 +2391,13 @@ export function consolidatedPerformanceTable({
       mutationViewAnchor({ view: "draft", draft, phase: "conformance" })
     );
     lines.push(
-      `| ${participantLink(row.participant)} | ${row.baseMidpoint === null ? "N/A" : number(row.baseMidpoint)} | ${row.formatMidpoint === null ? "N/A" : number(row.formatMidpoint)} | ${row.combined === null ? "N/A" : number(row.combined)} | ${!competitive || row.combined === null ? "N/A" : score((row.combined / bestCombined) * 100)} | [${row.baseErrors}](${baseHref}) | [${row.formatErrors}](${formatHref}) | ${mutationCell} | ${peakRssMiB(row.peakRssBytes)} |`
+      `| ${participantLink(row.participant)} | ${number(row.baseMedian)} | ${number(row.formatMedian)} | ${competitive ? score(row.baseScore) : "N/A"} | ${competitive ? score(row.formatsScore) : "N/A"} | ${competitive ? score(row.balancedScore) : "N/A"} | [${row.baseErrors}](${baseHref}) | [${row.formatErrors}](${formatHref}) | ${mutationCell} | ${peakRssMiB(row.peakRssBytes)} |`
     );
   }
-  const excluded = allRows.filter(({ combined }) => combined === null);
+  const excluded = allRows.filter(
+    ({ baseMedian, formatMedian }) =>
+      baseMedian === null || formatMedian === null
+  );
   if (excluded.length > 0) {
     lines.push(
       "",
@@ -2151,16 +2405,16 @@ export function consolidatedPerformanceTable({
       "",
       ...excluded.map((row) => {
         const reasons = new Set();
-        if (row.baseMidpoint === null) {
-          const exclusions = baseSummary.eligibility?.roster?.excluded?.find(
+        if (row.baseMedian === null) {
+          const exclusions = baseSummary?.eligibility?.roster?.excluded?.find(
             ({ id }) => id === row.participant.id
           )?.reasons;
           for (const reason of exclusions ?? [{ code: "MEASUREMENT_UNAVAILABLE" }]) {
             reasons.add(eligibilityReasonLabel(reason));
           }
         }
-        if (row.formatMidpoint === null) {
-          const exclusions = formatSummary.eligibility?.roster?.excluded?.find(
+        if (row.formatMedian === null) {
+          const exclusions = formatSummary?.eligibility?.roster?.excluded?.find(
             ({ id }) => id === row.participant.id
           )?.reasons;
           for (const reason of exclusions ?? [{ code: "MEASUREMENT_UNAVAILABLE" }]) {
@@ -2195,7 +2449,7 @@ export function performanceTable(
       return -1;
     }
     if (leftValues !== undefined && rightValues !== undefined) {
-      const difference = rightValues.midpoint - leftValues.midpoint;
+      const difference = rightValues.median - leftValues.median;
       if (difference !== 0) {
         return difference;
       }
@@ -2203,28 +2457,28 @@ export function performanceTable(
     return compareIds(left, right);
     });
   const measurable = participants.filter(({ id }) => {
-    const midpoint = summary.validators[id]?.midpoint;
-    return Number.isFinite(midpoint) && midpoint > 0;
+    const median = summary.validators[id]?.median;
+    return Number.isFinite(median) && median > 0;
   });
   const competitive = measurable.length >= 2;
-  const bestMidpoint =
+  const bestMedian =
     !competitive
       ? null
-      : Math.max(...measurable.map(({ id }) => summary.validators[id].midpoint));
+      : Math.max(...measurable.map(({ id }) => summary.validators[id].median));
   const winners = measurable.filter(
-    ({ id }) => summary.validators[id].midpoint === bestMidpoint
+    ({ id }) => summary.validators[id].median === bestMedian
   );
   const lines = [
     `${"#".repeat(headingLevel)} ${title}`,
     "",
     competitive
-      ? `Leader: ${winnerNames(winners)} — ${number(bestMidpoint)} ops/s (100%)`
+      ? `Leader: ${winnerNames(winners)} — ${number(bestMedian)} ops/s (100%)`
       : "INSUFFICIENT_COMPETITORS: this ranking requires at least two qualified competitors.",
     "",
-    "Higher ops/s and a higher score are better. The score is each midpoint divided by the best midpoint in this scope, multiplied by 100. Rows are sorted by midpoint ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.",
+    "Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.",
     "",
-    "| Validator | Round 1 ops/s | Round 2 ops/s | Range ops/s | Midpoint ops/s | Score | Mutations | Peak RSS |",
-    "| --- | ---: | ---: | --- | ---: | ---: | ---: | ---: |"
+    "| Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |",
+    "| --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |"
   ];
   for (const participant of participants) {
     const values = summary.validators[participant.id];
@@ -2245,7 +2499,7 @@ export function performanceTable(
             })
       );
       lines.push(
-        `| ${participantLink(participant)} | N/A | N/A | N/A | N/A | N/A | ${mutationCell} | N/A |`
+        `| ${participantLink(participant)} | N/A | N/A | N/A | N/A | N/A | N/A | ${mutationCell} | N/A |`
       );
       continue;
     }
@@ -2267,7 +2521,7 @@ export function performanceTable(
             })
     );
     lines.push(
-      `| ${participantLink(participant)} | ${number(values.roundThroughputs[0])} | ${values.roundThroughputs.length === 1 ? "N/A" : number(values.roundThroughputs[1])} | ${values.roundThroughputs.length === 1 ? "N/A" : `${number(values.minimum)} to ${number(values.maximum)}`} | ${number(values.midpoint)} | ${competitive ? score((values.midpoint / bestMidpoint) * 100) : "N/A"} | ${mutationCell} | ${peakRssMiB(values.peakRssBytes)} |`
+      `| ${participantLink(participant)} | ${number(values.median)} | ${number(values.mean)} | ${score(values.relativeMedianAbsoluteDeviation * 100)} | ${score(values.coefficientOfVariation * 100)} | ${number(values.minimum)} to ${number(values.maximum)} | ${competitive ? score((values.median / bestMedian) * 100) : "N/A"} | ${mutationCell} | ${peakRssMiB(values.peakRssBytes)} |`
     );
   }
   const excluded = summary.eligibility?.roster?.excluded ?? [];
@@ -2291,14 +2545,30 @@ export function performanceTable(
 export function downloadTable(snapshot, participants) {
   const ordered = [...participants].sort(compareIds);
   return [
-    "Weekly downloads show npm adoption volume for the snapshot period.",
+    "Each row binds observed adapter behavior to the pinned package version. Weekly downloads show npm adoption volume for the snapshot period. `module-global-unavailable` means Cold execution is N/A because a fresh adapter wrapper cannot isolate provider state.",
     "",
-    "| Validator | Weekly downloads |",
-    "| --- | ---: |",
+    "| Validator | API | Cold isolation | Dynamic code | Weekly downloads |",
+    "| --- | --- | --- | --- | ---: |",
     ...ordered.map(
-      (participant) =>
-        `| ${participantLink(participant)} | ${number(snapshot.packages[participant.packageName].weeklyDownloads)} |`
-    )
+      (participant) => {
+        const implementation = participantImplementations[participant.id] ?? {
+          api: "N/A",
+          isolation: "N/A",
+          dynamicCode: "N/A"
+        };
+        return `| ${participantLink(participant)} | ${implementation.api} | ${implementation.isolation} | ${implementation.dynamicCode} | ${number(snapshot.packages[participant.packageName].weeklyDownloads)} |`;
+      }
+    ),
+    "",
+    "- `reusable-sync`: prepares a reusable callable synchronously.",
+    "- `reusable-async`: resolves asynchronous setup before exposing a reusable callable.",
+    "- `validate-only`: exposes validation through the adapter without a separate reusable compile result.",
+    "- `fresh-instance`: each fresh adapter creates isolated provider state.",
+    "- `module-global-unavailable`: module-global provider state cannot satisfy the fresh-isolation contract, so Cold execution is `N/A`.",
+    "- `observed`: the exercised adapter route uses dynamic code generation.",
+    "- `not-observed`: the exercised adapter route did not use dynamic code generation.",
+    "",
+    "Dynamic code describes the route exercised by the adapter at the pinned version, not every path available in the package."
   ].join("\n");
 }
 
@@ -2341,22 +2611,21 @@ export function renderRootSummary({ environment }) {
       `- [${draft}](${draft}/summary.md)`,
     ]),
     "",
-    "Each draft keeps independent base and format-assertion corpora. The root README and global summary publish qualified All Drafts Compile and Execution aggregates."
+    "Each draft keeps one unified Setup corpus plus independent Base and Formats corpora for Execution and Cold execution. The root README and global summary publish qualified All Drafts Setup, Execution and Cold execution aggregates."
   ].join("\n")}\n`;
 }
 
 export function renderDraftSummary({ draft, scopes, reports, snapshot, versions }) {
   const lines = [`# ${draft} benchmark results`, ""];
   const participants = versionedParticipants(getParticipants(draft), versions);
+  const setupScope = scopes.get(`${draft}/setup`);
   const baseScope = scopes.get(`${draft}/base`);
   const formatScope = scopes.get(`${draft}/format-assertion`);
   lines.push(
-    consolidatedPerformanceTable({
-      title: "Compile consolidation",
-      phase: "compile",
+    setupPerformanceTable({
+      title: "Setup ranking",
       draft,
-      baseSummary: baseScope.compileSummary,
-      formatSummary: formatScope.compileSummary,
+      summary: phaseSummary(setupScope, "setup"),
       reports,
       participants,
       errorLinkPrefix: "errors",
@@ -2374,42 +2643,67 @@ export function renderDraftSummary({ draft, scopes, reports, snapshot, versions 
       errorLinkPrefix: "errors",
       mutationLinkPrefix: "../mutations"
     }),
+    "",
+    consolidatedPerformanceTable({
+      title: "Cold execution consolidation",
+      phase: "cold-execution",
+      draft,
+      baseSummary: phaseSummary(baseScope, "cold-execution"),
+      formatSummary: phaseSummary(formatScope, "cold-execution"),
+      reports,
+      participants,
+      errorLinkPrefix: "errors",
+      mutationLinkPrefix: "../mutations"
+    }),
+    ""
+  );
+  const setupIntersection = setupScope.intersections.setup;
+  const setupPerformanceCorpus = setupScope.performanceCorpora?.setup ?? null;
+  lines.push(
+    `Setup eligible roster: ${setupIntersection.eligibility?.roster?.retention ?? "N/A"}. Draft intersection: ${setupIntersection.counts.total} represented cases and ${setupIntersection.counts.compileEntries} deduplicated effective operations. Roster SHA-256: \`${setupIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
+    ...(setupPerformanceCorpus === null
+      ? []
+      : [
+          "",
+          `Setup Quick performance corpus: ${setupPerformanceCorpus.selected.compileEntries} deduplicated effective operations. Selection SHA-256: \`${setupPerformanceCorpus.selectionSha256}\`.`
+        ]),
     ""
   );
   for (const formatProfile of formatProfiles) {
     const scope = scopes.get(`${draft}/${formatProfile}`);
-    const compileIntersection = scope.intersections?.compile ?? scope.intersection;
     const executionIntersection = scope.intersections?.execution ?? scope.intersection;
+    const coldExecutionIntersection =
+      scope.intersections?.["cold-execution"] ?? executionIntersection;
     const performanceCorpora = scope.performanceCorpora ?? {
-      compile: scope.performanceCorpus ?? null,
+      "cold-execution": scope.performanceCorpus ?? null,
       execution: scope.performanceCorpus ?? null
     };
     lines.push(
       `# Profile: ${formatProfile}`,
       "",
-      `Compile eligible roster: ${compileIntersection.eligibility?.roster?.retention ?? "legacy"}. Intersection: ${compileIntersection.counts.total} cases and ${compileIntersection.counts.compileEntries} compile entries. Roster SHA-256: \`${compileIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
-      "",
       `Execution eligible roster: ${executionIntersection.eligibility?.roster?.retention ?? "legacy"}. Intersection: ${executionIntersection.counts.total} cases and ${executionIntersection.counts.compileEntries} compile entries. Roster SHA-256: \`${executionIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
-      ...["compile", "execution"].flatMap((phase) => {
+      "",
+      `Cold execution eligible roster: ${coldExecutionIntersection.eligibility?.roster?.retention ?? "N/A"}. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: \`${coldExecutionIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
+      ...performancePhases.flatMap((phase) => {
         const performanceCorpus = performanceCorpora[phase];
-        return performanceCorpus === null
+        return performanceCorpus === null || performanceCorpus === undefined
           ? []
           : [
               "",
-              `${phase === "compile" ? "Compile" : "Execution"} Quick performance corpus: ${performanceCorpus.selected.executionCases} cases (${performanceCorpus.selected.validCases} valid and ${performanceCorpus.selected.invalidCases} invalid) and ${performanceCorpus.selected.compileEntries} compile entries. Selection SHA-256: \`${performanceCorpus.selectionSha256}\`.`
+              `${phase === "setup" ? "Setup" : phase === "cold-execution" ? "Cold execution" : "Execution"} Quick performance corpus: ${performanceCorpus.selected.executionCases} cases (${performanceCorpus.selected.validCases} valid and ${performanceCorpus.selected.invalidCases} invalid) and ${performanceCorpus.selected.compileEntries} deduplicated schema entries. Selection SHA-256: \`${performanceCorpus.selectionSha256}\`.`
             ];
       }),
       "",
       performanceTable(
-        "Compile ranking",
-        scope.compileSummary,
+        "Execution ranking",
+        scope.executionSummary,
         participants,
         { mutationLinkPrefix: "../mutations" }
       ),
       "",
       performanceTable(
-        "Execution ranking",
-        scope.executionSummary,
+        "Cold execution ranking",
+        phaseSummary(scope, "cold-execution"),
         participants,
         { mutationLinkPrefix: "../mutations" }
       ),
@@ -2429,7 +2723,7 @@ export function renderDraftSummary({ draft, scopes, reports, snapshot, versions 
     "",
     "## Limitations",
     "",
-    "Format behavior, runtime state, hardware, power state, and operating-system load affect results. Compile N/A identifies a validate-only API or an unavailable compile measurement."
+    "Format behavior, runtime state, hardware, power state, and operating-system load affect results. Setup N/A identifies a validate-only API or unavailable setup measurement. Cold execution N/A identifies an adapter whose state cannot be isolated under the direct measurement contract."
   );
   return `${lines.join("\n")}\n`;
 }
@@ -2442,26 +2736,29 @@ function participantList(versions) {
 }
 
 function draft6MainTables(scopes, reports, versions) {
+  const setupScope = scopes.get("draft6/setup");
   const baseScope = scopes.get("draft6/base");
   const formatScope = scopes.get("draft6/format-assertion");
-  if (baseScope === undefined || formatScope === undefined) {
+  if (
+    setupScope === undefined ||
+    baseScope === undefined ||
+    formatScope === undefined
+  ) {
     throw new Error("README lacks reporting scopes for draft6");
   }
   return [
     "## Draft 6 results",
     "",
-    consolidatedPerformanceTable({
-      title: "Draft 6 compile",
-      phase: "compile",
+    setupPerformanceTable({
+      title: "Draft 6 setup",
       draft: "draft6",
-      baseSummary: baseScope.compileSummary,
-      formatSummary: formatScope.compileSummary,
+      summary: phaseSummary(setupScope, "setup"),
       reports,
       participants: versionedParticipants(getParticipants("draft6"), versions),
       errorLinkPrefix: "results/draft6/errors",
       mutationLinkPrefix: "results/mutations",
       headingLevel: 3,
-      chartTitle: "Draft-06 compile"
+      chartTitle: "Draft-06 setup"
     }),
     "",
     consolidatedPerformanceTable({
@@ -2477,14 +2774,28 @@ function draft6MainTables(scopes, reports, versions) {
       headingLevel: 3,
       chartTitle: "Draft-06 execution"
     }),
+    "",
+    consolidatedPerformanceTable({
+      title: "Draft 6 Cold execution",
+      phase: "cold-execution",
+      draft: "draft6",
+      baseSummary: phaseSummary(baseScope, "cold-execution"),
+      formatSummary: phaseSummary(formatScope, "cold-execution"),
+      reports,
+      participants: versionedParticipants(getParticipants("draft6"), versions),
+      errorLinkPrefix: "results/draft6/errors",
+      mutationLinkPrefix: "results/mutations",
+      headingLevel: 3,
+      chartTitle: "Draft-06 Cold execution"
+    }),
     ""
   ];
 }
 
 function allDraftTables(globalSummary) {
   const lines = ["## All drafts results", ""];
-  for (const phase of ["compile", "execution"]) {
-    const phaseLabel = phase === "compile" ? "Compile" : "Execution";
+  for (const phase of performancePhases) {
+    const phaseLabel = phase === "setup" ? "Setup" : phase === "cold-execution" ? "Cold execution" : "Execution";
     lines.push(
       globalPerformanceTable(
         phase,
@@ -2591,7 +2902,7 @@ function renderLastRun(environment) {
     `- **Mode:** ${run.mode === "quick" ? "Quick" : "Full"}`,
     ...(environment.diagnostic?.diagnostic === true
       ? [
-          `- **Publication:** Diagnostic refresh of ${environment.diagnostic.refreshedValidator}. Refreshed validators in this cohort: ${environment.diagnostic.refreshedValidators.join(", ")}.`
+          `- **Publication:** Diagnostic refresh for validator ${environment.diagnostic.current.validator ?? "all"} and bench ${environment.diagnostic.current.bench ?? "all"}. Every sample retains the validator runtime hash that produced it.`
         ]
       : []),
     `- **Completed (UTC):** ${run.completedAt ?? "N/A"}`,
@@ -2621,17 +2932,13 @@ export function renderBenchmarkReadme({
   const quick = mode === "quick";
   const thresholdPercent =
     globalSummary.eligibility.policy.thresholdPercent;
-  const discoveredCaseCount = draftIds.reduce((total, draft) => {
-    const report = reports.find((candidate) => candidate.draft === draft);
-    return total + (report?.cases.length ?? 0);
-  }, 0);
   return `${[
     benchmarkTitle(mode, diagnostic),
     "",
     ...(diagnostic === null
       ? []
       : [
-          `> Diagnostic publication for \`${diagnostic.refreshedValidator}\`. Run the full ${mode === "quick" ? "Quick " : ""}benchmark before official publication.`,
+          `> Diagnostic publication for validator \`${diagnostic.current.validator ?? "all"}\` and bench \`${diagnostic.current.bench ?? "all"}\`. Omitted samples retain their baseline runtime identity. Run the full ${mode === "quick" ? "Quick " : ""}benchmark before official publication.`,
           ""
         ]),
     ...whySection,
@@ -2678,6 +2985,14 @@ export function renderBenchmarkReadme({
     "",
     "A validator refresh requires a complete compatible publication for the same base mode. Changes to the environment, benchmark contract, suite, locks, threshold, rounds, roster, eligibility, or common PASS corpus require a complete run first.",
     "",
+    "Regenerate one phase from a complete compatible publication:",
+    "",
+    "```bash",
+    "npm run benchmark -- --bench setup",
+    "npm run benchmark -- --bench execution",
+    "npm run benchmark -- --bench cold",
+    "```",
+    "",
     "Set the atomic Base and Formats eligibility threshold with a decimal percentage from 0 through 100:",
     "",
     "```bash",
@@ -2697,15 +3012,15 @@ export function renderBenchmarkReadme({
     ...allDraftTables(globalSummary),
     "## How to read these results",
     "",
-    "Draft tables use the arithmetic Average of their Base and Formats midpoints. The relative Score divides that draft-level Average by the best Average in the same phase and multiplies the ratio by 100.",
+    "Setup tables use one draft-scoped median and normalize it against the fastest eligible Setup median. Execution and Cold execution tables normalize Base and Formats against the fastest eligible median in each profile. Their Balanced score is the geometric mean of those two normalized scores and determines the draft leader and row order.",
     "",
-    `All-drafts tables show three raw aggregated indices before the normalized scores. Base ops/s sums the ${draftIds.length} Base midpoints, Formats ops/s sums the ${draftIds.length} Formats midpoints, and Average ops/s equals their arithmetic mean. These columns inherit ops/s units from their scope midpoints. Base score and Formats score use normalized geometric means across ${draftIds.length} scopes. Balanced score uses all ${draftIds.length * formatProfiles.length} scopes and alone determines the leader and row order.`,
+    `All Drafts Setup shows a raw Setup ops/s index that sums the ${draftIds.length} draft medians and a Setup score that uses their normalized geometric mean. Execution and Cold execution show Base and Formats indices, their arithmetic Average ops/s index, and a Balanced score across ${draftIds.length * formatProfiles.length} scopes.`,
     "",
-    "Compile error links open COMPILE records. Execution error links open RUNTIME records.",
+    "Setup error links open COMPILE records. Cold execution and Execution error links open RUNTIME records. COMPILE remains a conformance status and does not name a performance phase.",
     "",
-    "N/A marks an unavailable measurement. Compile N/A identifies a validate-only API or unavailable compile measurement.",
+    "N/A marks an unavailable measurement. Setup N/A identifies a validate-only API or unavailable setup measurement. Cold execution N/A identifies a provider whose state cannot be isolated under the direct fresh-operation contract.",
     "",
-    "Draft charts plot measured Average ops/s values. All-drafts charts plot Balanced score rather than the raw Average ops/s index. Draft tables retain N/A entries, while all-drafts eligibility excludes incomplete participants.",
+    "Setup charts plot Setup score. Execution and Cold execution charts plot Balanced score. All Drafts tables retain raw summed ops/s indices for diagnosis, while eligibility excludes incomplete participants.",
     "",
     "## Detailed draft summaries",
     "",
@@ -2724,7 +3039,7 @@ export function renderBenchmarkReadme({
     "",
     "### Participants by draft",
     "",
-    "Every participant listed for a draft runs conformance in both `base` and `format-assertion`. One atomic roster per draft governs both profiles. Compile intersects that roster with participants that expose Compile capability. Participant links use the package names recorded in `results/packages.json` and verified against npm.",
+    "Every participant listed for a draft runs conformance in both `base` and `format-assertion`. One atomic roster per draft governs both profiles. Setup intersects that roster with participants that expose reusable compilation. Cold execution excludes providers whose state cannot be isolated. Participant links use the pinned package names and versions recorded in `results/packages.json`.",
     "",
     ...participantList(versions),
     "",
@@ -2743,15 +3058,17 @@ export function renderBenchmarkReadme({
     '    E -->|Eligible| F["We add the validator to the draft roster"]',
     '    E -->|Below gate| G["We publish diagnostic results"]',
     '    F --> H["We build the common PASS corpus"]',
-    '    H --> I["We measure Compile with fresh complete construction"]',
-    '    H --> J["We measure Execution with a reusable callable"]',
-    '    I --> K["We publish draft results: Base, Formats, and Average"]',
+    '    H --> I["We measure Setup with deduplicated fresh construction"]',
+    '    H --> J["We measure Execution with prepared validation context"]',
+    '    H --> Q["We measure Cold execution directly per case"]',
+    '    I --> K["We publish one normalized Setup score per draft"]',
     '    J --> K',
+    '    Q --> K',
     '    K --> L{"Does the validator qualify across all five drafts?"}',
     '    L -->|Below gate| G',
     '    L -->|Yes| M["We consolidate validators that qualify across all five drafts"]',
-    '    M --> N["We publish All Drafts Compile and Execution"]',
-    '    N --> O["We normalize scope midpoints"]',
+    '    M --> N["We publish All Drafts Setup, Execution and Cold execution"]',
+    '    N --> O["We normalize scope medians"]',
     '    O --> P["We calculate geometric scores with equal weight per scope"]',
     "```",
     "",
@@ -2759,37 +3076,56 @@ export function renderBenchmarkReadme({
     "",
     "We measure conformance for every configured validator against every discovered case in Base and Formats. We preserve each `PASS`, `WRONG`, `COMPILE`, `RUNTIME` and `UNSUPPORTED` result in the reports and participant matrix.",
     "",
-    `We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured ${thresholdPercent}% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly, while Compile intersects it with validators that expose Compile capability.`,
+    `We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured ${thresholdPercent}% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable compilation. Cold execution intersects it with adapters that provide fresh isolated state.`,
     "",
     "We retain every excluded validator and its exact reasons in diagnostic results. We build each common phase corpus from cases where every validator in that phase roster reports `PASS`. A ranking requires at least two qualified competitors. Smaller rosters publish `INSUFFICIENT_COMPETITORS`; competitive leader, relative score, and chart fields start with two competitors.",
     "",
     "We publish two hashes for each phase intersection. The performance identity hash covers the policy, relevant suite and format configuration, eligible roster, and common corpus. Compatible performance cache entries share this identity. The artifact hash also covers excluded-roster diagnostics, mutations, and all source-report hashes.",
+    "Each performance sample records the validator runtime hash that produced it. A partial refresh preserves that hash on omitted baseline samples, while `results/environment.json` publishes the runtime provenance by scope and validator. This prevents an old sample from inheriting the current runtime identity by presentation alone.",
     "",
-    "### Compile",
+    "### Setup",
     "",
-    "We measure one complete fresh construction per Compile operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and schema compilation. We prepare the neutral corpus and disposable schema and resource copies before the clock starts. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Compile `N/A` identifies a validate-only API or unavailable compile measurement.",
+    "We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and schema compilation. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. We prepare neutral disposable copies before the clock starts. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.",
     "",
     "### Execution",
     "",
-    "We prepare each reusable callable and its correctness-check data before the Execution clock starts. We then measure complete passes over the common corpus with one isolated mutable measurement set per worker and round. `reusable-sync` exposes synchronous compilation, `reusable-async` resolves asynchronous setup before reuse, and `validate-only` calls validation directly through the vendor API. Any boolean result change or memory-budget violation fails the sample.",
+    "Before the Execution clock starts, reusable adapters prepare their callable and `validate-only` adapters prepare their adapter context, profiled schema and correctness-check data. During each measured complete-corpus pass, reusable adapters call the prepared callable, while `validate-only` adapters call the vendor API through their prepared adapter context. Each worker and round owns one isolated mutable measurement set. Any boolean result change or memory-budget violation fails the sample.",
+    "",
+    "### Cold execution",
+    "",
+    "Cold execution measures each case directly. Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile and analyzes schema capabilities. The timed operation creates a fresh adapter and provider context, applies integration-owned configuration and registration, obtains the callable or validate-only equivalent, validates once and ends when validation returns. Result comparison, checksum, diagnostics and telemetry remain outside the clock. The runner never derives this rate from Setup or Execution and never rewrites `$id` or references. Hyperjump is N/A because its pinned API stores schema and format state in module globals that a fresh adapter wrapper cannot isolate.",
     "",
     "### Timing and scoring",
     "",
-    quick
-      ? `In Quick mode, we evaluate all ${discoveredCaseCount.toLocaleString("en-US")} discovered cases for conformance and select each performance corpus by deterministic SHA-256 case-ID rank. We cap a scope at ${quickPerformanceCorpusContract.maximumCompileEntriesPerScope} compile entries and ${quickPerformanceCorpusContract.maximumExecutionCasesPerScope} execution cases, preserve valid and invalid cases, and measure one complete pass per eligible validator. We record selection hashes and counts in \`results/environment.json\` and each phase's \`samples.json\`.`
-      : "In Full mode, we evaluate every discovered conformance case and measure the complete common corpus. We keep integrity checks and baseline resets outside operation clocks. We warm complete corpus passes for at least 100 ms, then measure complete passes toward a 500 ms target with a normal minimum of 350 ms. Each active validator receives two isolated samples in canonical-name order with validator ID as the deterministic tie-breaker.",
+    `Quick runs complete conformance, one performance round without warmup, and a reduced deterministic performance corpus selected by SHA-256 case-ID rank. It caps each scope at ${quickPerformanceCorpusContract.maximumCompileEntriesPerScope} deduplicated Setup entries and ${quickPerformanceCorpusContract.maximumExecutionCasesPerScope} execution cases, preserves valid and invalid cases, and records selection hashes and counts in \`results/environment.json\` and each phase's \`samples.json\`. Quick is diagnostic and does not define the canonical publication.`,
+    "",
+    "Full runs complete conformance and the complete common performance corpus under the canonical contract. Each phase warms complete corpus passes for at least 100 ms, then measures complete passes toward a 250 ms target with a normal minimum of 175 ms. A pass that exceeds the target remains valid because the runner never truncates a corpus pass. Each active validator receives six isolated samples in three antithetic pairs. The pair rotations use deterministic offsets 0, floor(n / 3), and floor(2n / 3) for the eligible roster size n, so every participant has the same mean position. Reports use their median for ranking and scoring and publish the arithmetic mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum and all six rates. Compatible before-and-after analysis may pair the same rounds, but the runner makes no automatic significance claim. Run Full only for the final publication, after tests and Quick are stable.",
     "",
     quick
-      ? "Higher ops/s is better. Each scope reports its observed Quick pass. We calculate the scoped relative Score as `midpoint / bestMidpoint * 100`, which is a normalized relative performance index. The best scoped midpoint scores exactly 100%, and rows sort by midpoint ops/s descending with validator ID for deterministic ties."
-      : "Higher ops/s is better. Each scope reports both rounds, their range, and their arithmetic midpoint. We calculate the scoped relative Score as `midpoint / bestMidpoint * 100`, a normalized relative performance index. Statistical significance and percentage improvement require separate analysis. The best scoped midpoint scores exactly 100%, and rows sort by midpoint ops/s descending with validator ID for deterministic ties.",
+      ? "Higher ops/s is better. Each scope reports its observed Quick pass as its median. We calculate the scoped relative Score as `median / bestMedian * 100`, which is a normalized relative performance index. The best scoped median scores exactly 100%, and rows sort by median ops/s descending with validator ID for deterministic ties."
+      : "Higher ops/s is better. Each scope reports all six round rates, uses their median for ranking and scoring, and publishes the arithmetic mean, relative median absolute deviation, sample coefficient of variation, minimum and maximum as diagnostics. We calculate the scoped relative Score as `median / bestMedian * 100`, a normalized relative performance index. Compatible before-and-after analysis may pair the same rounds and inspect their ratios, but the runner makes no automatic significance claim. The best scoped median scores exactly 100%, and rows sort by median ops/s descending with validator ID for deterministic ties.",
     "",
-    "Draft tables retain the arithmetic Average of their Base and Formats midpoints for one draft and phase. In All Drafts tables, Base ops/s and Formats ops/s sum five scope midpoints, and Average ops/s is the arithmetic mean of those sums. All three are raw aggregated indices with inherited ops/s units. Complete traversal throughput remains scoped to each draft and profile. We keep N/A measurements last.",
+    "Setup draft tables normalize one median against the eligible draft reference. All Drafts Setup sums five medians as a diagnostic index and ranks by the geometric mean of five normalized ratios. Execution and Cold execution retain Base and Formats normalization, their raw global indices and the ten-scope Balanced score. We keep N/A measurements last.",
     "",
-    `For All Drafts, we require atomic eligibility at ${thresholdPercent}% in Base and Formats across all five drafts. We set each phase-and-scope reference to the fastest midpoint in the common All Drafts roster and divide each validator midpoint by that reference. We calculate Base score and Formats score as five-scope geometric means, then calculate Balanced score as the ten-scope geometric mean with equal weight per scope. Balanced score also equals \`sqrt(Base score * Formats score)\` within floating-point precision. Balanced score determines the leader and row order, with validator ID as the deterministic tie-breaker. The raw indices provide context. A validator scores 100 only by matching every relevant scope reference. The highest All Drafts score can therefore be below 100.`,
+    `For All Drafts, we require atomic eligibility at ${thresholdPercent}% in Base and Formats across all five drafts. Setup uses one reference per draft and calculates Setup score as the five-scope geometric mean. Execution and Cold execution calculate Base score and Formats score as five-scope geometric means, then calculate Balanced score as the ten-scope geometric mean with equal weight per scope. Each ranking uses its normalized score with validator ID as the deterministic tie-breaker. Raw summed indices remain diagnostic. A validator scores 100 only by matching every relevant scope reference.`,
     "",
     "### Mutations",
     "",
-    "Conformance detects schema, data, and resource mutations on disposable copies. We deduplicate findings by `(validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)` and retain every event in JSON. Each validator report renders the first 10 findings in deterministic order, states its omitted count, and links readers to the complete JSON record. Performance Compile and Execution use separate copies. Performance rankings use throughput and score metrics.",
+    "Conformance detects schema, data, and resource mutations on disposable copies. We deduplicate findings by `(validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)` and retain every event in JSON. Each validator report renders the first 10 findings in deterministic order, states its omitted count, and links readers to the complete JSON record. Setup, Execution and Cold execution use separate copies. Performance rankings use throughput and score metrics.",
+    "",
+    "### Using the bench to improve a validator",
+    "",
+    "Use this procedure for one validator:",
+    "",
+    "1. Establish a diagnostic baseline with `npm test`, then `npm run benchmark -- --quick`.",
+    "2. Inspect `results/<draft>/conformance/<canonical-id>.json` and its Markdown companion. `WRONG` means the validator returned the opposite boolean. `COMPILE` means a reusable adapter rejected the schema before validation. `RUNTIME` means validation, validate-only setup or detailed error extraction failed.",
+    "3. Choose the phase that matches the suspected cost. Setup isolates fresh provider construction, registration and compilation. Cold execution measures fresh setup plus one validation per case. Execution measures repeated validation through a prepared reusable callable or a prepared `validate-only` adapter context.",
+    "4. Inspect `results/<draft>/setup/samples.json` for Setup or `results/<draft>/profiles/<profile>/<phase>/samples.json` for Execution and Cold execution. Compare each round's `operations`, `actualElapsedMilliseconds`, throughput and `memory.peak.rss`, then confirm Peak RSS, the intersection hash, the performance identity and the benchmark contract hash before attributing a change.",
+    "5. Keep the units separate. Raw rates belong to one scope. Scoped and Balanced relative scores compare eligible validators against their scope references. The global ops/s indices sum scope medians and serve as diagnostic indices rather than one directly measured workload.",
+    "6. Before changing the validator, copy the relevant baseline artifacts outside `results/` so a refresh cannot replace them, and record the benchmark contract hash, intersection and performance identities, and baseline values for the exact draft, profile and phase under analysis.",
+    "7. Keep the pinned corpus, target and adapter options fixed, make one validator change, then run `npm run benchmark -- --quick --validator <canonical-id>` when a complete compatible Quick publication exists. This command produces only the post-change state; it does not calculate a before/after comparison. Compare that post-change state with the preserved baseline for exactly the same draft, profile and phase.",
+    "8. A complete Quick run is required after changes to the environment, benchmark contract, suite, locks, threshold, rounds, roster, eligibility or common PASS corpus. It also establishes a new diagnostic baseline when no compatible Quick publication exists.",
+    "9. Run `npm run benchmark` only after the implementation, tests and Quick results are stable. Full is reserved for the final publication.",
     "",
     "### Memory",
     "",
@@ -2816,15 +3152,16 @@ export function renderBenchmarkReadme({
     "## Results",
     "",
     "- `results/index.json` records the result format, benchmark mode, drafts and profiles.",
-    "- `results/environment.json` records runtime and hashes.",
+    "- `results/environment.json` records the current runtime, hashes, and sample runtime provenance by scope and validator.",
     "- `results/packages.json` records package versions, tarballs, and integrities.",
     "- `results/validators.json` records validator profiles.",
-    "- `results/global-summary.json` records one All Drafts ranking per phase with raw draft midpoints, summed Base and Formats ops/s indices, their arithmetic Average ops/s index, per-scope references, geometric Base, Formats and Balanced scores, mutation counts, peak RSS bytes, eligibility and exclusions.",
+    "- `results/global-summary.json` records All Drafts rankings for Setup, Execution and Cold execution. Setup contains five draft medians, a summed Setup ops/s index and a five-scope geometric score. The other phases retain Base, Formats, Average and Balanced fields.",
     "- `results/global-errors/` contains the exact records summed by each linked all-drafts error count, including explicit zero-record pages.",
     "- `results/mutations/` contains one bounded Markdown mutation report for each validator with recorded mutations plus a hashed inventory. Each report renders at most 10 deterministic event details while its total and the JSON results remain complete.",
     "- `results/<draft>/conformance/` contains full JSON and Markdown reports.",
-    "- `results/<draft>/profiles/<profile>/intersections/` contains phase-specific eligibility, rosters, hashes, intersections, and retention data.",
-    "- `results/<draft>/profiles/<profile>/<phase>/` contains raw phase samples and summaries for the exact eligible roster.",
+    "- `results/<draft>/intersections/setup.*` and `results/<draft>/setup/` contain the unified Setup intersection, samples and summary.",
+    "- `results/<draft>/profiles/<profile>/intersections/` contains Execution and Cold execution eligibility, rosters, hashes and intersections.",
+    "- `results/<draft>/profiles/<profile>/<phase>/` contains Execution or Cold execution samples and summaries for the exact eligible roster.",
     "- `results/<draft>/summary.md` contains rankings per profile.",
     "- `results/summary.md` indexes all configured drafts.",
     "",
@@ -2862,7 +3199,7 @@ export function createResultsIndex(
     throw new Error("results index mode must be quick or full");
   }
   return {
-    resultsVersion: 10,
+    resultsVersion: 14,
     benchmarkMode: mode,
     eligibilityThresholdPercent: parseEligibilityThresholdPercent(
       eligibilityThresholdPercent
@@ -2875,12 +3212,21 @@ export function createResultsIndex(
       : {
           diagnostic: {
             diagnostic: true,
-            refreshedValidator: diagnostic.validator,
-            refreshedValidators: [...diagnostic.refreshedValidators]
+            current: {
+              validator: diagnostic.validator,
+              bench: diagnostic.bench ?? null
+            },
+            refreshes: diagnostic.refreshes.map((refresh) => ({ ...refresh }))
           }
         }),
     drafts: draftIds,
     formatProfiles,
+    performancePhases,
+    performanceScopes: {
+      setup: "draft",
+      execution: "draft-profile",
+      "cold-execution": "draft-profile"
+    },
     ...(mutationManifest === null
       ? {}
       : {
@@ -2933,7 +3279,8 @@ async function writeStaged(stagedRoot, relativePath, content) {
 export async function generateFinalReport({
   mode = "full",
   eligibilityThresholdPercent = defaultEligibilityThresholdPercent,
-  validator = null
+  validator = null,
+  bench = null
 } = {}) {
   const config = getBenchmarkMode(mode);
   const eligibilityPolicy = createPerformanceEligibilityPolicy(
@@ -3033,21 +3380,96 @@ export async function generateFinalReport({
   const sampleResults = [];
   let suiteArtifacts = null;
   for (const draft of draftIds) {
+    const setupRaw = await readFile(
+      path.join(resultsRoot, draft, "setup", "samples.json")
+    );
+    const setupResult = JSON.parse(setupRaw);
+    sampleResults.push(setupResult);
+    const setupArtifacts = await loadBenchmarkArtifacts({
+      draft,
+      formatProfile: null,
+      phase: "setup",
+      eligibilityThresholdPercent
+    });
+    suiteArtifacts ??= setupArtifacts;
+    const setupCorpus = derivePerformanceCorpus({
+      mode,
+      intersection: setupArtifacts.intersection,
+      cases: setupArtifacts.suite.cases
+    });
+    const setupCasesById = new Map(
+      setupArtifacts.suite.cases.map((testCase) => [testCase.id, testCase])
+    );
+    const setupCases = setupCorpus.caseIds.map((id) => setupCasesById.get(id));
+    const setupValidationContext = {
+      draft,
+      formatProfile: null,
+      hash: setupArtifacts.intersectionHash,
+      emptyReason: setupArtifacts.intersection.emptyReason,
+      performanceCorpus: setupCorpus.metadata,
+      performanceEligibility: setupArtifacts.intersection.eligibility.policy,
+      compileChecksum: compileChecksum(setupCorpus.compileEntries),
+      compileEntries: setupCorpus.compileEntries.length,
+      execution: {
+        cases: setupCases.length,
+        valid: setupCases.filter(({ expected }) => expected === true).length,
+        invalid: setupCases.filter(({ expected }) => expected === false).length,
+        inputHash: sha256(canonicalJson(setupCases.map(({ data }) => data))),
+        passChecksum: setupCases.reduce(
+          (total, testCase, index) =>
+            total + (index + 1) * (testCase.expected ? 3 : 7),
+          0
+        )
+      }
+    };
+    const setupParticipants = setupArtifacts.intersection.participants.map(
+      ({ id }) => {
+        const participant = validatorMatrix.find((candidate) => candidate.id === id);
+        if (participant === undefined) {
+          throw new Error(`intersection has unknown eligible participant: ${id}`);
+        }
+        return participant;
+      }
+    );
+    validateSampleSet({
+      phase: "setup",
+      result: setupResult,
+      intersection: setupValidationContext,
+      installedVersions: installedValidators,
+      participants: setupParticipants,
+      benchmarkContractHash,
+      mode
+    });
+    scopes.set(`${draft}/setup`, {
+      intersections: { setup: setupArtifacts.intersection },
+      performanceCorpora: { setup: setupCorpus.metadata },
+      setupSummary: summarizePhase(
+        setupResult,
+        mode,
+        setupArtifacts.intersection
+      )
+    });
+    performanceHashes[`${draft}/setup`] = {
+      setupSamples: sha256(setupRaw),
+      intersections: { setup: setupArtifacts.intersectionHash },
+      intersectionArtifacts: { setup: setupArtifacts.artifactHash }
+    };
+
     for (const formatProfile of formatProfiles) {
       const scopePath = `${draft}/profiles/${formatProfile}`;
-      const compileRaw = await readFile(
-        path.join(resultsRoot, scopePath, "compile/samples.json")
-      );
       const executionRaw = await readFile(
         path.join(resultsRoot, scopePath, "execution/samples.json")
       );
-      const compileResult = JSON.parse(compileRaw);
+      const coldExecutionRaw = await readFile(
+        path.join(resultsRoot, scopePath, "cold-execution/samples.json")
+      );
       const executionResult = JSON.parse(executionRaw);
-      sampleResults.push(compileResult, executionResult);
+      const coldExecutionResult = JSON.parse(coldExecutionRaw);
+      sampleResults.push(executionResult, coldExecutionResult);
       const phaseData = {};
       for (const [phase, result] of [
-        ["compile", compileResult],
-        ["execution", executionResult]
+        ["execution", executionResult],
+        ["cold-execution", coldExecutionResult]
       ]) {
         const artifacts = await loadBenchmarkArtifacts({
           draft,
@@ -3107,34 +3529,34 @@ export async function generateFinalReport({
       const key = `${draft}/${formatProfile}`;
       scopes.set(key, {
         intersections: {
-          compile: phaseData.compile.artifacts.intersection,
-          execution: phaseData.execution.artifacts.intersection
+          execution: phaseData.execution.artifacts.intersection,
+          "cold-execution": phaseData["cold-execution"].artifacts.intersection
         },
         performanceCorpora: {
-          compile: phaseData.compile.performanceCorpus.metadata,
-          execution: phaseData.execution.performanceCorpus.metadata
+          execution: phaseData.execution.performanceCorpus.metadata,
+          "cold-execution": phaseData["cold-execution"].performanceCorpus.metadata
         },
-        compileSummary: summarizePhase(
-          compileResult,
-          mode,
-          phaseData.compile.artifacts.intersection
-        ),
         executionSummary: summarizePhase(
           executionResult,
           mode,
           phaseData.execution.artifacts.intersection
+        ),
+        coldExecutionSummary: summarizePhase(
+          coldExecutionResult,
+          mode,
+          phaseData["cold-execution"].artifacts.intersection
         )
       });
       performanceHashes[key] = {
-        compileSamples: sha256(compileRaw),
         executionSamples: sha256(executionRaw),
+        coldExecutionSamples: sha256(coldExecutionRaw),
         intersections: {
-          compile: phaseData.compile.artifacts.intersectionHash,
-          execution: phaseData.execution.artifacts.intersectionHash
+          execution: phaseData.execution.artifacts.intersectionHash,
+          "cold-execution": phaseData["cold-execution"].artifacts.intersectionHash
         },
         intersectionArtifacts: {
-          compile: phaseData.compile.artifacts.artifactHash,
-          execution: phaseData.execution.artifacts.artifactHash
+          execution: phaseData.execution.artifacts.artifactHash,
+          "cold-execution": phaseData["cold-execution"].artifacts.artifactHash
         }
       };
     }
@@ -3146,14 +3568,16 @@ export async function generateFinalReport({
     path.join(resultsRoot, "suite-manifest.json")
   );
   const validators = createValidatorProfiles(reports);
-  const diagnostic = validator === null
+  const diagnostic = validator === null && bench === null
     ? null
     : {
         validator,
-        refreshedValidator: validator,
+        bench,
+        current: { validator, bench },
         ...createDiagnosticPublication({
           previousDiagnostic: previousIndex?.diagnostic ?? null,
-          validator
+          validator,
+          bench
         })
       };
   const cohortIdentity = await createBenchmarkCohortIdentity({
@@ -3176,6 +3600,7 @@ export async function generateFinalReport({
     pipelineStartedAt,
     reportEndedAt: new Date(reportEnded).toISOString()
   });
+  const sampleRuntimeProvenance = createSampleRuntimeProvenance(sampleResults);
   const environment = {
     startedAt: new Date(reportStarted).toISOString(),
     endedAt: new Date(reportEnded).toISOString(),
@@ -3217,6 +3642,7 @@ export async function generateFinalReport({
     performanceCorpora: Object.fromEntries(
       [...scopes].map(([key, scope]) => [key, scope.performanceCorpora])
     ),
+    sampleRuntimeProvenance,
     benchmarkMode: mode,
     publicationWarning: diagnostic === null
       ? mode === "quick" ? "Run the full benchmark before publication." : null
@@ -3237,8 +3663,8 @@ export async function generateFinalReport({
     : {
         diagnostic: true,
         benchmarkMode: mode,
-        refreshedValidator: validator,
-        refreshedValidators: [...diagnostic.refreshedValidators]
+        current: { validator, bench },
+        refreshes: diagnostic.refreshes.map((refresh) => ({ ...refresh }))
       };
   const versions = createValidatorVersionMap({
     reports,
@@ -3351,17 +3777,23 @@ export async function generateFinalReport({
         document.content
       );
     }
+    const setupScope = scopes.get(`${draft}/setup`);
+    await writeStaged(
+      runRoot,
+      `results/${draft}/setup/summary.json`,
+      `${JSON.stringify(setupScope.setupSummary, null, 2)}\n`
+    );
     for (const formatProfile of formatProfiles) {
       const scope = scopes.get(`${draft}/${formatProfile}`);
       await writeStaged(
         runRoot,
-        `results/${draft}/profiles/${formatProfile}/compile/summary.json`,
-        `${JSON.stringify(scope.compileSummary, null, 2)}\n`
+        `results/${draft}/profiles/${formatProfile}/execution/summary.json`,
+        `${JSON.stringify(scope.executionSummary, null, 2)}\n`
       );
       await writeStaged(
         runRoot,
-        `results/${draft}/profiles/${formatProfile}/execution/summary.json`,
-        `${JSON.stringify(scope.executionSummary, null, 2)}\n`
+        `results/${draft}/profiles/${formatProfile}/cold-execution/summary.json`,
+        `${JSON.stringify(scope.coldExecutionSummary, null, 2)}\n`
       );
     }
   }

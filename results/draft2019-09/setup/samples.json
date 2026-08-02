@@ -1,0 +1,1013 @@
+{
+  "benchmarkVersion": 9,
+  "phase": "setup",
+  "draft": "draft2019-09",
+  "formatProfile": null,
+  "startedAt": "2026-08-02T01:33:38.749Z",
+  "endedAt": "2026-08-02T01:34:13.511Z",
+  "durationMilliseconds": 34762,
+  "benchmarkMode": "full",
+  "constants": {
+    "mode": "full",
+    "rounds": 6,
+    "setupWarmupMinimumMilliseconds": 100,
+    "setupTargetMilliseconds": 250,
+    "setupMinimumSampleMilliseconds": 175,
+    "coldExecutionWarmupMinimumMilliseconds": 100,
+    "coldExecutionTargetMilliseconds": 250,
+    "coldExecutionMinimumSampleMilliseconds": 175,
+    "executionWarmupMinimumMilliseconds": 100,
+    "executionTargetMilliseconds": 250,
+    "executionMinimumSampleMilliseconds": 175,
+    "workerDeadlineMilliseconds": 1800000,
+    "controllerDeadlineMilliseconds": 14400000,
+    "maxWallMilliseconds": 14400000,
+    "completeCorpusPasses": true,
+    "checksumRequired": true,
+    "workerConcurrency": 1,
+    "memoryBudget": {
+      "maxRssGrowthBytes": 536870912,
+      "maxHeapGrowthBytes": 268435456,
+      "sustainedGrowthPasses": 50,
+      "minimumGrowthBytesPerPass": 1048576,
+      "sustainedGrowthPressureRatio": 0.5
+    }
+  },
+  "performanceEligibility": {
+    "policyVersion": 3,
+    "scope": [
+      "draft",
+      "phase"
+    ],
+    "thresholdPercent": "98",
+    "thresholdFraction": {
+      "numerator": 49,
+      "denominator": 50
+    },
+    "exactComparison": "PASS * 50 >= total * 49",
+    "requiredProfiles": [
+      "base",
+      "format-assertion"
+    ]
+  },
+  "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+  "performanceCorpus": null,
+  "emptyReason": null,
+  "participants": [
+    "hyperjump",
+    "schema-shield",
+    "z-schema"
+  ],
+  "participantOrderByRound": [
+    {
+      "round": 1,
+      "validators": [
+        "hyperjump",
+        "schema-shield",
+        "z-schema"
+      ]
+    },
+    {
+      "round": 2,
+      "validators": [
+        "z-schema",
+        "schema-shield",
+        "hyperjump"
+      ]
+    },
+    {
+      "round": 3,
+      "validators": [
+        "schema-shield",
+        "z-schema",
+        "hyperjump"
+      ]
+    },
+    {
+      "round": 4,
+      "validators": [
+        "hyperjump",
+        "z-schema",
+        "schema-shield"
+      ]
+    },
+    {
+      "round": 5,
+      "validators": [
+        "z-schema",
+        "hyperjump",
+        "schema-shield"
+      ]
+    },
+    {
+      "round": 6,
+      "validators": [
+        "schema-shield",
+        "hyperjump",
+        "z-schema"
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "phase": "setup",
+      "validator": "hyperjump",
+      "validatorVersion": "1.17.7",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 1,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 297.24457999999845,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 400.72153100000173,
+      "singlePassExceededTarget": false,
+      "passes": 2,
+      "corpusCompileEntries": 403,
+      "operations": 806,
+      "seconds": 0.40072153100000174,
+      "throughput": 2011.371832176386,
+      "nanosecondsPerOperation": 497173.11538461753,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 169078784,
+          "heapUsed": 51593792,
+          "heapTotal": 118112256,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 298336256,
+          "heapUsed": 83291272,
+          "heapTotal": 212144128,
+          "external": 5135567
+        },
+        "peak": {
+          "rss": 298336256,
+          "heapUsed": 83291272,
+          "heapTotal": 212144128,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 3,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "320b02f1aa31489a8cb3900260b220f418b2823f13b0a421ebfd01d6655e1541",
+      "validatorRuntimeSha256": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc"
+    },
+    {
+      "phase": "setup",
+      "validator": "schema-shield",
+      "validatorVersion": "1.2.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 1,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 363.8402249999971,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 278.984344000002,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.278984344000002,
+      "throughput": 1444.5255035529776,
+      "nanosecondsPerOperation": 692268.8436724615,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 168120320,
+          "heapUsed": 51602472,
+          "heapTotal": 117850112,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 287358976,
+          "heapUsed": 72454080,
+          "heapTotal": 197345280,
+          "external": 5135567
+        },
+        "peak": {
+          "rss": 287358976,
+          "heapUsed": 72454080,
+          "heapTotal": 197345280,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "8849cb4ec0f13a55c5d8385d99264c2b18f060c91d72490591cde93386ae963c",
+      "validatorRuntimeSha256": "0d7abf5216478f4be39cbaaf3c0bf692450601b9f44bb8201634b3e2be472e55"
+    },
+    {
+      "phase": "setup",
+      "validator": "z-schema",
+      "validatorVersion": "12.4.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 1,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 375.44945900000425,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 250.28103699999906,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.25028103699999904,
+      "throughput": 1610.1899082350435,
+      "nanosecondsPerOperation": 621044.756823819,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167706624,
+          "heapUsed": 51599336,
+          "heapTotal": 117587968,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 202006528,
+          "heapUsed": 46750784,
+          "heapTotal": 109772800,
+          "external": 5134319
+        },
+        "peak": {
+          "rss": 202006528,
+          "heapUsed": 64113120,
+          "heapTotal": 117587968,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "1d9fa4a11da8e591bd92a73888be169c7e7e0fd690114f21aa5c53d53b9dc5b6",
+      "validatorRuntimeSha256": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465"
+    },
+    {
+      "phase": "setup",
+      "validator": "z-schema",
+      "validatorVersion": "12.4.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 2,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 368.9370880000014,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 254.26882599999976,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.2542688259999998,
+      "throughput": 1584.9367236233684,
+      "nanosecondsPerOperation": 630940.0148883369,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167710720,
+          "heapUsed": 51601624,
+          "heapTotal": 117325824,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 207851520,
+          "heapUsed": 52603616,
+          "heapTotal": 116342784,
+          "external": 5135567
+        },
+        "peak": {
+          "rss": 207851520,
+          "heapUsed": 69942192,
+          "heapTotal": 117325824,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "dce0596d67ca41d2199c87a6298d0a866746c29a42f09984c8de0ebf7ef595c9",
+      "validatorRuntimeSha256": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465"
+    },
+    {
+      "phase": "setup",
+      "validator": "schema-shield",
+      "validatorVersion": "1.2.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 2,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 337.80094900000165,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 287.62818000000357,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.28762818000000356,
+      "throughput": 1401.1144526937346,
+      "nanosecondsPerOperation": 713717.5682382223,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167022592,
+          "heapUsed": 51603360,
+          "heapTotal": 117325824,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 286822400,
+          "heapUsed": 72333736,
+          "heapTotal": 197083136,
+          "external": 5135567
+        },
+        "peak": {
+          "rss": 286822400,
+          "heapUsed": 72333736,
+          "heapTotal": 197083136,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "da5ec3b7fa57984d6559b6e0b39a5a2c8f33e4e90f541bd0c3b2c314a63a93bc",
+      "validatorRuntimeSha256": "0d7abf5216478f4be39cbaaf3c0bf692450601b9f44bb8201634b3e2be472e55"
+    },
+    {
+      "phase": "setup",
+      "validator": "hyperjump",
+      "validatorVersion": "1.17.7",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 2,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 290.0505500000006,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 399.3119139999999,
+      "singlePassExceededTarget": false,
+      "passes": 2,
+      "corpusCompileEntries": 403,
+      "operations": 806,
+      "seconds": 0.3993119139999999,
+      "throughput": 2018.4722061661307,
+      "nanosecondsPerOperation": 495424.210918114,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 168009728,
+          "heapUsed": 51593784,
+          "heapTotal": 118374400,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 297762816,
+          "heapUsed": 83330808,
+          "heapTotal": 212930560,
+          "external": 5135567
+        },
+        "peak": {
+          "rss": 297762816,
+          "heapUsed": 83330808,
+          "heapTotal": 212930560,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 3,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "13ae8bc93ca3758a94f57d0ad2d8fc21b87a3fe15dfddf64205db06728d50b87",
+      "validatorRuntimeSha256": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc"
+    },
+    {
+      "phase": "setup",
+      "validator": "schema-shield",
+      "validatorVersion": "1.2.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 3,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 298.2046059999991,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 316.3800130000011,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.3163800130000011,
+      "throughput": 1273.784636958083,
+      "nanosecondsPerOperation": 785062.0669975214,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 168873984,
+          "heapUsed": 51601344,
+          "heapTotal": 117325824,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 281899008,
+          "heapUsed": 95349952,
+          "heapTotal": 191574016,
+          "external": 5134943
+        },
+        "peak": {
+          "rss": 281899008,
+          "heapUsed": 95349952,
+          "heapTotal": 191574016,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "d4b5a9ed0596c8449f365bbf7bf3cefb2b18937f01f94dd78c1295c6b2cc9ff1",
+      "validatorRuntimeSha256": "0d7abf5216478f4be39cbaaf3c0bf692450601b9f44bb8201634b3e2be472e55"
+    },
+    {
+      "phase": "setup",
+      "validator": "z-schema",
+      "validatorVersion": "12.4.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 3,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 365.89224999999897,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 485.5351399999986,
+      "singlePassExceededTarget": false,
+      "passes": 2,
+      "corpusCompileEntries": 403,
+      "operations": 806,
+      "seconds": 0.4855351399999986,
+      "throughput": 1660.024030392532,
+      "nanosecondsPerOperation": 602400.9181141423,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167464960,
+          "heapUsed": 51601640,
+          "heapTotal": 117063680,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 208048128,
+          "heapUsed": 67275864,
+          "heapTotal": 116867072,
+          "external": 5135567
+        },
+        "peak": {
+          "rss": 208048128,
+          "heapUsed": 69881000,
+          "heapTotal": 117063680,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 3,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "76a6f4c34f2986c60fe4d10ff5094893a6d28e3c4a5cc56ec7a2501fd8af851c",
+      "validatorRuntimeSha256": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465"
+    },
+    {
+      "phase": "setup",
+      "validator": "hyperjump",
+      "validatorVersion": "1.17.7",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 3,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 283.6700439999987,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 401.8802489999955,
+      "singlePassExceededTarget": false,
+      "passes": 2,
+      "corpusCompileEntries": 403,
+      "operations": 806,
+      "seconds": 0.4018802489999955,
+      "throughput": 2005.5725604967688,
+      "nanosecondsPerOperation": 498610.7307692252,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167882752,
+          "heapUsed": 51591896,
+          "heapTotal": 117325824,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 289148928,
+          "heapUsed": 96002424,
+          "heapTotal": 204533760,
+          "external": 5134735
+        },
+        "peak": {
+          "rss": 289148928,
+          "heapUsed": 98264952,
+          "heapTotal": 204533760,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 3,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "23d64fd0e917950b22df979fc116d334ef7286c12805c5116db0d43e30b4b77d",
+      "validatorRuntimeSha256": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc"
+    },
+    {
+      "phase": "setup",
+      "validator": "hyperjump",
+      "validatorVersion": "1.17.7",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 4,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 294.2770349999968,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 426.6957810000047,
+      "singlePassExceededTarget": false,
+      "passes": 2,
+      "corpusCompileEntries": 403,
+      "operations": 806,
+      "seconds": 0.42669578100000466,
+      "throughput": 1888.9336053688123,
+      "nanosecondsPerOperation": 529399.2320099314,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 166998016,
+          "heapUsed": 51590064,
+          "heapTotal": 116801536,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 291057664,
+          "heapUsed": 96668296,
+          "heapTotal": 205062144,
+          "external": 5134943
+        },
+        "peak": {
+          "rss": 291057664,
+          "heapUsed": 99594656,
+          "heapTotal": 205062144,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 3,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "17a2951dfb773c9595d1489c29b306c92262bb4ea7a56796d73be17924ba3bfa",
+      "validatorRuntimeSha256": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc"
+    },
+    {
+      "phase": "setup",
+      "validator": "z-schema",
+      "validatorVersion": "12.4.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 4,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 373.6936739999977,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 255.2633660000006,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.2552633660000006,
+      "throughput": 1578.7615995003334,
+      "nanosecondsPerOperation": 633407.856079406,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167550976,
+          "heapUsed": 51599640,
+          "heapTotal": 117587968,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 204029952,
+          "heapUsed": 49487472,
+          "heapTotal": 112406528,
+          "external": 5134943
+        },
+        "peak": {
+          "rss": 204029952,
+          "heapUsed": 66921768,
+          "heapTotal": 117587968,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "118760c636d933de9ef40d941afc89fff16a292973e98711e6b25847905c16c2",
+      "validatorRuntimeSha256": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465"
+    },
+    {
+      "phase": "setup",
+      "validator": "schema-shield",
+      "validatorVersion": "1.2.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 4,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 308.54176799999937,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 278.17491800000084,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.2781749180000008,
+      "throughput": 1448.7287455585727,
+      "nanosecondsPerOperation": 690260.3424317638,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167763968,
+          "heapUsed": 51602176,
+          "heapTotal": 118112256,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 285319168,
+          "heapUsed": 98407608,
+          "heapTotal": 194723840,
+          "external": 5135567
+        },
+        "peak": {
+          "rss": 285319168,
+          "heapUsed": 98407608,
+          "heapTotal": 194723840,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "7b17d3667c657da790ac02645a93b03569aec234aaaa425bacc0e6e67bbcb57d",
+      "validatorRuntimeSha256": "0d7abf5216478f4be39cbaaf3c0bf692450601b9f44bb8201634b3e2be472e55"
+    },
+    {
+      "phase": "setup",
+      "validator": "z-schema",
+      "validatorVersion": "12.4.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 5,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 373.67865400000346,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 250.25372400000174,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.25025372400000173,
+      "throughput": 1610.3656463469738,
+      "nanosecondsPerOperation": 620976.9826302773,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 168206336,
+          "heapUsed": 51600384,
+          "heapTotal": 117850112,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 204083200,
+          "heapUsed": 49315112,
+          "heapTotal": 112930816,
+          "external": 5134943
+        },
+        "peak": {
+          "rss": 204083200,
+          "heapUsed": 66815776,
+          "heapTotal": 117850112,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "52992946700662a6de1437eb650cae2a6055bb7ee5fbbeaf61992604d1932152",
+      "validatorRuntimeSha256": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465"
+    },
+    {
+      "phase": "setup",
+      "validator": "hyperjump",
+      "validatorVersion": "1.17.7",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 5,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 283.69002499999806,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 411.5832009999972,
+      "singlePassExceededTarget": false,
+      "passes": 2,
+      "corpusCompileEntries": 403,
+      "operations": 806,
+      "seconds": 0.4115832009999972,
+      "throughput": 1958.2917816901024,
+      "nanosecondsPerOperation": 510649.1327543389,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167800832,
+          "heapUsed": 51592280,
+          "heapTotal": 117325824,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 290148352,
+          "heapUsed": 95561488,
+          "heapTotal": 204533760,
+          "external": 5134735
+        },
+        "peak": {
+          "rss": 290148352,
+          "heapUsed": 98788384,
+          "heapTotal": 204533760,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 3,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "df1689005ac4a8f3a28b091051dc71d645d4fc6e833614a66c8dbb94414d7ea1",
+      "validatorRuntimeSha256": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc"
+    },
+    {
+      "phase": "setup",
+      "validator": "schema-shield",
+      "validatorVersion": "1.2.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 5,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 312.2518990000017,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 299.00596000000064,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.2990059600000006,
+      "throughput": 1347.7992211258904,
+      "nanosecondsPerOperation": 741950.2729528552,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 168325120,
+          "heapUsed": 51601392,
+          "heapTotal": 117850112,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 280338432,
+          "heapUsed": 93972464,
+          "heapTotal": 191045632,
+          "external": 5134735
+        },
+        "peak": {
+          "rss": 280338432,
+          "heapUsed": 93972464,
+          "heapTotal": 191045632,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "d491d66b7a40ab6d57300ce7e9d8693a10257cbf834b3d62d151b16d4b7cd0eb",
+      "validatorRuntimeSha256": "0d7abf5216478f4be39cbaaf3c0bf692450601b9f44bb8201634b3e2be472e55"
+    },
+    {
+      "phase": "setup",
+      "validator": "schema-shield",
+      "validatorVersion": "1.2.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 6,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 325.8546559999975,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 288.5476659999995,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.2885476659999995,
+      "throughput": 1396.6496613422642,
+      "nanosecondsPerOperation": 715999.1712158796,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167178240,
+          "heapUsed": 51601848,
+          "heapTotal": 117850112,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 283566080,
+          "heapUsed": 97003792,
+          "heapTotal": 193671168,
+          "external": 5135359
+        },
+        "peak": {
+          "rss": 283566080,
+          "heapUsed": 97003792,
+          "heapTotal": 193671168,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "c0596d24f7e8a761016fff8a2d14428153fec56b8ea16aab3de2a127ee7d8f0f",
+      "validatorRuntimeSha256": "0d7abf5216478f4be39cbaaf3c0bf692450601b9f44bb8201634b3e2be472e55"
+    },
+    {
+      "phase": "setup",
+      "validator": "hyperjump",
+      "validatorVersion": "1.17.7",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 6,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 301.7588330000008,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 410.9294399999999,
+      "singlePassExceededTarget": false,
+      "passes": 2,
+      "corpusCompileEntries": 403,
+      "operations": 806,
+      "seconds": 0.41092943999999987,
+      "throughput": 1961.4072917238548,
+      "nanosecondsPerOperation": 509838.0148883373,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167489536,
+          "heapUsed": 51593448,
+          "heapTotal": 117063680,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 290959360,
+          "heapUsed": 99071768,
+          "heapTotal": 204800000,
+          "external": 5134943
+        },
+        "peak": {
+          "rss": 290959360,
+          "heapUsed": 101571112,
+          "heapTotal": 204800000,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 3,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "a15326473d54e8fa57277b1cb6dc75a55adc852c4d4adc068aca3f77d4502ddf",
+      "validatorRuntimeSha256": "ee01fb9064305b8b3bd1c7bc663c4b74480d12a8f6a383c7d9e923a6b9fbc3bc"
+    },
+    {
+      "phase": "setup",
+      "validator": "z-schema",
+      "validatorVersion": "12.4.0",
+      "draft": "draft2019-09",
+      "formatProfile": null,
+      "round": 6,
+      "warmupMinimumMilliseconds": 100,
+      "warmupMilliseconds": 365.8244330000017,
+      "warmupPasses": 1,
+      "targetSampleMilliseconds": 250,
+      "minimumSampleMilliseconds": 175,
+      "actualElapsedMilliseconds": 254.72357000000102,
+      "singlePassExceededTarget": true,
+      "passes": 1,
+      "corpusCompileEntries": 403,
+      "operations": 403,
+      "seconds": 0.254723570000001,
+      "throughput": 1582.1072231360388,
+      "nanosecondsPerOperation": 632068.4119106724,
+      "checksum": "3486f883c4ca8132f0cb1b176ab269d6702f607d091c8ad87913369dd2ad0cfc",
+      "memory": {
+        "start": {
+          "rss": 167911424,
+          "heapUsed": 51602048,
+          "heapTotal": 117587968,
+          "external": 19833734
+        },
+        "end": {
+          "rss": 207020032,
+          "heapUsed": 52688992,
+          "heapTotal": 116080640,
+          "external": 5135567
+        },
+        "peak": {
+          "rss": 207020032,
+          "heapUsed": 69978024,
+          "heapTotal": 117587968,
+          "external": 19833734
+        },
+        "sustainedGrowthPasses": 2,
+        "observedAt": "complete-pass-boundary"
+      },
+      "sampleContractVersion": 21,
+      "benchmarkMode": "full",
+      "benchmarkContractSha256": "a11db4526dad6fe30e89518e9841589976aab08ff7be46ad9af62f82ab6941e5",
+      "intersectionSha256": "f0d71d3fbb436139f75903488524267e15c3a4f2e99b622c7ab4cfaeb1e14433",
+      "sampleCacheIdentitySha256": "aa4ab238971148117f5e1cfe7dda031761dfb178288576a284c037a4e1591e6b",
+      "validatorRuntimeSha256": "318386f789ec133e2f801116b84fdb546e1afeb81cd4eecb66741778b3992465"
+    }
+  ]
+}

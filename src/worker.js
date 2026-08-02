@@ -5,6 +5,7 @@ import path from "node:path";
 
 import {
   getCompileRegistryParticipants,
+  getColdExecutionRegistryParticipants,
   getAdapterFactory,
   getRegisteredAdapter
 } from "./adapters/index.js";
@@ -128,18 +129,23 @@ export function validateWorkerRequest(request) {
   const eligibilityThresholdPercent = parseEligibilityThresholdPercent(
     request.eligibilityThresholdPercent
   ).percent;
-  if (request.phase !== "compile" && request.phase !== "execution") {
+  if (!["setup", "execution", "cold-execution"].includes(request.phase)) {
     throw new Error(`unsupported worker phase: ${request.phase}`);
   }
   if (!draftIds.includes(request.draft)) {
     throw new Error(`unsupported benchmark draft: ${request.draft}`);
   }
-  if (!formatProfiles.includes(request.formatProfile)) {
+  if (
+    (request.phase === "setup" && request.formatProfile !== null) ||
+    (request.phase !== "setup" && !formatProfiles.includes(request.formatProfile))
+  ) {
     throw new Error(`unsupported benchmark format profile: ${request.formatProfile}`);
   }
   const participants =
-    request.phase === "compile"
+    request.phase === "setup"
       ? getCompileRegistryParticipants(request.draft)
+      : request.phase === "cold-execution"
+        ? getColdExecutionRegistryParticipants(request.draft)
       : getParticipants(request.draft);
   if (
     !participants.some(({ id }) => id === request.validator)
@@ -162,7 +168,8 @@ export function validateWorkerRequest(request) {
   for (const field of [
     "benchmarkContractSha256",
     "intersectionSha256",
-    "sampleCacheIdentitySha256"
+    "sampleCacheIdentitySha256",
+    "validatorRuntimeSha256"
   ]) {
     if (!/^[a-f0-9]{64}$/.test(request[field])) {
       throw new Error(`worker request ${field} must be a SHA-256 hash`);
@@ -198,13 +205,13 @@ export async function runCompileSample({
   memoryBudget = null,
   timing = {
     warmupMinimumMilliseconds:
-      benchmarkConstants.compileWarmupMinimumMilliseconds,
-    targetSampleMilliseconds: benchmarkConstants.compileTargetMilliseconds,
-    minimumSampleMilliseconds: benchmarkConstants.compileMinimumSampleMilliseconds
+      benchmarkConstants.setupWarmupMinimumMilliseconds,
+    targetSampleMilliseconds: benchmarkConstants.setupTargetMilliseconds,
+    minimumSampleMilliseconds: benchmarkConstants.setupMinimumSampleMilliseconds
   }
 }) {
   if (Date.now() > request.deadline) {
-    throw deadlineError("compile");
+    throw deadlineError("setup");
   }
   if (compileEntries.length === 0) {
     throw new Error(`compile corpus is empty for ${request.draft}`);
@@ -217,15 +224,28 @@ export async function runCompileSample({
     if (schema === undefined) {
       throw new Error(`compile schema is absent: ${entry.representativeSchemaId}`);
     }
-    return { entry, schema };
+    const formatProfile =
+      typeof entry.setupConfiguration?.formatAssertion === "boolean"
+        ? (entry.setupConfiguration.formatAssertion
+            ? "format-assertion"
+            : "base")
+        : (entry.formatProfile ?? request.formatProfile ?? "base");
+    if (!formatProfiles.includes(formatProfile)) {
+      throw new Error(`compile entry has no effective format profile: ${entry.compileKey}`);
+    }
+    const effectiveSchema = structuredClone(schema);
+    prepareSchemaForFormatProfile(
+      effectiveSchema,
+      request.draft,
+      formatProfile
+    );
+    return {
+      entry,
+      schema,
+      formatProfile,
+      unknownFormats: analyzeSchemaCapabilities(effectiveSchema).unknownFormats
+    };
   });
-  const unknownFormats = [
-    ...new Set(
-      prepared.flatMap(({ schema }) =>
-        analyzeSchemaCapabilities(schema).unknownFormats
-      )
-    )
-  ].sort();
   for (const field of [
     "warmupMinimumMilliseconds",
     "targetSampleMilliseconds",
@@ -242,7 +262,7 @@ export async function runCompileSample({
   let adapterMetadata = null;
   async function compilePass() {
     let elapsed = 0;
-    for (const { entry, schema } of prepared) {
+    for (const { entry, schema, formatProfile, unknownFormats } of prepared) {
       const resources = structuredClone(
         resourceRegistry?.resourcesFor(entry.representativeSchemaId) ?? []
       );
@@ -250,14 +270,14 @@ export async function runCompileSample({
       prepareSchemaForFormatProfile(
         disposableSchema,
         request.draft,
-        request.formatProfile ?? "base"
+        formatProfile
       );
       const start = now();
       const adapter = createAdapter({
         draft: request.draft,
-        formatProfile: request.formatProfile,
+        formatProfile,
         resources,
-        unknownFormats
+        unknownFormats: [...unknownFormats].sort()
       });
       adapterMetadata ??= adapter;
       if (typeof adapter.compile !== "function") {
@@ -287,14 +307,14 @@ export async function runCompileSample({
   if (timing.warmupMinimumMilliseconds > 0) {
     do {
       if (Date.now() > request.deadline) {
-        throw deadlineError("compile");
+        throw deadlineError("setup");
       }
       warmupMilliseconds += await compilePass();
       warmupPasses += 1;
       await yieldAfterPass();
       memory.observe();
       if (Date.now() > request.deadline) {
-        throw deadlineError("compile");
+        throw deadlineError("setup");
       }
     } while (warmupMilliseconds < timing.warmupMinimumMilliseconds);
   }
@@ -303,14 +323,14 @@ export async function runCompileSample({
   let measuredMilliseconds = 0;
   do {
     if (Date.now() > request.deadline) {
-      throw deadlineError("compile");
+      throw deadlineError("setup");
     }
     measuredMilliseconds += await compilePass();
     passes += 1;
     await yieldAfterPass();
     memory.observe();
     if (Date.now() > request.deadline) {
-      throw deadlineError("compile");
+      throw deadlineError("setup");
     }
   } while (measuredMilliseconds < timing.targetSampleMilliseconds);
   const singlePassExceededTarget =
@@ -327,7 +347,7 @@ export async function runCompileSample({
   const operations = prepared.length * passes;
   const throughput = operations / seconds;
   return {
-    phase: "compile",
+    phase: "setup",
     validator: request.validator,
     validatorVersion: adapterMetadata.version,
     draft: request.draft,
@@ -347,6 +367,173 @@ export async function runCompileSample({
     throughput,
     nanosecondsPerOperation: 1e9 / throughput,
     checksum: compileChecksum(compileEntries),
+    memory: memory.finish()
+  };
+}
+
+export async function runColdExecutionSample({
+  request,
+  cases,
+  caseIds,
+  schemas,
+  resourceRegistry = null,
+  createAdapter,
+  now = () => performance.now(),
+  yieldAfterPass = () => new Promise((resolve) => setImmediate(resolve)),
+  memoryUsage = () => process.memoryUsage(),
+  memoryBudget = null,
+  timing = {
+    warmupMinimumMilliseconds:
+      benchmarkConstants.coldExecutionWarmupMinimumMilliseconds,
+    targetSampleMilliseconds:
+      benchmarkConstants.coldExecutionTargetMilliseconds,
+    minimumSampleMilliseconds:
+      benchmarkConstants.coldExecutionMinimumSampleMilliseconds
+  }
+}) {
+  if (Date.now() > request.deadline) {
+    throw deadlineError("cold-execution");
+  }
+  const casesById = new Map(cases.map((testCase) => [testCase.id, testCase]));
+  const canonicalCases = caseIds.map((id) => {
+    const testCase = casesById.get(id);
+    if (testCase === undefined) {
+      throw new Error(`intersection case is absent from the suite: ${id}`);
+    }
+    return testCase;
+  });
+  if (canonicalCases.length === 0) {
+    throw new Error(`cold-execution corpus is empty for ${request.draft}`);
+  }
+  const schemaById = new Map(schemas.map(({ id, schema }) => [id, schema]));
+  const memory = createMemoryTelemetry(memoryUsage, memoryBudget);
+  for (const field of [
+    "warmupMinimumMilliseconds",
+    "targetSampleMilliseconds",
+    "minimumSampleMilliseconds"
+  ]) {
+    if (!Number.isFinite(timing[field]) || timing[field] < 0) {
+      throw new Error(`cold-execution timing ${field} must be finite and non-negative`);
+    }
+  }
+  if (timing.minimumSampleMilliseconds > timing.targetSampleMilliseconds) {
+    throw new Error("cold-execution minimum sample duration cannot exceed its target");
+  }
+  let adapterMetadata = null;
+  async function coldPass() {
+    let elapsed = 0;
+    let checksum = 0;
+    for (let index = 0; index < canonicalCases.length; index += 1) {
+      if (Date.now() > request.deadline) {
+        throw deadlineError("cold-execution");
+      }
+      const testCase = canonicalCases[index];
+      const sourceSchema = schemaById.get(testCase.schemaId);
+      if (sourceSchema === undefined) {
+        throw new Error(`cold-execution schema is absent: ${testCase.schemaId}`);
+      }
+      const schema = structuredClone(sourceSchema);
+      const resources = structuredClone(
+        resourceRegistry?.resourcesFor(testCase.schemaId) ?? []
+      );
+      prepareSchemaForFormatProfile(
+        schema,
+        request.draft,
+        request.formatProfile ?? "base"
+      );
+      const unknownFormats = analyzeSchemaCapabilities(schema).unknownFormats;
+      const data = structuredClone(testCase.data);
+      const start = now();
+      const adapter = createAdapter({
+        draft: request.draft,
+        formatProfile: request.formatProfile,
+        resources,
+        unknownFormats
+      });
+      let target = schema;
+      if (typeof adapter.compile === "function") {
+        target = adapter.compileMode === "async"
+          ? await adapter.compile(schema)
+          : adapter.compile(schema);
+      }
+      const observed = adapter.validate(target, data);
+      elapsed += now() - start;
+      adapterMetadata ??= adapter;
+      if (observed !== testCase.expected) {
+        throw executionError(
+          "COLD_EXECUTION_RESULT_MISMATCH",
+          request,
+          mismatchDiagnostic({
+            moment: `operation ${index + 1}`,
+            caseId: testCase.id,
+            schemaId: testCase.schemaId,
+            expected: testCase.expected,
+            observed
+          })
+        );
+      }
+      checksum += (index + 1) * (observed ? 3 : 7);
+    }
+    return { elapsed, checksum };
+  }
+  let warmupPasses = 0;
+  let warmupMilliseconds = 0;
+  if (timing.warmupMinimumMilliseconds > 0) {
+    do {
+      const pass = await coldPass();
+      warmupMilliseconds += pass.elapsed;
+      warmupPasses += 1;
+      memory.observe();
+      await yieldAfterPass();
+    } while (warmupMilliseconds < timing.warmupMinimumMilliseconds);
+  }
+  let passes = 0;
+  let measuredMilliseconds = 0;
+  let checksum = 0;
+  do {
+    const pass = await coldPass();
+    measuredMilliseconds += pass.elapsed;
+    checksum += pass.checksum;
+    passes += 1;
+    memory.observe();
+    await yieldAfterPass();
+  } while (measuredMilliseconds < timing.targetSampleMilliseconds);
+  const singlePassExceededTarget =
+    passes === 1 && measuredMilliseconds >= timing.targetSampleMilliseconds;
+  if (
+    measuredMilliseconds < timing.minimumSampleMilliseconds &&
+    !singlePassExceededTarget
+  ) {
+    throw new Error(
+      `cold-execution sample ended before its minimum duration: ${measuredMilliseconds}ms`
+    );
+  }
+  const seconds = measuredMilliseconds / 1000;
+  const operations = canonicalCases.length * passes;
+  const throughput = operations / seconds;
+  return {
+    phase: "cold-execution",
+    validator: request.validator,
+    validatorVersion: adapterMetadata.version,
+    draft: request.draft,
+    formatProfile: request.formatProfile,
+    round: request.round,
+    warmupMinimumMilliseconds: timing.warmupMinimumMilliseconds,
+    warmupMilliseconds,
+    warmupPasses,
+    targetSampleMilliseconds: timing.targetSampleMilliseconds,
+    minimumSampleMilliseconds: timing.minimumSampleMilliseconds,
+    actualElapsedMilliseconds: measuredMilliseconds,
+    singlePassExceededTarget,
+    passes,
+    corpusCases: canonicalCases.length,
+    validCases: canonicalCases.filter(({ expected }) => expected).length,
+    invalidCases: canonicalCases.filter(({ expected }) => !expected).length,
+    operations,
+    seconds,
+    throughput,
+    nanosecondsPerOperation: 1e9 / throughput,
+    checksum,
     memory: memory.finish()
   };
 }
@@ -387,13 +574,13 @@ function executionError(code, request, details) {
       ? ` caseId=${details.caseId} expected=${details.expected} observed=${details.observed}`
       : "";
   const error = new Error(
-    `${code}: validator=${request.validator} draft=${request.draft} profile=${request.formatProfile ?? "base"} phase=execution round=${request.round}${mismatchContext} moment=${details.moment}`
+    `${code}: validator=${request.validator} draft=${request.draft} profile=${request.formatProfile ?? "base"} phase=${request.phase} round=${request.round}${mismatchContext} moment=${details.moment}`
   );
   error.code = code;
   error.validator = request.validator;
   error.draft = request.draft;
   error.formatProfile = request.formatProfile ?? "base";
-  error.phase = "execution";
+  error.phase = request.phase;
   error.round = request.round;
   error.moment = details.moment;
   error.caseId = details.caseId ?? null;
@@ -758,7 +945,7 @@ export async function executeWorkerRequest(
   { artifactsCache = null } = {}
 ) {
   request = validateWorkerRequest(request);
-  const cacheKey = `${request.eligibilityThresholdPercent}/${request.phase}/${request.draft}/${request.formatProfile}`;
+  const cacheKey = `${request.eligibilityThresholdPercent}/${request.phase}/${request.draft}/${request.formatProfile ?? "draft"}`;
   let artifacts = artifactsCache?.get(cacheKey);
   if (artifacts === undefined) {
     artifacts = await loadBenchmarkArtifacts({
@@ -787,7 +974,7 @@ export async function executeWorkerRequest(
     (schema) => schema.draft === request.draft
   );
   const sample =
-    request.phase === "compile"
+    request.phase === "setup"
       ? await runCompileSample({
           request,
           compileEntries,
@@ -798,7 +985,22 @@ export async function executeWorkerRequest(
           memoryBudget: request.memoryBudget,
           timing: request.timing
         })
-      : await runExecutionSample({
+      : request.phase === "cold-execution"
+        ? await runColdExecutionSample({
+            request,
+            cases: artifacts.suite.cases.filter(
+              (testCase) => testCase.draft === request.draft
+            ),
+            caseIds: corpus.caseIds.filter((id) =>
+              id.startsWith(`${request.draft}:`)
+            ),
+            schemas,
+            resourceRegistry: artifacts.suite.resourceRegistry,
+            createAdapter: getAdapterFactory(request.validator),
+            memoryBudget: request.memoryBudget,
+            timing: request.timing
+          })
+        : await runExecutionSample({
           request,
           compileEntries,
           cases: artifacts.suite.cases.filter(
@@ -819,6 +1021,7 @@ export async function executeWorkerRequest(
   sample.benchmarkContractSha256 = request.benchmarkContractSha256;
   sample.intersectionSha256 = request.intersectionSha256;
   sample.sampleCacheIdentitySha256 = request.sampleCacheIdentitySha256;
+  sample.validatorRuntimeSha256 = request.validatorRuntimeSha256;
   if (request.benchmarkMode === "quick") {
     sample.performanceCorpus = corpus.metadata;
   }

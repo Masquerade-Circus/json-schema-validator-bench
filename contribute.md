@@ -2,7 +2,7 @@
 
 ## Purpose
 
-JSON Schema Validator Bench compares validator conformance and performance across five JSON Schema drafts and two format profiles. Within each draft, every participating validator receives the same discovered conformance cases. Performance uses one atomic qualified roster per draft and the common `PASS` intersection formed from that roster. Compile further intersects the draft roster with validators that expose Compile capability.
+JSON Schema Validator Bench compares validator conformance and performance across five JSON Schema drafts and two format profiles. Within each draft, every participating validator receives the same discovered conformance cases. Performance uses one atomic qualified roster per draft and the common `PASS` intersection formed from that roster. Setup further intersects the draft roster with validators that expose reusable compilation. Cold execution requires fresh isolated provider state.
 
 The benchmark package is standalone. Run every command in this guide from the directory that contains this file.
 
@@ -50,6 +50,10 @@ Use the exact ID from `src/adapters/index.js`. The validator refresh runs confor
 
 The refresh requires a complete compatible publication for the same base mode. Changes to the environment, benchmark contract, suite, locks, threshold, rounds, roster, eligibility, or common `PASS` corpus stop the refresh and request a complete run. Compatible chained refreshes retain every refreshed validator in diagnostic metadata.
 
+Regenerate one phase from a complete compatible publication with `--bench setup`, `--bench execution`, or `--bench cold`. The runner repeats preflight, harness, smoke and conformance, replaces the selected phase, verifies every omitted phase against the baseline, and rebuilds the complete publication transactionally. Combine `--bench` with `--validator` to refresh one validator in one phase while retaining both selectors in diagnostic metadata.
+
+Each sample stores the validator runtime hash that produced it. A combined validator and phase refresh updates only that validator-phase pair. Omitted samples preserve their baseline runtime hash, and `results/environment.json` records provenance by scope and validator so a report cannot attribute baseline measurements to the current runtime.
+
 The atomic eligibility gate defaults to 98%. Configure it for either mode with an ordinary decimal from 0 through 100 and at most six decimal places:
 
 ```bash
@@ -81,15 +85,27 @@ Each adapter has two parts:
 1. A declaration names the validator, npm package, supported drafts, and statically unsupported capabilities.
 2. A factory closure owns vendor state, options, resources, compilation, validation, and optional error extraction for one benchmark configuration.
 
-`src/adapters/index.js` is the single registry. The participant matrix, compile eligibility, package metadata, and runtime factories derive from it. The presence of `compile` grants Compile eligibility.
+`src/adapters/index.js` is the single registry. The participant matrix, Setup eligibility, Cold execution isolation, package metadata, and runtime factories derive from it. The presence of `compile` grants Setup eligibility.
+
+The generated Participants table uses these labels:
+
+- `reusable-sync`: prepares a reusable callable synchronously.
+- `reusable-async`: resolves asynchronous setup before exposing a reusable callable.
+- `validate-only`: validates through the adapter without a separate reusable compile result.
+- `fresh-instance`: each fresh adapter creates isolated provider state.
+- `module-global-unavailable`: module-global provider state cannot satisfy fresh isolation, so Cold execution is `N/A`.
+- `observed`: the exercised adapter route uses dynamic code generation.
+- `not-observed`: the exercised adapter route did not use dynamic code generation.
+
+Dynamic code describes the adapter route exercised at the pinned package version. It does not classify every path available in that package.
 
 The harness detects schema capabilities before it creates an adapter. A declaration can mark a detected capability as unsupported, which produces `UNSUPPORTED` records and skips vendor invocation. Conformance records every case. Performance then applies the objective qualification gate once per draft before it derives the common `PASS` intersections for Base and Formats.
 
 ### Runner ownership and adapter ownership
 
-The runner owns benchmark policy. It discovers the suite, assigns the draft and format profile, detects capabilities, computes the local resource closure, detects unknown format names, applies the schema profile on a clone, qualifies the atomic draft roster, intersects Compile with API capability, chooses each phase's common conformance intersection, creates fresh factory contexts at the required boundary, and starts and stops the operation timers. Adapters consume those decisions and the corpus supplied by the runner.
+The runner owns benchmark policy. It discovers the suite, assigns the draft and format profile, detects capabilities, computes the local resource closure, detects unknown format names, applies the schema profile on a clone, qualifies the atomic draft roster, intersects Setup with reusable compilation and Cold execution with fresh isolation, chooses each phase's common conformance intersection, creates fresh factory contexts at the required boundary, and starts and stops the operation timers. Adapters consume those decisions and the corpus supplied by the runner.
 
-The qualification gate requires Base and Formats to reach the configured percentage in the same draft. The CLI preserves the normalized decimal text and converts it to a reduced fraction. Eligibility compares `PASS * threshold denominator >= total * threshold numerator` with integers, so displayed rounding preserves the result. `WRONG`, `COMPILE`, `RUNTIME`, and `UNSUPPORTED` all count as non-PASS. The exact profile fractions determine eligibility. Execution uses the eligible draft roster. Compile uses the same roster intersected with participants that expose a reusable compile API. Eligibility depends exclusively on the exact Base and Formats `PASS` fractions for the atomic draft roster.
+The qualification gate requires Base and Formats to reach the configured percentage in the same draft. The CLI preserves the normalized decimal text and converts it to a reduced fraction. Eligibility compares `PASS * threshold denominator >= total * threshold numerator` with integers, so displayed rounding preserves the result. `WRONG`, `COMPILE`, `RUNTIME`, and `UNSUPPORTED` all count as non-PASS. The exact profile fractions determine eligibility. Execution uses the eligible draft roster. Setup uses the same roster intersected with participants that expose a reusable compile API. Cold execution uses the roster intersected with adapters that provide fresh isolated state. Eligibility depends exclusively on the exact Base and Formats `PASS` fractions for the atomic draft roster.
 
 The global conformance table shows one percentage cell per draft and profile. Its Total divides PASS by all 7,970 canonical cases across the five drafts and both profiles. Unsupported drafts and scopes contribute zero PASS while their cases remain in the denominator. Rows sort by Total descending and use validator ID as the stable tie-breaker. The accompanying Mermaid chart keeps the same order and marks the configured threshold as a reference line. The atomic Base and Formats fractions for each draft control eligibility.
 
@@ -447,18 +463,21 @@ export const adapter = defineAdapter(
 );
 ```
 
-A validate-only adapter omits `compile`, so its compile performance is `N/A`. Execution prepares each schema before the measured execution interval and calls `validate` inside it.
+A validate-only adapter omits `compile`, so its Setup performance is `N/A`. It can participate in Cold execution when each operation can create fresh isolated state. Execution prepares each schema before the measured execution interval and calls `validate` inside it.
 
 ## Timing boundaries
 
-The adapter factory belongs to conformance setup and to the measured Compile operation. Its lifetime differs by stage.
+The adapter factory belongs to conformance setup, measured Setup, and measured Cold execution. Its lifetime differs by stage.
 
 - Conformance first detects statically unsupported capabilities. For a supported schema, it creates one factory context for that schema and profile, optionally compiles once, validates every case in the schema group, and may call `getError` after a false result. Factory, compile, validation, and diagnostic behavior all contribute to classification. Throughput timers apply to the performance phases.
-- Compile performance prepares neutral schema and resource copies before the start timestamp. Primitive schemas, including `true` and `false`, pass directly into each fresh adapter. The timer then covers the complete fresh contractual construction for one operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `compile(schema)`. Post-call yielding, serialization, deadline checks, memory sampling, and harness diagnostics remain outside the accumulated compile duration.
-- Execution performance creates one adapter context for each representative compile entry before warmup and measurement. Optional compilation, resource and format registration, closure creation, validator-to-schema mapping, and the correctness precheck all occur outside the execution timer. The measured interval covers repeated complete-corpus passes, including the `validate(target, data)` calls and the runner's minimal traversal, checksum, clock, deadline, and memory bookkeeping inside those passes.
-- `getError` runs during conformance after `validate` returns `false`. Compile and execution throughput measure their phase contracts.
+- Setup performance forms one draft-scoped union of effective Base and Formats operations. It deduplicates by transformed schema, resource closure and effective adapter configuration before it prepares neutral copies. Primitive schemas, including `true` and `false`, pass directly into each fresh adapter. The timer then covers the complete fresh contractual construction for one operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `compile(schema)`. Post-call yielding, serialization, deadline checks, memory sampling, and harness diagnostics remain outside the accumulated Setup duration.
+- Execution performance creates one adapter context for each representative compile entry before warmup and measurement. Reusable adapters prepare a callable, while `validate-only` adapters prepare their adapter context and profiled schema. Resource and format registration, validator-to-schema mapping, and the correctness precheck all occur outside the execution timer. The measured interval covers repeated complete-corpus passes through the prepared callable or prepared `validate-only` context, plus the runner's minimal traversal, checksum, clock, deadline, and memory bookkeeping.
+- Cold execution prepares neutral runner inputs before the operation clock: it clones the schema and data, constructs and clones the resource closure, applies the format profile, and analyzes schema capabilities. The timed operation creates a fresh isolated adapter and provider context, applies integration-owned configuration and registration, obtains the callable or validate-only equivalent, validates once, and ends when validation returns. Result comparison, checksum, diagnostics, and telemetry remain outside the clock. Providers whose module-global state cannot meet this isolation contract report `N/A` with `PHASE_UNAVAILABLE`.
+- `getError` runs during conformance after `validate` returns `false`. Setup, Execution, and Cold execution throughput measure their phase contracts.
 
-Keep vendor construction and registrations in the factory, reusable compilation in `compile`, and data validation in `validate`. Compile measures both factory and compilation as one fresh operation. Moving setup into `validate` inflates execution cost. Moving compilation into the factory changes the API under test even though the timer catches the cost.
+Full records six isolated samples per participant and scope. Every sample warms complete passes for at least 100 ms, targets 250 ms of measured work, and requires a normal minimum of 175 ms. Full uses three antithetic order pairs with deterministic offsets `0`, `floor(n / 3)`, and `floor(2n / 3)` for roster size `n`. Reports rank by the six-round median and publish the mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum, and all six rates. These diagnostics do not establish statistical significance. Quick retains one round without warmup and its existing zero target.
+
+Keep vendor construction and registrations in the factory, reusable compilation in `compile`, and data validation in `validate`. Setup measures both factory and compilation as one fresh operation. Cold execution measures that lifecycle plus one validation for every case. Moving setup into `validate` inflates execution cost. Moving compilation into the factory changes the API under test even though the Setup and Cold execution timers catch the cost.
 
 ## Result classification
 
@@ -478,11 +497,11 @@ Add tests for business behavior and orchestration that can regress:
 - `validate` returns the expected boolean for valid and invalid data and preserves its inputs.
 - Resources, aliases, format profiles, and unknown formats reach the vendor correctly.
 - Optional async compilation resolves through the shared contract.
-- Validate-only adapters stay outside compile participants.
+- Validate-only adapters stay outside Setup participants.
 - An exact boundary such as 98%, 98.5%, or 99.95% qualifies in both profiles, while the next fraction below it remains excluded.
 - Base and Formats form one atomic draft decision, and every non-PASS category reduces its profile percentage.
-- Execution uses the atomic draft roster. Compile intersects that roster with Compile API capability. Each phase corpus derives from its eligible roster.
-- All Drafts requires atomic qualification in Base and Formats across all five drafts. Each phase publishes `baseOpsPerSecond` and `formatsOpsPerSecond` as the sums of its five profile midpoints, plus `averageOpsPerSecond` as the arithmetic mean of those sums. These raw indices inherit ops/s units and represent aggregated scope rates. Each phase also builds one common roster, sets each scope reference to that roster's fastest midpoint, and normalizes every validator midpoint against its scope reference. Base score and Formats score use five-scope geometric means. Balanced score uses the ten-scope geometric mean and controls the ranking with validator ID as the deterministic tie-breaker. Compile also requires its phase to be available in all five drafts.
+- Execution uses the atomic draft roster. Setup intersects that roster with reusable Compile API capability. Cold execution intersects it with fresh isolation capability. Each phase corpus derives from its eligible roster.
+- All Drafts requires atomic qualification in Base and Formats across all five drafts. Setup publishes `setupOpsPerSecond` as the sum of five draft medians and ranks by `setupScore`, the geometric mean of five normalized ratios. Execution and Cold execution retain `baseOpsPerSecond`, `formatsOpsPerSecond`, `averageOpsPerSecond`, five-scope Base and Formats scores, and the ten-scope Balanced score. Setup and Cold execution also require their respective phase capability in all five drafts.
 - Unsupported scopes contribute zero PASS to the global 7,970-case Total denominator.
 - Total rows use deterministic descending order and validator ID tie-breaking, and the Mermaid series preserves that order.
 - Rankings with fewer than two competitors publish `INSUFFICIENT_COMPETITORS`. Leader, score, and competitive chart fields start with two competitors.
@@ -494,19 +513,17 @@ Write tests for executable behavior, observed evidence, formulas, columns, order
 
 ## Contribution workflow
 
-During development:
+Use this sequence for a reproducible validator change:
 
-```bash
-npm test
-npm run benchmark -- --quick
-```
-
-Before publishing benchmark results:
-
-```bash
-npm test
-npm run benchmark
-```
+1. Run `npm test`, then `npm run benchmark -- --quick` to establish a diagnostic baseline. Quick runs complete conformance, one performance round without warmup and a reduced deterministic performance corpus. Quick artifacts are diagnostic.
+2. Inspect `results/<draft>/conformance/<canonical-id>.json` and its Markdown companion. `WRONG` records the opposite boolean, `COMPILE` records reusable schema preparation failure, and `RUNTIME` records validation, validate-only setup or detailed error extraction failure.
+3. Select the relevant performance phase. Setup isolates fresh construction, registration and compilation. Execution measures repeated validation through a prepared callable or prepared `validate-only` context. Cold execution adds the first validation to fresh setup.
+4. Read `results/<draft>/setup/samples.json` for Setup or `results/<draft>/profiles/<profile>/<phase>/samples.json` for Execution and Cold execution. Compare rounds, `operations`, `actualElapsedMilliseconds`, throughput and `memory.peak.rss`. Confirm Peak RSS and the corpus, intersection, performance and benchmark identities before attributing a result to the validator change.
+5. Interpret each value in its unit. Raw rates belong to one scope. Relative scores compare eligible validators with that scope's reference. Global ops/s indices sum scope medians and support diagnosis across drafts. They do not represent one measured workload.
+6. Before changing the validator, copy the relevant baseline artifacts outside `results/` so the refresh cannot replace them, and record the benchmark contract hash, intersection and performance identities, and baseline values for the exact draft, profile and phase under analysis.
+7. Keep the corpus, target and adapter options fixed. After one validator change, use `npm run benchmark -- --quick --validator <canonical-id>` when the existing Quick publication remains compatible. The command produces only the post-change state and does not calculate a before/after comparison. Compare it with the preserved baseline for exactly the same draft, profile and phase.
+8. Run complete Quick when the environment, benchmark contract, suite, locks, threshold, rounds, roster, eligibility or common `PASS` corpus changes, or when no compatible Quick publication exists.
+9. Run `npm run benchmark` only after tests and Quick are stable. Full runs complete conformance and the complete performance corpus under the canonical contract. Use it only for final publication.
 
 Quick and Full stage and validate canonical `README.md` and `results/` artifacts before a coordinated transactional publication after every prior pipeline stage passes. The transaction uses separate renames for the two public root paths and rolls back failures before both paths commit. Concurrent readers can observe the rename window. `.cache/` contains the pinned suite checkout, resumable checkpoints, staging directories, and local transaction data. The versioned locks recreate the cache. Publish the generated artifacts and keep `.cache/` and `node_modules/` local.
 

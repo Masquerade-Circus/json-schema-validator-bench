@@ -8,6 +8,7 @@ import {
   draftDialectUris,
   formatProfiles,
   getCompileParticipants,
+  getColdExecutionParticipants,
   getParticipants,
   sortValidatorIds
 } from "./matrix.js";
@@ -18,6 +19,7 @@ import {
   sha256
 } from "./suite.js";
 import { semanticDifferenceForKey } from "./integrity.js";
+import { schemaForFormatProfile } from "./schema-profile.js";
 import {
   createPerformanceEligibilityPolicy,
   defaultEligibilityThresholdPercent,
@@ -69,7 +71,7 @@ export function createPhaseEligibility({
   phaseParticipants,
   eligibilityThresholdPercent = defaultEligibilityThresholdPercent
 }) {
-  if (phase !== "compile" && phase !== "execution") {
+  if (!["setup", "execution", "cold-execution"].includes(phase)) {
     throw new Error(`unknown performance eligibility phase: ${phase}`);
   }
   const orderedParticipants = sortValidatorIds(participants);
@@ -128,7 +130,7 @@ export function createPhaseEligibility({
     } else {
       excluded.push({
         id: validator,
-        counts: countsByProfile[formatProfile],
+        counts: formatProfile === null ? null : countsByProfile[formatProfile],
         countsByProfile,
         reasons
       });
@@ -183,7 +185,10 @@ function collectMutationRecords(report, formatProfile) {
   for (const mutation of report.mutations ?? []) {
     const scope = mutationScope(mutation);
     const subjectId = mutationSubjectId(mutation);
-    if (mutation?.formatProfile !== formatProfile) {
+    if (
+      formatProfile !== null &&
+      mutation?.formatProfile !== formatProfile
+    ) {
       continue;
     }
     if (
@@ -211,7 +216,7 @@ function collectMutationRecords(report, formatProfile) {
   }
   for (const record of report.cases) {
     if (
-      record.formatProfile !== formatProfile ||
+      (formatProfile !== null && record.formatProfile !== formatProfile) ||
       record.errorCode !== "INPUT_MUTATION"
     ) {
       continue;
@@ -415,37 +420,56 @@ export function createCompileEntries({
     if (
       !represented.has(schemaMetadata.id) ||
       (formatProfile !== undefined &&
+        formatProfile !== null &&
         schemaMetadata.formatProfile !== formatProfile)
     ) {
       continue;
     }
     const profile = formatProfile ?? schemaMetadata.formatProfile ?? "base";
-    const resources = resourceClosure(
+    const formatAssertion =
+      profile === "format-assertion" ||
+      ["draft4", "draft6", "draft7"].includes(schemaMetadata.draft);
+    const effectiveProfile = formatAssertion ? "format-assertion" : "base";
+    const effectiveSchema = schemaForFormatProfile(
       schemaMetadata.schema,
+      schemaMetadata.draft,
+      effectiveProfile
+    );
+    const resources = resourceClosure(
+      effectiveSchema,
       remoteEntries,
       schemaMetadata.draft
     );
-    const digest = sha256(
-      canonicalJson({
-        schema: schemaMetadata.schema,
-        resources,
-        formatProfile: profile,
-        formatPolicyVersion: 2
-      })
-    );
-    const compileKey = `${schemaMetadata.draft}:${profile}:${digest}`;
+    const effectiveSchemaSha256 = sha256(canonicalJson(effectiveSchema));
+    const setupConfiguration = {
+      formatAssertion,
+      stripFormatKeywords: !formatAssertion,
+      formatPolicyVersion: 4
+    };
+    const digest = sha256(canonicalJson({
+      schemaSha256: effectiveSchemaSha256,
+      resources,
+      setupConfiguration
+    }));
+    const compileKey = `${schemaMetadata.draft}:${digest}`;
     const existing = grouped.get(compileKey);
     if (existing === undefined) {
       grouped.set(compileKey, {
         compileKey,
         draft: schemaMetadata.draft,
-        formatProfile: profile,
+        formatProfile: effectiveProfile,
+        sourceFormatProfiles: [profile],
+        effectiveSchemaSha256,
+        setupConfiguration,
         representativeSchemaId: schemaMetadata.id,
         memberSchemaIds: [schemaMetadata.id],
         resources
       });
     } else {
       existing.memberSchemaIds.push(schemaMetadata.id);
+      existing.sourceFormatProfiles = [
+        ...new Set([...existing.sourceFormatProfiles, profile])
+      ].sort();
     }
   }
 
@@ -458,6 +482,62 @@ export function createCompileEntries({
   return entries;
 }
 
+export function mergeSetupEntries(entries) {
+  if (!Array.isArray(entries)) {
+    throw new Error("Setup entries must be an array");
+  }
+  const grouped = new Map();
+  for (const entry of entries) {
+    if (
+      entry === null ||
+      typeof entry !== "object" ||
+      typeof entry.draft !== "string" ||
+      !/^[a-f0-9]{64}$/.test(entry.effectiveSchemaSha256 ?? "") ||
+      !Array.isArray(entry.resources) ||
+      entry.setupConfiguration === null ||
+      typeof entry.setupConfiguration !== "object" ||
+      Array.isArray(entry.setupConfiguration) ||
+      typeof entry.setupConfiguration.formatAssertion !== "boolean" ||
+      typeof entry.setupConfiguration.stripFormatKeywords !== "boolean" ||
+      entry.setupConfiguration.formatPolicyVersion !== 4 ||
+      typeof entry.representativeSchemaId !== "string" ||
+      !Array.isArray(entry.memberSchemaIds)
+    ) {
+      throw new Error("Setup entry lacks an effective operation identity");
+    }
+    const digest = sha256(canonicalJson({
+      schemaSha256: entry.effectiveSchemaSha256,
+      resources: entry.resources,
+      setupConfiguration: entry.setupConfiguration
+    }));
+    const compileKey = `${entry.draft}:${digest}`;
+    const sourceFormatProfiles = entry.sourceFormatProfiles ?? [entry.formatProfile];
+    const existing = grouped.get(compileKey);
+    if (existing === undefined) {
+      grouped.set(compileKey, {
+        ...entry,
+        compileKey,
+        formatProfile: entry.setupConfiguration.formatAssertion
+          ? "format-assertion"
+          : "base",
+        sourceFormatProfiles: [...new Set(sourceFormatProfiles)].sort(),
+        memberSchemaIds: [...new Set(entry.memberSchemaIds)].sort()
+      });
+      continue;
+    }
+    existing.sourceFormatProfiles = [
+      ...new Set([...existing.sourceFormatProfiles, ...sourceFormatProfiles])
+    ].sort();
+    existing.memberSchemaIds = [
+      ...new Set([...existing.memberSchemaIds, ...entry.memberSchemaIds])
+    ].sort();
+    existing.representativeSchemaId = existing.memberSchemaIds[0];
+  }
+  return [...grouped.values()].sort((left, right) =>
+    left.compileKey.localeCompare(right.compileKey)
+  );
+}
+
 export function createIntersection({
   suite,
   reports,
@@ -468,11 +548,19 @@ export function createIntersection({
   phase = "execution",
   participants = getParticipants(draft).map(({ id }) => id),
   phaseParticipants =
-    phase === "compile"
+    phase === "setup"
       ? getCompileParticipants(draft).map(({ id }) => id)
+      : phase === "cold-execution"
+        ? getColdExecutionParticipants(draft).map(({ id }) => id)
       : participants,
   eligibilityThresholdPercent = defaultEligibilityThresholdPercent
 }) {
+  if (phase !== "setup" && !formatProfiles.includes(formatProfile)) {
+    throw new Error(`${phase} intersection requires a format profile`);
+  }
+  if (phase === "setup" && formatProfile !== null) {
+    throw new Error("Setup intersection must be draft-scoped");
+  }
   const orderedParticipants = sortValidatorIds(participants);
   const reportsByKey = validateIntersectionInputs({
     suite,
@@ -494,7 +582,8 @@ export function createIntersection({
   const eligibleParticipants = eligibility.roster.eligible;
   const profileCases = suite.cases.filter(
     (testCase) =>
-      testCase.draft === draft && testCase.formatProfile === formatProfile
+      testCase.draft === draft &&
+      (formatProfile === null || testCase.formatProfile === formatProfile)
   );
   const caseIds =
     eligibleParticipants.length === 0
@@ -527,12 +616,12 @@ export function createIntersection({
   const representedSchemaIds = [
     ...new Set(includedCases.map(({ schemaId }) => schemaId))
   ];
-  const compileEntries = createCompileEntries({
+  const compileEntries = mergeSetupEntries(createCompileEntries({
     schemas: suite.schemas,
     representedSchemaIds,
     remoteEntries: suite.remoteEntries,
     formatProfile
-  });
+  }));
   if (caseIds.length > 0 && compileEntries.length === 0) {
     throw new Error("intersection has no compile entries");
   }
@@ -572,8 +661,8 @@ export function createIntersection({
     representedSchemas: representedSchemaIds.length
   };
   return {
-    intersectionVersion: 7,
-    formatPolicyVersion: 2,
+    intersectionVersion: 11,
+    formatPolicyVersion: 4,
     draft,
     formatProfile,
     phase,
@@ -596,8 +685,8 @@ export function createIntersection({
     },
     counts,
     performanceIdentity: {
-      performanceIdentityVersion: 2,
-      formatPolicyVersion: 2,
+      performanceIdentityVersion: 7,
+      formatPolicyVersion: 4,
       scope: { draft, formatProfile, phase },
       policy: eligibility.policy,
       suite: suiteIdentity,
@@ -642,8 +731,12 @@ export async function generateIntersection({
       reportHashes.set(key, { expected: actual, actual });
     }
 
-    for (const formatProfile of formatProfiles) {
-      for (const phase of ["compile", "execution"]) {
+    for (const [phase, profiles] of [
+      ["setup", [null]],
+      ["execution", formatProfiles],
+      ["cold-execution", formatProfiles]
+    ]) {
+      for (const formatProfile of profiles) {
         const intersection = createIntersection({
           suite,
           reports,
@@ -654,26 +747,31 @@ export async function generateIntersection({
           phase,
           participants,
           phaseParticipants:
-            phase === "compile"
+            phase === "setup"
               ? getCompileParticipants(draft).map(({ id }) => id)
+              : phase === "cold-execution"
+                ? getColdExecutionParticipants(draft).map(({ id }) => id)
               : participants,
           eligibilityThresholdPercent
         });
         const content = `${JSON.stringify(intersection)}\n`;
         const hash = performanceIdentitySha256(intersection);
         const artifactHash = sha256(content);
+        const scopeLabel = formatProfile ?? "setup";
         const runRoot = path.join(
           benchmarksRoot,
           ".cache",
-          `run-intersection-${process.pid}-${Date.now()}-${draft}-${formatProfile}-${phase}`
+          `run-intersection-${process.pid}-${Date.now()}-${draft}-${scopeLabel}-${phase}`
         );
-        const targetRoot = path.join(
-          getResultsRoot(),
-          draft,
-          "profiles",
-          formatProfile,
-          "intersections"
-        );
+        const targetRoot = formatProfile === null
+          ? path.join(getResultsRoot(), draft, "intersections")
+          : path.join(
+              getResultsRoot(),
+              draft,
+              "profiles",
+              formatProfile,
+              "intersections"
+            );
         await mkdir(runRoot, { recursive: true });
         await mkdir(targetRoot, { recursive: true });
         const stagedJson = path.join(runRoot, `${phase}.json`);
@@ -692,7 +790,11 @@ export async function generateIntersection({
           path.join(targetRoot, `${phase}.artifact.sha256`)
         );
         intersections.push(intersection);
-        hashes[`${draft}/${formatProfile}/${phase}`] = hash;
+        hashes[
+          formatProfile === null
+            ? `${draft}/${phase}`
+            : `${draft}/${formatProfile}/${phase}`
+        ] = hash;
       }
     }
   }

@@ -6,6 +6,8 @@ import path from "node:path";
 
 import {
   createBenchmarkContractHash,
+  performancePhases,
+  sampleCacheIdentityVersion,
   sampleCheckpointPath
 } from "../src/benchmark.js";
 import * as benchmarkApi from "../src/benchmark.js";
@@ -32,6 +34,7 @@ import {
   renderBenchmarkReadme,
   renderDraftSummary,
   renderRootSummary,
+  setupPerformanceTable,
   summarizePhase
 } from "../src/report.js";
 import * as reportApi from "../src/report.js";
@@ -52,12 +55,17 @@ const benchmarkRoot = path.resolve(
   ".."
 );
 
-function performanceValues(midpoint) {
+function performanceValues(median) {
   return {
-    roundThroughputs: [midpoint],
-    minimum: midpoint,
-    maximum: midpoint,
-    midpoint
+    roundThroughputs: [median],
+    median,
+    mean: median,
+    medianAbsoluteDeviation: 0,
+    relativeMedianAbsoluteDeviation: 0,
+    sampleStandardDeviation: 0,
+    coefficientOfVariation: 0,
+    minimum: median,
+    maximum: median
   };
 }
 
@@ -265,33 +273,53 @@ test("performance chart scaling selects units and preserves bounded roundtrips",
 
 function reportScopes() {
   return new Map(
-    draftIds.flatMap((draft) =>
-      ["base", "format-assertion"].map((profile) => {
-        const validators = Object.fromEntries(
-          getParticipants(draft).map((participant, index) => [
-            participant.id,
-            performanceValues(200 - index * 10)
-          ])
-        );
+    draftIds.flatMap((draft) => {
+      const validators = Object.fromEntries(
+        getParticipants(draft).map((participant, index) => [
+          participant.id,
+          performanceValues(200 - index * 10)
+        ])
+      );
+      const setupValidators = Object.fromEntries(
+        Object.entries(validators).filter(([id]) =>
+          getCompileParticipants(draft).some(
+            ({ id: candidate }) => candidate === id
+          )
+        )
+      );
+      const setupScope = [
+        `${draft}/setup`,
+        {
+          intersections: {
+            setup: {
+              eligibility: {
+                policy: createPerformanceEligibilityPolicy(),
+                roster: { eligible: Object.keys(setupValidators), excluded: [] }
+              },
+              counts: { total: 20, compileEntries: 3 }
+            }
+          },
+          setupSummary: {
+            eligibility: {
+              roster: { eligible: Object.keys(setupValidators), excluded: [] }
+            },
+            validators: setupValidators
+          }
+        }
+      ];
+      const profileScopes = ["base", "format-assertion"].map((profile) => {
+        const executionSummary = { validators: structuredClone(validators) };
         return [
           `${draft}/${profile}`,
           {
             intersection: { counts: { total: 10, compileEntries: 2 } },
-            compileSummary: {
-              validators: Object.fromEntries(
-                Object.entries(validators).filter(
-                  ([id]) =>
-                    getCompileParticipants(draft).some(
-                      ({ id: candidate }) => candidate === id
-                    )
-                )
-              )
-            },
-            executionSummary: { validators }
+            coldExecutionSummary: structuredClone(executionSummary),
+            executionSummary
           }
         ];
-      })
-    )
+      });
+      return [setupScope, ...profileScopes];
+    })
   );
 }
 
@@ -470,12 +498,15 @@ function mutationReportingFixture(validator = "validator/id [special]") {
   });
   const scopes = new Map([
     [
-      "draft6/base",
+      "draft6/setup",
       {
-        compileSummary: {
-          phase: "compile",
+        setupSummary: {
+          phase: "setup",
           draft: "draft6",
-          formatProfile: "base",
+          formatProfile: null,
+          eligibility: {
+            roster: { eligible: [validator], excluded: [] }
+          },
           mutations: {
             validators: {
               [validator]: {
@@ -484,13 +515,22 @@ function mutationReportingFixture(validator = "validator/id [special]") {
               }
             }
           },
-          validators: { [validator]: performanceValues(10) }
-        },
+          validators: {
+            [validator]: { ...performanceValues(10), mutationCount: 2 }
+          }
+        }
+      }
+    ],
+    [
+      "draft6/base",
+      {
         executionSummary: {
           phase: "execution",
           draft: "draft6",
           formatProfile: "base",
-          mutations: { validators: validators(executionRecords) },
+          mutations: {
+            validators: validators([...compileRecords, ...executionRecords])
+          },
           validators: { [validator]: performanceValues(20) }
         }
       }
@@ -498,13 +538,6 @@ function mutationReportingFixture(validator = "validator/id [special]") {
     [
       "draft6/format-assertion",
       {
-        compileSummary: {
-          phase: "compile",
-          draft: "draft6",
-          formatProfile: "format-assertion",
-          mutations: { validators: validators([]) },
-          validators: { [validator]: performanceValues(11) }
-        },
         executionSummary: {
           phase: "execution",
           draft: "draft6",
@@ -567,11 +600,8 @@ function mutationReportingLimitFixture(eventCount) {
     }
   }));
   for (const scope of fixture.scopes.values()) {
-    scope.compileSummary.mutations.validators[fixture.validator] = {
-      count: 0,
-      records: []
-    };
-    scope.executionSummary.mutations.validators[fixture.validator] = {
+    const summary = scope.setupSummary ?? scope.executionSummary;
+    summary.mutations.validators[fixture.validator] = {
       count: 0,
       records: []
     };
@@ -595,7 +625,7 @@ test("mutation documents are deterministic, bounded, scoped, and omit zero valid
   const fixture = mutationReportingFixture();
   const zeroValidator = "zero/validator";
   for (const scope of fixture.scopes.values()) {
-    for (const summary of [scope.compileSummary, scope.executionSummary]) {
+    for (const summary of [scope.setupSummary, scope.executionSummary].filter(Boolean)) {
       summary.mutations.validators[zeroValidator] = { count: 0, records: [] };
     }
   }
@@ -637,13 +667,13 @@ test("mutation documents are deterministic, bounded, scoped, and omit zero valid
   const shuffled = mutationReportingFixture();
   shuffled.scopes = new Map([...shuffled.scopes].reverse());
   for (const scope of shuffled.scopes.values()) {
-    for (const summary of [scope.compileSummary, scope.executionSummary]) {
+    for (const summary of [scope.setupSummary, scope.executionSummary].filter(Boolean)) {
       summary.mutations.validators[shuffled.validator].records.reverse();
     }
   }
   assert.equal(reportApi.createMutationDocuments(shuffled)[0].content, document.content);
   for (const scope of shuffled.scopes.values()) {
-    for (const summary of [scope.compileSummary, scope.executionSummary]) {
+    for (const summary of [scope.setupSummary, scope.executionSummary].filter(Boolean)) {
       summary.mutations.validators[shuffled.validator] = { count: 0, records: [] };
     }
   }
@@ -719,7 +749,9 @@ test("mutation Markdown shows only the first 10 deterministic events without bro
   );
 
   for (const scope of fixture.scopes.values()) {
-    scope.executionSummary.mutations.validators[fixture.validator].records.reverse();
+    scope.executionSummary?.mutations.validators[
+      fixture.validator
+    ].records.reverse();
   }
   assert.equal(reportApi.createMutationDocuments(fixture)[0].content, document.content);
 });
@@ -734,27 +766,32 @@ test("mutation cells link to existing scope and draft anchors without changing m
     version: "9.8.7"
   };
   const base = fixture.scopes.get("draft6/base");
-  base.compileSummary.validators.ajv = performanceValues(30);
-  base.compileSummary.mutations.validators.ajv = { count: 0, records: [] };
+  base.executionSummary.validators.ajv = performanceValues(30);
+  base.executionSummary.mutations.validators.ajv = { count: 0, records: [] };
   const fasterParticipant = {
     id: "ajv",
     packageName: "ajv",
     version: "1.0.0"
   };
   const scopeTable = performanceTable(
-    "Compile",
-    base.compileSummary,
+    "Execution",
+    base.executionSummary,
     [participant, fasterParticipant],
     { mutationLinkPrefix: "../mutations" }
   );
-  const consolidated = consolidatedPerformanceTable({
-    title: "Compile",
-    phase: "compile",
+  const setup = fixture.scopes.get("draft6/setup").setupSummary;
+  setup.eligibility.roster.eligible.push("ajv");
+  setup.validators.ajv = performanceValues(30);
+  setup.mutations.validators.ajv = { count: 0, records: [] };
+  const setupTable = setupPerformanceTable({
+    title: "Setup",
     draft: "draft6",
-    baseSummary: base.compileSummary,
-    formatSummary: fixture.scopes.get("draft6/format-assertion").compileSummary,
-    reports: fixture.reports,
-    participants: [participant],
+    summary: setup,
+    reports: [
+      ...fixture.reports,
+      { draft: "draft6", validator: "ajv", cases: [] }
+    ],
+    participants: [participant, fasterParticipant],
     errorLinkPrefix: "errors",
     mutationLinkPrefix: "../mutations"
   });
@@ -764,7 +801,7 @@ test("mutation cells link to existing scope and draft anchors without changing m
   ];
   for (const [markdown, href] of [
     [scopeTable, expectedLinks[0]],
-    [consolidated, expectedLinks[1]]
+    [setupTable, expectedLinks[1]]
   ]) {
     assert.match(markdown, new RegExp(`\\[\\d+\\]\\(${href.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\)`));
     const anchor = href.split("#")[1];
@@ -772,9 +809,9 @@ test("mutation cells link to existing scope and draft anchors without changing m
   }
   assert.ok(scopeTable.indexOf("[ajv]") < scopeTable.indexOf("[schema-shield]"));
   const zero = performanceTable(
-    "Compile",
+    "Setup",
     {
-      ...base.compileSummary,
+      ...base.executionSummary,
       mutations: { validators: { "schema-shield": { count: 0, records: [] } } },
       validators: { "schema-shield": performanceValues(10) }
     },
@@ -826,7 +863,17 @@ test("mutation document inventory hashes and coordinated publication include eve
       assert.equal(reportApi.hashMutationDocument(content), entry.sha256);
     }
     const index = reportApi.createResultsIndex("full", manifest);
-    assert.equal(index.resultsVersion, 10);
+    assert.equal(index.resultsVersion, 14);
+    assert.deepEqual(index.performancePhases, [
+      "setup",
+      "execution",
+      "cold-execution"
+    ]);
+    assert.deepEqual(index.performanceScopes, {
+      setup: "draft",
+      execution: "draft-profile",
+      "cold-execution": "draft-profile"
+    });
     assert.equal(index.eligibilityThresholdPercent, "98");
     assert.equal(index.mutationDocuments.mutationReportVersion, 2);
     assert.equal(index.mutationDocuments.manifest, "mutations/index.json");
@@ -839,10 +886,10 @@ test("mutation document inventory hashes and coordinated publication include eve
 test("main performance charts render current horizontal syntax with units in titles", () => {
   const scopes = reportScopes();
   for (const scope of scopes.values()) {
-    for (const id of Object.keys(scope.compileSummary.validators)) {
-      scope.compileSummary.validators[id] = performanceValues(2_000);
+    for (const id of Object.keys(scope.setupSummary?.validators ?? {})) {
+      scope.setupSummary.validators[id] = performanceValues(2_000);
     }
-    for (const id of Object.keys(scope.executionSummary.validators)) {
+    for (const id of Object.keys(scope.executionSummary?.validators ?? {})) {
       scope.executionSummary.validators[id] = performanceValues(2_000_000);
     }
   }
@@ -855,19 +902,22 @@ test("main performance charts render current horizontal syntax with units in tit
     versions: reportVersions()
   });
 
-  assert.equal([...markdown.matchAll(/^xychart horizontal$/gm)].length, 5);
+  assert.equal([...markdown.matchAll(/^xychart horizontal$/gm)].length, 7);
   assert.equal(markdown.includes("xychart-beta"), false);
   assert.deepEqual(
-    [...markdown.matchAll(/^    title ".*\(Higher is better, values in ([KM])\)"$/gm)]
-      .map((match) => match[1]),
-    ["K", "M"]
+    [...markdown.matchAll(/^    title ".*\(Higher is better\)"$/gm)].length,
+    7
   );
   assert.equal(
     [...markdown.matchAll(/^    y-axis "Average ops\/s" 0 --> /gm)].length,
-    2
+    0
   );
   assert.equal(
-    [...markdown.matchAll(/^    y-axis "Balanced score" 0 --> 100$/gm)].length,
+    [...markdown.matchAll(/^    y-axis "Balanced score" 0 --> /gm)].length,
+    4
+  );
+  assert.equal(
+    [...markdown.matchAll(/^    y-axis "Setup score" 0 --> /gm)].length,
     2
   );
 });
@@ -885,7 +935,7 @@ test("every Mermaid performance chart appears immediately before its table", () 
     ...markdown.matchAll(/```mermaid\nxychart horizontal[\s\S]*?```/g)
   ];
 
-  assert.equal(charts.length, 5);
+  assert.equal(charts.length, 7);
   for (const chart of charts) {
     assert.match(
       markdown.slice(chart.index + chart[0].length),
@@ -914,6 +964,30 @@ test("scope summaries expose conformance mutation counts and maximum Peak RSS in
           round: 2,
           throughput: 20,
           memory: { peak: { rss: 96 * 1024 ** 2 } }
+        },
+        {
+          validator: "schema-shield",
+          round: 3,
+          throughput: 30,
+          memory: { peak: { rss: 80 * 1024 ** 2 } }
+        },
+        {
+          validator: "schema-shield",
+          round: 4,
+          throughput: 40,
+          memory: { peak: { rss: 72 * 1024 ** 2 } }
+        },
+        {
+          validator: "schema-shield",
+          round: 5,
+          throughput: 50,
+          memory: { peak: { rss: 88 * 1024 ** 2 } }
+        },
+        {
+          validator: "schema-shield",
+          round: 6,
+          throughput: 60,
+          memory: { peak: { rss: 84 * 1024 ** 2 } }
         }
       ]
     },
@@ -984,6 +1058,12 @@ test("performance tables show mutations and Peak RSS without changing throughput
   formatSummary.validators.alpha.peakRssBytes = 96 * 1024 ** 2;
 
   const scoped = performanceTable("Execution", baseSummary, participants);
+  assert.match(
+    scoped,
+    /\| Validator \| Median ops\/s \| Mean ops\/s \| Relative MAD \| Sample CV \| Min–max ops\/s \| Score \| Mutations \| Peak RSS \|/
+  );
+  assert.equal(scoped.includes("Round 1 ops/s"), false);
+  assert.equal(scoped.includes("Round 2 ops/s"), false);
   assert.match(scoped, /\| Mutations \| Peak RSS \|/);
   assert.ok(scoped.indexOf("[zulu]") < scoped.indexOf("[alpha]"));
   assert.match(scoped, /\| 1 \| 64\.0 MiB \|/);
@@ -1009,7 +1089,7 @@ test("performance tables show mutations and Peak RSS without changing throughput
 
 test("tables render zero mutations and absent memory without inventing a sample", () => {
   const markdown = performanceTable(
-    "Compile",
+    "Setup",
     {
       mutations: {
         validators: { alpha: { count: 0, records: [] } }
@@ -1147,12 +1227,14 @@ test("draft report tables retain public Mutations columns while All Drafts stays
   });
   assert.equal(
     [...readme.matchAll(/\| Mutations \| Peak RSS \|/g)].length,
-    2
+    3
   );
   assert.equal(
     [...readme.matchAll(/\| Validator \| Base ops\/s \| Formats ops\/s \| Average ops\/s \| Base score \| Formats score \| Balanced score \|/g)].length,
     2
   );
+  assert.equal([...readme.matchAll(/^Leader global:/gm)].length, 3);
+  assert.equal([...readme.matchAll(/^Leader:/gm)].length, 3);
 
   const draft = "draft6";
   const draftSummary = renderDraftSummary({
@@ -1174,7 +1256,7 @@ test("draft report tables retain public Mutations columns while All Drafts stays
   });
   assert.equal(
     [...draftSummary.matchAll(/\| Mutations \| Peak RSS \|/g)].length,
-    6
+    7
   );
 });
 
@@ -1198,7 +1280,7 @@ test("generated participant snapshots are complete and alphabetic while metric t
   );
   const globalParticipantRows = [
     ...globalParticipantSection.matchAll(
-      /^\| \[([^\]]+)\]\(https:\/\/www\.npmjs\.com\/package\/[^)]+\) \([^)]*\) \| ([\d,]+) \|$/gm
+      /^\| \[([^\]]+)\]\(https:\/\/www\.npmjs\.com\/package\/[^)]+\) \([^)]*\) \| [^|]+ \| [^|]+ \| [^|]+ \| ([\d,]+) \|$/gm
     )
   ];
   assert.deepEqual(
@@ -1216,6 +1298,21 @@ test("generated participant snapshots are complete and alphabetic while metric t
       snapshot.packages[participant.packageName].weeklyDownloads.toLocaleString("en-US")
     );
   }
+  for (const label of [
+    "`reusable-sync`",
+    "`reusable-async`",
+    "`validate-only`",
+    "`fresh-instance`",
+    "`module-global-unavailable`",
+    "`observed`",
+    "`not-observed`"
+  ]) {
+    assert.equal(globalParticipantSection.includes(label), true, label);
+  }
+  assert.match(
+    globalParticipantSection,
+    /Dynamic code describes the route exercised by the adapter at the pinned version, not every path available in the package/
+  );
   assert.doesNotMatch(markdown, /sort validators by canonical name/i);
   assert.doesNotMatch(globalParticipantSection, /sort|alphabet/i);
 
@@ -1417,13 +1514,15 @@ test("pipeline accepts only Full or one Quick flag", () => {
     mode: "full",
     controllerDeadlineMilliseconds: null,
     eligibilityThresholdPercent: "98",
-    validator: null
+    validator: null,
+    bench: null
   });
   assert.deepEqual(parsePipelineArguments(["--quick"]), {
     mode: "quick",
     controllerDeadlineMilliseconds: null,
     eligibilityThresholdPercent: "98",
-    validator: null
+    validator: null,
+    bench: null
   });
   assert.deepEqual(
     parsePipelineArguments(["--controller-deadline-minutes", "60"]),
@@ -1431,7 +1530,8 @@ test("pipeline accepts only Full or one Quick flag", () => {
       mode: "full",
       controllerDeadlineMilliseconds: 60 * 60 * 1000,
       eligibilityThresholdPercent: "98",
-      validator: null
+      validator: null,
+      bench: null
     }
   );
   assert.equal(
@@ -1453,6 +1553,17 @@ test("pipeline accepts only Full or one Quick flag", () => {
   }
   for (const args of [["--fast"], ["--quick", "--quick"], ["quick"]]) {
     assert.throws(() => parsePipelineArguments(args), /arguments|--quick/);
+  }
+  for (const bench of ["setup", "execution", "cold"]) {
+    assert.equal(parsePipelineArguments(["--bench", bench]).bench, bench);
+  }
+  for (const args of [
+    ["--bench"],
+    ["--bench", "coldexecution"],
+    ["--bench", "unknown"],
+    ["--bench", "setup", "--bench", "cold"]
+  ]) {
+    assert.throws(() => parsePipelineArguments(args), /--bench.*setup.*execution.*cold|--bench.*exactly once/);
   }
   for (const value of ["", "0", "2", "2.5", "241", "minutes"]) {
     assert.throws(
@@ -1506,7 +1617,7 @@ test("controller deadlines are validated at the benchmark boundary", () => {
   );
   assert.equal(
     benchmarkApi.controllerDeadlineMillisecondsFromEnvironment("full", {}),
-    14 * 60 * 1000
+    4 * 60 * 60 * 1000
   );
   assert.equal(
     benchmarkApi.controllerDeadlineMillisecondsFromEnvironment("full", {
@@ -1604,9 +1715,9 @@ test("Full keeps the complete intersection and has an isolated contract", () => 
 
 test("Quick and Full checkpoints cannot overlap", () => {
   const request = {
-    phase: "compile",
+    phase: "setup",
     draft: "draft6",
-    formatProfile: "base",
+    formatProfile: null,
     validator: "schema-shield",
     round: 1
   };
@@ -1621,8 +1732,8 @@ test("Quick and Full checkpoints cannot overlap", () => {
   });
 
   assert.notEqual(quick, full);
-  assert.ok(quick.includes(`${path.sep}granular-samples-v9${path.sep}`));
-  assert.ok(full.includes(`${path.sep}granular-samples-v9${path.sep}`));
+  assert.ok(quick.includes(`${path.sep}granular-samples-v${sampleCacheIdentityVersion}${path.sep}`));
+  assert.ok(full.includes(`${path.sep}granular-samples-v${sampleCacheIdentityVersion}${path.sep}`));
   assert.ok(quick.includes(`${path.sep}quick${path.sep}`));
   assert.ok(full.includes(`${path.sep}full${path.sep}`));
 });
@@ -1718,13 +1829,15 @@ test("pipeline preserves stage order, propagates mode and stops on failure", asy
       _runContext,
       controllerDeadlineMilliseconds,
       eligibilityThresholdPercent,
-      validator
+      validator,
+      bench
     ) => observed.push([
       command,
       mode,
       controllerDeadlineMilliseconds,
       eligibilityThresholdPercent,
-      validator
+      validator,
+      bench
     ]),
     writeProgress(event) {
       progress.push(event);
@@ -1737,6 +1850,7 @@ test("pipeline preserves stage order, propagates mode and stops on failure", asy
       "quick",
       60 * 60 * 1000,
       "99.95",
+      null,
       null
     ])
   );
@@ -1745,7 +1859,8 @@ test("pipeline preserves stage order, propagates mode and stops on failure", asy
     mode: "quick",
     controllerDeadlineMilliseconds: 60 * 60 * 1000,
     eligibilityThresholdPercent: "99.95",
-    validator: null
+    validator: null,
+    bench: null
   });
 
   const failed = [];
@@ -1755,17 +1870,51 @@ test("pipeline preserves stage order, propagates mode and stops on failure", asy
         mode: "quick",
         runCommand: async (command) => {
           failed.push(command);
-          if (command === "compile") {
-            throw new Error("injected compile failure");
+          if (command === "setup") {
+            throw new Error("injected setup failure");
           }
         },
         writeProgress() {}
       }),
-    /injected compile failure/
+    /injected setup failure/
   );
-  assert.equal(failed.at(-1), "compile");
+  assert.equal(failed.at(-1), "setup");
   assert.equal(failed.includes("execution"), false);
   assert.equal(failed.includes("report"), false);
+});
+
+test("phase refresh validates a complete baseline before running only the selected phase", async () => {
+  const events = [];
+  await runPipeline({
+    mode: "quick",
+    bench: "cold",
+    prepareBaseline: async (context) => events.push({ type: "baseline", ...context }),
+    runCommand: async (
+      command,
+      _mode,
+      _root,
+      _context,
+      _deadline,
+      _threshold,
+      validator,
+      bench
+    ) => events.push({ type: "command", command, validator, bench }),
+    writeProgress() {}
+  });
+  assert.equal(events[0].type, "baseline");
+  assert.equal(events[0].bench, "cold");
+  assert.deepEqual(
+    events.slice(1).map(({ command }) => command),
+    [
+      "preflight",
+      "suite-ensure",
+      "harness",
+      "smoke",
+      "conformance",
+      "cold-execution",
+      "report"
+    ]
+  );
 });
 
 test("pipeline gives every stage one isolated staging root", async () => {
@@ -1818,26 +1967,27 @@ test("normalized geometric scores use log-space ratios", () => {
   assert.equal(normalizedGeometricScore([1, 1], [1, 1]), 100);
 });
 
-test("All Drafts normalizes ten scopes, excludes incomplete data and orders Balanced score ties", () => {
+test("All Drafts normalizes five Setup scopes and ten execution scopes", () => {
   const scopes = reportScopes();
   let draftValue = 1;
   for (const draft of draftIds) {
+    const setupScope = scopes.get(`${draft}/setup`);
+    for (const id of Object.keys(setupScope.setupSummary.validators)) {
+      setupScope.setupSummary.validators[id] = performanceValues(1);
+    }
+    setupScope.setupSummary.validators["schema-shield"] = performanceValues(
+      draftValue
+    );
+    setupScope.setupSummary.validators["z-schema"] = performanceValues(
+      draftValue
+    );
     for (const profile of ["base", "format-assertion"]) {
       const scope = scopes.get(`${draft}/${profile}`);
       const profileOffset = profile === "base" ? 0 : 10;
-      for (const id of Object.keys(scope.compileSummary.validators)) {
-        scope.compileSummary.validators[id] = performanceValues(1);
-      }
       for (const id of Object.keys(scope.executionSummary.validators)) {
         scope.executionSummary.validators[id] = performanceValues(1);
       }
-      scope.compileSummary.validators["schema-shield"] = performanceValues(
-        draftValue + profileOffset
-      );
       scope.executionSummary.validators["schema-shield"] = performanceValues(
-        draftValue + profileOffset
-      );
-      scope.compileSummary.validators["z-schema"] = performanceValues(
         draftValue + profileOffset
       );
       scope.executionSummary.validators["z-schema"] = performanceValues(
@@ -1846,121 +1996,57 @@ test("All Drafts normalizes ten scopes, excludes incomplete data and orders Bala
     }
     draftValue += 1;
   }
-  delete scopes.get("draft2020-12/format-assertion").compileSummary.validators
-    .schemasafe;
   delete scopes.get("draft2020-12/format-assertion").executionSummary.validators
     .schemasafe;
 
   const summary = createGlobalPerformanceSummary(scopes);
-  assert.equal(summary.globalSummaryVersion, 11);
-  for (const phase of ["compile", "execution"]) {
-    const schemaShield = summary.phases[phase].included.find(
-      ({ id }) => id === "schema-shield"
-    );
-    assert.equal(schemaShield.baseScore, 100);
-    assert.equal(schemaShield.formatsScore, 100);
-    assert.equal(schemaShield.balancedScore, 100);
-    assert.equal(schemaShield.baseOpsPerSecond, 15);
-    assert.equal(schemaShield.formatsOpsPerSecond, 65);
-    assert.equal(schemaShield.averageOpsPerSecond, 40);
-    assert.equal(Object.hasOwn(schemaShield, "base"), false);
-    assert.equal(Object.hasOwn(schemaShield, "formats"), false);
-    assert.equal(Object.hasOwn(schemaShield, "average"), false);
-    assert.equal(Object.hasOwn(schemaShield, "scoreVsBestAverage"), false);
-    assert.equal(schemaShield.coverage, "10/10");
-    for (const participant of summary.phases[phase].included) {
-      const baseRates = draftIds.map(
-        (draft) =>
-          scopes.get(`${draft}/base`)[`${phase}Summary`].validators[participant.id]
-            .midpoint
-      );
-      const formatsRates = draftIds.map(
-        (draft) =>
-          scopes.get(`${draft}/format-assertion`)[`${phase}Summary`].validators[
-            participant.id
-          ].midpoint
-      );
-      const baseReferences = draftIds.map(
-        (draft) => summary.phases[phase].referencesByDraft[draft].baseMidpoint
-      );
-      const formatsReferences = draftIds.map(
-        (draft) => summary.phases[phase].referencesByDraft[draft].formatsMidpoint
-      );
-      const expectedBase = baseRates.reduce((total, rate) => total + rate, 0);
-      const expectedFormats = formatsRates.reduce((total, rate) => total + rate, 0);
-      assert.equal(participant.baseOpsPerSecond, expectedBase, participant.id);
-      assert.equal(participant.formatsOpsPerSecond, expectedFormats, participant.id);
-      assert.equal(
-        participant.averageOpsPerSecond,
-        (expectedBase + expectedFormats) / 2,
-        participant.id
-      );
-      assert.equal(
-        participant.baseScore,
-        normalizedGeometricScore(baseRates, baseReferences),
-        participant.id
-      );
-      assert.equal(
-        participant.formatsScore,
-        normalizedGeometricScore(formatsRates, formatsReferences),
-        participant.id
-      );
-      assert.equal(
-        participant.balancedScore,
-        normalizedGeometricScore(
-          [...baseRates, ...formatsRates],
-          [...baseReferences, ...formatsReferences]
-        ),
-        participant.id
-      );
-    }
-    assert.deepEqual(
-      summary.phases[phase].included
-        .filter(({ balancedScore }) => balancedScore === 100)
-        .map(({ id }) => id),
-      ["schema-shield", "z-schema"]
-    );
-    assert.deepEqual(summary.phases[phase].referencesByDraft.draft4, {
-      baseMidpoint: 1,
-      formatsMidpoint: 11
-    });
-    assert.equal(Object.hasOwn(summary.phases[phase], "bestAverage"), false);
-
-    const excluded = summary.phases[phase].excluded.find(
-      ({ id }) => id === "schemasafe"
-    );
-    assert.deepEqual(excluded.missingScopes, [
-      {
-        scope: "draft2020-12/format-assertion",
-        reasons: [{ code: "MEASUREMENT_UNAVAILABLE" }]
-      }
-    ]);
-    assert.equal(Object.hasOwn(summary.phases[phase], "rankings"), false);
-    const excludedIds = summary.phases[phase].excluded.map(({ id }) => id);
-    const metadata = new Map(
-      draftIds
-        .flatMap((draft) => getParticipants(draft))
-        .map((participant) => [participant.id, participant])
-    );
-    const nominal = [...excludedIds].sort((leftId, rightId) => {
-      const left = metadata.get(leftId);
-      const right = metadata.get(rightId);
-      if (left.displayName < right.displayName) {
-        return -1;
-      }
-      if (left.displayName > right.displayName) {
-        return 1;
-      }
-      if (left.id < right.id) {
-        return -1;
-      }
-      if (left.id > right.id) {
-        return 1;
-      }
-      return 0;
-    });
-    assert.deepEqual(excludedIds, nominal);
+  assert.equal(summary.globalSummaryVersion, 15);
+  const setup = summary.phases.setup.included.find(
+    ({ id }) => id === "schema-shield"
+  );
+  assert.equal(setup.setupOpsPerSecond, 15);
+  assert.equal(setup.setupScore, 100);
+  assert.equal(setup.coverage, "5/5");
+  for (const removed of [
+    "baseOpsPerSecond",
+    "formatsOpsPerSecond",
+    "averageOpsPerSecond",
+    "baseScore",
+    "formatsScore",
+    "balancedScore"
+  ]) {
+    assert.equal(Object.hasOwn(setup, removed), false, removed);
   }
+  assert.deepEqual(summary.phases.setup.requiredScopes, [
+    "draft4/setup",
+    "draft6/setup",
+    "draft7/setup",
+    "draft2019-09/setup",
+    "draft2020-12/setup"
+  ]);
+
+  const execution = summary.phases.execution.included.find(
+    ({ id }) => id === "schema-shield"
+  );
+  assert.equal(execution.baseOpsPerSecond, 15);
+  assert.equal(execution.formatsOpsPerSecond, 65);
+  assert.equal(execution.averageOpsPerSecond, 40);
+  assert.equal(execution.balancedScore, 100);
+  assert.equal(execution.coverage, "10/10");
+  assert.equal(summary.phases.execution.requiredScopes.length, 10);
+  assert.deepEqual(summary.phases.execution.referencesByDraft.draft4, {
+    baseMedian: 1,
+    formatsMedian: 11
+  });
+  const excluded = summary.phases.execution.excluded.find(
+    ({ id }) => id === "schemasafe"
+  );
+  assert.deepEqual(excluded.missingScopes, [
+    {
+      scope: "draft2020-12/format-assertion",
+      reasons: [{ code: "MEASUREMENT_UNAVAILABLE" }]
+    }
+  ]);
 });
 
 test("All Drafts ranks only by Balanced score when raw Average favors another validator", () => {
@@ -1968,36 +2054,32 @@ test("All Drafts ranks only by Balanced score when raw Average favors another va
   for (const draft of draftIds) {
     for (const profile of ["base", "format-assertion"]) {
       const scope = scopes.get(`${draft}/${profile}`);
-      for (const phase of ["compile", "execution"]) {
-        for (const id of Object.keys(scope[`${phase}Summary`].validators)) {
-          scope[`${phase}Summary`].validators[id] = performanceValues(1);
-        }
-        scope[`${phase}Summary`].validators["schema-shield"] = performanceValues(
-          draft === "draft4" && profile === "base" ? 1_000 : 1
-        );
-        scope[`${phase}Summary`].validators["z-schema"] = performanceValues(10);
+      for (const id of Object.keys(scope.executionSummary.validators)) {
+        scope.executionSummary.validators[id] = performanceValues(1);
       }
+      scope.executionSummary.validators["schema-shield"] = performanceValues(
+        draft === "draft4" && profile === "base" ? 1_000 : 1
+      );
+      scope.executionSummary.validators["z-schema"] = performanceValues(10);
     }
   }
 
   const summary = createGlobalPerformanceSummary(scopes);
-  for (const phase of ["compile", "execution"]) {
-    const leaders = summary.phases[phase].included.slice(0, 2);
-    assert.deepEqual(leaders.map(({ id }) => id), ["z-schema", "schema-shield"]);
-    assert.equal(leaders[0].averageOpsPerSecond, 50);
-    assert.equal(leaders[1].baseOpsPerSecond, 1_004);
-    assert.equal(leaders[1].formatsOpsPerSecond, 5);
-    assert.equal(leaders[1].averageOpsPerSecond, 504.5);
-    assert.ok(leaders[0].balancedScore > leaders[1].balancedScore);
-    assert.ok(Math.abs(leaders[0].balancedScore - 63.09573444801933) < 1e-12);
-    assert.ok(Math.abs(leaders[1].balancedScore - 12.589254117941675) < 1e-12);
-  }
+  const leaders = summary.phases.execution.included.slice(0, 2);
+  assert.deepEqual(leaders.map(({ id }) => id), ["z-schema", "schema-shield"]);
+  assert.equal(leaders[0].averageOpsPerSecond, 50);
+  assert.equal(leaders[1].baseOpsPerSecond, 1_004);
+  assert.equal(leaders[1].formatsOpsPerSecond, 5);
+  assert.equal(leaders[1].averageOpsPerSecond, 504.5);
+  assert.ok(leaders[0].balancedScore > leaders[1].balancedScore);
+  assert.ok(Math.abs(leaders[0].balancedScore - 63.09573444801933) < 1e-12);
+  assert.ok(Math.abs(leaders[1].balancedScore - 12.589254117941675) < 1e-12);
 });
 
 test("root summary describes qualified aggregates across drafts and profiles", () => {
   const markdown = renderRootSummary({ environment: reportEnvironment("quick") });
 
-  assert.match(markdown, /qualified All Drafts Compile and Execution aggregates/);
+  assert.match(markdown, /qualified All Drafts Setup, Execution and Cold execution aggregates/);
   assert.equal(markdown.includes("Combined"), false);
   assert.equal(markdown.includes("no aggregate across drafts or profiles"), false);
 });
@@ -2013,8 +2095,19 @@ test("All Drafts publishes raw ops/s indices before geometric scores in both pha
   });
   const allDrafts = readme.slice(readme.indexOf("## All drafts results"));
 
-  assert.equal((allDrafts.match(/^### All Drafts Compile$/gm) ?? []).length, 1);
+  assert.equal((allDrafts.match(/^### All Drafts Setup$/gm) ?? []).length, 1);
   assert.equal((allDrafts.match(/^### All Drafts Execution$/gm) ?? []).length, 1);
+  assert.equal((allDrafts.match(/^### All Drafts Cold execution$/gm) ?? []).length, 1);
+  assert.ok(
+    allDrafts.indexOf("### All Drafts Setup") <
+      allDrafts.indexOf("### All Drafts Execution") &&
+      allDrafts.indexOf("### All Drafts Execution") <
+        allDrafts.indexOf("### All Drafts Cold execution")
+  );
+  assert.match(
+    allDrafts,
+    /^\| Validator \| Setup ops\/s index \| Setup score \| Errors \| Peak RSS \|$/m
+  );
   assert.equal(
     (allDrafts.match(/^\| Validator \| Base ops\/s \| Formats ops\/s \| Average ops\/s \| Base score \| Formats score \| Balanced score \|$/gm) ?? []).length,
     2
@@ -2024,9 +2117,9 @@ test("All Drafts publishes raw ops/s indices before geometric scores in both pha
   const flowchart = readme.indexOf("```mermaid\nflowchart TD", profiles);
   const conformance = readme.indexOf("### Conformance and common PASS corpus");
   assert.ok(profiles < flowchart && flowchart < conformance);
-  assert.match(readme, /We normalize scope midpoints/);
-  assert.match(readme, /raw aggregated indices with inherited ops\/s units/);
-  assert.match(readme, /Balanced score determines the leader and row order/);
+  assert.match(readme, /We normalize scope medians/);
+  assert.match(readme, /Raw summed indices remain diagnostic/);
+  assert.match(readme, /Setup score.*five-scope geometric mean/);
 });
 
 test("generated methodology documents the complete benchmark flow in active voice", () => {
@@ -2053,12 +2146,12 @@ test("generated methodology documents the complete benchmark flow in active voic
     "draft roster",
     "diagnostic results",
     "We build the common PASS corpus",
-    "We measure Compile with fresh complete construction",
-    "We measure Execution with a reusable callable",
-    "draft results: Base, Formats, and Average",
+    "We measure Setup with deduplicated fresh construction",
+    "We measure Execution with prepared validation context",
+    "We measure Cold execution directly per case",
     "We consolidate validators that qualify across all five drafts",
-    "All Drafts Compile and Execution",
-    "We normalize scope midpoints",
+    "All Drafts Setup, Execution and Cold execution",
+    "We normalize scope medians",
     "equal weight per scope"
   ]) {
     assert.equal(flowchart.includes(expected), true, expected);
@@ -2066,8 +2159,9 @@ test("generated methodology documents the complete benchmark flow in active voic
 
   const headings = [
     "### Conformance and common PASS corpus",
-    "### Compile",
+    "### Setup",
     "### Execution",
+    "### Cold execution",
     "### Timing and scoring",
     "### Mutations",
     "### Memory",
@@ -2084,17 +2178,88 @@ test("generated methodology documents the complete benchmark flow in active voic
   assert.equal(methodology.includes("normalized throughput comparison"), false);
   assert.match(
     methodology,
-    /Draft tables retain the arithmetic Average of their Base and Formats midpoints/
+    /Setup draft tables normalize one median/
   );
+  assert.match(
+    methodology,
+    /reusable adapters call the prepared callable, while `validate-only` adapters call the vendor API through their prepared adapter context/
+  );
+  assert.match(
+    methodology,
+    /Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile and analyzes schema capabilities/
+  );
+  assert.match(
+    methodology,
+    /The timed operation creates a fresh adapter and provider context, applies integration-owned configuration and registration, obtains the callable or validate-only equivalent, validates once and ends when validation returns/
+  );
+  assert.match(
+    methodology,
+    /Result comparison, checksum, diagnostics and telemetry remain outside the clock/
+  );
+  assert.match(
+    methodology,
+    /Quick runs complete conformance, one performance round without warmup, and a reduced deterministic performance corpus/
+  );
+  assert.match(methodology, /Quick is diagnostic and does not define the canonical publication/);
+  assert.match(
+    methodology,
+    /Full runs complete conformance and the complete common performance corpus under the canonical contract/
+  );
+  assert.match(methodology, /250 ms target with a normal minimum of 175 ms/);
+  assert.match(methodology, /six isolated samples in three antithetic pairs/);
+  assert.match(
+    methodology,
+    /deterministic offsets 0, floor\(n \/ 3\), and floor\(2n \/ 3\)/
+  );
+  assert.match(methodology, /use their median for ranking and scoring/);
+  assert.match(methodology, /relative median absolute deviation/);
+  assert.match(methodology, /sample coefficient of variation/);
+  assert.match(methodology, /no automatic significance claim/);
+  assert.match(methodology, /Run Full only for the final publication/);
+  for (const expected of [
+    "npm test",
+    "npm run benchmark -- --quick",
+    "results/<draft>/conformance/<canonical-id>.json",
+    "WRONG",
+    "COMPILE",
+    "RUNTIME",
+    "Setup",
+    "Cold execution",
+    "Execution",
+    "actualElapsedMilliseconds",
+    "Peak RSS",
+    "performance identity",
+    "Each performance sample records the validator runtime hash that produced it",
+    "rates belong to one scope",
+    "relative scores compare eligible validators",
+    "global ops/s indices sum scope medians",
+    "Before changing the validator, copy the relevant baseline artifacts outside `results/`",
+    "record the benchmark contract hash, intersection and performance identities, and baseline values",
+    "npm run benchmark -- --quick --validator <canonical-id>",
+    "produces only the post-change state; it does not calculate a before/after comparison",
+    "Compare that post-change state with the preserved baseline for exactly the same draft, profile and phase",
+    "A complete Quick run is required",
+    "npm run benchmark"
+  ]) {
+    assert.equal(methodology.includes(expected), true, expected);
+  }
 });
 
 test("README methodology and global JSON reflect the configured eligibility threshold", () => {
   const scopes = reportScopes();
   const reports = reportFixtures();
+  const eligibilityPolicy = createPerformanceEligibilityPolicy("99.95");
+  for (const scope of scopes.values()) {
+    for (const phase of performancePhases) {
+      if (scope.intersections?.[phase] !== undefined) {
+        scope.intersections[phase].eligibility.policy = eligibilityPolicy;
+      }
+    }
+  }
   const globalSummary = createGlobalPerformanceSummary(scopes, reports, "99.95");
   const environment = {
     ...reportEnvironment("quick"),
-    performanceEligibility: createPerformanceEligibilityPolicy("99.95")
+    performanceEligibility: eligibilityPolicy
   };
   const readme = renderBenchmarkReadme({
     mode: "quick",
@@ -2112,24 +2277,14 @@ test("README methodology and global JSON reflect the configured eligibility thre
   assert.match(readme, /coordinated transactional publication/);
   assert.match(readme, /concurrent readers can observe the rename window/i);
   assert.equal(readme.includes("one atomic replacement"), false);
-  assert.equal((readme.match(/^### All Drafts /gm) ?? []).length, 2);
+  assert.equal((readme.match(/^### All Drafts /gm) ?? []).length, 3);
   assert.equal(readme.includes("Combined"), false);
 });
 
-test("All Drafts requires all ten phase scopes and keeps phase eligibility independent", () => {
+test("All Drafts keeps five Setup scopes independent from ten execution scopes", () => {
   const scopes = reportScopes();
   const excludedId = "schema-shield";
-  for (const scope of scopes.values()) {
-    scope.intersections = {
-      compile: {
-        eligibility: { roster: { excluded: [] } }
-      },
-      execution: {
-        eligibility: { roster: { excluded: [] } }
-      }
-    };
-  }
-  scopes.get("draft2020-12/base").intersections.compile.eligibility.roster.excluded = [
+  scopes.get("draft2020-12/setup").intersections.setup.eligibility.roster.excluded = [
     {
       id: excludedId,
       reasons: [
@@ -2145,7 +2300,7 @@ test("All Drafts requires all ten phase scopes and keeps phase eligibility indep
   ];
 
   const summary = createGlobalPerformanceSummary(scopes, reportFixtures());
-  assert.equal(summary.phases.compile.excluded.some(({ id }) => id === excludedId), true);
+  assert.equal(summary.phases.setup.excluded.some(({ id }) => id === excludedId), true);
   assert.equal(
     summary.phases.execution.included.some(({ id }) => id === excludedId),
     true
@@ -2167,13 +2322,12 @@ test("global error aggregation preserves exact statuses and zero totals", () => 
       error: "failed"
     });
   const summary = createGlobalPerformanceSummary(reportScopes(), reports);
-  const schemaShield = summary.phases.compile.included.find(
+  const schemaShield = summary.phases.setup.included.find(
     ({ id }) => id === "schema-shield"
   );
 
-  assert.equal(schemaShield.errors.base.count, 1);
-  assert.equal(schemaShield.errors.base.records[0].status, "COMPILE");
-  assert.equal(schemaShield.errors.formats.count, 0);
+  assert.equal(schemaShield.errors.setup.count, 1);
+  assert.equal(schemaShield.errors.setup.records[0].status, "COMPILE");
 });
 
 async function publicationFixture(label) {

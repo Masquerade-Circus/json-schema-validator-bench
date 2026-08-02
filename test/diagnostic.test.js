@@ -10,6 +10,7 @@ import {
   createDiagnosticPublication,
   reconcileDiagnosticPhaseResult
 } from "../src/diagnostic.js";
+import * as diagnosticApi from "../src/diagnostic.js";
 import {
   assertCompleteDiagnosticBaseline,
   parsePipelineArguments,
@@ -36,7 +37,7 @@ function cohortIdentity(overrides = {}) {
   return {
     cohortIdentityVersion: 1,
     benchmarkMode: "full",
-    rounds: 2,
+    rounds: 6,
     benchmarkContractSha256: "contract",
     eligibilityThresholdPercent: "98",
     sharedHarnessSha256: "harness",
@@ -74,7 +75,8 @@ async function diagnosticBaselineFixture(label) {
   const suiteManifestRaw = '{"fixture":true}\n';
   await writeFile(path.join(root, "suite-manifest.json"), suiteManifestRaw);
   const environment = {
-    cohortIdentity: { rounds: 2 },
+    cohortIdentity: { rounds: 6 },
+    sampleRuntimeProvenance: { provenanceVersion: 1, scopes: {} },
     hashes: {
       suiteManifest: sha256(suiteManifestRaw),
       conformance: {},
@@ -92,25 +94,42 @@ async function diagnosticBaselineFixture(label) {
       environment.hashes.conformance[`${draft}/${id}`] = sha256(raw);
       files.reports.push(relativePath);
     }
-    for (const formatProfile of formatProfiles) {
-      const scope = `${draft}/${formatProfile}`;
+    for (const [scope, formatProfile, phases, phaseRoot] of [
+      [`${draft}/setup`, null, ["setup"], draft],
+      ...formatProfiles.map((profile) => [
+        `${draft}/${profile}`,
+        profile,
+        ["execution", "cold-execution"],
+        `${draft}/profiles/${profile}`
+      ])
+    ]) {
       environment.hashes.performance[scope] = {
-        compileSamples: null,
-        executionSamples: null,
         intersections: {},
         intersectionArtifacts: {}
       };
-      for (const phase of ["compile", "execution"]) {
-        const phaseRoot = `${draft}/profiles/${formatProfile}`;
+      for (const phase of phases) {
+        environment.sampleRuntimeProvenance.scopes[
+          phase === "setup"
+            ? `${draft}/setup`
+            : `${draft}/${formatProfile}/${phase}`
+        ] = {};
         const intersectionPath = `${phaseRoot}/intersections/${phase}.json`;
         const intersection = {
-          performanceIdentity: { draft, formatProfile, phase }
+          intersectionVersion: 11,
+          performanceIdentityVersion: 7,
+          performanceIdentity: {
+            performanceIdentityVersion: 7,
+            draft,
+            formatProfile,
+            phase
+          }
         };
         const intersectionRaw = `${JSON.stringify(intersection)}\n`;
         const intersectionIdentity = performanceIdentitySha256(intersection);
         const intersectionArtifact = sha256(intersectionRaw);
         const samplePath = `${phaseRoot}/${phase}/samples.json`;
         const sampleRaw = `${JSON.stringify({
+          benchmarkVersion: 9,
           benchmarkMode: "full",
           phase,
           draft,
@@ -137,7 +156,10 @@ async function diagnosticBaselineFixture(label) {
           `${intersectionArtifact}\n`
         );
         await writeFile(path.join(root, samplePath), sampleRaw);
-        environment.hashes.performance[scope][`${phase}Samples`] = sha256(sampleRaw);
+        const sampleHashKey = phase === "cold-execution"
+          ? "coldExecutionSamples"
+          : `${phase}Samples`;
+        environment.hashes.performance[scope][sampleHashKey] = sha256(sampleRaw);
         environment.hashes.performance[scope].intersections[phase] =
           intersectionIdentity;
         environment.hashes.performance[scope].intersectionArtifacts[phase] =
@@ -169,6 +191,7 @@ async function diagnosticBaselineFixture(label) {
     }
   };
   const index = {
+    resultsVersion: 14,
     benchmarkMode: "full",
     mutationDocuments: {
       manifest: "mutations/index.json",
@@ -184,7 +207,8 @@ test("pipeline validator parsing accepts one canonical ID and rejects ambiguous 
     mode: "full",
     controllerDeadlineMilliseconds: null,
     eligibilityThresholdPercent: "98",
-    validator: "schema-shield"
+    validator: "schema-shield",
+    bench: null
   });
   assert.deepEqual(
     parsePipelineArguments(["--quick", "--validator", "ajv"]),
@@ -192,7 +216,8 @@ test("pipeline validator parsing accepts one canonical ID and rejects ambiguous 
       mode: "quick",
       controllerDeadlineMilliseconds: null,
       eligibilityThresholdPercent: "98",
-      validator: "ajv"
+      validator: "ajv",
+      bench: null
     }
   );
   for (const args of [
@@ -206,6 +231,19 @@ test("pipeline validator parsing accepts one canonical ID and rejects ambiguous 
       /--validator.*canonical|--validator.*exactly once/
     );
   }
+});
+
+test("pipeline accepts a validator and phase selector together", () => {
+  assert.deepEqual(
+    parsePipelineArguments(["--quick", "--validator", "ajv", "--bench", "execution"]),
+    {
+      mode: "quick",
+      controllerDeadlineMilliseconds: null,
+      eligibilityThresholdPercent: "98",
+      validator: "ajv",
+      bench: "execution"
+    }
+  );
 });
 
 test("diagnostic pipeline validates the baseline before forwarding the selected validator", async () => {
@@ -272,6 +310,46 @@ test("diagnostic baseline rejects absent, mismatched, and collectively stale coh
       new RegExp(`${label}.*full benchmark`, "i")
     );
   }
+});
+
+test("phase-only refresh requires a complete compatible baseline before measurement", () => {
+  const current = cohortIdentity();
+  assert.throws(
+    () =>
+      assertCompatibleDiagnosticBaseline({
+        mode: "quick",
+        validator: null,
+        validatorIds,
+        baselineIndex: null,
+        baselineEnvironment: null,
+        currentCohortIdentity: current
+      }),
+    /full Quick benchmark first/i
+  );
+  assert.doesNotThrow(() =>
+    assertCompatibleDiagnosticBaseline({
+      mode: "full",
+      validator: null,
+      validatorIds,
+      baselineIndex: { benchmarkMode: "full" },
+      baselineEnvironment: { cohortIdentity: current },
+      currentCohortIdentity: current
+    })
+  );
+  assert.throws(
+    () =>
+      assertCompatibleDiagnosticBaseline({
+        mode: "full",
+        validator: null,
+        validatorIds,
+        baselineIndex: { benchmarkMode: "full" },
+        baselineEnvironment: { cohortIdentity: current },
+        currentCohortIdentity: cohortIdentity({
+          benchmarkContractSha256: "changed"
+        })
+      }),
+    /contract mismatch.*full benchmark/i
+  );
 });
 
 test("every methodological source changes the shared identity and requires a full run", async () => {
@@ -472,7 +550,7 @@ test("diagnostic baseline permits only the selected validator runtime to change"
       baselineEnvironment: { cohortIdentity: baseline },
       currentCohortIdentity: current
     }),
-    { refreshedValidators: [] }
+    { refreshes: [] }
   );
   assert.throws(
     () => assertCompatibleDiagnosticBaseline({
@@ -509,6 +587,23 @@ test("diagnostic intersection guard rejects roster, eligibility, or common corpu
   }
 });
 
+test("flat intersection hashes retain the draft-scoped Setup inventory", () => {
+  assert.deepEqual(
+    diagnosticApi.groupIntersectionHashesByScope({
+      "draft6/setup": "setup-hash",
+      "draft6/base/execution": "execution-hash",
+      "draft6/base/cold-execution": "cold-hash"
+    }),
+    {
+      "draft6/setup": { setup: "setup-hash" },
+      "draft6/base": {
+        execution: "execution-hash",
+        "cold-execution": "cold-hash"
+      }
+    }
+  );
+});
+
 test("diagnostic phase reconciliation refreshes only the selected validator", () => {
   const previous = {
     benchmarkVersion: 3,
@@ -517,21 +612,23 @@ test("diagnostic phase reconciliation refreshes only the selected validator", ()
     formatProfile: "base",
     benchmarkMode: "full",
     participants: ["ajv", "schema-shield"],
-    participantOrderByRound: [
-      { round: 1, validators: ["ajv", "schema-shield"] },
-      { round: 2, validators: ["ajv", "schema-shield"] }
-    ],
-    samples: [
-      { validator: "ajv", round: 1, throughput: 10 },
-      { validator: "schema-shield", round: 1, throughput: 20 },
-      { validator: "ajv", round: 2, throughput: 11 },
-      { validator: "schema-shield", round: 2, throughput: 21 }
-    ]
+    participantOrderByRound: Array.from({ length: 6 }, (_value, index) => ({
+      round: index + 1,
+      validators:
+        index % 2 === 0
+          ? ["ajv", "schema-shield"]
+          : ["schema-shield", "ajv"]
+    })),
+    samples: Array.from({ length: 6 }, (_value, index) => [
+      { validator: "ajv", round: index + 1, throughput: 10 + index },
+      { validator: "schema-shield", round: index + 1, throughput: 20 + index }
+    ]).flat()
   };
-  const freshSamples = [
-    { validator: "schema-shield", round: 1, throughput: 30 },
-    { validator: "schema-shield", round: 2, throughput: 31 }
-  ];
+  const freshSamples = Array.from({ length: 6 }, (_value, index) => ({
+    validator: "schema-shield",
+    round: index + 1,
+    throughput: 30 + index
+  }));
   const reconciled = reconcileDiagnosticPhaseResult({
     previousResult: previous,
     validator: "schema-shield",
@@ -545,20 +642,28 @@ test("diagnostic phase reconciliation refreshes only the selected validator", ()
       round,
       throughput
     })),
-    [
-      { validator: "ajv", round: 1, throughput: 10 },
-      { validator: "schema-shield", round: 1, throughput: 30 },
-      { validator: "ajv", round: 2, throughput: 11 },
-      { validator: "schema-shield", round: 2, throughput: 31 }
-    ]
+    Array.from({ length: 6 }, (_value, index) => {
+      const samples = {
+        ajv: { validator: "ajv", round: index + 1, throughput: 10 + index },
+        "schema-shield": {
+          validator: "schema-shield",
+          round: index + 1,
+          throughput: 30 + index
+        }
+      };
+      return (index % 2 === 0
+        ? ["ajv", "schema-shield"]
+        : ["schema-shield", "ajv"]
+      ).map((validator) => samples[validator]);
+    }).flat()
   );
   const summary = summarizePhase(reconciled, "full");
-  assert.equal(summary.validators["schema-shield"].midpoint, 30.5);
+  assert.equal(summary.validators["schema-shield"].median, 32.5);
   assert.equal(summary.validators["schema-shield"].scoreRelativeToBest, 100);
-  assert.equal(summary.validators.ajv.midpoint, 10.5);
+  assert.equal(summary.validators.ajv.median, 12.5);
   assert.equal(
     summary.validators.ajv.scoreRelativeToBest,
-    (10.5 / 30.5) * 100
+    (12.5 / 32.5) * 100
   );
 });
 
@@ -568,30 +673,120 @@ test("diagnostic metadata traces chained refreshes and a full run clears it", ()
       previousDiagnostic: null,
       validator: "schema-shield"
     }),
-    { diagnostic: true, refreshedValidators: ["schema-shield"] }
+    {
+      diagnostic: true,
+      refreshes: [{ validator: "schema-shield", bench: null }]
+    }
   );
   assert.deepEqual(
     createDiagnosticPublication({
       previousDiagnostic: {
         diagnostic: true,
-        refreshedValidators: ["schema-shield"]
+        refreshes: [{ validator: "schema-shield", bench: "setup" }]
+      },
+      validator: "ajv",
+      bench: "cold"
+    }),
+    {
+      diagnostic: true,
+      refreshes: [
+        { validator: "ajv", bench: "cold" },
+        { validator: "schema-shield", bench: "setup" }
+      ]
+    }
+  );
+  assert.deepEqual(
+    createDiagnosticPublication({
+      previousDiagnostic: {
+        diagnostic: true,
+        refreshes: [{ validator: "schema-shield", bench: null }]
       },
       validator: "ajv"
     }),
-    { diagnostic: true, refreshedValidators: ["ajv", "schema-shield"] }
+    {
+      diagnostic: true,
+      refreshes: [
+        { validator: "ajv", bench: null },
+        { validator: "schema-shield", bench: null }
+      ]
+    }
   );
   const diagnosticIndex = createResultsIndex("quick", null, "98", {
     validator: "ajv",
-    refreshedValidators: ["ajv", "schema-shield"]
+    bench: "execution",
+    refreshes: [{ validator: "ajv", bench: "execution" }]
   });
   assert.equal(diagnosticIndex.benchmarkMode, "quick");
   assert.deepEqual(diagnosticIndex.diagnostic, {
     diagnostic: true,
-    refreshedValidator: "ajv",
-    refreshedValidators: ["ajv", "schema-shield"]
+    current: { validator: "ajv", bench: "execution" },
+    refreshes: [{ validator: "ajv", bench: "execution" }]
   });
   assert.match(diagnosticIndex.publicationWarning, /full Quick benchmark/i);
   assert.equal(createResultsIndex("full").diagnostic, undefined);
+});
+
+test("combined validator and bench refresh preserves runtime provenance for omitted phases", () => {
+  const baselineRuntime = "a".repeat(64);
+  const refreshedRuntime = "b".repeat(64);
+  const provenance = diagnosticApi.createSampleRuntimeProvenance([
+    {
+      phase: "setup",
+      draft: "draft6",
+      formatProfile: null,
+      samples: [
+        {
+          validator: "ajv",
+          validatorRuntimeSha256: refreshedRuntime
+        }
+      ]
+    },
+    {
+      phase: "execution",
+      draft: "draft6",
+      formatProfile: "base",
+      samples: [
+        {
+          validator: "ajv",
+          validatorRuntimeSha256: baselineRuntime
+        }
+      ]
+    }
+  ]);
+
+  assert.deepEqual(provenance, {
+    provenanceVersion: 1,
+    scopes: {
+      "draft6/setup": { ajv: refreshedRuntime },
+      "draft6/base/execution": { ajv: baselineRuntime }
+    }
+  });
+  assert.deepEqual(
+    createDiagnosticPublication({
+      previousDiagnostic: null,
+      validator: "ajv",
+      bench: "setup"
+    }),
+    {
+      diagnostic: true,
+      refreshes: [{ validator: "ajv", bench: "setup" }]
+    }
+  );
+  assert.throws(
+    () =>
+      diagnosticApi.createSampleRuntimeProvenance([
+        {
+          phase: "execution",
+          draft: "draft6",
+          formatProfile: "base",
+          samples: [
+            { validator: "ajv", validatorRuntimeSha256: baselineRuntime },
+            { validator: "ajv", validatorRuntimeSha256: refreshedRuntime }
+          ]
+        }
+      ]),
+    /changes across rounds/
+  );
 });
 
 test("benchmark titles distinguish canonical and diagnostic publications exactly", () => {

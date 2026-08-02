@@ -39,7 +39,9 @@ export function derivePerformanceCorpus({ mode, intersection, cases }) {
     };
   }
 
-  const scope = `${intersection.draft}/${intersection.formatProfile}`;
+  const scope = intersection.phase === "setup"
+    ? `${intersection.draft}/setup`
+    : `${intersection.draft}/${intersection.formatProfile}`;
   const casesById = new Map(cases.map((testCase) => [testCase.id, testCase]));
   const entryBySchemaId = new Map();
   for (const entry of intersection.compileEntries) {

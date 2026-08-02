@@ -105,6 +105,19 @@ export function getBenchmarkAdapterMetadata(id, draft) {
 
 const compileSupport = new Map();
 
+export const participantImplementations = Object.freeze({
+  "schema-shield": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "not-observed" }),
+  ajv: Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "observed" }),
+  schemasafe: Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "observed" }),
+  "redocly-ajv": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "observed" }),
+  "cfworker-json-schema": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "not-observed" }),
+  "json-schema-library": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "not-observed" }),
+  jsonschema: Object.freeze({ api: "validate-only", isolation: "fresh-instance", dynamicCode: "not-observed" }),
+  djv: Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "observed" }),
+  "z-schema": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "not-observed" }),
+  hyperjump: Object.freeze({ api: "reusable-async", isolation: "module-global-unavailable", dynamicCode: "not-observed" })
+});
+
 export function supportsCompile(id, draft) {
   const key = `${draft}/${id}`;
   if (compileSupport.has(key)) {
@@ -128,20 +141,45 @@ export function getCompileRegistryParticipants(draft) {
   );
 }
 
+export function getColdExecutionRegistryParticipants(draft) {
+  return adapterRegistry.filter(
+    (definition) =>
+      definition.drafts.includes(draft) &&
+      participantImplementations[definition.id].isolation !==
+        "module-global-unavailable"
+  );
+}
+
 export function getRegistryRoundOrder({ draft, phase, round }) {
-  if (phase !== "compile" && phase !== "execution") {
+  if (!["setup", "execution", "cold-execution"].includes(phase)) {
     throw new Error(`unknown benchmark phase: ${phase}`);
   }
   if (!Number.isInteger(round) || round < 1 || round > 9) {
     throw new Error("round must be an integer from 1 through 9");
   }
-  return (
-    phase === "compile"
+  const participants = (
+    phase === "setup"
       ? getCompileRegistryParticipants(draft)
+      : phase === "cold-execution"
+        ? getColdExecutionRegistryParticipants(draft)
       : adapterRegistry.filter((definition) => definition.drafts.includes(draft))
   )
     .sort(compareCanonicalAdapters)
     .map(({ id }) => id);
+  return rotateRoundOrder(participants, round);
+}
+
+export function rotateRoundOrder(participants, round) {
+  if (!Array.isArray(participants) || participants.length === 0) {
+    return [];
+  }
+  if (!Number.isInteger(round) || round < 1) {
+    throw new Error("round must be a positive integer");
+  }
+  const pair = Math.floor((round - 1) / 2) % 3;
+  const offset = Math.floor((pair * participants.length) / 3);
+  const order = [...participants.slice(offset), ...participants.slice(0, offset)];
+  return round % 2 === 0 ? order.reverse() : order;
 }
 
 export const registryMetadata = Object.freeze(

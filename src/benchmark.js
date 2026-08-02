@@ -21,8 +21,10 @@ import path from "node:path";
 import { canonicalJson, loadSuite, sha256 } from "./suite.js";
 import {
   adapterRegistry,
+  getColdExecutionRegistryParticipants,
   getCompileRegistryParticipants,
-  getRegistryRoundOrder
+  getRegistryRoundOrder,
+  rotateRoundOrder
 } from "./adapters/index.js";
 import {
   draftIds,
@@ -43,11 +45,36 @@ import { reconcileDiagnosticPhaseResult } from "./diagnostic.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const workerPath = path.join(benchmarksRoot, "src", "worker.js");
-export const sampleContractVersion = 15;
-export const sampleCacheIdentityVersion = 9;
+export const sampleContractVersion = 21;
+export const sampleCacheIdentityVersion = 14;
 const sampleCheckpointNamespace = `granular-samples-v${sampleCacheIdentityVersion}`;
 const checkpointEnvelopeVersion = 1;
 const hashPattern = /^[a-f0-9]{64}$/;
+export const performancePhases = Object.freeze([
+  "setup",
+  "execution",
+  "cold-execution"
+]);
+
+function participantsForPhase(draft, phase) {
+  if (phase === "setup") {
+    return getCompileRegistryParticipants(draft);
+  }
+  if (phase === "cold-execution") {
+    return getColdExecutionRegistryParticipants(draft);
+  }
+  if (phase === "execution") {
+    return getParticipants(draft);
+  }
+  throw new Error(`unsupported benchmark phase: ${phase}`);
+}
+
+function phaseTimingPrefix(phase) {
+  if (phase === "cold-execution") {
+    return "coldExecution";
+  }
+  return phase;
+}
 export const measurementSourcePaths = Object.freeze([
   "src/adapter-api.js",
   "src/adapters/helpers.js",
@@ -89,16 +116,19 @@ const memoryBudget = Object.freeze({
 export const benchmarkModes = Object.freeze({
   full: Object.freeze({
     mode: "full",
-    rounds: 2,
-    compileWarmupMinimumMilliseconds: 100,
-    compileTargetMilliseconds: 500,
-    compileMinimumSampleMilliseconds: 350,
+    rounds: 6,
+    setupWarmupMinimumMilliseconds: 100,
+    setupTargetMilliseconds: 250,
+    setupMinimumSampleMilliseconds: 175,
+    coldExecutionWarmupMinimumMilliseconds: 100,
+    coldExecutionTargetMilliseconds: 250,
+    coldExecutionMinimumSampleMilliseconds: 175,
     executionWarmupMinimumMilliseconds: 100,
-    executionTargetMilliseconds: 500,
-    executionMinimumSampleMilliseconds: 350,
-    workerDeadlineMilliseconds: 2 * 60 * 1000,
-    controllerDeadlineMilliseconds: 14 * 60 * 1000,
-    maxWallMilliseconds: 15 * 60 * 1000,
+    executionTargetMilliseconds: 250,
+    executionMinimumSampleMilliseconds: 175,
+    workerDeadlineMilliseconds: 30 * 60 * 1000,
+    controllerDeadlineMilliseconds: 4 * 60 * 60 * 1000,
+    maxWallMilliseconds: 4 * 60 * 60 * 1000,
     completeCorpusPasses: true,
     checksumRequired: true,
     workerConcurrency: 1,
@@ -107,9 +137,12 @@ export const benchmarkModes = Object.freeze({
   quick: Object.freeze({
     mode: "quick",
     rounds: 1,
-    compileWarmupMinimumMilliseconds: 0,
-    compileTargetMilliseconds: 0,
-    compileMinimumSampleMilliseconds: 0,
+    setupWarmupMinimumMilliseconds: 0,
+    setupTargetMilliseconds: 0,
+    setupMinimumSampleMilliseconds: 0,
+    coldExecutionWarmupMinimumMilliseconds: 0,
+    coldExecutionTargetMilliseconds: 0,
+    coldExecutionMinimumSampleMilliseconds: 0,
     executionWarmupMinimumMilliseconds: 0,
     executionTargetMilliseconds: 0,
     executionMinimumSampleMilliseconds: 0,
@@ -168,22 +201,30 @@ export function createBenchmarkContract(
     draftIds.map((draft) => [
       draft,
       {
-        compile: getCompileRegistryParticipants(draft).map(({ id }) => id),
-        execution: getParticipants(draft).map(({ id }) => id)
+        setup: getCompileRegistryParticipants(draft).map(({ id }) => id),
+        execution: getParticipants(draft).map(({ id }) => id),
+        "cold-execution": getColdExecutionRegistryParticipants(draft).map(({ id }) => id)
       }
     ])
   ),
   performanceEligibility: eligibilityPolicy,
   rounds: config.rounds,
-  compile: Object.freeze({
-    warmupMinimumMilliseconds: config.compileWarmupMinimumMilliseconds,
-    targetSampleMilliseconds: config.compileTargetMilliseconds,
-    minimumSampleMilliseconds: config.compileMinimumSampleMilliseconds
-  }),
-  execution: Object.freeze({
-    warmupMinimumMilliseconds: config.executionWarmupMinimumMilliseconds,
-    targetSampleMilliseconds: config.executionTargetMilliseconds,
-    minimumSampleMilliseconds: config.executionMinimumSampleMilliseconds
+  phases: Object.freeze({
+    setup: Object.freeze({
+      warmupMinimumMilliseconds: config.setupWarmupMinimumMilliseconds,
+      targetSampleMilliseconds: config.setupTargetMilliseconds,
+      minimumSampleMilliseconds: config.setupMinimumSampleMilliseconds
+    }),
+    execution: Object.freeze({
+      warmupMinimumMilliseconds: config.executionWarmupMinimumMilliseconds,
+      targetSampleMilliseconds: config.executionTargetMilliseconds,
+      minimumSampleMilliseconds: config.executionMinimumSampleMilliseconds
+    }),
+    "cold-execution": Object.freeze({
+      warmupMinimumMilliseconds: config.coldExecutionWarmupMinimumMilliseconds,
+      targetSampleMilliseconds: config.coldExecutionTargetMilliseconds,
+      minimumSampleMilliseconds: config.coldExecutionMinimumSampleMilliseconds
+    })
   }),
   completeCorpusPasses: config.completeCorpusPasses,
   checksumRequired: config.checksumRequired,
@@ -221,13 +262,17 @@ export const benchmarkContractSha256 = createBenchmarkContractHash();
 export function estimatePerformanceBudget({
   mode = "full",
   rounds = getBenchmarkMode(mode).rounds,
-  warmupMilliseconds = getBenchmarkMode(mode).compileWarmupMinimumMilliseconds,
-  targetMilliseconds = getBenchmarkMode(mode).compileTargetMilliseconds
+  warmupMilliseconds = getBenchmarkMode(mode).setupWarmupMinimumMilliseconds,
+  targetMilliseconds = getBenchmarkMode(mode).setupTargetMilliseconds
 } = {}) {
-  const compileScopes =
+  const compileScopes = draftIds.reduce(
+      (total, draft) => total + getCompileRegistryParticipants(draft).length,
+      0
+    );
+  const coldExecutionScopes =
     formatProfiles.length *
     draftIds.reduce(
-      (total, draft) => total + getCompileRegistryParticipants(draft).length,
+      (total, draft) => total + getColdExecutionRegistryParticipants(draft).length,
       0
     );
   const executionScopes =
@@ -236,9 +281,10 @@ export function estimatePerformanceBudget({
       (total, draft) => total + getParticipants(draft).length,
       0
     );
-  const samples = rounds * (compileScopes + executionScopes);
+  const samples = rounds * (compileScopes + coldExecutionScopes + executionScopes);
   return {
     compileScopes,
+    coldExecutionScopes,
     executionScopes,
     samples,
     timedMilliseconds: samples * (warmupMilliseconds + targetMilliseconds)
@@ -936,7 +982,7 @@ export async function createBenchmarkCohortIdentity({
     }
   }
   return Object.freeze({
-    cohortIdentityVersion: 1,
+    cohortIdentityVersion: 2,
     benchmarkMode: mode,
     rounds: getBenchmarkMode(mode).rounds,
     benchmarkContractSha256: createBenchmarkContractHash({
@@ -1088,6 +1134,18 @@ export function createSampleCacheIdentity({
   });
 }
 
+function isValidPhaseScope(phase, formatProfile) {
+  return phase === "setup"
+    ? formatProfile === null
+    : formatProfiles.includes(formatProfile);
+}
+
+function phaseScopeRoot(resultsRoot, draft, formatProfile, phase) {
+  return phase === "setup"
+    ? path.join(resultsRoot, draft)
+    : path.join(resultsRoot, draft, "profiles", formatProfile);
+}
+
 export function verifyBenchmarkArtifacts({
   manifest,
   loadedManifest,
@@ -1121,8 +1179,8 @@ export async function loadBenchmarkArtifacts({
 }) {
   if (
     !draftIds.includes(draft) ||
-    !formatProfiles.includes(formatProfile) ||
-    (phase !== "compile" && phase !== "execution")
+    !isValidPhaseScope(phase, formatProfile) ||
+    !performancePhases.includes(phase)
   ) {
     throw new Error("benchmark artifact draft, format profile, and phase are required");
   }
@@ -1136,40 +1194,20 @@ export async function loadBenchmarkArtifacts({
       "utf8"
     )
   );
+  const scopeRoot = phaseScopeRoot(getResultsRoot(), draft, formatProfile, phase);
   const intersectionRaw = await readFile(
-    path.join(
-      getResultsRoot(),
-      draft,
-      "profiles",
-      formatProfile,
-      "intersections",
-      `${phase}.json`
-    ),
+    path.join(scopeRoot, "intersections", `${phase}.json`),
     "utf8"
   );
   const intersectionHash = (
     await readFile(
-      path.join(
-        getResultsRoot(),
-        draft,
-        "profiles",
-        formatProfile,
-        "intersections",
-        `${phase}.sha256`
-      ),
+      path.join(scopeRoot, "intersections", `${phase}.sha256`),
       "utf8"
     )
   ).trim();
   const artifactHash = (
     await readFile(
-      path.join(
-        getResultsRoot(),
-        draft,
-        "profiles",
-        formatProfile,
-        "intersections",
-        `${phase}.artifact.sha256`
-      ),
+      path.join(scopeRoot, "intersections", `${phase}.artifact.sha256`),
       "utf8"
     )
   ).trim();
@@ -1225,8 +1263,8 @@ async function loadBenchmarkScopeMetadata({
 }) {
   if (
     !draftIds.includes(draft) ||
-    !formatProfiles.includes(formatProfile) ||
-    (phase !== "compile" && phase !== "execution")
+    !isValidPhaseScope(phase, formatProfile) ||
+    !performancePhases.includes(phase)
   ) {
     throw new Error("benchmark scope draft, format profile, and phase are required");
   }
@@ -1236,11 +1274,11 @@ async function loadBenchmarkScopeMetadata({
       "utf8"
     )
   );
-  const scopeRoot = path.join(
+  const scopeRoot = phaseScopeRoot(
     getResultsRoot(),
     draft,
-    "profiles",
-    formatProfile
+    formatProfile,
+    phase
   );
   const intersectionRaw = await readFile(
     path.join(scopeRoot, "intersections", `${phase}.json`),
@@ -1387,19 +1425,16 @@ export function sampleCheckpointPath(request, options = {}) {
     throw new Error("sample checkpoint root must stay inside the project .cache");
   }
   if (
-    (request.phase !== "compile" && request.phase !== "execution") ||
+    !performancePhases.includes(request.phase) ||
     !draftIds.includes(request.draft) ||
-    !formatProfiles.includes(request.formatProfile) ||
+    !isValidPhaseScope(request.phase, request.formatProfile) ||
     !Number.isInteger(request.round) ||
     request.round < 1 ||
     request.round > config.rounds
   ) {
     throw new Error("invalid granular sample identity");
   }
-  const participants =
-    request.phase === "compile"
-      ? getCompileRegistryParticipants(request.draft)
-      : getParticipants(request.draft);
+  const participants = participantsForPhase(request.draft, request.phase);
   if (!participants.some(({ id }) => id === request.validator)) {
     throw new Error("validator does not participate in the granular sample scope");
   }
@@ -1408,7 +1443,7 @@ export function sampleCheckpointPath(request, options = {}) {
     options.sampleIdentityHash,
     request.phase,
     request.draft,
-    request.formatProfile,
+    request.formatProfile ?? "draft",
     request.validator,
     `round-${request.round}.json`
   );
@@ -1425,11 +1460,8 @@ export function validateGranularSample({
   const config = getBenchmarkMode(mode);
   const effectiveContractHash =
     benchmarkContractHash ?? createBenchmarkContractHash({ mode });
-  const participant = (
-    request.phase === "compile"
-      ? getCompileRegistryParticipants(request.draft)
-      : getParticipants(request.draft)
-  ).find(({ id }) => id === request.validator);
+  const participant = participantsForPhase(request.draft, request.phase)
+    .find(({ id }) => id === request.validator);
   if (
     participant === null ||
     typeof participant !== "object" ||
@@ -1442,6 +1474,9 @@ export function validateGranularSample({
     sample.validator !== request.validator ||
     sample.round !== request.round ||
     sample.intersectionSha256 !== intersectionHash ||
+    !hashPattern.test(sample.validatorRuntimeSha256) ||
+    (hashPattern.test(request.validatorRuntimeSha256) &&
+      sample.validatorRuntimeSha256 !== request.validatorRuntimeSha256) ||
     !hashPattern.test(sample.sampleCacheIdentitySha256) ||
     (sampleIdentityHash !== null &&
       sample.sampleCacheIdentitySha256 !== sampleIdentityHash)
@@ -1480,9 +1515,9 @@ export function validateGranularSample({
   ) {
     throw new Error("granular sample performance fields are invalid");
   }
-  const prefix = request.phase === "compile" ? "compile" : "execution";
+  const prefix = phaseTimingPrefix(request.phase);
   const corpusSize =
-    request.phase === "compile"
+    request.phase === "setup"
       ? sample.corpusCompileEntries
       : sample.corpusCases;
   if (
@@ -1590,7 +1625,11 @@ export async function readSampleCheckpoint({
   }
   try {
     return validateGranularSample({
-      request,
+      request: {
+        ...request,
+        validatorRuntimeSha256:
+          sampleIdentity.identity.cacheContext.validatorRuntimeSha256
+      },
       sample: envelope.sample,
       intersectionHash,
       benchmarkContractHash: effectiveContractHash,
@@ -1620,7 +1659,11 @@ export async function publishSampleCheckpoint({
     cacheContext
   });
   validateGranularSample({
-    request,
+    request: {
+      ...request,
+      validatorRuntimeSha256:
+        sampleIdentity.identity.cacheContext.validatorRuntimeSha256
+    },
     sample,
     intersectionHash,
     benchmarkContractHash: effectiveContractHash,
@@ -1748,7 +1791,7 @@ export async function runBenchmarkSample({
   await prepareConfinedCacheDirectory(pendingRoot);
   const outputPath = path.join(
     pendingRoot,
-    `${phase}-${draft}-${formatProfile}-${validator}-${round}-${process.pid}-${Date.now()}.json`
+    `${phase}-${draft}-${formatProfile ?? "draft"}-${validator}-${round}-${process.pid}-${Date.now()}.json`
   );
   await prepareConfinedCacheOutput(outputPath);
   const request = {
@@ -1757,13 +1800,14 @@ export async function runBenchmarkSample({
     intersectionSha256: intersectionHash,
     benchmarkContractSha256: benchmarkContractHash,
     sampleCacheIdentitySha256: sampleIdentity.hash,
+    validatorRuntimeSha256: cacheContext.validatorRuntimeSha256,
     workerExecArgv: effectiveWorkerExecArgv(),
     benchmarkMode: mode,
     rounds: config.rounds,
     timing: {
-      warmupMinimumMilliseconds: config[`${phase}WarmupMinimumMilliseconds`],
-      targetSampleMilliseconds: config[`${phase}TargetMilliseconds`],
-      minimumSampleMilliseconds: config[`${phase}MinimumSampleMilliseconds`]
+      warmupMinimumMilliseconds: config[`${phaseTimingPrefix(phase)}WarmupMinimumMilliseconds`],
+      targetSampleMilliseconds: config[`${phaseTimingPrefix(phase)}TargetMilliseconds`],
+      minimumSampleMilliseconds: config[`${phaseTimingPrefix(phase)}MinimumSampleMilliseconds`]
     },
     memoryBudget,
     outputPath
@@ -1785,10 +1829,11 @@ export async function runBenchmarkSample({
 }
 
 async function writePhaseResults({ phase, draft, formatProfile, result }) {
+  const scopeLabel = formatProfile ?? "draft";
   const runRoot = path.join(
     benchmarksRoot,
     ".cache",
-    `run-${phase}-${draft}-${formatProfile}-${process.pid}-${Date.now()}`
+    `run-${phase}-${draft}-${scopeLabel}-${process.pid}-${Date.now()}`
   );
   const stagedRoot = path.join(runRoot, phase);
   await mkdir(stagedRoot, { recursive: true });
@@ -1798,10 +1843,7 @@ async function writePhaseResults({ phase, draft, formatProfile, result }) {
   );
 
   const targetRoot = path.join(
-    getResultsRoot(),
-    draft,
-    "profiles",
-    formatProfile,
+    phaseScopeRoot(getResultsRoot(), draft, formatProfile, phase),
     phase
   );
   await mkdir(path.dirname(targetRoot), { recursive: true });
@@ -1825,7 +1867,7 @@ export async function runBenchmarkPhase(
     sampleExecutor = spawnWorker
   } = {}
 ) {
-  if (phase !== "compile" && phase !== "execution") {
+  if (!performancePhases.includes(phase)) {
     throw new Error(`unsupported benchmark phase: ${phase}`);
   }
   const config = getBenchmarkMode(mode);
@@ -1835,7 +1877,8 @@ export async function runBenchmarkPhase(
   const scopes = [];
 
   for (const draft of draftIds) {
-    for (const formatProfile of formatProfiles) {
+    const scopeProfiles = phase === "setup" ? [null] : formatProfiles;
+    for (const formatProfile of scopeProfiles) {
       const scopeStarted = Date.now();
       const { intersection, intersectionHash } = await loadBenchmarkScopeMetadata({
         draft,
@@ -1849,9 +1892,9 @@ export async function runBenchmarkPhase(
       if (intersection.emptyReason === null) {
         for (let round = 1; round <= config.rounds; round += 1) {
           const eligible = new Set(participants);
-          const validatorOrder = getRegistryRoundOrder({ draft, phase, round }).filter(
-            (validator) => eligible.has(validator)
-          );
+          const canonicalOrder = getRegistryRoundOrder({ draft, phase, round: 1 })
+            .filter((validator) => eligible.has(validator));
+          const validatorOrder = rotateRoundOrder(canonicalOrder, round);
           participantOrderByRound.push({ round, validators: validatorOrder });
           const validatorsToRun = validator === null
             ? validatorOrder
@@ -1902,10 +1945,7 @@ export async function runBenchmarkPhase(
         const previousResult = JSON.parse(
           await readFile(
             path.join(
-              getResultsRoot(),
-              draft,
-              "profiles",
-              formatProfile,
+              phaseScopeRoot(getResultsRoot(), draft, formatProfile, phase),
               phase,
               "samples.json"
             ),
@@ -1949,7 +1989,7 @@ export async function runBenchmarkPhase(
         throw new Error("quick samples disagree on the performance corpus");
       }
       const result = {
-        benchmarkVersion: 3,
+        benchmarkVersion: 9,
         phase,
         draft,
         formatProfile,
@@ -1972,7 +2012,7 @@ export async function runBenchmarkPhase(
   }
 
   return {
-    benchmarkVersion: 3,
+    benchmarkVersion: 9,
     phase,
     startedAt: new Date(started).toISOString(),
     endedAt: new Date().toISOString(),

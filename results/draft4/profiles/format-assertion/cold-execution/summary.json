@@ -1,0 +1,602 @@
+{
+  "benchmarkVersion": 9,
+  "summaryVersion": 10,
+  "phase": "cold-execution",
+  "draft": "draft4",
+  "formatProfile": "format-assertion",
+  "performanceEligibility": {
+    "policyVersion": 3,
+    "scope": [
+      "draft",
+      "phase"
+    ],
+    "thresholdPercent": "98",
+    "thresholdFraction": {
+      "numerator": 49,
+      "denominator": 50
+    },
+    "exactComparison": "PASS * 50 >= total * 49",
+    "requiredProfiles": [
+      "base",
+      "format-assertion"
+    ]
+  },
+  "intersectionSha256": "53e41f2811c3f9ddb4fd7801fee299eab01f1c3c1961bf420e6ec45ca64fe8e0",
+  "primaryUnit": "operations per second",
+  "units": {
+    "throughput": "operations per second",
+    "mutations": "unique mutation findings detected during conformance",
+    "peakRss": "bytes"
+  },
+  "centerFormula": "median(round_throughputs)",
+  "scoreFormula": "median_validator / best_median_in_scope * 100",
+  "mutationCountFormula": "count distinct (validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)",
+  "peakRssFormula": "max(sample.memory.peak.rss across valid rounds)",
+  "ranking": {
+    "status": "COMPETITIVE",
+    "competitorCount": 4
+  },
+  "eligibility": {
+    "policy": {
+      "policyVersion": 3,
+      "scope": [
+        "draft",
+        "phase"
+      ],
+      "thresholdPercent": "98",
+      "thresholdFraction": {
+        "numerator": 49,
+        "denominator": 50
+      },
+      "exactComparison": "PASS * 50 >= total * 49",
+      "requiredProfiles": [
+        "base",
+        "format-assertion"
+      ]
+    },
+    "roster": {
+      "candidates": [
+        "cfworker-json-schema",
+        "ajv",
+        "hyperjump",
+        "redocly-ajv",
+        "schema-shield",
+        "json-schema-library",
+        "jsonschema",
+        "schemasafe",
+        "z-schema"
+      ],
+      "eligible": [
+        "ajv",
+        "redocly-ajv",
+        "schema-shield",
+        "z-schema"
+      ],
+      "excluded": [
+        {
+          "id": "cfworker-json-schema",
+          "counts": {
+            "PASS": 201,
+            "WRONG": 5,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 706,
+              "WRONG": 8,
+              "COMPILE": 0,
+              "RUNTIME": 4,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 201,
+              "WRONG": 5,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 201,
+              "total": 206,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "hyperjump",
+          "counts": {
+            "PASS": 206,
+            "WRONG": 0,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 706,
+              "WRONG": 6,
+              "COMPILE": 6,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 206,
+              "WRONG": 0,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PHASE_UNAVAILABLE"
+            }
+          ]
+        },
+        {
+          "id": "json-schema-library",
+          "counts": {
+            "PASS": 117,
+            "WRONG": 89,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 710,
+              "WRONG": 2,
+              "COMPILE": 0,
+              "RUNTIME": 6,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 117,
+              "WRONG": 89,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 117,
+              "total": 206,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "jsonschema",
+          "counts": {
+            "PASS": 183,
+            "WRONG": 23,
+            "COMPILE": 0,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 708,
+              "WRONG": 2,
+              "COMPILE": 0,
+              "RUNTIME": 8,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 183,
+              "WRONG": 23,
+              "COMPILE": 0,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 183,
+              "total": 206,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        },
+        {
+          "id": "schemasafe",
+          "counts": {
+            "PASS": 196,
+            "WRONG": 3,
+            "COMPILE": 7,
+            "RUNTIME": 0,
+            "UNSUPPORTED": 0
+          },
+          "countsByProfile": {
+            "base": {
+              "PASS": 713,
+              "WRONG": 1,
+              "COMPILE": 4,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            },
+            "format-assertion": {
+              "PASS": 196,
+              "WRONG": 3,
+              "COMPILE": 7,
+              "RUNTIME": 0,
+              "UNSUPPORTED": 0
+            }
+          },
+          "reasons": [
+            {
+              "code": "PASS_THRESHOLD_NOT_MET",
+              "profile": "format-assertion",
+              "pass": 196,
+              "total": 206,
+              "thresholdPercent": "98",
+              "thresholdFraction": {
+                "numerator": 49,
+                "denominator": 50
+              }
+            }
+          ]
+        }
+      ],
+      "size": {
+        "candidates": 9,
+        "eligible": 4
+      },
+      "retention": "4/9",
+      "degenerate": false,
+      "sha256": "72be4390de4cd2a1ee4ec88d34bf6d3818982fe4ce72101448f052142d6d45e5"
+    }
+  },
+  "mutations": {
+    "countKey": [
+      "validator",
+      "draft",
+      "scope",
+      "subjectId",
+      "mutationTarget",
+      "mutationClass",
+      "difference"
+    ],
+    "validators": {
+      "cfworker-json-schema": {
+        "count": 7,
+        "records": [
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft4",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft4:optional/format/date-time.json#/groups/0",
+            "schemaId": "draft4:optional/format/date-time.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft4",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft4:optional/format/email.json#/groups/0",
+            "schemaId": "draft4:optional/format/email.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft4",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft4:optional/format/hostname.json#/groups/0",
+            "schemaId": "draft4:optional/format/hostname.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft4",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft4:optional/format/ipv4.json#/groups/0",
+            "schemaId": "draft4:optional/format/ipv4.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft4",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft4:optional/format/ipv6.json#/groups/0",
+            "schemaId": "draft4:optional/format/ipv6.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft4",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft4:optional/format/unknown.json#/groups/0",
+            "schemaId": "draft4:optional/format/unknown.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          },
+          {
+            "validator": "cfworker-json-schema",
+            "draft": "draft4",
+            "formatProfile": "format-assertion",
+            "phase": "conformance",
+            "scope": "schema",
+            "subjectId": "draft4:optional/format/uri.json#/groups/0",
+            "schemaId": "draft4:optional/format/uri.json#/groups/0",
+            "mutationTarget": "schema",
+            "mutationClass": "compile",
+            "moment": "after compile",
+            "difference": {
+              "path": "$.__absolute_uri__",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": false,
+                "enumerable": false,
+                "writable": false,
+                "value": {
+                  "type": "string",
+                  "value": "https://github.com/cfworker"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ajv": {
+        "count": 0,
+        "records": []
+      },
+      "hyperjump": {
+        "count": 0,
+        "records": []
+      },
+      "redocly-ajv": {
+        "count": 0,
+        "records": []
+      },
+      "schema-shield": {
+        "count": 0,
+        "records": []
+      },
+      "json-schema-library": {
+        "count": 0,
+        "records": []
+      },
+      "jsonschema": {
+        "count": 0,
+        "records": []
+      },
+      "schemasafe": {
+        "count": 0,
+        "records": []
+      },
+      "z-schema": {
+        "count": 0,
+        "records": []
+      }
+    }
+  },
+  "validators": {
+    "ajv": {
+      "roundThroughputs": [
+        208.63831302947392,
+        214.25219034451416,
+        205.6009759410692,
+        199.69265812009183,
+        214.15475123190413,
+        176.60626936275125
+      ],
+      "median": 207.11964448527158,
+      "mean": 203.15752633830073,
+      "medianAbsoluteDeviation": 7.083826302937567,
+      "relativeMedianAbsoluteDeviation": 0.034201614822882254,
+      "sampleStandardDeviation": 14.121009540665908,
+      "coefficientOfVariation": 0.06950768595770065,
+      "minimum": 176.60626936275125,
+      "maximum": 214.25219034451416,
+      "nanosecondsPerOperation": 4828127.252174337,
+      "mutationCount": 0,
+      "peakRssBytes": 287383552,
+      "scoreRelativeToBest": 4.630682861957626
+    },
+    "redocly-ajv": {
+      "roundThroughputs": [
+        205.39518003440244,
+        219.966499317808,
+        210.75306694991394,
+        207.93416747177832,
+        191.39292326355016,
+        184.21381450386207
+      ],
+      "median": 206.66467375309037,
+      "mean": 203.2759419235525,
+      "medianAbsoluteDeviation": 8.695109380770603,
+      "relativeMedianAbsoluteDeviation": 0.04207351562734403,
+      "sampleStandardDeviation": 13.15479512921336,
+      "coefficientOfVariation": 0.06471397945439399,
+      "minimum": 184.21381450386207,
+      "maximum": 219.966499317808,
+      "nanosecondsPerOperation": 4838756.338176768,
+      "mutationCount": 0,
+      "peakRssBytes": 292016128,
+      "scoreRelativeToBest": 4.620510841928143
+    },
+    "schema-shield": {
+      "roundThroughputs": [
+        4279.199728539285,
+        4704.608002874993,
+        4482.7566644720455,
+        4467.33378778237,
+        4478.1997613543335,
+        4278.273714598724
+      ],
+      "median": 4472.766774568352,
+      "mean": 4448.3952766036255,
+      "medianAbsoluteDeviation": 101.77846796638005,
+      "relativeMedianAbsoluteDeviation": 0.022755147562148994,
+      "sampleStandardDeviation": 158.51884426802593,
+      "coefficientOfVariation": 0.035635062626236745,
+      "minimum": 4278.273714598724,
+      "maximum": 4704.608002874993,
+      "nanosecondsPerOperation": 223575.26121994274,
+      "mutationCount": 0,
+      "peakRssBytes": 273330176,
+      "scoreRelativeToBest": 100
+    },
+    "z-schema": {
+      "roundThroughputs": [
+        3203.231158309311,
+        3075.389185978853,
+        3153.7218770474956,
+        3252.3651580066917,
+        2931.103875379432,
+        3078.765042144247
+      ],
+      "median": 3116.243459595871,
+      "mean": 3115.7627161443384,
+      "medianAbsoluteDeviation": 63.920986165228896,
+      "relativeMedianAbsoluteDeviation": 0.020512192642842632,
+      "sampleStandardDeviation": 113.88554841249702,
+      "coefficientOfVariation": 0.036551418958317504,
+      "minimum": 2931.103875379432,
+      "maximum": 3252.3651580066917,
+      "nanosecondsPerOperation": 320899.18934950116,
+      "mutationCount": 0,
+      "peakRssBytes": 231596032,
+      "scoreRelativeToBest": 69.6714945504085
+    }
+  }
+}

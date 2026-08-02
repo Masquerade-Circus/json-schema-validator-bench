@@ -35,7 +35,10 @@ import { generateIntersection } from "./intersection.js";
 import { runBenchmarkPhase, runBenchmarkSample } from "./benchmark.js";
 import { executeWorkerRequest, runExecutionSample } from "./worker.js";
 import { eligibilityThresholdFromEnvironment } from "./eligibility.js";
-import { assertCompatibleIntersections } from "./diagnostic.js";
+import {
+  assertCompatibleIntersections,
+  groupIntersectionHashesByScope
+} from "./diagnostic.js";
 import { getResultsRoot } from "./paths.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -489,6 +492,17 @@ async function main() {
     process.env.BENCHMARK_VALIDATOR === ""
     ? null
     : getRegisteredAdapter(process.env.BENCHMARK_VALIDATOR).id;
+  const selectedBench = process.env.BENCHMARK_SELECTED_BENCH === undefined ||
+    process.env.BENCHMARK_SELECTED_BENCH === ""
+    ? null
+    : process.env.BENCHMARK_SELECTED_BENCH;
+  if (
+    selectedBench !== null &&
+    !["setup", "execution", "cold"].includes(selectedBench)
+  ) {
+    throw new Error("selected bench must be setup, execution, or cold");
+  }
+  const selectedPhase = selectedBench === "cold" ? "cold-execution" : selectedBench;
   if (command === "preflight") {
     process.stdout.write(`${JSON.stringify(await validatePipelinePreflight())}\n`);
     return;
@@ -680,7 +694,7 @@ async function main() {
         }
       }
     }
-    const previousIntersections = diagnosticValidator === null
+    const previousIntersections = diagnosticValidator === null && selectedBench === null
       ? null
       : JSON.parse(
           await readFile(path.join(getResultsRoot(), "environment.json"), "utf8")
@@ -697,15 +711,24 @@ async function main() {
           values.intersections
         ])
       );
-      const currentHashes = {};
-      for (const [key, hash] of Object.entries(hashes)) {
-        const separator = key.lastIndexOf("/");
-        const scope = key.slice(0, separator);
-        const phase = key.slice(separator + 1);
-        currentHashes[scope] ??= {};
-        currentHashes[scope][phase] = hash;
+      const currentHashes = groupIntersectionHashesByScope(hashes);
+      if (diagnosticValidator !== null) {
+        assertCompatibleIntersections(previousHashes, currentHashes, mode);
+      } else {
+        const omitSelected = (inventory) => Object.fromEntries(
+          Object.entries(inventory).map(([scope, phases]) => [
+            scope,
+            Object.fromEntries(
+              Object.entries(phases).filter(([phase]) => phase !== selectedPhase)
+            )
+          ])
+        );
+        assertCompatibleIntersections(
+          omitSelected(previousHashes),
+          omitSelected(currentHashes),
+          mode
+        );
       }
-      assertCompatibleIntersections(previousHashes, currentHashes, mode);
     }
     const summary = reports.map(({ validator, draft, counts }) => ({
       validator,
@@ -717,7 +740,9 @@ async function main() {
         conformance: summary,
         intersections: Object.fromEntries(
           intersections.map((intersection) => [
-            `${intersection.draft}/${intersection.formatProfile}/${intersection.phase}`,
+            intersection.phase === "setup"
+              ? `${intersection.draft}/setup`
+              : `${intersection.draft}/${intersection.formatProfile}/${intersection.phase}`,
             intersection.counts
           ])
         ),
@@ -736,9 +761,9 @@ async function main() {
     return;
   }
 
-  if (command === "compile") {
+  if (command === "setup" || command === "cold-execution") {
     const artifactsCache = new Map();
-    const result = await runBenchmarkPhase("compile", {
+    const result = await runBenchmarkPhase(command, {
       mode,
       eligibilityThresholdPercent,
       validator: diagnosticValidator,
@@ -780,7 +805,10 @@ async function main() {
     const result = await runBenchmarkSample({
       phase,
       draft,
-      formatProfile,
+      formatProfile:
+        phase === "setup" && formatProfile === "draft"
+          ? null
+          : formatProfile,
       validator,
       round: Number(roundRaw),
       mode: flag === "--quick" ? "quick" : "full",
@@ -828,7 +856,8 @@ async function main() {
     const result = await generateFinalReport({
       mode,
       eligibilityThresholdPercent,
-      validator: diagnosticValidator
+      validator: diagnosticValidator,
+      bench: selectedBench
     });
     process.stdout.write(
       `${JSON.stringify({

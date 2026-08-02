@@ -111,7 +111,12 @@ function deduplicateMutationEvents(events) {
   );
 }
 
-function checkpointMutations({ schemaTracker, resourcesTracker, mutationClass }) {
+function checkpointMutations({
+  schemaTracker,
+  resourcesTracker,
+  mutationClass,
+  release = true
+}) {
   const findings = [];
   const schemaIntegrity = schemaTracker?.verify();
   if (schemaIntegrity !== undefined && !schemaIntegrity.unchanged) {
@@ -129,8 +134,10 @@ function checkpointMutations({ schemaTracker, resourcesTracker, mutationClass })
       difference: resourcesIntegrity.difference
     });
   }
-  schemaTracker?.release();
-  resourcesTracker?.release();
+  if (release) {
+    schemaTracker?.release();
+    resourcesTracker?.release();
+  }
   return findings;
 }
 
@@ -194,16 +201,34 @@ export async function classifySchemaCases({
     return records;
   }
 
+  schemaTracker = createIntegrityTracker(disposableSchema);
+  resourcesTracker = resources === null
+    ? null
+    : createIntegrityTracker(resources);
+  function checkpointValidationMutations() {
+    const findings = checkpointMutations({
+      schemaTracker,
+      resourcesTracker,
+      mutationClass: "validation",
+      release: false
+    });
+    if (findings.length > 0) {
+      schemaTracker.release();
+      resourcesTracker?.release();
+      schemaTracker = createIntegrityTracker(disposableSchema);
+      resourcesTracker = resources === null
+        ? null
+        : createIntegrityTracker(resources);
+    }
+    return findings;
+  }
+
   const records = [];
   for (let index = 0; index < cases.length; index += 1) {
     const testCase = cases[index];
     const record = baseRecord(adapter, testCase);
     const disposableData = structuredClone(testCase.data);
     const dataTracker = createIntegrityTracker(disposableData);
-    schemaTracker = createIntegrityTracker(disposableSchema);
-    resourcesTracker = resources === null
-      ? null
-      : createIntegrityTracker(resources);
     try {
       record.observed = adapter.validate(
         validationTarget,
@@ -217,13 +242,7 @@ export async function classifySchemaCases({
     }
     const dataIntegrity = dataTracker.verify();
     dataTracker.release();
-    const validationMutations = checkpointMutations({
-      schemaTracker,
-      resourcesTracker,
-      mutationClass: "validation"
-    });
-    schemaTracker = null;
-    resourcesTracker = null;
+    const validationMutations = checkpointValidationMutations();
     if (!dataIntegrity.unchanged) {
       validationMutations.push({
         mutationTarget: "data",
@@ -247,10 +266,6 @@ export async function classifySchemaCases({
     ) {
       const detailedTestCase = structuredClone(testCase);
       const detailTracker = createIntegrityTracker(detailedTestCase);
-      schemaTracker = createIntegrityTracker(disposableSchema);
-      resourcesTracker = resources === null
-        ? null
-        : createIntegrityTracker(resources);
       try {
         const detail = await adapter.getError({
           schema: disposableSchema,
@@ -272,13 +287,7 @@ export async function classifySchemaCases({
       }
       const detailIntegrity = detailTracker.verify();
       detailTracker.release();
-      const detailMutations = checkpointMutations({
-        schemaTracker,
-        resourcesTracker,
-        mutationClass: "validation"
-      });
-      schemaTracker = null;
-      resourcesTracker = null;
+      const detailMutations = checkpointValidationMutations();
       if (!detailIntegrity.unchanged) {
         detailMutations.push({
           mutationTarget: "data",
@@ -299,6 +308,8 @@ export async function classifySchemaCases({
     }
     records.push(record);
   }
+  schemaTracker.release();
+  resourcesTracker?.release();
 
   if (schemaMetadata?.id !== cases[0]?.schemaId) {
     throw new Error("schema metadata and case schema ID mismatch");

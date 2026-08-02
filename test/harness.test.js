@@ -33,7 +33,8 @@ import {
   adapterRegistry,
   compareCanonicalAdapters,
   getAdapterFactory,
-  getRegisteredAdapter
+  getRegisteredAdapter,
+  rotateRoundOrder
 } from "../src/adapters/index.js";
 import { defineAdapter } from "../src/adapter-api.js";
 import * as Hyperjump2019 from "@hyperjump/json-schema/draft-2019-09";
@@ -50,7 +51,7 @@ import {
   packageInventoryNames,
   renderConformanceMarkdown,
   summarizePhase,
-  summarizeTwoRoundThroughputs,
+  summarizeThroughputs,
   validateInstalledVersions,
   validateSampleSet
 } from "../src/report.js";
@@ -72,6 +73,7 @@ import {
 } from "../src/worker.js";
 import {
   benchmarkConstants,
+  benchmarkModes,
   benchmarkContractSha256,
   createBenchmarkContract,
   createBenchmarkContractHash,
@@ -97,6 +99,7 @@ import { derivePerformanceCorpus } from "../src/performance-corpus.js";
 import { createIntegrityTracker } from "../src/integrity.js";
 import {
   draftIds,
+  getColdExecutionParticipants,
   getCompileParticipants,
   getParticipants,
   getRoundOrder
@@ -574,7 +577,7 @@ test("integrity tracker reports the first structural descriptor difference", () 
   });
 });
 
-test("benchmark rounds order validators by canonical name with ID tie-breaks", () => {
+test("benchmark rounds use three deterministic antithetic pairs", () => {
   assert.ok(
     compareCanonicalAdapters(
       { displayName: "same", id: "alpha" },
@@ -583,11 +586,13 @@ test("benchmark rounds order validators by canonical name with ID tie-breaks", (
   );
 
   for (const draft of draftIds) {
-    for (const phase of ["compile", "execution"]) {
+    for (const phase of ["setup", "execution", "cold-execution"]) {
       const participants =
-        phase === "compile"
+        phase === "setup"
           ? getCompileParticipants(draft)
-          : getParticipants(draft);
+          : phase === "cold-execution"
+            ? getColdExecutionParticipants(draft)
+            : getParticipants(draft);
       const expected = [...participants]
         .sort((left, right) => {
           if (left.displayName < right.displayName) {
@@ -606,12 +611,29 @@ test("benchmark rounds order validators by canonical name with ID tie-breaks", (
         })
         .map(({ id }) => id);
 
-      for (const round of [1, 2]) {
+      const positionTotals = new Map(expected.map((participant) => [participant, 0]));
+      for (let round = 1; round <= benchmarkModes.full.rounds; round += 1) {
         const actual = getRoundOrder({ draft, phase, round });
-        assert.deepEqual(actual, expected, `${draft}/${phase}/round-${round}`);
+        assert.deepEqual(
+          actual,
+          rotateRoundOrder(expected, round),
+          `${draft}/${phase}/round-${round}`
+        );
         assert.equal(new Set(actual).size, participants.length);
         assert.deepEqual([...actual].sort(), expected.slice().sort());
+        actual.forEach((participant, position) => {
+          positionTotals.set(
+            participant,
+            positionTotals.get(participant) + position
+          );
+        });
       }
+      assert.deepEqual(
+        new Set(positionTotals.values()),
+        new Set([
+          (benchmarkModes.full.rounds / 2) * (expected.length - 1)
+        ])
+      );
     }
   }
 });
@@ -645,9 +667,9 @@ test("non-metric registry, matrix, contract, and validator profile metadata use 
       `${draft}/execution contract`
     );
     assert.deepEqual(
-      contract.participantsByDraft[draft].compile,
+      contract.participantsByDraft[draft].setup,
       canonicalIds(compile),
-      `${draft}/compile contract`
+      `${draft}/setup contract`
     );
   }
 
@@ -699,7 +721,7 @@ test("published validator summaries and error-document inventories use canonical
   });
   assert.deepEqual(
     documents
-      .filter(({ phase, profile }) => phase === "compile" && profile === "base")
+      .filter(({ phase, profile }) => phase === "setup" && profile === null)
       .map(({ validator }) => validator),
     expected
   );
@@ -709,21 +731,23 @@ test("published validator summaries and error-document inventories use canonical
     packageName: participant.packageName,
     version: "1.0.0",
     errors: {
+      setup: { records: [] },
       base: { records: [] },
       formats: { records: [] }
     }
   }));
   const globalDocuments = createGlobalErrorDocuments({
     phases: {
-      compile: { included },
+      setup: { included },
+      "cold-execution": { included },
       execution: { included }
     }
   });
   assert.deepEqual(
     globalDocuments
-      .filter(({ phase }) => phase === "compile")
+      .filter(({ phase }) => phase === "setup")
       .map(({ validator }) => validator),
-    expected.flatMap((id) => [id, id])
+    expected
   );
   for (const document of globalDocuments) {
     assert.equal(document.count, 0);
@@ -2063,6 +2087,34 @@ test("intersection ignores a participant that falls below the atomic draft thres
   );
 });
 
+test("Setup creates one atomic draft scope from Base and Formats", () => {
+  const fixture = intersectionFixture();
+  const intersection = createIntersection({
+    ...fixture,
+    formatProfile: null,
+    phase: "setup",
+    phaseParticipants: fixture.participants,
+    reportHashes: null
+  });
+
+  assert.equal(intersection.formatProfile, null);
+  assert.equal(intersection.phase, "setup");
+  assert.equal(intersection.caseIds.length, 6);
+  assert.equal(intersection.compileEntries.length, 2);
+  assert.deepEqual(
+    new Set(
+      intersection.compileEntries.flatMap(
+        ({ sourceFormatProfiles }) => sourceFormatProfiles
+      )
+    ),
+    new Set(["base", "format-assertion"])
+  );
+  assert.deepEqual(
+    intersection.participants.map(({ id }) => id),
+    ["ajv", "schema-shield", "schemasafe"]
+  );
+});
+
 function eligibilityReport(validator, { basePass = 100, formatsPass = 100 } = {}) {
   return {
     validator,
@@ -2217,7 +2269,7 @@ test("draft eligibility is atomic across Base and Formats and counts every non-P
   );
 });
 
-test("Base and Formats share one draft roster while Compile intersects API capability", () => {
+test("Base and Formats share one draft roster while Setup intersects API capability", () => {
   const reports = [
     eligibilityReport("schema-shield"),
     eligibilityReport("ajv"),
@@ -2239,20 +2291,20 @@ test("Base and Formats share one draft roster while Compile intersects API capab
     participants: ["schema-shield", "ajv", "schemasafe"],
     phaseParticipants: ["schema-shield", "ajv", "schemasafe"]
   });
-  const compile = createPhaseEligibility({
+  const setup = createPhaseEligibility({
     reports,
     draft: "draft6",
     formatProfile: "base",
-    phase: "compile",
+    phase: "setup",
     participants: ["schema-shield", "ajv", "schemasafe"],
     phaseParticipants: ["ajv", "schemasafe"]
   });
 
   assert.deepEqual(execution.roster.eligible, ["ajv", "schema-shield", "schemasafe"]);
   assert.deepEqual(formatsExecution.roster.eligible, execution.roster.eligible);
-  assert.deepEqual(compile.roster.eligible, ["ajv", "schemasafe"]);
+  assert.deepEqual(setup.roster.eligible, ["ajv", "schemasafe"]);
   assert.deepEqual(
-    compile.roster.excluded.find(({ id }) => id === "schema-shield").reasons,
+    setup.roster.excluded.find(({ id }) => id === "schema-shield").reasons,
     [{ code: "PHASE_UNAVAILABLE" }]
   );
 });
@@ -2586,6 +2638,24 @@ test("performance worker source contains no mutation instrumentation", async () 
   }
 });
 
+test("conformance reuses schema and resource integrity baselines across unchanged cases", async () => {
+  const source = await readFile(
+    path.join(benchmarkRoot, "src", "conformance.js"),
+    "utf8"
+  );
+  const loopStart = source.indexOf(
+    "for (let index = 0; index < cases.length; index += 1)"
+  );
+  const loopEnd = source.indexOf(
+    "if (schemaMetadata?.id !== cases[0]?.schemaId)",
+    loopStart
+  );
+  const caseLoop = source.slice(loopStart, loopEnd);
+
+  assert.equal(caseLoop.includes("createIntegrityTracker(disposableSchema)"), false);
+  assert.equal(caseLoop.includes("createIntegrityTracker(resources)"), false);
+});
+
 test("intersection records empty and rejects one-sided draft corpora", () => {
   const empty = intersectionFixture();
   for (const report of empty.reports) {
@@ -2610,7 +2680,7 @@ test("intersection records empty and rejects one-sided draft corpora", () => {
   );
 });
 
-test("compile keys canonicalize keys, deduplicate within draft, and separate draft or resources", () => {
+test("compile keys canonicalize effective operations and separate draft or resources", () => {
   const schemas = [
     { id: "d6-a", draft: "draft6", schema: { type: "object", minProperties: 1 } },
     { id: "d6-b", draft: "draft6", schema: { minProperties: 1, type: "object" } },
@@ -2656,8 +2726,10 @@ test("compile keys canonicalize keys, deduplicate within draft, and separate dra
     remoteEntries
   });
 
-  assert.equal(entries.length, 6);
-  const duplicate = entries.find((entry) => entry.memberSchemaIds.length === 2);
+  assert.equal(entries.length, 5);
+  const duplicate = entries.find((entry) =>
+    entry.memberSchemaIds.includes("d6-a")
+  );
   assert.deepEqual(duplicate.memberSchemaIds, ["d6-a", "d6-b"]);
   assert.notEqual(
     entries.find((entry) => entry.representativeSchemaId === "d7-a").compileKey,
@@ -2667,13 +2739,45 @@ test("compile keys canonicalize keys, deduplicate within draft, and separate dra
     .filter((entry) => entry.resources.length === 1)
     .map(({ compileKey }) => compileKey);
   assert.equal(new Set(resourceKeys).size, 2);
-  assert.notEqual(
-    entries.find((entry) => entry.representativeSchemaId === "d6-profile-base")
-      .compileKey,
-    entries.find(
-      (entry) => entry.representativeSchemaId === "d6-profile-assertion"
-    ).compileKey
+  const mergedProfiles = entries.find((entry) =>
+    entry.memberSchemaIds.includes("d6-profile-base")
   );
+  assert.deepEqual(mergedProfiles.memberSchemaIds, [
+    "d6-profile-assertion",
+    "d6-profile-base"
+  ]);
+  assert.deepEqual(mergedProfiles.sourceFormatProfiles, [
+    "base",
+    "format-assertion"
+  ]);
+});
+
+test("Setup deduplicates modern Base schemas after removing format", () => {
+  const schemas = [
+    {
+      id: "modern-with-format",
+      draft: "draft2019-09",
+      formatProfile: "base",
+      schema: { type: "string", format: "email" }
+    },
+    {
+      id: "modern-without-format",
+      draft: "draft2019-09",
+      formatProfile: "base",
+      schema: { type: "string" }
+    }
+  ];
+  const baseEntries = createCompileEntries({
+    schemas,
+    representedSchemaIds: schemas.map(({ id }) => id),
+    remoteEntries: [],
+    formatProfile: "base"
+  });
+  assert.equal(baseEntries.length, 1);
+  assert.deepEqual(baseEntries[0].memberSchemaIds, [
+    "modern-with-format",
+    "modern-without-format"
+  ]);
 });
 
 test("compile entries treat the active draft metaschema as built-in adapter setup", () => {
@@ -2697,15 +2801,16 @@ test("compile entries treat the active draft metaschema as built-in adapter setu
 
 test("benchmark worker rejects invalid arguments and an exhausted deadline", async () => {
   const validRequest = {
-    phase: "compile",
+    phase: "setup",
     validator: "ajv",
     draft: "draft6",
-    formatProfile: "base",
+    formatProfile: null,
     round: 1,
     deadline: Date.now() + 60_000,
     benchmarkContractSha256: "a".repeat(64),
     intersectionSha256: "b".repeat(64),
     sampleCacheIdentitySha256: "c".repeat(64),
+    validatorRuntimeSha256: "d".repeat(64),
     eligibilityThresholdPercent: "098.500",
     workerExecArgv: effectiveWorkerExecArgv()
   };
@@ -2713,14 +2818,16 @@ test("benchmark worker rejects invalid arguments and an exhausted deadline", asy
     validateWorkerRequest(validRequest).eligibilityThresholdPercent,
     "98.5"
   );
+  assert.equal(validateWorkerRequest({ ...validRequest, round: 6 }).round, 6);
   const invalidRequests = [
     { ...validRequest, phase: "unknown" },
     { ...validRequest, validator: "unknown" },
     { ...validRequest, draft: "draft8" },
     { ...validRequest, round: 0 },
-    { ...validRequest, round: 3 },
+    { ...validRequest, round: 7 },
     { ...validRequest, round: 10 },
     { ...validRequest, workerExecArgv: ["--definitely-not-effective"] },
+    { ...validRequest, validatorRuntimeSha256: "invalid" },
     { ...validRequest, eligibilityThresholdPercent: "NaN" }
   ];
   for (const request of invalidRequests) {
@@ -2761,7 +2868,7 @@ test("benchmark worker rejects invalid arguments and an exhausted deadline", asy
         {
           artifactsCache: new Map([
             [
-              "98.5/compile/draft6/base",
+              "98.5/setup/draft6/draft",
               {
                 intersection: {
                   eligibility: { policy: { thresholdPercent: "98" } }
@@ -2786,25 +2893,30 @@ test("benchmark worker rejects invalid arguments and an exhausted deadline", asy
   );
 });
 
-test("programmatic benchmark API sends the normalized threshold to its worker", async () => {
+test("programmatic benchmark API sends the normalized threshold to its worker", async (context) => {
   const environment = JSON.parse(
     await readFile(path.join(benchmarkRoot, "results", "environment.json"), "utf8")
   );
   const threshold = environment.performanceEligibility.thresholdPercent;
-  const intersection = JSON.parse(
-    await readFile(
+  let intersection;
+  try {
+    intersection = JSON.parse(await readFile(
       path.join(
         benchmarkRoot,
         "results",
         "draft6",
-        "profiles",
-        "base",
         "intersections",
-        "compile.json"
+        "setup.json"
       ),
       "utf8"
-    )
-  );
+    ));
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      context.skip("canonical artifacts still use the previous performance contract");
+      return;
+    }
+    throw error;
+  }
   const configured = threshold.includes(".")
     ? `0${threshold}00`
     : `0${threshold}.000`;
@@ -2819,9 +2931,9 @@ test("programmatic benchmark API sends the normalized threshold to its worker", 
     await assert.rejects(
       () =>
         runBenchmarkSample({
-          phase: "compile",
+          phase: "setup",
           draft: "draft6",
-          formatProfile: "base",
+          formatProfile: null,
           validator: intersection.participants[0].id,
           round: 1,
           mode: "quick",
@@ -2835,6 +2947,7 @@ test("programmatic benchmark API sends the normalized threshold to its worker", 
       /CONTROLLED_WORKER_REQUEST_CAPTURE/
     );
     assert.equal(workerRequest.eligibilityThresholdPercent, threshold);
+    assert.match(workerRequest.validatorRuntimeSha256, /^[a-f0-9]{64}$/);
   } finally {
     await rm(checkpointRoot, { recursive: true, force: true });
   }
@@ -2908,7 +3021,7 @@ test("compile worker times fresh adapter setup but keeps neutral preparation out
   let clock = 0;
   const sample = await runCompileSample({
     request: {
-      phase: "compile",
+      phase: "setup",
       validator: "fixture",
       draft: "draft6",
       round: 1,
@@ -2999,7 +3112,7 @@ test("compile worker gives every operation disposable schemas and resources", as
 
   const sample = await runCompileSample({
     request: {
-      phase: "compile",
+      phase: "setup",
       validator: "fixture",
       draft: "draft6",
       formatProfile: "base",
@@ -3061,7 +3174,7 @@ test("compile worker keeps boolean preparation outside the timed vendor operatio
 
   const sample = await runCompileSample({
     request: {
-      phase: "compile",
+      phase: "setup",
       validator: "fixture",
       draft: "draft6",
       formatProfile: "base",
@@ -3117,7 +3230,7 @@ test("compile worker sustains complete fresh-context passes to the temporal targ
   const entries = executionFixtureEntries();
   const sample = await runCompileSample({
     request: {
-      phase: "compile",
+      phase: "setup",
       validator: "fixture",
       draft: "draft6",
       formatProfile: "base",
@@ -3175,7 +3288,7 @@ test("compile telemetry records start, finish, peak, and stops only after a comp
   let memory = 0;
   let compiles = 0;
   const request = {
-    phase: "compile",
+    phase: "setup",
     validator: "fixture",
     draft: "draft6",
     formatProfile: "base",
@@ -3261,7 +3374,7 @@ test("sustained growth ignores safe startup expansion and stops under material p
     }
   ];
   const request = {
-    phase: "compile",
+    phase: "setup",
     validator: "fixture",
     draft: "draft6",
     formatProfile: "base",
@@ -3322,9 +3435,9 @@ test("granular checkpoints hit, miss stale identities, overwrite atomically, and
     `checkpoint-test-${process.pid}-${Date.now()}`
   );
   const request = {
-    phase: "compile",
+    phase: "setup",
     draft: "draft6",
-    formatProfile: "base",
+    formatProfile: null,
     validator: "schema-shield",
     round: 1
   };
@@ -3355,13 +3468,15 @@ test("granular checkpoints hit, miss stale identities, overwrite atomically, and
     ...request,
     intersectionSha256: scopedIntersectionHash,
     sampleCacheIdentitySha256: identity.hash,
+    validatorRuntimeSha256:
+      identity.identity.cacheContext.validatorRuntimeSha256,
     warmupMinimumMilliseconds:
-      benchmarkConstants.compileWarmupMinimumMilliseconds,
-    warmupMilliseconds: benchmarkConstants.compileWarmupMinimumMilliseconds,
-    targetSampleMilliseconds: benchmarkConstants.compileTargetMilliseconds,
+      benchmarkConstants.setupWarmupMinimumMilliseconds,
+    warmupMilliseconds: benchmarkConstants.setupWarmupMinimumMilliseconds,
+    targetSampleMilliseconds: benchmarkConstants.setupTargetMilliseconds,
     minimumSampleMilliseconds:
-      benchmarkConstants.compileMinimumSampleMilliseconds,
-    actualElapsedMilliseconds: benchmarkConstants.compileTargetMilliseconds,
+      benchmarkConstants.setupMinimumSampleMilliseconds,
+    actualElapsedMilliseconds: benchmarkConstants.setupTargetMilliseconds,
     singlePassExceededTarget: false,
     passes: 1,
     corpusCompileEntries: 1,
@@ -3391,6 +3506,20 @@ test("granular checkpoints hit, miss stale identities, overwrite atomically, and
     cacheContext
   });
   assert.equal(resumed.skipped, true);
+  await assert.rejects(
+    () =>
+      publishSampleCheckpoint({
+        request,
+        sample: {
+          ...sample,
+          validatorRuntimeSha256: "f".repeat(64)
+        },
+        intersectionHash,
+        checkpointRoot,
+        cacheContext
+      }),
+    /identity, contract, or intersection hash/
+  );
   assert.deepEqual(
     await readSampleCheckpoint({
       request,
@@ -3792,7 +3921,7 @@ test("validator runtime fingerprints isolate adapter, package, and resource byte
           cohortIdentity: {
             cohortIdentityVersion: 1,
             benchmarkMode: "full",
-            rounds: 2,
+            rounds: 6,
             benchmarkContractSha256: "contract",
             eligibilityThresholdPercent: "98",
             sharedHarnessSha256: "harness",
@@ -3806,7 +3935,7 @@ test("validator runtime fingerprints isolate adapter, package, and resource byte
         currentCohortIdentity: {
           cohortIdentityVersion: 1,
           benchmarkMode: "full",
-          rounds: 2,
+          rounds: 6,
           benchmarkContractSha256: "contract",
           eligibilityThresholdPercent: "98",
           sharedHarnessSha256: "harness",
@@ -4903,7 +5032,7 @@ test("execution worker still stops genuine memory budget growth", async () => {
 
 function reportSampleFixture(phase) {
   const draft = "draft6";
-  const formatProfile = "base";
+  const formatProfile = null;
   const participants = getCompileParticipants(draft);
   const samples = [];
   for (let round = 1; round <= benchmarkConstants.rounds; round += 1) {
@@ -4919,13 +5048,13 @@ function reportSampleFixture(phase) {
           formatProfile,
           round,
           warmupMinimumMilliseconds:
-            benchmarkConstants.compileWarmupMinimumMilliseconds,
+            benchmarkConstants.setupWarmupMinimumMilliseconds,
           warmupMilliseconds:
-            benchmarkConstants.compileWarmupMinimumMilliseconds,
-          targetSampleMilliseconds: benchmarkConstants.compileTargetMilliseconds,
+            benchmarkConstants.setupWarmupMinimumMilliseconds,
+          targetSampleMilliseconds: benchmarkConstants.setupTargetMilliseconds,
           minimumSampleMilliseconds:
-            benchmarkConstants.compileMinimumSampleMilliseconds,
-          actualElapsedMilliseconds: benchmarkConstants.compileTargetMilliseconds,
+            benchmarkConstants.setupMinimumSampleMilliseconds,
+          actualElapsedMilliseconds: benchmarkConstants.setupTargetMilliseconds,
           singlePassExceededTarget: false,
           passes: 1,
           corpusCompileEntries: 10,
@@ -4936,6 +5065,7 @@ function reportSampleFixture(phase) {
           checksum: "fixture",
           intersectionSha256: "a".repeat(64),
           sampleCacheIdentitySha256: "b".repeat(64),
+          validatorRuntimeSha256: "c".repeat(64),
           memory: {
             start: { rss: 1, heapUsed: 1, heapTotal: 1, external: 1 },
             end: { rss: 1, heapUsed: 1, heapTotal: 1, external: 1 },
@@ -4945,7 +5075,7 @@ function reportSampleFixture(phase) {
     }
   }
   return {
-    benchmarkVersion: 3,
+    benchmarkVersion: 9,
     benchmarkMode: "full",
     phase,
     draft,
@@ -4968,7 +5098,7 @@ function reportSampleFixture(phase) {
 test("report validation rejects missing, stale, incomplete, bad checksum, and version mismatch inputs", () => {
   const intersection = {
     draft: "draft6",
-    formatProfile: "base",
+    formatProfile: null,
     hash: "a".repeat(64),
     emptyReason: null,
     performanceEligibility: performanceEligibilityPolicy,
@@ -4979,46 +5109,46 @@ test("report validation rejects missing, stale, incomplete, bad checksum, and ve
   const participants = getCompileParticipants("draft6");
   const versions = new Map(participants.map(({ id }) => [id, "1.0.0"]));
   assert.throws(
-    () => validateSampleSet({ phase: "compile", result: null, intersection, installedVersions: versions, participants }),
-    /missing compile result/
+    () => validateSampleSet({ phase: "setup", result: null, intersection, installedVersions: versions, participants }),
+    /missing setup result/
   );
   assert.throws(
     () =>
       validateSampleSet({
-        phase: "compile",
-        result: { ...reportSampleFixture("compile"), intersectionSha256: "b".repeat(64) },
+        phase: "setup",
+        result: { ...reportSampleFixture("setup"), intersectionSha256: "b".repeat(64) },
         intersection,
         installedVersions: versions,
         participants
       }),
     /intersection hash/
   );
-  const short = reportSampleFixture("compile");
+  const short = reportSampleFixture("setup");
   short.samples.pop();
   assert.throws(
-    () => validateSampleSet({ phase: "compile", result: short, intersection, installedVersions: versions, participants }),
+    () => validateSampleSet({ phase: "setup", result: short, intersection, installedVersions: versions, participants }),
     /samples/
   );
-  const badChecksum = reportSampleFixture("compile");
+  const badChecksum = reportSampleFixture("setup");
   badChecksum.samples[0].checksum = "wrong";
   assert.throws(
-    () => validateSampleSet({ phase: "compile", result: badChecksum, intersection, installedVersions: versions, participants }),
+    () => validateSampleSet({ phase: "setup", result: badChecksum, intersection, installedVersions: versions, participants }),
     /checksum/
   );
-  const badVersion = reportSampleFixture("compile");
+  const badVersion = reportSampleFixture("setup");
   badVersion.samples[0].validatorVersion = "2.0.0";
   assert.throws(
-    () => validateSampleSet({ phase: "compile", result: badVersion, intersection, installedVersions: versions, participants }),
+    () => validateSampleSet({ phase: "setup", result: badVersion, intersection, installedVersions: versions, participants }),
     /installed version/
   );
-  const compileDataMutation = reportSampleFixture("compile");
+  const compileDataMutation = reportSampleFixture("setup");
   const compileSample = compileDataMutation.samples[0];
   compileSample.mutations = [
     {
       validator: compileSample.validator,
       draft: compileSample.draft,
       formatProfile: compileSample.formatProfile,
-      phase: "compile",
+      phase: "setup",
       round: compileSample.round,
       mutationTarget: "data",
       mutationClass: "compile",
@@ -5027,7 +5157,7 @@ test("report validation rejects missing, stale, incomplete, bad checksum, and ve
       subjectId: "case-id",
       caseId: "case-id",
       schemaId: null,
-      sampleId: "draft6/base/compile/round-1",
+      sampleId: "draft6/setup/round-1",
       difference: {
         path: "$.value",
         kind: "changed",
@@ -5039,13 +5169,13 @@ test("report validation rejects missing, stale, incomplete, bad checksum, and ve
   assert.throws(
     () =>
       validateSampleSet({
-        phase: "compile",
+        phase: "setup",
         result: compileDataMutation,
         intersection,
         installedVersions: versions,
         participants
       }),
-    /compile sample must not include mutation metadata/
+    /setup sample must not include mutation metadata/
   );
   assert.throws(
     () => validateInstalledVersions(new Map([["ajv", "1.0.0"]]), new Map([["ajv", "2.0.0"]])),
@@ -5053,23 +5183,29 @@ test("report validation rejects missing, stale, incomplete, bad checksum, and ve
   );
 });
 
-test("report statistics calculate midpoint, spread and operation time", () => {
-  const summary = summarizeTwoRoundThroughputs([
-    { round: 2, throughput: 30 },
-    { round: 1, throughput: 10 }
-  ]);
+test("report statistics calculate six-round center, dispersion and operation time", () => {
+  const summary = summarizeThroughputs(
+    [10, 20, 30, 40, 50, 60].map((throughput, index) => ({
+      round: index + 1,
+      throughput
+    })),
+    6
+  );
   assert.deepEqual(summary, {
-    roundThroughputs: [10, 30],
-    midpoint: 20,
-    absoluteSpread: 20,
-    relativeSpread: 1,
+    roundThroughputs: [10, 20, 30, 40, 50, 60],
+    median: 35,
+    mean: 35,
+    medianAbsoluteDeviation: 15,
+    relativeMedianAbsoluteDeviation: 15 / 35,
+    sampleStandardDeviation: Math.sqrt(350),
+    coefficientOfVariation: Math.sqrt(350) / 35,
     minimum: 10,
-    maximum: 30,
-    nanosecondsPerOperation: 50_000_000
+    maximum: 60,
+    nanosecondsPerOperation: 1e9 / 35
   });
   assert.throws(
-    () => summarizeTwoRoundThroughputs([{ round: 1, throughput: 10 }]),
-    /exactly two rounds/
+    () => summarizeThroughputs([{ round: 1, throughput: 10 }], 6),
+    /exactly 6 valid rounds/
   );
 });
 
@@ -6208,7 +6344,7 @@ test("async compile timing includes resolution and execution excludes setup", as
   let compileClock = 0;
   const compileSample = await runCompileSample({
     request: {
-      phase: "compile",
+      phase: "setup",
       validator: "hyperjump",
       draft: "draft6",
       round: 1,

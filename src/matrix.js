@@ -1,5 +1,6 @@
 import {
   compareCanonicalAdapters,
+  getColdExecutionRegistryParticipants,
   getCompileRegistryParticipants,
   getRegistryRoundOrder,
   registryMetadata
@@ -62,6 +63,11 @@ export function getParticipants(draft) {
 export function getCompileParticipants(draft) {
   getDraft(draft);
   return sortParticipantsByName(getCompileRegistryParticipants(draft));
+}
+
+export function getColdExecutionParticipants(draft) {
+  getDraft(draft);
+  return sortParticipantsByName(getColdExecutionRegistryParticipants(draft));
 }
 
 export function getRoundOrder(options) {

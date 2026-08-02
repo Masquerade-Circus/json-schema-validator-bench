@@ -5,16 +5,28 @@ function requireFullRun(mode, reason) {
   throw new Error(`Diagnostic refresh cannot reuse the current publication: ${reason}. Run the ${label} first.`);
 }
 
-export function createDiagnosticPublication({ previousDiagnostic, validator }) {
-  const refreshedValidators = new Set(
-    previousDiagnostic?.diagnostic === true
-      ? previousDiagnostic.refreshedValidators
-      : []
+export function createDiagnosticPublication({
+  previousDiagnostic,
+  validator,
+  bench = null
+}) {
+  const refreshes = previousDiagnostic?.diagnostic === true
+    ? [...previousDiagnostic.refreshes]
+    : [];
+  refreshes.push({ validator, bench });
+  const unique = new Map(
+    refreshes.map((refresh) => [
+      `${refresh.validator ?? "*"}/${refresh.bench ?? "*"}`,
+      refresh
+    ])
   );
-  refreshedValidators.add(validator);
   return {
     diagnostic: true,
-    refreshedValidators: [...refreshedValidators].sort()
+    refreshes: [...unique.values()].sort(
+      (left, right) =>
+        (left.validator ?? "").localeCompare(right.validator ?? "") ||
+        (left.bench ?? "").localeCompare(right.bench ?? "")
+    )
   };
 }
 
@@ -26,7 +38,7 @@ export function assertCompatibleDiagnosticBaseline({
   baselineEnvironment,
   currentCohortIdentity
 }) {
-  if (!validatorIds.includes(validator)) {
+  if (validator !== null && !validatorIds.includes(validator)) {
     throw new Error(`diagnostic validator must use one canonical adapter registry ID: ${String(validator)}`);
   }
   if (
@@ -45,12 +57,23 @@ export function assertCompatibleDiagnosticBaseline({
     previousDiagnostic !== null &&
     (
       previousDiagnostic.diagnostic !== true ||
-      !Array.isArray(previousDiagnostic.refreshedValidators) ||
-      new Set(previousDiagnostic.refreshedValidators).size !==
-        previousDiagnostic.refreshedValidators.length ||
-      previousDiagnostic.refreshedValidators.some(
-        (id) => !validatorIds.includes(id)
-      )
+      !Array.isArray(previousDiagnostic.refreshes) ||
+      previousDiagnostic.refreshes.some(
+        (refresh) =>
+          refresh === null ||
+          typeof refresh !== "object" ||
+          (refresh.validator !== null &&
+            !validatorIds.includes(refresh.validator)) ||
+          (refresh.bench !== null &&
+            !["setup", "execution", "cold"].includes(refresh.bench)) ||
+          (refresh.validator === null && refresh.bench === null)
+      ) ||
+      new Set(
+        previousDiagnostic.refreshes.map(
+          ({ validator: refreshedValidator, bench: refreshedBench }) =>
+            `${refreshedValidator ?? "*"}/${refreshedBench ?? "*"}`
+        )
+      ).size !== previousDiagnostic.refreshes.length
     )
   ) {
     requireFullRun(mode, "diagnostic trace metadata is invalid");
@@ -94,24 +117,92 @@ export function assertCompatibleDiagnosticBaseline({
       requireFullRun(mode, "validator roster mismatch");
     }
     if (
-      runtimeValidator !== validator &&
+      (validator === null || runtimeValidator !== validator) &&
       baselineRuntime[key] !== currentRuntime[key]
     ) {
       requireFullRun(mode, `validator runtime mismatch for ${runtimeValidator}`);
     }
   }
   return {
-    refreshedValidators:
+    refreshes:
       previousDiagnostic?.diagnostic === true
-        ? [...previousDiagnostic.refreshedValidators]
+        ? previousDiagnostic.refreshes.map((refresh) => ({ ...refresh }))
         : []
   };
+}
+
+export function createSampleRuntimeProvenance(results) {
+  if (!Array.isArray(results)) {
+    throw new Error("sample runtime provenance requires phase results");
+  }
+  const scopes = {};
+  for (const result of results) {
+    if (
+      result === null ||
+      typeof result !== "object" ||
+      !["setup", "execution", "cold-execution"].includes(result.phase) ||
+      typeof result.draft !== "string" ||
+      !Array.isArray(result.samples)
+    ) {
+      throw new Error("sample runtime provenance received an invalid phase result");
+    }
+    const scope = result.phase === "setup"
+      ? `${result.draft}/setup`
+      : `${result.draft}/${result.formatProfile}/${result.phase}`;
+    scopes[scope] ??= {};
+    for (const sample of result.samples) {
+      if (
+        typeof sample.validator !== "string" ||
+        !/^[a-f0-9]{64}$/.test(sample.validatorRuntimeSha256)
+      ) {
+        throw new Error(`sample runtime provenance is invalid for ${scope}`);
+      }
+      const existing = scopes[scope][sample.validator];
+      if (
+        typeof existing === "string" &&
+        existing !== sample.validatorRuntimeSha256
+      ) {
+        throw new Error(
+          `sample runtime provenance changes across rounds for ${scope}/${sample.validator}`
+        );
+      }
+      scopes[scope][sample.validator] = sample.validatorRuntimeSha256;
+    }
+  }
+  return { provenanceVersion: 1, scopes };
 }
 
 export function assertCompatibleIntersections(previous, current, mode) {
   if (canonicalJson(previous) !== canonicalJson(current)) {
     requireFullRun(mode, "eligibility, roster, or common PASS corpus changed");
   }
+}
+
+export function groupIntersectionHashesByScope(hashes) {
+  if (hashes === null || typeof hashes !== "object" || Array.isArray(hashes)) {
+    throw new Error("intersection hashes must be an object");
+  }
+  const inventory = {};
+  for (const [key, hash] of Object.entries(hashes)) {
+    const parts = key.split("/");
+    const phase = parts.at(-1);
+    const setup = phase === "setup";
+    if (
+      (setup && (parts.length !== 2 || parts[1] !== "setup")) ||
+      (!setup &&
+        (parts.length !== 3 ||
+          !["execution", "cold-execution"].includes(phase)))
+    ) {
+      throw new Error(`invalid intersection hash key: ${key}`);
+    }
+    const scope = setup ? key : parts.slice(0, -1).join("/");
+    inventory[scope] ??= {};
+    if (Object.hasOwn(inventory[scope], phase)) {
+      throw new Error(`duplicate intersection hash key: ${key}`);
+    }
+    inventory[scope][phase] = hash;
+  }
+  return inventory;
 }
 
 export function reconcileDiagnosticPhaseResult({

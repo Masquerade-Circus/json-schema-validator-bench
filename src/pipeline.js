@@ -12,9 +12,12 @@ import {
   assertConfinedCachePath,
   createBenchmarkCohortIdentity
 } from "./benchmark.js";
-import { assertCompatibleDiagnosticBaseline } from "./diagnostic.js";
+import {
+  assertCompatibleDiagnosticBaseline,
+  createSampleRuntimeProvenance
+} from "./diagnostic.js";
 import { performanceIdentitySha256 } from "./intersection.js";
-import { sha256 } from "./suite.js";
+import { canonicalJson, sha256 } from "./suite.js";
 import {
   draftIds,
   formatProfiles,
@@ -30,15 +33,22 @@ export const pipelineCommands = Object.freeze([
   "harness",
   "smoke",
   "conformance",
-  "compile",
+  "setup",
   "execution",
+  "cold-execution",
   "report"
 ]);
 export const pipelineUsage =
-  "Usage: npm run benchmark -- [--quick] [--validator <canonical-id>] [--controller-deadline-minutes <3-240>] [--eligibility-threshold-percent <0-100>]";
+  "Usage: npm run benchmark -- [--quick] [--validator <canonical-id>] [--bench <setup|execution|cold>] [--controller-deadline-minutes <3-240>] [--eligibility-threshold-percent <0-100>]";
+const benchCommands = Object.freeze({
+  setup: "setup",
+  execution: "execution",
+  cold: "cold-execution"
+});
 const eligibilityThresholdCommands = new Set([
   "conformance",
-  "compile",
+  "setup",
+  "cold-execution",
   "execution",
   "report"
 ]);
@@ -52,6 +62,7 @@ export function parsePipelineArguments(args) {
   let eligibilityThresholdPercent = defaultEligibilityThresholdPercent;
   let eligibilityThresholdConfigured = false;
   let validator = null;
+  let bench = null;
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
     if (argument === "--quick" && mode === "full") {
@@ -75,6 +86,21 @@ export function parsePipelineArguments(args) {
     }
     if (argument === "--validator") {
       throw new Error("--validator must appear exactly once with one canonical adapter registry ID");
+    }
+    if (
+      argument === "--bench" &&
+      bench === null &&
+      typeof args[index + 1] === "string" &&
+      Object.hasOwn(benchCommands, args[index + 1])
+    ) {
+      bench = args[index + 1];
+      index += 1;
+      continue;
+    }
+    if (argument === "--bench") {
+      throw new Error(
+        "--bench must appear exactly once with one value: setup, execution, or cold"
+      );
     }
     if (
       argument === "--controller-deadline-minutes" &&
@@ -112,8 +138,27 @@ export function parsePipelineArguments(args) {
     mode,
     controllerDeadlineMilliseconds,
     eligibilityThresholdPercent,
-    validator
+    validator,
+    bench
   };
+}
+
+export function pipelineCommandsForBench(bench = null) {
+  if (bench === null) {
+    return pipelineCommands;
+  }
+  if (!Object.hasOwn(benchCommands, bench)) {
+    throw new Error("bench selector must be setup, execution, or cold");
+  }
+  return Object.freeze([
+    "preflight",
+    "suite-ensure",
+    "harness",
+    "smoke",
+    "conformance",
+    benchCommands[bench],
+    "report"
+  ]);
 }
 
 function runCliCommand(
@@ -123,7 +168,8 @@ function runCliCommand(
   runContext,
   controllerDeadlineMilliseconds,
   eligibilityThresholdPercent,
-  validator
+  validator,
+  bench
 ) {
   return runChildProcess(
     process.execPath,
@@ -135,6 +181,7 @@ function runCliCommand(
         BENCHMARK_RESULTS_ROOT: resultsRoot,
         BENCHMARK_PIPELINE_STARTED_AT: runContext.startedAt,
         BENCHMARK_VALIDATOR: validator ?? "",
+        BENCHMARK_SELECTED_BENCH: bench ?? "",
         BENCHMARK_CONTROLLER_DEADLINE_MILLISECONDS:
           controllerDeadlineMilliseconds === null
             ? ""
@@ -155,7 +202,8 @@ export async function prepareDiagnosticBaseline({
   mode,
   validator,
   eligibilityThresholdPercent,
-  resultsRoot
+  resultsRoot,
+  bench = null
 }) {
   const canonicalResults = path.join(benchmarksRoot, "results");
   await assertNoSymlinksInTree(canonicalResults);
@@ -250,11 +298,13 @@ export async function assertCompleteDiagnosticBaseline({
       !Number.isInteger(environment.cohortIdentity.rounds) ||
       environment.cohortIdentity.rounds < 1 ||
       index === null ||
-      typeof index !== "object"
+      typeof index !== "object" ||
+      index.resultsVersion !== 14
     ) {
       throw new Error("baseline index or hash inventory is absent");
     }
     const expectedHashes = environment.hashes;
+    const sampleResults = [];
     const suiteManifestRaw = await readFile(
       path.join(resultsRoot, "suite-manifest.json")
     );
@@ -276,7 +326,7 @@ export async function assertCompleteDiagnosticBaseline({
       expectedHashes.performance === null ||
       typeof expectedHashes.performance !== "object" ||
       Object.keys(expectedHashes.performance).length !==
-        draftIds.length * formatProfiles.length
+        draftIds.length * (formatProfiles.length + 1)
     ) {
       throw new Error("performance hash inventory is incomplete");
     }
@@ -289,19 +339,25 @@ export async function assertCompleteDiagnosticBaseline({
           throw new Error(`conformance report hash mismatch: ${draft}/${id}`);
         }
       }
-      for (const formatProfile of formatProfiles) {
-        const scope = `${draft}/${formatProfile}`;
+      for (const [scope, formatProfile, phases, phaseRoot] of [
+        [
+          `${draft}/setup`,
+          null,
+          ["setup"],
+          path.join(resultsRoot, draft)
+        ],
+        ...formatProfiles.map((profile) => [
+          `${draft}/${profile}`,
+          profile,
+          ["execution", "cold-execution"],
+          path.join(resultsRoot, draft, "profiles", profile)
+        ])
+      ]) {
         const expectedPerformance = expectedHashes.performance?.[scope];
         if (expectedPerformance === null || typeof expectedPerformance !== "object") {
           throw new Error(`performance hash inventory is absent: ${scope}`);
         }
-        for (const phase of ["compile", "execution"]) {
-          const phaseRoot = path.join(
-            resultsRoot,
-            draft,
-            "profiles",
-            formatProfile
-          );
+        for (const phase of phases) {
           const [sampleRaw, intersectionHashRaw, artifactHashRaw, intersectionRaw] =
             await Promise.all([
               readFile(path.join(phaseRoot, phase, "samples.json"), "utf8"),
@@ -323,11 +379,14 @@ export async function assertCompleteDiagnosticBaseline({
               )
             ]);
           const result = JSON.parse(sampleRaw);
+          sampleResults.push(result);
           const intersection = JSON.parse(intersectionRaw);
           const expectedHash = expectedPerformance.intersections?.[phase];
           const expectedArtifactHash =
             expectedPerformance.intersectionArtifacts?.[phase];
-          const expectedSampleHash = expectedPerformance[`${phase}Samples`];
+          const sampleHashKey =
+            phase === "cold-execution" ? "coldExecutionSamples" : `${phase}Samples`;
+          const expectedSampleHash = expectedPerformance[sampleHashKey];
           const observedHash = intersectionHashRaw.trim();
           const observedArtifactHash = artifactHashRaw.trim();
           const expectedSampleCount = (result.participantOrderByRound ?? [])
@@ -344,23 +403,36 @@ export async function assertCompleteDiagnosticBaseline({
             : observedRounds.length === 0;
           if (
             result.benchmarkMode !== mode ||
+            result.benchmarkVersion !== 9 ||
             result.phase !== phase ||
             result.draft !== draft ||
             result.formatProfile !== formatProfile ||
             result.intersectionSha256 !== expectedHash ||
             observedHash !== expectedHash ||
             performanceIdentitySha256(intersection) !== expectedHash ||
+            intersection.intersectionVersion !== 11 ||
+            intersection.performanceIdentity?.performanceIdentityVersion !== 7 ||
             observedArtifactHash !== expectedArtifactHash ||
             sha256(intersectionRaw) !== expectedArtifactHash ||
             sha256(sampleRaw) !== expectedSampleHash ||
             !roundsAreComplete ||
             !Array.isArray(result.samples) ||
-            result.samples.length !== expectedSampleCount
+            result.samples.length !== expectedSampleCount ||
+            result.samples.some(
+              (sample) =>
+                !/^[a-f0-9]{64}$/.test(sample.validatorRuntimeSha256)
+            )
           ) {
             throw new Error(`${scope}/${phase} is incomplete or incompatible`);
           }
         }
       }
+    }
+    if (
+      canonicalJson(environment.sampleRuntimeProvenance) !==
+      canonicalJson(createSampleRuntimeProvenance(sampleResults))
+    ) {
+      throw new Error("sample runtime provenance is inconsistent");
     }
     const mutationIndex = index.mutationDocuments ?? null;
     const mutationHashes = expectedHashes.mutationDocuments ?? null;
@@ -431,6 +503,7 @@ export async function runPipeline({
   controllerDeadlineMilliseconds = null,
   eligibilityThresholdPercent = defaultEligibilityThresholdPercent,
   validator = null,
+  bench = null,
   prepareBaseline = prepareDiagnosticBaseline,
   runCommand = runCliCommand,
   writeProgress = (event) => process.stderr.write(`${JSON.stringify(event)}\n`)
@@ -441,6 +514,7 @@ export async function runPipeline({
   const normalizedEligibilityThreshold = parseEligibilityThresholdPercent(
     eligibilityThresholdPercent
   ).percent;
+  const commands = pipelineCommandsForBench(bench);
   const started = Date.now();
   const runContext = { startedAt: new Date(started).toISOString() };
   writeProgress({
@@ -448,7 +522,8 @@ export async function runPipeline({
     mode,
     controllerDeadlineMilliseconds,
     eligibilityThresholdPercent: normalizedEligibilityThreshold,
-    validator
+    validator,
+    bench
   });
   const runRoot = path.join(
     benchmarksRoot,
@@ -457,22 +532,23 @@ export async function runPipeline({
   );
   const resultsRoot = path.join(runRoot, "results");
   await mkdir(runRoot, { recursive: true });
-  if (validator !== null) {
+  if (validator !== null || bench !== null) {
     await prepareBaseline({
       mode,
       validator,
       eligibilityThresholdPercent: normalizedEligibilityThreshold,
-      resultsRoot
+      resultsRoot,
+      bench
     });
   }
-  for (let index = 0; index < pipelineCommands.length; index += 1) {
-    const command = pipelineCommands[index];
+  for (let index = 0; index < commands.length; index += 1) {
+    const command = commands[index];
     const stageStarted = Date.now();
     writeProgress({
       event: "pipeline-checkpoint",
       status: "start",
       step: index + 1,
-      total: pipelineCommands.length,
+      total: commands.length,
       command
     });
     await runCommand(
@@ -482,13 +558,14 @@ export async function runPipeline({
       runContext,
       controllerDeadlineMilliseconds,
       normalizedEligibilityThreshold,
-      validator
+      validator,
+      bench
     );
     writeProgress({
       event: "pipeline-checkpoint",
       status: "complete",
       step: index + 1,
-      total: pipelineCommands.length,
+      total: commands.length,
       command,
       stageDurationMilliseconds: Date.now() - stageStarted,
       elapsedMilliseconds: Date.now() - started
