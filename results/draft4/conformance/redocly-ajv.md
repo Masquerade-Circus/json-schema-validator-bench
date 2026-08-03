@@ -4,15 +4,15 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","fast":{"allErrors":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/draft4.js"}}} | 7afcbb6e15a58ae1d1f674edc867e3cc2c768cebcaa5f3b1d0cfdbfc93a7d9b7 |
-| format-assertion | {"formatProfile":"format-assertion","fast":{"allErrors":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/draft4.js"}}} | 73fe8ee6d39ec896725ee34e8955c0f6d6100f1d527df949eccf68b59e52446d |
+| base | {"formatProfile":"base","fast":{"allErrors":true,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":true,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/draft4.js"}}} | 199f8c10c98b89c2fccd980bca2cee29e23bf8a230a7281916020fb612af9a77 |
+| format-assertion | {"formatProfile":"format-assertion","fast":{"allErrors":true,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":true,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/draft4.js"}}} | e1dd74a546325f115bf393d38258645fe2868e61bed162e909c7484003ed1ae0 |
 
 ## Counts
 
 | Profile | Status | Cases | Percentage |
 | --- | --- | ---: | ---: |
-| base | PASS | 708 | 98.61% |
-| base | WRONG | 10 | 1.39% |
+| base | PASS | 712 | 99.16% |
+| base | WRONG | 6 | 0.84% |
 | base | COMPILE | 0 | 0.00% |
 | base | RUNTIME | 0 | 0.00% |
 | base | UNSUPPORTED | 0 | 0.00% |
@@ -30,14 +30,10 @@
 | draft4:optional/format/hostname.json#/groups/0/tests/26 | trailing dot | false | true | WRONG |  |
 | draft4:optional/format/uri.json#/groups/0/tests/43 | non-numeric port is invalid | false | true | WRONG |  |
 | draft4:optional/zeroTerminatedFloats.json#/groups/0/tests/0 | a float is not an integer even without fractional part | false | true | WRONG |  |
-| draft4:properties.json#/groups/4/tests/2 | none of the properties mentioned | true | false | WRONG | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","message":"must be number"} |
+| draft4:properties.json#/groups/4/tests/3 | __proto__ not valid | false | true | WRONG |  |
 | draft4:ref.json#/groups/5/tests/1 | ref valid, maxItems ignored | true | false | WRONG | {"keyword":"maxItems","instancePath":"/foo","schemaPath":"#/properties/foo/maxItems","message":"must NOT have more than 2 items"} |
 | draft4:ref.json#/groups/6/tests/0 | $ref resolves to /definitions/base_foo, data does not validate | false | true | WRONG |  |
 | draft4:ref.json#/groups/6/tests/1 | $ref resolves to /definitions/base_foo, data validates | true | false | WRONG | {"keyword":"type","instancePath":"","schemaPath":"foo.json/type","message":"must be string"} |
-| draft4:required.json#/groups/3/tests/2 | none of the properties mentioned | false | true | WRONG |  |
-| draft4:required.json#/groups/3/tests/3 | __proto__ present | false | true | WRONG |  |
-| draft4:required.json#/groups/3/tests/4 | toString present | false | true | WRONG |  |
-| draft4:required.json#/groups/3/tests/5 | constructor present | false | true | WRONG |  |
 
 ## Detailed errors for invalid results
 
@@ -348,8 +344,6 @@
 | draft4:properties.json#/groups/1/tests/4 | patternProperty invalidates nonproperty | PASS | {"keyword":"minItems","instancePath":"/fxo","schemaPath":"#/patternProperties/f.o/minItems","message":"must NOT have fewer than 2 items"} |
 | draft4:properties.json#/groups/1/tests/7 | additionalProperty invalidates others | PASS | {"keyword":"type","instancePath":"/quux","schemaPath":"#/additionalProperties/type","message":"must be integer"} |
 | draft4:properties.json#/groups/2/tests/1 | object with strings is invalid | PASS | {"keyword":"type","instancePath":"/foo\nbar","schemaPath":"#/properties/foo%0Abar/type","message":"must be number"} |
-| draft4:properties.json#/groups/4/tests/2 | none of the properties mentioned | WRONG | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","message":"must be number"} |
-| draft4:properties.json#/groups/4/tests/3 | __proto__ not valid | PASS | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","message":"must be number"} |
 | draft4:properties.json#/groups/4/tests/4 | toString not valid | PASS | {"keyword":"type","instancePath":"/toString/length","schemaPath":"#/properties/toString/properties/length/type","message":"must be string"} |
 | draft4:properties.json#/groups/4/tests/5 | constructor not valid | PASS | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","message":"must be number"} |
 | draft4:ref.json#/groups/0/tests/2 | mismatch | PASS | {"keyword":"additionalProperties","instancePath":"","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
@@ -385,6 +379,10 @@
 | draft4:refRemote.json#/groups/7/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#foo/type","message":"must be integer"} |
 | draft4:required.json#/groups/0/tests/1 | non-present required property is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property 'foo'"} |
 | draft4:required.json#/groups/2/tests/1 | object with some properties missing is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property 'foo\\bar'"} |
+| draft4:required.json#/groups/3/tests/2 | none of the properties mentioned | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property '__proto__'"} |
+| draft4:required.json#/groups/3/tests/3 | __proto__ present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property 'toString'"} |
+| draft4:required.json#/groups/3/tests/4 | toString present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property '__proto__'"} |
+| draft4:required.json#/groups/3/tests/5 | constructor present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property '__proto__'"} |
 | draft4:type.json#/groups/0/tests/1 | a float is not an integer | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","message":"must be integer"} |
 | draft4:type.json#/groups/0/tests/2 | a string is not an integer | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","message":"must be integer"} |
 | draft4:type.json#/groups/0/tests/3 | a string is still not an integer, even if it looks like one | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","message":"must be integer"} |

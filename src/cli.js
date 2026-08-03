@@ -25,7 +25,7 @@ import {
   getAdapterFactory,
   getBenchmarkAdapterMetadata,
   getRegisteredAdapter
-} from "./adapters/index.js";
+} from "./adapter-registry.js";
 import { runAdapterConformance } from "./conformance.js";
 import {
   generateFinalReport,
@@ -33,7 +33,7 @@ import {
 } from "./report.js";
 import { generateIntersection } from "./intersection.js";
 import { runBenchmarkPhase, runBenchmarkSample } from "./benchmark.js";
-import { executeWorkerRequest, runExecutionSample } from "./worker.js";
+import { runExecutionSample } from "./worker.js";
 import { eligibilityThresholdFromEnvironment } from "./eligibility.js";
 import {
   assertCompatibleIntersections,
@@ -548,8 +548,8 @@ async function main() {
           unknownFormats: []
         });
         const schema = { type: "integer" };
-        const target = typeof adapter.compile === "function"
-          ? await adapter.compile(structuredClone(schema))
+        const target = typeof adapter.setup === "function"
+          ? await adapter.setup(structuredClone(schema))
           : structuredClone(schema);
         const validate = (data) =>
           adapter.validate(target, structuredClone(data));
@@ -568,9 +568,9 @@ async function main() {
             round: 1,
             deadline: Date.now() + 2 * 60 * 1000
           },
-          compileEntries: [
+          setupEntries: [
             {
-              compileKey: `${draft}:${"0".repeat(64)}`,
+              setupKey: `${draft}:${"0".repeat(64)}`,
               draft,
               representativeSchemaId: smokeSchemaId,
               memberSchemaIds: [smokeSchemaId]
@@ -762,15 +762,10 @@ async function main() {
   }
 
   if (command === "setup" || command === "cold-execution") {
-    const artifactsCache = new Map();
     const result = await runBenchmarkPhase(command, {
       mode,
       eligibilityThresholdPercent,
-      validator: diagnosticValidator,
-      sampleExecutor:
-        mode === "quick"
-          ? (request) => executeWorkerRequest(request, { artifactsCache })
-          : undefined
+      validator: diagnosticValidator
     });
     process.stdout.write(
       `${JSON.stringify({
@@ -828,15 +823,10 @@ async function main() {
   }
 
   if (command === "execution") {
-    const artifactsCache = new Map();
     const result = await runBenchmarkPhase("execution", {
       mode,
       eligibilityThresholdPercent,
-      validator: diagnosticValidator,
-      sampleExecutor:
-        mode === "quick"
-          ? (request) => executeWorkerRequest(request, { artifactsCache })
-          : undefined
+      validator: diagnosticValidator
     });
     process.stdout.write(
       `${JSON.stringify({

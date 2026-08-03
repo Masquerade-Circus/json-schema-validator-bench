@@ -22,17 +22,16 @@ import { canonicalJson, loadSuite, sha256 } from "./suite.js";
 import {
   adapterRegistry,
   getColdExecutionRegistryParticipants,
-  getCompileRegistryParticipants,
+  getSetupRegistryParticipants,
   getRegistryRoundOrder,
   rotateRoundOrder
-} from "./adapters/index.js";
+} from "./adapter-registry.js";
 import {
   draftIds,
   formatProfiles,
   getParticipants
 } from "./matrix.js";
 import { getResultsRoot } from "./paths.js";
-import { quickPerformanceCorpusContract } from "./performance-corpus.js";
 import {
   performanceIdentitySha256
 } from "./intersection.js";
@@ -45,8 +44,8 @@ import { reconcileDiagnosticPhaseResult } from "./diagnostic.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const workerPath = path.join(benchmarksRoot, "src", "worker.js");
-export const sampleContractVersion = 21;
-export const sampleCacheIdentityVersion = 14;
+export const sampleContractVersion = 23;
+export const sampleCacheIdentityVersion = 16;
 const sampleCheckpointNamespace = `granular-samples-v${sampleCacheIdentityVersion}`;
 const checkpointEnvelopeVersion = 1;
 const hashPattern = /^[a-f0-9]{64}$/;
@@ -58,7 +57,7 @@ export const performancePhases = Object.freeze([
 
 function participantsForPhase(draft, phase) {
   if (phase === "setup") {
-    return getCompileRegistryParticipants(draft);
+    return getSetupRegistryParticipants(draft);
   }
   if (phase === "cold-execution") {
     return getColdExecutionRegistryParticipants(draft);
@@ -77,8 +76,7 @@ function phaseTimingPrefix(phase) {
 }
 export const measurementSourcePaths = Object.freeze([
   "src/adapter-api.js",
-  "src/adapters/helpers.js",
-  "src/adapters/index.js",
+  "src/adapter-registry.js",
   "src/benchmark.js",
   "src/capabilities.js",
   "src/conformance.js",
@@ -93,18 +91,6 @@ export const measurementSourcePaths = Object.freeze([
   "src/suite.js",
   "src/worker.js"
 ]);
-const adapterSourceFiles = Object.freeze({
-  "schema-shield": "schema-shield.js",
-  ajv: "ajv.js",
-  schemasafe: "schemasafe.js",
-  "redocly-ajv": "redocly-ajv.js",
-  "cfworker-json-schema": "cfworker-json-schema.js",
-  "json-schema-library": "json-schema-library.js",
-  jsonschema: "jsonschema.js",
-  djv: "djv.js",
-  "z-schema": "z-schema.js",
-  hyperjump: "hyperjump.js"
-});
 const memoryBudget = Object.freeze({
     maxRssGrowthBytes: 512 * 1024 * 1024,
     maxHeapGrowthBytes: 256 * 1024 * 1024,
@@ -113,46 +99,35 @@ const memoryBudget = Object.freeze({
     sustainedGrowthPressureRatio: 0.5
 });
 
+const sharedBenchmarkMode = Object.freeze({
+  setupWarmupMinimumMilliseconds: 100,
+  setupTargetMilliseconds: 250,
+  setupMinimumSampleMilliseconds: 175,
+  coldExecutionWarmupMinimumMilliseconds: 100,
+  coldExecutionTargetMilliseconds: 250,
+  coldExecutionMinimumSampleMilliseconds: 175,
+  executionWarmupMinimumMilliseconds: 100,
+  executionTargetMilliseconds: 250,
+  executionMinimumSampleMilliseconds: 175,
+  workerDeadlineMilliseconds: 30 * 60 * 1000,
+  controllerDeadlineMilliseconds: 4 * 60 * 60 * 1000,
+  maxWallMilliseconds: 4 * 60 * 60 * 1000,
+  completeCorpusPasses: true,
+  checksumRequired: true,
+  workerConcurrency: 1,
+  memoryBudget
+});
+
 export const benchmarkModes = Object.freeze({
   full: Object.freeze({
     mode: "full",
     rounds: 6,
-    setupWarmupMinimumMilliseconds: 100,
-    setupTargetMilliseconds: 250,
-    setupMinimumSampleMilliseconds: 175,
-    coldExecutionWarmupMinimumMilliseconds: 100,
-    coldExecutionTargetMilliseconds: 250,
-    coldExecutionMinimumSampleMilliseconds: 175,
-    executionWarmupMinimumMilliseconds: 100,
-    executionTargetMilliseconds: 250,
-    executionMinimumSampleMilliseconds: 175,
-    workerDeadlineMilliseconds: 30 * 60 * 1000,
-    controllerDeadlineMilliseconds: 4 * 60 * 60 * 1000,
-    maxWallMilliseconds: 4 * 60 * 60 * 1000,
-    completeCorpusPasses: true,
-    checksumRequired: true,
-    workerConcurrency: 1,
-    memoryBudget
+    ...sharedBenchmarkMode
   }),
   quick: Object.freeze({
     mode: "quick",
     rounds: 1,
-    setupWarmupMinimumMilliseconds: 0,
-    setupTargetMilliseconds: 0,
-    setupMinimumSampleMilliseconds: 0,
-    coldExecutionWarmupMinimumMilliseconds: 0,
-    coldExecutionTargetMilliseconds: 0,
-    coldExecutionMinimumSampleMilliseconds: 0,
-    executionWarmupMinimumMilliseconds: 0,
-    executionTargetMilliseconds: 0,
-    executionMinimumSampleMilliseconds: 0,
-    workerDeadlineMilliseconds: 2 * 60 * 1000,
-    controllerDeadlineMilliseconds: 3 * 60 * 1000,
-    maxWallMilliseconds: 3 * 60 * 1000,
-    completeCorpusPasses: true,
-    checksumRequired: true,
-    workerConcurrency: 1,
-    memoryBudget
+    ...sharedBenchmarkMode
   })
 });
 
@@ -194,14 +169,13 @@ export function createBenchmarkContract(
   );
   return Object.freeze({
   sampleContractVersion,
-  benchmarkMode: mode,
   drafts: draftIds,
   formatProfiles,
   participantsByDraft: Object.fromEntries(
     draftIds.map((draft) => [
       draft,
       {
-        setup: getCompileRegistryParticipants(draft).map(({ id }) => id),
+        setup: getSetupRegistryParticipants(draft).map(({ id }) => id),
         execution: getParticipants(draft).map(({ id }) => id),
         "cold-execution": getColdExecutionRegistryParticipants(draft).map(({ id }) => id)
       }
@@ -228,10 +202,7 @@ export function createBenchmarkContract(
   }),
   completeCorpusPasses: config.completeCorpusPasses,
   checksumRequired: config.checksumRequired,
-  workerConcurrency: config.workerConcurrency,
-  ...(mode === "quick"
-    ? { performanceCorpus: quickPerformanceCorpusContract }
-    : {})
+  workerConcurrency: config.workerConcurrency
   });
 }
 
@@ -265,8 +236,8 @@ export function estimatePerformanceBudget({
   warmupMilliseconds = getBenchmarkMode(mode).setupWarmupMinimumMilliseconds,
   targetMilliseconds = getBenchmarkMode(mode).setupTargetMilliseconds
 } = {}) {
-  const compileScopes = draftIds.reduce(
-      (total, draft) => total + getCompileRegistryParticipants(draft).length,
+  const setupScopes = draftIds.reduce(
+      (total, draft) => total + getSetupRegistryParticipants(draft).length,
       0
     );
   const coldExecutionScopes =
@@ -281,9 +252,9 @@ export function estimatePerformanceBudget({
       (total, draft) => total + getParticipants(draft).length,
       0
     );
-  const samples = rounds * (compileScopes + coldExecutionScopes + executionScopes);
+  const samples = rounds * (setupScopes + coldExecutionScopes + executionScopes);
   return {
-    compileScopes,
+    setupScopes,
     coldExecutionScopes,
     executionScopes,
     samples,
@@ -811,11 +782,19 @@ async function hashInstalledPackageClosure(packageNames, projectRoot = benchmark
   return hash.digest("hex");
 }
 
-async function hashMetaschemasForDraft(draft, projectRoot = benchmarksRoot) {
+async function hashLocalRuntimeAssets(draft, projectRoot = benchmarksRoot) {
   const root = path.join(projectRoot, "metaschemas");
-  const manifest = JSON.parse(
-    await readFile(path.join(root, "manifest.json"), "utf8")
-  );
+  let manifest;
+  try {
+    manifest = JSON.parse(
+      await readFile(path.join(root, "manifest.json"), "utf8")
+    );
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      return null;
+    }
+    throw error;
+  }
   const entries = manifest.files.filter((entry) => entry.draft === draft);
   const hash = createHash("sha256");
   hash.update(canonicalJson(entries));
@@ -834,12 +813,11 @@ export async function createValidatorRuntimeIdentity({
   draft,
   projectRoot = benchmarksRoot
 }) {
-  const sourceFile = adapterSourceFiles[validator];
-  if (typeof sourceFile !== "string") {
+  if (!adapterRegistry.some(({ id }) => id === validator)) {
     throw new Error(`unknown validator runtime identity: ${String(validator)}`);
   }
   const sourceIdentity = await hashAdapterRuntimeSources(
-    path.join(projectRoot, "src", "adapters", sourceFile),
+    path.join(projectRoot, "src", "adapters", `${validator}.js`),
     path.join(projectRoot, "src")
   );
   const packageNames = new Set(sourceIdentity.packages);
@@ -847,13 +825,14 @@ export async function createValidatorRuntimeIdentity({
     packageNames,
     projectRoot
   );
-  const metaschemaSha256 = validator === "schema-shield"
-    ? await hashMetaschemasForDraft(draft, projectRoot)
-    : null;
+  const localRuntimeAssetsSha256 = await hashLocalRuntimeAssets(
+    draft,
+    projectRoot
+  );
   const identity = {
     adapterSourcesSha256: sourceIdentity.sha256,
     packageRuntimeSha256,
-    metaschemaSha256
+    localRuntimeAssetsSha256
   };
   return Object.freeze({
     ...identity,
@@ -962,17 +941,8 @@ export async function createBenchmarkCohortIdentity({
   }
   const validatorRuntimeSha256 = {};
   for (const definition of adapterRegistry) {
-    const sharedRuntime = definition.id === "schema-shield"
-      ? null
-      : (
-          await createValidatorRuntimeIdentity({
-            validator: definition.id,
-            draft: definition.drafts[0]
-          })
-        ).hash;
     for (const draft of definition.drafts) {
       validatorRuntimeSha256[`${draft}/${definition.id}`] =
-        sharedRuntime ??
         (
           await createValidatorRuntimeIdentity({
             validator: definition.id,
@@ -982,7 +952,7 @@ export async function createBenchmarkCohortIdentity({
     }
   }
   return Object.freeze({
-    cohortIdentityVersion: 2,
+    cohortIdentityVersion: 3,
     benchmarkMode: mode,
     rounds: getBenchmarkMode(mode).rounds,
     benchmarkContractSha256: createBenchmarkContractHash({
@@ -1047,9 +1017,7 @@ let defaultRuntimeEnvironmentSha256 = null;
 function getDefaultSampleCacheContext(request) {
   const key = `${request.validator}/${request.draft}`;
   if (!defaultSampleCacheContextPromises.has(key)) {
-    const validatorKey = request.validator === "schema-shield"
-      ? key
-      : request.validator;
+    const validatorKey = key;
     if (!defaultValidatorRuntimeIdentityPromises.has(validatorKey)) {
       defaultValidatorRuntimeIdentityPromises.set(
         validatorKey,
@@ -1485,23 +1453,18 @@ export function validateGranularSample({
       "granular sample identity, contract, or intersection hash is invalid"
     );
   }
-  if (
-    mode === "quick" &&
-    (sample.performanceCorpus === null ||
-      typeof sample.performanceCorpus !== "object" ||
-      sample.performanceCorpus.policyVersion !==
-        quickPerformanceCorpusContract.policyVersion ||
-      !/^[a-f0-9]{64}$/.test(sample.performanceCorpus.selectionSha256))
-  ) {
-    throw new Error("quick performance corpus metadata is invalid");
-  }
   if (Object.hasOwn(sample, "mutations")) {
     throw new Error(`${request.phase} sample must not include mutation metadata`);
   }
   for (const point of ["start", "end", "peak"]) {
     for (const field of ["rss", "heapUsed", "heapTotal", "external"]) {
-      if (!Number.isFinite(sample.memory?.[point]?.[field]) || sample.memory[point][field] < 0) {
-        throw new Error(`granular sample memory telemetry is invalid: ${point}.${field}`);
+      if (
+        !Number.isFinite(sample.memory?.[point]?.[field]) ||
+        sample.memory[point][field] < 0
+      ) {
+        throw new Error(
+          `granular sample memory telemetry is invalid: ${point}.${field}`
+        );
       }
     }
   }
@@ -1518,7 +1481,7 @@ export function validateGranularSample({
   const prefix = phaseTimingPrefix(request.phase);
   const corpusSize =
     request.phase === "setup"
-      ? sample.corpusCompileEntries
+      ? sample.corpusSetupEntries
       : sample.corpusCases;
   if (
     sample.warmupMinimumMilliseconds !==
@@ -1974,22 +1937,8 @@ export async function runBenchmarkPhase(
         scopes.push(result);
         continue;
       }
-      const performanceCorpus =
-        mode === "quick" && samples.length > 0
-          ? samples[0].performanceCorpus
-          : null;
-      if (
-        mode === "quick" &&
-        samples.some(
-          (sample) =>
-            canonicalJson(sample.performanceCorpus) !==
-            canonicalJson(performanceCorpus)
-        )
-      ) {
-        throw new Error("quick samples disagree on the performance corpus");
-      }
       const result = {
-        benchmarkVersion: 9,
+        benchmarkVersion: 11,
         phase,
         draft,
         formatProfile,
@@ -2000,7 +1949,7 @@ export async function runBenchmarkPhase(
         constants: config,
         performanceEligibility: intersection.eligibility.policy,
         intersectionSha256: intersectionHash,
-        performanceCorpus,
+        performanceCorpus: null,
         emptyReason: intersection.emptyReason,
         participants,
         participantOrderByRound,
@@ -2012,7 +1961,7 @@ export async function runBenchmarkPhase(
   }
 
   return {
-    benchmarkVersion: 9,
+    benchmarkVersion: 11,
     phase,
     startedAt: new Date(started).toISOString(),
     endedAt: new Date().toISOString(),

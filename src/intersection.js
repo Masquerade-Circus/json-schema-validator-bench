@@ -7,7 +7,7 @@ import { getResultsRoot } from "./paths.js";
 import {
   draftDialectUris,
   formatProfiles,
-  getCompileParticipants,
+  getSetupParticipants,
   getColdExecutionParticipants,
   getParticipants,
   sortValidatorIds
@@ -38,7 +38,7 @@ function reportKey(report) {
 const mutationTargets = new Set(["data", "schema", "resources"]);
 const mutationClasses = new Set([
   "adapter-setup",
-  "compile",
+  "setup",
   "validation"
 ]);
 const mutationScopes = new Set(["adapter", "schema", "case", "sample"]);
@@ -408,7 +408,7 @@ function resourceClosure(schema, remoteEntries, draft) {
   );
 }
 
-export function createCompileEntries({
+export function createSetupEntries({
   schemas,
   representedSchemaIds,
   remoteEntries,
@@ -451,11 +451,11 @@ export function createCompileEntries({
       resources,
       setupConfiguration
     }));
-    const compileKey = `${schemaMetadata.draft}:${digest}`;
-    const existing = grouped.get(compileKey);
+    const setupKey = `${schemaMetadata.draft}:${digest}`;
+    const existing = grouped.get(setupKey);
     if (existing === undefined) {
-      grouped.set(compileKey, {
-        compileKey,
+      grouped.set(setupKey, {
+        setupKey,
         draft: schemaMetadata.draft,
         formatProfile: effectiveProfile,
         sourceFormatProfiles: [profile],
@@ -478,7 +478,7 @@ export function createCompileEntries({
     entry.memberSchemaIds.sort();
     entry.representativeSchemaId = entry.memberSchemaIds[0];
   }
-  entries.sort((left, right) => left.compileKey.localeCompare(right.compileKey));
+  entries.sort((left, right) => left.setupKey.localeCompare(right.setupKey));
   return entries;
 }
 
@@ -510,13 +510,13 @@ export function mergeSetupEntries(entries) {
       resources: entry.resources,
       setupConfiguration: entry.setupConfiguration
     }));
-    const compileKey = `${entry.draft}:${digest}`;
+    const setupKey = `${entry.draft}:${digest}`;
     const sourceFormatProfiles = entry.sourceFormatProfiles ?? [entry.formatProfile];
-    const existing = grouped.get(compileKey);
+    const existing = grouped.get(setupKey);
     if (existing === undefined) {
-      grouped.set(compileKey, {
+      grouped.set(setupKey, {
         ...entry,
-        compileKey,
+        setupKey,
         formatProfile: entry.setupConfiguration.formatAssertion
           ? "format-assertion"
           : "base",
@@ -534,7 +534,7 @@ export function mergeSetupEntries(entries) {
     existing.representativeSchemaId = existing.memberSchemaIds[0];
   }
   return [...grouped.values()].sort((left, right) =>
-    left.compileKey.localeCompare(right.compileKey)
+    left.setupKey.localeCompare(right.setupKey)
   );
 }
 
@@ -549,7 +549,7 @@ export function createIntersection({
   participants = getParticipants(draft).map(({ id }) => id),
   phaseParticipants =
     phase === "setup"
-      ? getCompileParticipants(draft).map(({ id }) => id)
+      ? getSetupParticipants(draft).map(({ id }) => id)
       : phase === "cold-execution"
         ? getColdExecutionParticipants(draft).map(({ id }) => id)
       : participants,
@@ -616,14 +616,14 @@ export function createIntersection({
   const representedSchemaIds = [
     ...new Set(includedCases.map(({ schemaId }) => schemaId))
   ];
-  const compileEntries = mergeSetupEntries(createCompileEntries({
+  const setupEntries = mergeSetupEntries(createSetupEntries({
     schemas: suite.schemas,
     representedSchemaIds,
     remoteEntries: suite.remoteEntries,
     formatProfile
   }));
-  if (caseIds.length > 0 && compileEntries.length === 0) {
-    throw new Error("intersection has no compile entries");
+  if (caseIds.length > 0 && setupEntries.length === 0) {
+    throw new Error("intersection has no setup entries");
   }
 
   const sourceReports = {};
@@ -657,11 +657,11 @@ export function createIntersection({
     total: caseIds.length,
     expectedTrue,
     expectedFalse,
-    compileEntries: compileEntries.length,
+    setupEntries: setupEntries.length,
     representedSchemas: representedSchemaIds.length
   };
   return {
-    intersectionVersion: 11,
+    intersectionVersion: 12,
     formatPolicyVersion: 4,
     draft,
     formatProfile,
@@ -685,7 +685,7 @@ export function createIntersection({
     },
     counts,
     performanceIdentity: {
-      performanceIdentityVersion: 7,
+      performanceIdentityVersion: 8,
       formatPolicyVersion: 4,
       scope: { draft, formatProfile, phase },
       policy: eligibility.policy,
@@ -698,11 +698,11 @@ export function createIntersection({
         emptyReason,
         counts,
         caseIds,
-        compileEntries
+        setupEntries
       }
     },
     caseIds,
-    compileEntries
+    setupEntries
   };
 }
 
@@ -748,7 +748,7 @@ export async function generateIntersection({
           participants,
           phaseParticipants:
             phase === "setup"
-              ? getCompileParticipants(draft).map(({ id }) => id)
+              ? getSetupParticipants(draft).map(({ id }) => id)
               : phase === "cold-execution"
                 ? getColdExecutionParticipants(draft).map(({ id }) => id)
               : participants,

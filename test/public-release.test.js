@@ -42,3 +42,26 @@ test("third-party notices preserve the locked JSON Schema Test Suite license", a
   assert.match(notices, /metaschemas\/NOTICE-AJV/);
   assert.match(notices, /metaschemas\/NOTICE-REDOCLY-AJV/);
 });
+
+test("public source contract uses Cold execution without Cold start infrastructure", async () => {
+  const registrySource = await readFile(
+    new URL("src/adapter-registry.js", root),
+    "utf8"
+  );
+  const workerSource = await readFile(new URL("src/worker.js", root), "utf8");
+
+  assert.match(workerSource, /cold-execution/);
+  assert.equal(workerSource.includes("cold-start"), false);
+  assert.match(registrySource, /adapters\/ajv\.js/);
+  for (const relativePath of [
+    "src/adapters/index.js",
+    "src/adapters/helpers.js",
+    "src/adapters/catalog.js",
+    "src/cold-start-operation.js"
+  ]) {
+    await assert.rejects(
+      () => readFile(new URL(relativePath, root), "utf8"),
+      (error) => error.code === "ENOENT"
+    );
+  }
+});

@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 9,
+  "benchmarkVersion": 11,
   "summaryVersion": 10,
   "phase": "cold-execution",
   "draft": "draft7",
@@ -21,7 +21,7 @@
       "format-assertion"
     ]
   },
-  "intersectionSha256": "cefe6bcede8dcfcec9e55d55534438e63359acedba24888e5e026f5fc1307d02",
+  "intersectionSha256": "b44e450d87dc65f1d815aea801e23b856f730f39714d72613dc13595df98c766",
   "primaryUnit": "operations per second",
   "units": {
     "throughput": "operations per second",
@@ -121,8 +121,8 @@
           },
           "countsByProfile": {
             "base": {
-              "PASS": 1027,
-              "WRONG": 13,
+              "PASS": 1031,
+              "WRONG": 9,
               "COMPILE": 5,
               "RUNTIME": 0,
               "UNSUPPORTED": 0
@@ -191,8 +191,8 @@
           },
           "countsByProfile": {
             "base": {
-              "PASS": 1027,
-              "WRONG": 13,
+              "PASS": 1031,
+              "WRONG": 9,
               "COMPILE": 5,
               "RUNTIME": 0,
               "UNSUPPORTED": 0
@@ -391,8 +391,8 @@
             "subjectId": "draft7:optional/format/date-time.json#/groups/0",
             "schemaId": "draft7:optional/format/date-time.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -418,8 +418,8 @@
             "subjectId": "draft7:optional/format/date.json#/groups/0",
             "schemaId": "draft7:optional/format/date.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -445,8 +445,8 @@
             "subjectId": "draft7:optional/format/email.json#/groups/0",
             "schemaId": "draft7:optional/format/email.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -472,8 +472,8 @@
             "subjectId": "draft7:optional/format/hostname.json#/groups/0",
             "schemaId": "draft7:optional/format/hostname.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -499,8 +499,8 @@
             "subjectId": "draft7:optional/format/hostname.json#/groups/1",
             "schemaId": "draft7:optional/format/hostname.json#/groups/1",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -526,8 +526,8 @@
             "subjectId": "draft7:optional/format/idn-email.json#/groups/0",
             "schemaId": "draft7:optional/format/idn-email.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -553,8 +553,8 @@
             "subjectId": "draft7:optional/format/idn-hostname.json#/groups/0",
             "schemaId": "draft7:optional/format/idn-hostname.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -580,8 +580,8 @@
             "subjectId": "draft7:optional/format/idn-hostname.json#/groups/1",
             "schemaId": "draft7:optional/format/idn-hostname.json#/groups/1",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -607,8 +607,8 @@
             "subjectId": "draft7:optional/format/ipv4.json#/groups/0",
             "schemaId": "draft7:optional/format/ipv4.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -634,8 +634,8 @@
             "subjectId": "draft7:optional/format/ipv6.json#/groups/0",
             "schemaId": "draft7:optional/format/ipv6.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -661,8 +661,8 @@
             "subjectId": "draft7:optional/format/iri-reference.json#/groups/0",
             "schemaId": "draft7:optional/format/iri-reference.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -688,8 +688,8 @@
             "subjectId": "draft7:optional/format/iri.json#/groups/0",
             "schemaId": "draft7:optional/format/iri.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -715,8 +715,8 @@
             "subjectId": "draft7:optional/format/json-pointer.json#/groups/0",
             "schemaId": "draft7:optional/format/json-pointer.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -742,8 +742,8 @@
             "subjectId": "draft7:optional/format/regex.json#/groups/0",
             "schemaId": "draft7:optional/format/regex.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -769,8 +769,8 @@
             "subjectId": "draft7:optional/format/relative-json-pointer.json#/groups/0",
             "schemaId": "draft7:optional/format/relative-json-pointer.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -796,8 +796,8 @@
             "subjectId": "draft7:optional/format/time.json#/groups/0",
             "schemaId": "draft7:optional/format/time.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -823,8 +823,8 @@
             "subjectId": "draft7:optional/format/unknown.json#/groups/0",
             "schemaId": "draft7:optional/format/unknown.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -850,8 +850,8 @@
             "subjectId": "draft7:optional/format/uri-reference.json#/groups/0",
             "schemaId": "draft7:optional/format/uri-reference.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -877,8 +877,8 @@
             "subjectId": "draft7:optional/format/uri-template.json#/groups/0",
             "schemaId": "draft7:optional/format/uri-template.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -904,8 +904,8 @@
             "subjectId": "draft7:optional/format/uri.json#/groups/0",
             "schemaId": "draft7:optional/format/uri.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -961,47 +961,47 @@
   "validators": {
     "schema-shield": {
       "roundThroughputs": [
-        3883.1560334123265,
-        3675.0111624550914,
-        3741.533823625089,
-        3794.320143848785,
-        3630.6481516269428,
-        3735.8722889957717
+        4155.401981871851,
+        4229.419294462325,
+        4074.525684690627,
+        4044.5124153732518,
+        4102.517280141711,
+        4062.116178245775
       ],
-      "median": 3738.7030563104304,
-      "mean": 3743.4236006606675,
-      "medianAbsoluteDeviation": 59.65449069684678,
-      "relativeMedianAbsoluteDeviation": 0.01595593172240785,
-      "sampleStandardDeviation": 88.96602502336653,
-      "coefficientOfVariation": 0.023765951843565107,
-      "minimum": 3630.6481516269428,
-      "maximum": 3883.1560334123265,
-      "nanosecondsPerOperation": 267472.4322682257,
+      "median": 4088.521482416169,
+      "mean": 4111.415472464257,
+      "medianAbsoluteDeviation": 35.207185606655685,
+      "relativeMedianAbsoluteDeviation": 0.008611226762063998,
+      "sampleStandardDeviation": 69.5790036478983,
+      "coefficientOfVariation": 0.016923369606865534,
+      "minimum": 4044.5124153732518,
+      "maximum": 4229.419294462325,
+      "nanosecondsPerOperation": 244587.19473550032,
       "mutationCount": 0,
-      "peakRssBytes": 282980352,
+      "peakRssBytes": 279490560,
       "scoreRelativeToBest": 100
     },
     "z-schema": {
       "roundThroughputs": [
-        2789.1291784917794,
-        2685.128684437646,
-        2751.684543658785,
-        2569.975929592328,
-        2785.602431133358,
-        2744.1958242245382
+        3058.9955271752615,
+        2848.5133037666305,
+        3045.220910583667,
+        2986.145672864565,
+        3450.253124852234,
+        2969.324327694709
       ],
-      "median": 2747.9401839416614,
-      "mean": 2720.952765256406,
-      "medianAbsoluteDeviation": 39.42562087090732,
-      "relativeMedianAbsoluteDeviation": 0.014347335906837311,
-      "sampleStandardDeviation": 82.93329161109907,
-      "coefficientOfVariation": 0.030479504337622684,
-      "minimum": 2569.975929592328,
-      "maximum": 2789.1291784917794,
-      "nanosecondsPerOperation": 363908.9401740886,
+      "median": 3015.683291724116,
+      "mean": 3059.7421444895112,
+      "medianAbsoluteDeviation": 44.835599740276166,
+      "relativeMedianAbsoluteDeviation": 0.014867476257642067,
+      "sampleStandardDeviation": 205.38729018034644,
+      "coefficientOfVariation": 0.06712568591776329,
+      "minimum": 2848.5133037666305,
+      "maximum": 3450.253124852234,
+      "nanosecondsPerOperation": 331599.80782606767,
       "mutationCount": 0,
-      "peakRssBytes": 278880256,
-      "scoreRelativeToBest": 73.49982447264716
+      "peakRssBytes": 272670720,
+      "scoreRelativeToBest": 73.7597516533521
     }
   }
 }

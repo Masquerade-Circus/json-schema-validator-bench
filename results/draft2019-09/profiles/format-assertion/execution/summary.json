@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 9,
+  "benchmarkVersion": 11,
   "summaryVersion": 10,
   "phase": "execution",
   "draft": "draft2019-09",
@@ -21,7 +21,7 @@
       "format-assertion"
     ]
   },
-  "intersectionSha256": "071a85f81802be858c29879e3b97eefc1a76ac77f11aa8f247d0c3337d41dd7e",
+  "intersectionSha256": "16985c669d82e2200f9dc978e9f5363c10a0949f46731e511f771eba004d105c",
   "primaryUnit": "operations per second",
   "units": {
     "throughput": "operations per second",
@@ -121,8 +121,8 @@
           },
           "countsByProfile": {
             "base": {
-              "PASS": 1382,
-              "WRONG": 16,
+              "PASS": 1386,
+              "WRONG": 12,
               "COMPILE": 19,
               "RUNTIME": 0,
               "UNSUPPORTED": 0
@@ -139,7 +139,7 @@
             {
               "code": "PASS_THRESHOLD_NOT_MET",
               "profile": "base",
-              "pass": 1382,
+              "pass": 1386,
               "total": 1417,
               "thresholdPercent": "98",
               "thresholdFraction": {
@@ -171,8 +171,8 @@
           },
           "countsByProfile": {
             "base": {
-              "PASS": 1382,
-              "WRONG": 16,
+              "PASS": 1386,
+              "WRONG": 12,
               "COMPILE": 19,
               "RUNTIME": 0,
               "UNSUPPORTED": 0
@@ -189,7 +189,7 @@
             {
               "code": "PASS_THRESHOLD_NOT_MET",
               "profile": "base",
-              "pass": 1382,
+              "pass": 1386,
               "total": 1417,
               "thresholdPercent": "98",
               "thresholdFraction": {
@@ -321,8 +321,8 @@
             "subjectId": "draft2019-09:optional/format/date-time.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/date-time.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -348,8 +348,8 @@
             "subjectId": "draft2019-09:optional/format/date.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/date.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -375,8 +375,8 @@
             "subjectId": "draft2019-09:optional/format/duration.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/duration.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -402,8 +402,8 @@
             "subjectId": "draft2019-09:optional/format/email.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/email.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -429,8 +429,8 @@
             "subjectId": "draft2019-09:optional/format/hostname.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/hostname.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -456,8 +456,8 @@
             "subjectId": "draft2019-09:optional/format/hostname.json#/groups/1",
             "schemaId": "draft2019-09:optional/format/hostname.json#/groups/1",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -483,8 +483,8 @@
             "subjectId": "draft2019-09:optional/format/idn-email.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/idn-email.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -510,8 +510,8 @@
             "subjectId": "draft2019-09:optional/format/idn-hostname.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/idn-hostname.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -537,8 +537,8 @@
             "subjectId": "draft2019-09:optional/format/idn-hostname.json#/groups/1",
             "schemaId": "draft2019-09:optional/format/idn-hostname.json#/groups/1",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -564,8 +564,8 @@
             "subjectId": "draft2019-09:optional/format/ipv4.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/ipv4.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -591,8 +591,8 @@
             "subjectId": "draft2019-09:optional/format/ipv6.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/ipv6.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -618,8 +618,8 @@
             "subjectId": "draft2019-09:optional/format/iri-reference.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/iri-reference.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -645,8 +645,8 @@
             "subjectId": "draft2019-09:optional/format/iri.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/iri.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -672,8 +672,8 @@
             "subjectId": "draft2019-09:optional/format/json-pointer.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/json-pointer.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -699,8 +699,8 @@
             "subjectId": "draft2019-09:optional/format/regex.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/regex.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -726,8 +726,8 @@
             "subjectId": "draft2019-09:optional/format/relative-json-pointer.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/relative-json-pointer.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -753,8 +753,8 @@
             "subjectId": "draft2019-09:optional/format/time.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/time.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -780,8 +780,8 @@
             "subjectId": "draft2019-09:optional/format/unknown.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/unknown.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -807,8 +807,8 @@
             "subjectId": "draft2019-09:optional/format/uri-reference.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/uri-reference.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -834,8 +834,8 @@
             "subjectId": "draft2019-09:optional/format/uri-template.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/uri-template.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -861,8 +861,8 @@
             "subjectId": "draft2019-09:optional/format/uri.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/uri.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -888,8 +888,8 @@
             "subjectId": "draft2019-09:optional/format/uuid.json#/groups/0",
             "schemaId": "draft2019-09:optional/format/uuid.json#/groups/0",
             "mutationTarget": "schema",
-            "mutationClass": "compile",
-            "moment": "after compile",
+            "mutationClass": "setup",
+            "moment": "after setup",
             "difference": {
               "path": "$.__absolute_uri__",
               "kind": "added",
@@ -941,69 +941,69 @@
   "validators": {
     "hyperjump": {
       "roundThroughputs": [
-        268352.35755513737,
-        254666.80557847559,
-        262476.30906272493,
-        283499.55697187944,
-        252198.78404752497,
-        258103.34850200207
+        294782.2865911265,
+        300150.1819400345,
+        287910.38940500485,
+        287010.3225269094,
+        292587.77737051697,
+        284908.64072593726
       ],
-      "median": 260289.8287823635,
-      "mean": 263216.1936196241,
-      "medianAbsoluteDeviation": 6842.77598833089,
-      "relativeMedianAbsoluteDeviation": 0.02628906408038076,
-      "sampleStandardDeviation": 11480.060738201051,
-      "coefficientOfVariation": 0.04361456861879472,
-      "minimum": 252198.78404752497,
-      "maximum": 283499.55697187944,
-      "nanosecondsPerOperation": 3841.87121209462,
+      "median": 290249.0833877609,
+      "mean": 291224.9330932549,
+      "medianAbsoluteDeviation": 3885.982032108557,
+      "relativeMedianAbsoluteDeviation": 0.0133884386016029,
+      "sampleStandardDeviation": 5706.432629349623,
+      "coefficientOfVariation": 0.019594588171893686,
+      "minimum": 284908.64072593726,
+      "maximum": 300150.1819400345,
+      "nanosecondsPerOperation": 3445.3166512296643,
       "mutationCount": 0,
-      "peakRssBytes": 219156480,
-      "scoreRelativeToBest": 1.9598448316629435
+      "peakRssBytes": 214302720,
+      "scoreRelativeToBest": 2.137183868248156
     },
     "schema-shield": {
       "roundThroughputs": [
-        12716573.340898242,
-        13232712.995326089,
-        13553099.698521953,
-        13706374.783025594,
-        13329576.48567385,
-        12605537.26787066
+        13648351.76673442,
+        13839774.277733801,
+        13513474.382147878,
+        13196072.026535919,
+        15751764.543476177,
+        12891174.976065274
       ],
-      "median": 13281144.74049997,
-      "mean": 13190645.761886066,
-      "medianAbsoluteDeviation": 348592.5002738042,
-      "relativeMedianAbsoluteDeviation": 0.026247172746396964,
-      "sampleStandardDeviation": 443963.35156859853,
-      "coefficientOfVariation": 0.03365743873218216,
-      "minimum": 12605537.26787066,
-      "maximum": 13706374.783025594,
-      "nanosecondsPerOperation": 75.29471438938289,
+      "median": 13580913.07444115,
+      "mean": 13806768.66211558,
+      "medianAbsoluteDeviation": 321851.125598941,
+      "relativeMedianAbsoluteDeviation": 0.023698784009202934,
+      "sampleStandardDeviation": 1010591.7054102023,
+      "coefficientOfVariation": 0.07319538192764588,
+      "minimum": 12891174.976065274,
+      "maximum": 15751764.543476177,
+      "nanosecondsPerOperation": 73.63275168014796,
       "mutationCount": 0,
-      "peakRssBytes": 196452352,
+      "peakRssBytes": 198754304,
       "scoreRelativeToBest": 100
     },
     "z-schema": {
       "roundThroughputs": [
-        90413.69773531012,
-        89658.28950369144,
-        85634.44328705348,
-        93403.5184310636,
-        97232.74626365368,
-        87278.95643131484
+        99834.34582567717,
+        98577.6936003028,
+        101347.71179919856,
+        96110.64738475002,
+        93172.54489357231,
+        94934.54296274167
       ],
-      "median": 90035.99361950078,
-      "mean": 90603.6086086812,
-      "medianAbsoluteDeviation": 3062.280999874376,
-      "relativeMedianAbsoluteDeviation": 0.03401174215742892,
-      "sampleStandardDeviation": 4206.199508018254,
-      "coefficientOfVariation": 0.046424194053737024,
-      "minimum": 85634.44328705348,
-      "maximum": 97232.74626365368,
-      "nanosecondsPerOperation": 11106.669230819833,
+      "median": 97344.1704925264,
+      "mean": 97329.58107770707,
+      "medianAbsoluteDeviation": 2449.901431467748,
+      "relativeMedianAbsoluteDeviation": 0.025167418028959825,
+      "sampleStandardDeviation": 3113.8388706834617,
+      "coefficientOfVariation": 0.031992728584718765,
+      "minimum": 93172.54489357231,
+      "maximum": 101347.71179919856,
+      "nanosecondsPerOperation": 10272.828819027996,
       "mutationCount": 0,
-      "peakRssBytes": 203567104,
-      "scoreRelativeToBest": 0.6779234424344612
+      "peakRssBytes": 199114752,
+      "scoreRelativeToBest": 0.7167719133386183
     }
   }
 }

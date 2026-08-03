@@ -8,20 +8,16 @@ import {
 } from "json-schema-library";
 
 import { defineAdapter } from "../adapter-api.js";
-import {
-  resourceIdentifiers
-} from "./helpers.js";
 
-const drafts = {
-  draft4: draft04,
-  draft6: draft06,
-  draft7: draft07,
-  "draft2019-09": draft2019,
-  "draft2020-12": draft2020
-};
-
-function remoteSchemas(resources) {
-  const schemas = [];
+function createImplementation({ draft, formatProfile, resources }) {
+  const draftImplementation = {
+    draft4: draft04,
+    draft6: draft06,
+    draft7: draft07,
+    "draft2019-09": draft2019,
+    "draft2020-12": draft2020
+  }[draft];
+  const remotes = [];
   const seen = new Set();
   for (const resource of resources) {
     if (seen.has(resource.schema)) {
@@ -32,45 +28,40 @@ function remoteSchemas(resources) {
       typeof resource.schema?.$id === "string" ||
       typeof resource.schema?.id === "string"
     ) {
-      schemas.push(resource.schema);
+      remotes.push(resource.schema);
       const target = resource.schema.$id ?? resource.schema.id;
-      for (const alias of resourceIdentifiers(resource).aliases) {
+      for (const alias of resource.aliases) {
         if (alias !== target) {
-          schemas.push({ $id: alias, $ref: target });
+          remotes.push({ $id: alias, $ref: target });
         }
       }
-    } else if (typeof resource.uri === "string") {
-      schemas.push({ ...resource.schema, $id: resource.uri });
+    } else if (typeof resource.canonicalUri === "string") {
+      remotes.push({ ...resource.schema, $id: resource.canonicalUri });
     }
   }
-  return schemas;
-}
-
-function createImplementation({ draft, formatProfile, resources }) {
-  const remotes = remoteSchemas(resources);
+  const formatAssertion =
+    draft === "draft4" ||
+    draft === "draft6" ||
+    draft === "draft7" ||
+    formatProfile === "format-assertion";
   const compileOptions = {
-    drafts: [drafts[draft]],
+    drafts: [draftImplementation],
     draft,
     remotes,
-    formatAssertion:
-      draft === "draft4" ||
-      draft === "draft6" ||
-      draft === "draft7" ||
-      formatProfile === "format-assertion",
+    formatAssertion,
     throwOnInvalidSchema: true,
     throwOnInvalidRef: true
   };
-  const reportOptions = {
-    drafts: [draft],
-    draft,
-    formatAssertion: compileOptions.formatAssertion,
-    throwOnInvalidSchema: compileOptions.throwOnInvalidSchema,
-    throwOnInvalidRef: compileOptions.throwOnInvalidRef
-  };
   let lastResult = null;
   return {
-    reportOptions,
-    compile(schema) {
+    reportOptions: {
+      drafts: [draft],
+      draft,
+      formatAssertion,
+      throwOnInvalidSchema: true,
+      throwOnInvalidRef: true
+    },
+    setup(schema) {
       return compileSchema(schema, compileOptions);
     },
     validate(node, data) {
@@ -92,7 +83,12 @@ export const adapter = defineAdapter(
     packageName: "json-schema-library",
     displayName: "json-schema-library",
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
-    unsupported: []
+    unsupported: [],
+    implementation: {
+      api: "reusable-sync",
+      isolation: "fresh-instance",
+      dynamicCode: "not-observed"
+    }
   },
   createImplementation
 );

@@ -162,32 +162,90 @@ export function defineAdapter(declaration, factory) {
   if (typeof factory !== "function") {
     throw new Error("adapter factory must be a function");
   }
-  const declarationFields = Object.keys(declaration).sort();
-  const expectedDeclarationFields = [
+  const declarationFields = Object.keys(declaration);
+  const requiredDeclarationFields = [
     "displayName",
     "drafts",
     "id",
     "packageName",
     "unsupported"
   ];
+  const allowedDeclarationFields = [
+    ...requiredDeclarationFields,
+    "implementation",
+    "supportClaims"
+  ];
   if (
-    declarationFields.length !== expectedDeclarationFields.length ||
-    declarationFields.some(
-      (field, index) => field !== expectedDeclarationFields[index]
-    )
+    requiredDeclarationFields.some((field) => !Object.hasOwn(declaration, field)) ||
+    declarationFields.some((field) => !allowedDeclarationFields.includes(field))
   ) {
     throw new Error("adapter declaration fields differ from the public contract");
   }
+  const drafts = uniqueKnownStrings(declaration.drafts, "drafts", ADAPTER_DRAFTS);
+  const implementationMetadata = Object.hasOwn(declaration, "implementation")
+    ? declaration.implementation
+    : {
+        api: "N/A",
+        isolation: "N/A",
+        dynamicCode: "N/A"
+      };
+  if (
+    implementationMetadata === null ||
+    typeof implementationMetadata !== "object" ||
+    Array.isArray(implementationMetadata) ||
+    Object.keys(implementationMetadata).some(
+      (field) => !["api", "isolation", "dynamicCode"].includes(field)
+    )
+  ) {
+    throw new Error("adapter implementation metadata must be an object");
+  }
+  const implementation = Object.freeze({
+    api: nonEmptyString(implementationMetadata.api, "implementation.api"),
+    isolation: nonEmptyString(
+      implementationMetadata.isolation,
+      "implementation.isolation"
+    ),
+    dynamicCode: nonEmptyString(
+      implementationMetadata.dynamicCode,
+      "implementation.dynamicCode"
+    )
+  });
+  const declaredSupportClaims = Object.hasOwn(declaration, "supportClaims")
+    ? declaration.supportClaims
+    : {};
+  if (
+    declaredSupportClaims === null ||
+    typeof declaredSupportClaims !== "object" ||
+    Array.isArray(declaredSupportClaims) ||
+    Object.keys(declaredSupportClaims).some((draft) => !drafts.includes(draft))
+  ) {
+    throw new Error("adapter support claims must use declared drafts");
+  }
+  const supportClaims = Object.freeze(
+    Object.fromEntries(
+      drafts.map((draft) => [
+        draft,
+        Object.hasOwn(declaredSupportClaims, draft)
+          ? nonEmptyString(
+              declaredSupportClaims[draft],
+              `supportClaims.${draft}`
+            )
+          : "declared"
+      ])
+    )
+  );
   const metadata = Object.freeze({
     id: nonEmptyString(declaration.id, "id"),
     packageName: nonEmptyString(declaration.packageName, "packageName"),
     displayName: nonEmptyString(declaration.displayName, "displayName"),
-    drafts: uniqueKnownStrings(declaration.drafts, "drafts", ADAPTER_DRAFTS),
+    drafts,
     unsupported: uniqueKnownStrings(
       declaration.unsupported,
       "unsupported",
       CAPABILITY_KEYS
-    )
+    ),
+    implementation,
+    supportClaims
   });
 
   return Object.freeze({
@@ -205,10 +263,13 @@ export function defineAdapter(declaration, factory) {
       const implementationFields = Object.keys(implementation);
       const allowedImplementationFields = [
         "reportOptions",
-        "compile",
+        "setup",
         "validate",
         "getError"
       ];
+      if (Object.hasOwn(implementation, "compile")) {
+        throw new Error("adapter compile is forbidden; expose setup instead");
+      }
       if (
         implementationFields.some(
           (field) => !allowedImplementationFields.includes(field)
@@ -222,10 +283,10 @@ export function defineAdapter(declaration, factory) {
         throw new Error("adapter validate must be a function");
       }
       if (
-        Object.hasOwn(implementation, "compile") &&
-        typeof implementation.compile !== "function"
+        Object.hasOwn(implementation, "setup") &&
+        typeof implementation.setup !== "function"
       ) {
-        throw new Error("adapter compile must be a function when present");
+        throw new Error("adapter setup must be a function when present");
       }
       if (
         Object.hasOwn(implementation, "getError") &&
@@ -269,7 +330,7 @@ export function defineAdapter(declaration, factory) {
         ...reporting,
         validate(target, data) {
           lastValidation = null;
-          lastTarget = typeof implementation.compile === "function"
+          lastTarget = typeof implementation.setup === "function"
             ? target
             : preparedSchema(target);
           const result = implementation.validate(lastTarget, data);
@@ -280,22 +341,22 @@ export function defineAdapter(declaration, factory) {
           return result;
         }
       };
-      if (typeof implementation.compile === "function") {
-        const compileIsAsync = implementation.compile.constructor.name === "AsyncFunction";
-        runtime.compileMode = compileIsAsync ? "async" : "sync";
-        if (compileIsAsync) {
-          runtime.compile = async (schema) =>
-            implementation.compile(preparedSchema(schema));
+      if (typeof implementation.setup === "function") {
+        const setupIsAsync = implementation.setup.constructor.name === "AsyncFunction";
+        runtime.setupMode = setupIsAsync ? "async" : "sync";
+        if (setupIsAsync) {
+          runtime.setup = async (schema) =>
+            implementation.setup(preparedSchema(schema));
         } else {
-          runtime.compile = (schema) => {
-            const target = implementation.compile(preparedSchema(schema));
+          runtime.setup = (schema) => {
+            const target = implementation.setup(preparedSchema(schema));
             if (
               target !== null &&
               (typeof target === "object" || typeof target === "function") &&
               typeof target.then === "function"
             ) {
               throw new Error(
-                "adapter compile must be declared async when it returns a Promise"
+                "adapter setup must be declared async when it returns a Promise"
               );
             }
             return target;
@@ -312,7 +373,7 @@ export function defineAdapter(declaration, factory) {
           }
           const detail = await implementation.getError({
             schema: context.schema,
-            compiled: lastTarget,
+            target: lastTarget,
             testCase: context.testCase,
             data: context.data,
             config: normalizedConfig

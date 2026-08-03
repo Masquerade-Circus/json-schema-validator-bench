@@ -14,27 +14,54 @@ import {
   getParticipants
 } from "../src/matrix.js";
 import { normalizedGeometricScore, summarizePhase } from "../src/report.js";
-import { runColdExecutionSample, runCompileSample } from "../src/worker.js";
-import { rotateRoundOrder } from "../src/adapters/index.js";
-import { createCompileEntries, mergeSetupEntries } from "../src/intersection.js";
+import { runColdExecutionSample, runSetupSample } from "../src/worker.js";
+import { adapterRegistry, rotateRoundOrder } from "../src/adapter-registry.js";
+import { createSetupEntries, mergeSetupEntries } from "../src/intersection.js";
 
-test("vNext rejects the legacy performance phase contract", () => {
+test("Quick and Full share one performance contract except for rounds", () => {
   const contract = createBenchmarkContract("full");
-  assert.equal(benchmarkModes.full.rounds, 6);
-  assert.equal(benchmarkModes.full.setupWarmupMinimumMilliseconds, 100);
-  assert.equal(benchmarkModes.full.setupTargetMilliseconds, 250);
-  assert.equal(benchmarkModes.full.setupMinimumSampleMilliseconds, 175);
-  assert.equal(benchmarkModes.full.executionWarmupMinimumMilliseconds, 100);
-  assert.equal(benchmarkModes.full.executionTargetMilliseconds, 250);
-  assert.equal(benchmarkModes.full.executionMinimumSampleMilliseconds, 175);
-  assert.equal(benchmarkModes.full.coldExecutionWarmupMinimumMilliseconds, 100);
-  assert.equal(benchmarkModes.full.coldExecutionTargetMilliseconds, 250);
-  assert.equal(benchmarkModes.full.coldExecutionMinimumSampleMilliseconds, 175);
+  const quickContract = createBenchmarkContract("quick");
+  const {
+    mode: fullMode,
+    rounds: fullRounds,
+    ...fullConfiguration
+  } = benchmarkModes.full;
+  const {
+    mode: quickMode,
+    rounds: quickRounds,
+    ...quickConfiguration
+  } = benchmarkModes.quick;
+
+  assert.equal(fullMode, "full");
+  assert.equal(quickMode, "quick");
+  assert.equal(fullRounds, 6);
+  assert.equal(quickRounds, 1);
+  assert.deepEqual(quickConfiguration, fullConfiguration);
+  assert.equal(fullConfiguration.setupWarmupMinimumMilliseconds, 100);
+  assert.equal(fullConfiguration.setupTargetMilliseconds, 250);
+  assert.equal(fullConfiguration.setupMinimumSampleMilliseconds, 175);
+  assert.equal(fullConfiguration.executionWarmupMinimumMilliseconds, 100);
+  assert.equal(fullConfiguration.executionTargetMilliseconds, 250);
+  assert.equal(fullConfiguration.executionMinimumSampleMilliseconds, 175);
+  assert.equal(fullConfiguration.coldExecutionWarmupMinimumMilliseconds, 100);
+  assert.equal(fullConfiguration.coldExecutionTargetMilliseconds, 250);
+  assert.equal(fullConfiguration.coldExecutionMinimumSampleMilliseconds, 175);
+  const {
+    rounds: fullContractRounds,
+    ...fullMethodology
+  } = contract;
+  const {
+    rounds: quickContractRounds,
+    ...quickMethodology
+  } = quickContract;
+  assert.equal(fullContractRounds, 6);
+  assert.equal(quickContractRounds, 1);
+  assert.deepEqual(quickMethodology, fullMethodology);
+  assert.equal(Object.hasOwn(contract, "benchmarkMode"), false);
+  assert.equal(Object.hasOwn(quickContract, "benchmarkMode"), false);
   assert.equal(benchmarkModes.quick.rounds, 1);
-  assert.equal(benchmarkModes.quick.setupTargetMilliseconds, 0);
-  assert.equal(benchmarkModes.quick.executionTargetMilliseconds, 0);
-  assert.equal(benchmarkModes.quick.coldExecutionTargetMilliseconds, 0);
   assert.equal(Object.hasOwn(contract, "compile"), false);
+  assert.equal(Object.hasOwn(quickContract, "performanceCorpus"), false);
   assert.deepEqual(Object.keys(contract.phases), [
     "setup",
     "execution",
@@ -52,7 +79,7 @@ test("vNext rejects the legacy performance phase contract", () => {
   assert.equal(sampleCacheIdentityVersion > 9, true);
 });
 
-test("createCompileEntries uses effective draft format semantics", () => {
+test("createSetupEntries uses effective draft format semantics", () => {
   for (const draft of ["draft4", "draft6", "draft7"]) {
     const schemas = ["base", "format-assertion"].map((formatProfile) => ({
       id: `${draft}:${formatProfile}`,
@@ -60,7 +87,7 @@ test("createCompileEntries uses effective draft format semantics", () => {
       formatProfile,
       schema: { type: "string", format: "email" }
     }));
-    const entries = createCompileEntries({
+    const entries = createSetupEntries({
       schemas,
       representedSchemaIds: schemas.map(({ id }) => id),
       remoteEntries: [],
@@ -82,7 +109,7 @@ test("createCompileEntries uses effective draft format semantics", () => {
       formatProfile,
       schema: { type: "string", format: "email" }
     }));
-    const entries = createCompileEntries({
+    const entries = createSetupEntries({
       schemas,
       representedSchemaIds: schemas.map(({ id }) => id),
       remoteEntries: [],
@@ -106,7 +133,7 @@ test("createCompileEntries uses effective draft format semantics", () => {
     );
   }
 
-  const distinct = createCompileEntries({
+  const distinct = createSetupEntries({
     schemas: [
       {
         id: "draft7:base",
@@ -138,7 +165,7 @@ test("Setup merges equal effective operations across profiles and preserves real
   const entries = mergeSetupEntries([
     {
       ...common,
-      compileKey: "base-source",
+      setupKey: "base-source",
       formatProfile: "base",
       sourceFormatProfiles: ["base"],
       setupConfiguration: {
@@ -151,7 +178,7 @@ test("Setup merges equal effective operations across profiles and preserves real
     },
     {
       ...common,
-      compileKey: "formats-equal-source",
+      setupKey: "formats-equal-source",
       formatProfile: "format-assertion",
       sourceFormatProfiles: ["format-assertion"],
       setupConfiguration: {
@@ -164,7 +191,7 @@ test("Setup merges equal effective operations across profiles and preserves real
     },
     {
       ...common,
-      compileKey: "formats-distinct-source",
+      setupKey: "formats-distinct-source",
       formatProfile: "format-assertion",
       sourceFormatProfiles: ["format-assertion"],
       setupConfiguration: {
@@ -185,13 +212,12 @@ test("Setup merges equal effective operations across profiles and preserves real
     "formats-equal-schema"
   ]);
   assert.equal(distinct.memberSchemaIds.includes("formats-distinct-schema"), true);
-  assert.notEqual(merged.compileKey, distinct.compileKey);
+  assert.notEqual(merged.setupKey, distinct.setupKey);
 });
 
 test("one draft-scoped Setup sample executes each entry with its effective configuration", async () => {
   const observedProfiles = [];
-  let clock = 0;
-  const sample = await runCompileSample({
+  const sample = await runSetupSample({
     request: {
       phase: "setup",
       validator: "schema-shield",
@@ -200,8 +226,8 @@ test("one draft-scoped Setup sample executes each entry with its effective confi
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: ["base", "format-assertion"].map((formatProfile) => ({
-      compileKey: `draft2020-12:${formatProfile}`,
+    setupEntries: ["base", "format-assertion"].map((formatProfile) => ({
+      setupKey: `draft2020-12:${formatProfile}`,
       draft: "draft2020-12",
       formatProfile,
       setupConfiguration: {
@@ -228,16 +254,15 @@ test("one draft-scoped Setup sample executes each entry with its effective confi
       observedProfiles.push(formatProfile);
       return {
         version: "1.0.0",
-        compileMode: "sync",
-        compile: (schema) => schema
+        setupMode: "sync",
+        setup: (schema) => schema
       };
     },
     timing: {
       warmupMinimumMilliseconds: 0,
       targetSampleMilliseconds: 0,
       minimumSampleMilliseconds: 0
-    },
-    now: () => ++clock
+    }
   });
 
   assert.equal(sample.formatProfile, null);
@@ -310,17 +335,18 @@ test("eligible subsets rotate after roster filtering", () => {
   assert.deepEqual(rotateRoundOrder(eligible, 3), ["beta", "gamma", "alpha"]);
 });
 
-test("module-global adapters publish Cold execution as unavailable", () => {
+test("Cold execution excludes providers with module-global state", () => {
   assert.equal(
     getColdExecutionParticipants("draft6").some(({ id }) => id === "hyperjump"),
     false
   );
 });
 
-test("Cold execution measures one complete fresh operation per case", async () => {
-  let clock = 0;
+test("Cold execution measures one fresh adapter setup and validation per case", async () => {
   let factories = 0;
+  let setups = 0;
   let validations = 0;
+  let clock = 0;
   const schemaId = "draft6:cold.json#/groups/0";
   const sample = await runColdExecutionSample({
     request: {
@@ -342,24 +368,28 @@ test("Cold execution measures one complete fresh operation per case", async () =
       factories += 1;
       return {
         version: "1.0.0",
-        compileMode: "sync",
-        compile: (schema) => schema,
+        setupMode: "sync",
+        setup(schema) {
+          setups += 1;
+          return schema;
+        },
         validate(schema, data) {
           validations += 1;
           return schema.type === "integer" && typeof data === "number";
         }
       };
     },
+    now: () => ++clock,
     timing: {
       warmupMinimumMilliseconds: 0,
       targetSampleMilliseconds: 0,
       minimumSampleMilliseconds: 0
-    },
-    now: () => ++clock
+    }
   });
   assert.equal(sample.phase, "cold-execution");
   assert.equal(sample.operations, 2);
   assert.equal(factories, 2);
+  assert.equal(setups, 2);
   assert.equal(validations, 2);
   assert.equal(sample.checksum > 0, true);
 });
@@ -391,7 +421,6 @@ test("Cold execution prepares neutral inputs before the provider clock", async (
     }
   });
   let clock = 0;
-  let telemetrySnapshots = 0;
   const sample = await runColdExecutionSample({
     request: {
       phase: "cold-execution",
@@ -423,20 +452,17 @@ test("Cold execution prepares neutral inputs before the provider clock", async (
       }
     },
     createAdapter() {
-      events.push("adapter");
+      events.push("factory");
       return {
-        get version() {
-          events.push("metadata");
-          return "1.0.0";
+        version: "1.0.0",
+        setupMode: "sync",
+        setup(targetSchema) {
+          events.push("setup");
+          return targetSchema;
         },
-        compileMode: "sync",
-        compile(preparedSchema) {
-          events.push("compile");
-          return preparedSchema;
-        },
-        validate(_preparedSchema, preparedData) {
+        validate(_targetSchema, targetData) {
           events.push("validate");
-          return preparedData.value === 1;
+          return targetData.value === 1;
         }
       };
     },
@@ -446,15 +472,10 @@ test("Cold execution prepares neutral inputs before the provider clock", async (
       minimumSampleMilliseconds: 0
     },
     now() {
-      events.push(clock === 0 ? "start" : "stop");
-      clock += 1;
+      events.push(`clock-${++clock}`);
       return clock;
     },
-    memoryUsage() {
-      telemetrySnapshots += 1;
-      events.push(`telemetry-${telemetrySnapshots}`);
-      return { rss: 1, heapUsed: 1, heapTotal: 1, external: 1 };
-    }
+    memoryUsage: () => ({ rss: 1, heapUsed: 1, heapTotal: 1, external: 1 })
   });
   assert.equal(sample.checksum, 3);
   for (const event of [
@@ -463,30 +484,30 @@ test("Cold execution prepares neutral inputs before the provider clock", async (
     "resource-clone",
     "data-clone"
   ]) {
-    assert.ok(events.indexOf(event) < events.indexOf("start"), event);
+    assert.ok(events.indexOf(event) < events.indexOf("clock-1"), event);
   }
-  for (const event of ["adapter", "compile", "validate"]) {
-    assert.ok(events.indexOf("start") < events.indexOf(event), event);
-    assert.ok(events.indexOf(event) < events.indexOf("stop"), event);
-  }
-  assert.ok(events.indexOf("stop") < events.indexOf("metadata"));
-  assert.ok(events.indexOf("stop") < events.indexOf("telemetry-2"));
+  assert.ok(events.indexOf("clock-1") < events.indexOf("factory"));
+  assert.ok(events.indexOf("factory") < events.indexOf("setup"));
+  assert.ok(events.indexOf("setup") < events.indexOf("validate"));
+  assert.ok(events.indexOf("validate") < events.indexOf("clock-2"));
+  assert.equal(sample.memory !== null, true);
+});
 
-  const workerSource = await readFile(
-    new URL("../src/worker.js", import.meta.url),
+test("the runner imports only opaque adapter modules through the generic registry", async () => {
+  const registrySource = await readFile(
+    new URL("../src/adapter-registry.js", import.meta.url),
     "utf8"
   );
-  const coldStart = workerSource.indexOf("async function coldPass()");
-  const coldEnd = workerSource.indexOf("let warmupPasses", coldStart);
-  const coldSource = workerSource.slice(coldStart, coldEnd);
-  const stop = coldSource.indexOf("elapsed += now() - start");
-  for (const operation of [
-    "adapterMetadata ??= adapter",
-    "if (observed !== testCase.expected)",
-    "executionError(",
-    "checksum +="
-  ]) {
-    assert.ok(stop < coldSource.indexOf(operation), operation);
+  const runnerSources = await Promise.all(
+    ["benchmark.js", "worker.js", "matrix.js", "cli.js"].map((file) =>
+      readFile(new URL(`../src/${file}`, import.meta.url), "utf8")
+    )
+  );
+  assert.equal(adapterRegistry.length, 10);
+  assert.match(registrySource, /from "\.\/adapters\/ajv\.js"/);
+  for (const source of runnerSources) {
+    assert.equal(/(?:ajv|hyperjump|schemasafe|z-schema)\/(?:dist|draft)/.test(source), false);
+    assert.equal(source.includes("adapters/catalog.js"), false);
   }
 });
 

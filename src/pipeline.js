@@ -7,7 +7,7 @@ import {
   defaultEligibilityThresholdPercent,
   parseEligibilityThresholdPercent
 } from "./eligibility.js";
-import { adapterRegistry } from "./adapters/index.js";
+import { adapterRegistry } from "./adapter-registry.js";
 import {
   assertConfinedCachePath,
   createBenchmarkCohortIdentity
@@ -385,7 +385,9 @@ export async function assertCompleteDiagnosticBaseline({
           const expectedArtifactHash =
             expectedPerformance.intersectionArtifacts?.[phase];
           const sampleHashKey =
-            phase === "cold-execution" ? "coldExecutionSamples" : `${phase}Samples`;
+            phase === "cold-execution"
+              ? "coldExecutionSamples"
+              : `${phase}Samples`;
           const expectedSampleHash = expectedPerformance[sampleHashKey];
           const observedHash = intersectionHashRaw.trim();
           const observedArtifactHash = artifactHashRaw.trim();
@@ -403,15 +405,15 @@ export async function assertCompleteDiagnosticBaseline({
             : observedRounds.length === 0;
           if (
             result.benchmarkMode !== mode ||
-            result.benchmarkVersion !== 9 ||
+            result.benchmarkVersion !== 11 ||
             result.phase !== phase ||
             result.draft !== draft ||
             result.formatProfile !== formatProfile ||
             result.intersectionSha256 !== expectedHash ||
             observedHash !== expectedHash ||
             performanceIdentitySha256(intersection) !== expectedHash ||
-            intersection.intersectionVersion !== 11 ||
-            intersection.performanceIdentity?.performanceIdentityVersion !== 7 ||
+            intersection.intersectionVersion !== 12 ||
+            intersection.performanceIdentity?.performanceIdentityVersion !== 8 ||
             observedArtifactHash !== expectedArtifactHash ||
             sha256(intersectionRaw) !== expectedArtifactHash ||
             sha256(sampleRaw) !== expectedSampleHash ||

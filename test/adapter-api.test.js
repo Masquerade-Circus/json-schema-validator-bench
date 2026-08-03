@@ -12,28 +12,24 @@ import {
   adapterRegistry,
   createAdapterRegistry,
   createRegisteredAdapter,
-  getCompileRegistryParticipants,
+  getSetupRegistryParticipants,
   getRegisteredAdapter,
-  supportsCompile
-} from "../src/adapters/index.js";
+  supportsSetup
+} from "../src/adapter-registry.js";
 import {
   classifySchemaCases,
   runAdapterConformance
 } from "../src/conformance.js";
-import { adapter as jsonSchemaLibrary } from "../src/adapters/json-schema-library.js";
-import { adapter as jsonschema } from "../src/adapters/jsonschema.js";
-import {
-  adapter as schemaShield,
-  createSchemaShieldAdapter
-} from "../src/adapters/schema-shield.js";
-import { SchemaShield } from "schema-shield";
-import { adapter as ajv } from "../src/adapters/ajv.js";
-import { adapter as schemasafe } from "../src/adapters/schemasafe.js";
-import { adapter as redoclyAjv } from "../src/adapters/redocly-ajv.js";
-import { adapter as cfworker } from "../src/adapters/cfworker-json-schema.js";
-import { adapter as djv } from "../src/adapters/djv.js";
-import { adapter as zSchema } from "../src/adapters/z-schema.js";
-import { adapter as hyperjump } from "../src/adapters/hyperjump.js";
+const schemaShield = getRegisteredAdapter("schema-shield");
+const ajv = getRegisteredAdapter("ajv");
+const schemasafe = getRegisteredAdapter("schemasafe");
+const redoclyAjv = getRegisteredAdapter("redocly-ajv");
+const cfworker = getRegisteredAdapter("cfworker-json-schema");
+const jsonSchemaLibrary = getRegisteredAdapter("json-schema-library");
+const jsonschema = getRegisteredAdapter("jsonschema");
+const djv = getRegisteredAdapter("djv");
+const zSchema = getRegisteredAdapter("z-schema");
+const hyperjump = getRegisteredAdapter("hyperjump");
 
 const declaration = {
   id: "fixture",
@@ -58,6 +54,28 @@ function fixtureCases(expectedValues = [false]) {
     data: index
   }));
 }
+
+test("adapter declarations reject malformed opaque metadata", () => {
+  for (const invalid of [
+    { ...declaration, implementation: null },
+    {
+      ...declaration,
+      implementation: {
+        api: "reusable-sync",
+        isolation: "fresh-instance",
+        dynamicCode: "observed",
+        provider: "leaked"
+      }
+    },
+    { ...declaration, supportClaims: null },
+    { ...declaration, supportClaims: { draft6: "declared" } }
+  ]) {
+    assert.throws(
+      () => defineAdapter(invalid, () => ({ validate: () => true })),
+      /implementation metadata|support claims/
+    );
+  }
+});
 
 test("adapter factory rejects non-boolean validation results", () => {
   const adapter = defineAdapter(declaration, () => ({
@@ -86,37 +104,47 @@ test("adapter creation rejects missing behavior and normalizes config", () => {
   });
 });
 
-test("adapter wrapper preserves synchronous and asynchronous compile contracts", async () => {
+test("adapter contract rejects compile and exposes no raw factory", () => {
+  const definition = defineAdapter(declaration, () => ({
+    reportOptions: {},
+    compile: (schema) => schema,
+    validate: () => true
+  }));
+  assert.throws(() => definition.create({ draft: "draft7" }), /compile is forbidden/);
+  assert.equal(Object.hasOwn(definition, "createRaw"), false);
+});
+
+test("adapter wrapper preserves synchronous and asynchronous setup contracts", async () => {
   const sync = defineAdapter(declaration, () => ({
     reportOptions: {},
-    compile: (schema) => ({ schema }),
-    validate: (compiled, data) => compiled.schema.type === typeof data
+    setup: (schema) => ({ schema }),
+    validate: (target, data) => target.schema.type === typeof data
   })).create({ draft: "draft7" });
-  const syncTarget = sync.compile({ type: "number" });
-  assert.equal(sync.compileMode, "sync");
+  const syncTarget = sync.setup({ type: "number" });
+  assert.equal(sync.setupMode, "sync");
   assert.equal(typeof syncTarget?.then, "undefined");
   assert.equal(sync.validate(syncTarget, 1), true);
 
   const asyncAdapter = defineAdapter(declaration, () => ({
     reportOptions: {},
-    compile: async (schema) => ({ schema }),
-    validate: (compiled, data) => compiled.schema.type === typeof data
+    setup: async (schema) => ({ schema }),
+    validate: (target, data) => target.schema.type === typeof data
   })).create({ draft: "draft7" });
-  const asyncTarget = asyncAdapter.compile({ type: "number" });
-  assert.equal(asyncAdapter.compileMode, "async");
+  const asyncTarget = asyncAdapter.setup({ type: "number" });
+  assert.equal(asyncAdapter.setupMode, "async");
   assert.equal(typeof asyncTarget.then, "function");
   assert.equal(asyncAdapter.validate(await asyncTarget, 1), true);
 });
 
-test("sync compile rejects undeclared Promise results", () => {
+test("sync setup rejects undeclared Promise results", () => {
   const adapter = defineAdapter(declaration, () => ({
     reportOptions: {},
-    compile: (schema) => Promise.resolve({ schema }),
+    setup: (schema) => Promise.resolve({ schema }),
     validate: () => true
   })).create({ draft: "draft7" });
 
   assert.throws(
-    () => adapter.compile({ type: "number" }),
+    () => adapter.setup({ type: "number" }),
     /must be declared async/
   );
 });
@@ -124,24 +152,24 @@ test("sync compile rejects undeclared Promise results", () => {
 test("prepared primitive schemas bypass neutral cloning inside fresh adapters", () => {
   const adapter = defineAdapter(declaration, () => ({
     reportOptions: {},
-    compile: (schema) => schema,
-    validate: (compiled, data) => compiled === data
+    setup: (schema) => schema,
+    validate: (target, data) => target === data
   })).create({ draft: "draft7", formatProfile: "base" });
   const canary = Symbol("primitive-schema-clone-canary");
 
-  assert.equal(adapter.compile(canary), canary);
+  assert.equal(adapter.setup(canary), canary);
 });
 
 test("boolean schemas preserve correctness in both format profiles", () => {
   for (const formatProfile of ["base", "format-assertion"]) {
     const adapter = defineAdapter(declaration, () => ({
       reportOptions: {},
-      compile: (schema) => schema,
-      validate: (compiled) => compiled
+      setup: (schema) => schema,
+      validate: (target) => target
     })).create({ draft: "draft7", formatProfile });
 
-    const alwaysValid = adapter.compile(true);
-    const alwaysInvalid = adapter.compile(false);
+    const alwaysValid = adapter.setup(true);
+    const alwaysInvalid = adapter.setup(false);
     assert.equal(adapter.validate(alwaysValid, "anything"), true, formatProfile);
     assert.equal(adapter.validate(alwaysInvalid, "anything"), false, formatProfile);
   }
@@ -217,7 +245,7 @@ test("getError is conformance-only and produces flat string, null, and throw rec
     }
     assert.deepEqual(observedError, entry.expected);
     assert.deepEqual(received.schema, {});
-    assert.equal(received.compiled !== undefined, true);
+    assert.equal(received.target !== undefined, true);
     assert.equal(received.testCase.id, fixtureCases()[0].id);
     assert.equal(received.data, 0);
     assert.equal(received.config.draft, "draft7");
@@ -274,7 +302,7 @@ test("unsupported capabilities include evidence and stop before the factory", as
       engines: null,
       supportClaim: "declared",
       unsupported: definition.unsupported,
-      compileEligible: false
+      setupEligible: false
     },
     adapterFactory: (config) => definition.create(config),
     adapterConfiguration: { draft: "draft7" },
@@ -310,7 +338,7 @@ test("unsupported capabilities include evidence and stop before the factory", as
 
 test("unexpected factory errors keep COMPILE and validate-only RUNTIME classifications", async () => {
   const cases = fixtureCases();
-  for (const [compileEligible, status] of [[true, "COMPILE"], [false, "RUNTIME"]]) {
+  for (const [setupEligible, status] of [[true, "COMPILE"], [false, "RUNTIME"]]) {
     const report = await runAdapterConformance({
       adapter: {
         name: "fixture",
@@ -321,7 +349,7 @@ test("unexpected factory errors keep COMPILE and validate-only RUNTIME classific
         engines: null,
         supportClaim: "declared",
         unsupported: [],
-        compileEligible
+        setupEligible
       },
       adapterFactory: () => {
         throw Object.assign(new Error("factory exploded"), { code: "FACTORY_EXPLODED" });
@@ -437,17 +465,17 @@ test("conformance reports options once per profile and keeps them out of cases",
   assert.equal(Object.hasOwn(report.cases[0], "supportClaim"), false);
 });
 
-test("registry rejects duplicate IDs and derives compile participation", () => {
+test("registry rejects duplicate IDs and derives setup participation", () => {
   assert.throws(
     () => createAdapterRegistry([jsonschema, jsonschema]),
     /duplicate adapter ID/
   );
   assert.equal(adapterRegistry.length, 10);
   assert.equal(getRegisteredAdapter("jsonschema"), jsonschema);
-  assert.equal(supportsCompile("json-schema-library", "draft7"), true);
-  assert.equal(supportsCompile("jsonschema", "draft7"), false);
+  assert.equal(supportsSetup("json-schema-library", "draft7"), true);
+  assert.equal(supportsSetup("jsonschema", "draft7"), false);
   assert.equal(
-    getCompileRegistryParticipants("draft7").some(({ id }) => id === "jsonschema"),
+    getSetupRegistryParticipants("draft7").some(({ id }) => id === "jsonschema"),
     false
   );
   assert.equal(
@@ -471,11 +499,11 @@ test("draft4 support matrix lists only adapters with a native draft4 integration
     "schemasafe",
     "z-schema",
   ]);
-  assert.equal(supportsCompile("schema-shield", "draft4"), true);
-  assert.equal(supportsCompile("jsonschema", "draft4"), false);
+  assert.equal(supportsSetup("schema-shield", "draft4"), true);
+  assert.equal(supportsSetup("jsonschema", "draft4"), false);
 });
 
-test("all registered adapters use the runtime contract and preserve compile eligibility", async () => {
+test("all registered adapters use the runtime contract and preserve setup eligibility", async () => {
   const sourceDefinitions = [
     schemaShield,
     ajv,
@@ -506,7 +534,7 @@ test("all registered adapters use the runtime contract and preserve compile elig
       return 0;
     })
   );
-  const compiled = new Set([
+  const reusable = new Set([
     "schema-shield",
     "ajv",
     "schemasafe",
@@ -526,11 +554,11 @@ test("all registered adapters use the runtime contract and preserve compile elig
       unknownFormats: ["vendor-format"]
     });
     assert.equal(typeof runtime.validate, "function", definition.id);
-    assert.equal(typeof runtime.compile === "function", compiled.has(definition.id), definition.id);
+    assert.equal(typeof runtime.setup === "function", reusable.has(definition.id), definition.id);
     assert.equal(Object.hasOwn(runtime, "mode"), false, definition.id);
     const schema = { type: "integer" };
-    const target = typeof runtime.compile === "function"
-      ? await runtime.compile(schema)
+    const target = typeof runtime.setup === "function"
+      ? await runtime.setup(schema)
       : schema;
     assert.equal(runtime.validate(target, 1), true, definition.id);
     assert.equal(runtime.validate(target, "1"), false, definition.id);
@@ -555,8 +583,8 @@ test("migrated adapters preserve resources, profiles, and input", async () => {
       unknownFormats: []
     });
     const schema = { $ref: resource.uri };
-    const target = typeof adapter.compile === "function"
-      ? await adapter.compile(schema)
+    const target = typeof adapter.setup === "function"
+      ? await adapter.setup(schema)
       : schema;
     const input = { value: 1 };
     const before = JSON.stringify(input);
@@ -567,7 +595,7 @@ test("migrated adapters preserve resources, profiles, and input", async () => {
     assert.equal(
       typeof await adapter.getError({
         schema,
-        compiled: target,
+        target,
         testCase: { id: "fixture" },
         data: "1"
       }),
@@ -583,7 +611,7 @@ test("migrated adapters preserve resources, profiles, and input", async () => {
       resources: [],
       unknownFormats: []
     });
-    const target = await adapter.compile({ type: "string", format: "email" });
+    const target = await adapter.setup({ type: "string", format: "email" });
     assert.equal(
       adapter.validate(target, "not-an-email"),
       profile === "base",
@@ -628,7 +656,7 @@ test("SchemaShield registers aliases, transitive and boolean resources in fast a
     }
   ];
   const before = structuredClone(resources);
-  const definition = createSchemaShieldAdapter(SchemaShield);
+  const definition = getRegisteredAdapter("schema-shield");
   assert.deepEqual(definition.unsupported, []);
   const runtime = definition.create({
     draft: "draft7",
@@ -643,14 +671,14 @@ test("SchemaShield registers aliases, transitive and boolean resources in fast a
       { $ref: "https://aliases.example/boolean" }
     ]
   };
-  const target = await runtime.compile(schema);
+  const target = await runtime.setup(schema);
   assert.equal(runtime.validate(target, { value: 1, allowed: "anything" }), true);
   const invalid = { value: "1", allowed: "anything" };
   assert.equal(runtime.validate(target, invalid), false);
   assert.equal(
     typeof await runtime.getError({
       schema,
-      compiled: target,
+      target,
       testCase: { id: "local-resource-fixture" },
       data: invalid
     }),
@@ -661,7 +689,7 @@ test("SchemaShield registers aliases, transitive and boolean resources in fast a
   assert.deepEqual(middleSchema, before[1].schema);
 });
 
-test("SchemaShield preloads each draft metaschema for the 20 official compile cases", async () => {
+test("SchemaShield preloads each draft metaschema for the 20 official setup cases", async () => {
   const fixtures = [
     {
       draft: "draft4",
@@ -715,7 +743,7 @@ test("SchemaShield preloads each draft metaschema for the 20 official compile ca
       invalid: { $defs: { foo: { type: 1 } } }
     }
   ];
-  const definition = createSchemaShieldAdapter(SchemaShield);
+  const definition = getRegisteredAdapter("schema-shield");
 
   for (const fixture of fixtures) {
     const runtime = definition.create({
@@ -725,13 +753,13 @@ test("SchemaShield preloads each draft metaschema for the 20 official compile ca
       unknownFormats: []
     });
     for (const schema of fixture.schemas) {
-      const target = await runtime.compile(schema);
+      const target = await runtime.setup(schema);
       assert.equal(runtime.validate(target, fixture.valid), true, fixture.draft);
       assert.equal(runtime.validate(target, fixture.invalid), false, fixture.draft);
       assert.equal(
         typeof await runtime.getError({
           schema,
-          compiled: target,
+          target,
           testCase: { id: `${fixture.draft}-metaschema` },
           data: fixture.invalid
         }),
@@ -743,7 +771,7 @@ test("SchemaShield preloads each draft metaschema for the 20 official compile ca
 });
 
 test("SchemaShield metaschema preload unions snapshot and suite aliases", async () => {
-  const definition = createSchemaShieldAdapter(SchemaShield);
+  const definition = getRegisteredAdapter("schema-shield");
   const [snapshot] = loadMetaschemas("draft6");
   const extraAlias = "https://schemas.example.test/draft-06/schema";
   const runtime = definition.create({
@@ -759,7 +787,7 @@ test("SchemaShield metaschema preload unions snapshot and suite aliases", async 
     unknownFormats: []
   });
   const schema = { $ref: extraAlias };
-  const target = await runtime.compile(schema);
+  const target = await runtime.setup(schema);
   const valid = { definitions: { foo: { type: "integer" } } };
   const invalid = { definitions: { foo: { type: 1 } } };
   assert.equal(runtime.validate(target, valid), true);
@@ -767,7 +795,7 @@ test("SchemaShield metaschema preload unions snapshot and suite aliases", async 
   assert.equal(
     typeof await runtime.getError({
       schema,
-      compiled: target,
+      target,
       testCase: { id: "metaschema-extra-alias" },
       data: invalid
     }),
@@ -776,7 +804,7 @@ test("SchemaShield metaschema preload unions snapshot and suite aliases", async 
 });
 
 test("SchemaShield metaschema preload rejects a real schema conflict", () => {
-  const definition = createSchemaShieldAdapter(SchemaShield);
+  const definition = getRegisteredAdapter("schema-shield");
   const [snapshot] = loadMetaschemas("draft6");
   assert.throws(
     () =>

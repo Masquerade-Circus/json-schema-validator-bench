@@ -134,9 +134,9 @@
 | draft7:optional/format/time.json#/groups/0/tests/41 | no time offset | false | true | WRONG |  |
 | draft7:optional/format/time.json#/groups/0/tests/42 | no time offset with second fraction | false | true | WRONG |  |
 | draft7:optional/format/uri.json#/groups/0/tests/43 | non-numeric port is invalid | false | true | WRONG |  |
-| draft7:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
-| draft7:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
-| draft7:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
+| draft7:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
+| draft7:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
+| draft7:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
 | draft7:properties.json#/groups/5/tests/2 | none of the properties mentioned | true | false | WRONG | {"instanceLocation":"#","keyword":"properties","keywordLocation":"#/properties","error":"Property \"__proto__\" does not match schema."} |
 | draft7:ref.json#/groups/6/tests/0 | $ref resolves to /definitions/base_foo, data does not validate | false | true | WRONG |  |
 | draft7:ref.json#/groups/6/tests/1 | $ref resolves to /definitions/base_foo, data validates | true | false | WRONG | {"instanceLocation":"#","keyword":"allOf","keywordLocation":"#/allOf","error":"Instance does not match every subschema."} |
@@ -627,9 +627,9 @@
 | draft7:optional/non-bmp-regex.json#/groups/0/tests/6 | doesn't match two ASCII | PASS | {"instanceLocation":"#","keyword":"pattern","keywordLocation":"#/pattern","error":"String does not match pattern."} |
 | draft7:optional/non-bmp-regex.json#/groups/1/tests/3 | doesn't match one | PASS | {"instanceLocation":"#","keyword":"patternProperties","keywordLocation":"#/patternProperties","error":"Property \"🐲\" matches pattern \"^🐲*$\" but does not match associated schema."} |
 | draft7:optional/non-bmp-regex.json#/groups/1/tests/4 | doesn't match two | PASS | {"instanceLocation":"#","keyword":"patternProperties","keywordLocation":"#/patternProperties","error":"Property \"🐲🐲\" matches pattern \"^🐲*$\" but does not match associated schema."} |
-| draft7:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
-| draft7:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
-| draft7:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
+| draft7:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
+| draft7:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
+| draft7:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/unknownKeyword/my_identifier.json". |
 | draft7:pattern.json#/groups/0/tests/1 | a non-matching pattern is invalid | PASS | {"instanceLocation":"#","keyword":"pattern","keywordLocation":"#/pattern","error":"String does not match pattern."} |
 | draft7:patternProperties.json#/groups/0/tests/2 | a single invalid match is invalid | PASS | {"instanceLocation":"#","keyword":"patternProperties","keywordLocation":"#/patternProperties","error":"Property \"foo\" matches pattern \"f.*o\" but does not match associated schema."} |
 | draft7:patternProperties.json#/groups/0/tests/3 | multiple invalid matches is invalid | PASS | {"instanceLocation":"#","keyword":"patternProperties","keywordLocation":"#/patternProperties","error":"Property \"foo\" matches pattern \"f.*o\" but does not match associated schema."} |

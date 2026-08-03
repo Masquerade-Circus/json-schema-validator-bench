@@ -5,18 +5,18 @@ import { defineAdapter } from "../adapter-api.js";
 const require = createRequire(import.meta.url);
 const { Validator } = require("jsonschema");
 
-function createImplementation({ draft, formatProfile, resources }) {
-  const validator = new Validator();
+function createImplementation({ formatProfile, resources }) {
+  const instance = new Validator();
   for (const resource of resources) {
     for (const alias of resource.aliases) {
-      validator.addSchema(resource.schema, alias);
+      instance.addSchema(resource.schema, alias);
     }
   }
   let lastResult = null;
   return {
     reportOptions: { formatProfile, nestedErrors: false },
     validate(schema, data) {
-      lastResult = validator.validate(data, schema);
+      lastResult = instance.validate(data, schema);
       return lastResult.valid;
     },
     getError() {
@@ -34,7 +34,12 @@ export const adapter = defineAdapter(
     packageName: "jsonschema",
     displayName: "jsonschema",
     drafts: ["draft4", "draft6", "draft7"],
-    unsupported: []
+    unsupported: [],
+    implementation: {
+      api: "validate-only",
+      isolation: "fresh-instance",
+      dynamicCode: "not-observed"
+    }
   },
   createImplementation
 );

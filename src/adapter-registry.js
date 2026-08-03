@@ -1,14 +1,30 @@
-import { adapter as schemaShield } from "./schema-shield.js";
-import { adapter as ajv } from "./ajv.js";
-import { adapter as schemasafe } from "./schemasafe.js";
-import { adapter as redoclyAjv } from "./redocly-ajv.js";
-import { adapter as cfworker } from "./cfworker-json-schema.js";
-import { adapter as jsonSchemaLibrary } from "./json-schema-library.js";
-import { adapter as jsonschema } from "./jsonschema.js";
-import { adapter as djv } from "./djv.js";
-import { adapter as zSchema } from "./z-schema.js";
-import { adapter as hyperjump } from "./hyperjump.js";
-import { packageMetadata } from "./helpers.js";
+import { readFileSync } from "node:fs";
+
+import { adapter as schemaShield } from "./adapters/schema-shield.js";
+import { adapter as ajv } from "./adapters/ajv.js";
+import { adapter as schemasafe } from "./adapters/schemasafe.js";
+import { adapter as redoclyAjv } from "./adapters/redocly-ajv.js";
+import { adapter as cfworker } from "./adapters/cfworker-json-schema.js";
+import { adapter as jsonSchemaLibrary } from "./adapters/json-schema-library.js";
+import { adapter as jsonschema } from "./adapters/jsonschema.js";
+import { adapter as djv } from "./adapters/djv.js";
+import { adapter as zSchema } from "./adapters/z-schema.js";
+import { adapter as hyperjump } from "./adapters/hyperjump.js";
+
+function packageMetadata(name) {
+  const metadata = JSON.parse(
+    readFileSync(
+      new URL(`../node_modules/${name}/package.json`, import.meta.url),
+      "utf8"
+    )
+  );
+  return {
+    packageName: name,
+    version: metadata.version,
+    license: metadata.license,
+    engines: metadata.engines ?? null
+  };
+}
 
 export function compareCanonicalAdapters(left, right) {
   if (left.displayName < right.displayName) {
@@ -17,13 +33,7 @@ export function compareCanonicalAdapters(left, right) {
   if (left.displayName > right.displayName) {
     return 1;
   }
-  if (left.id < right.id) {
-    return -1;
-  }
-  if (left.id > right.id) {
-    return 1;
-  }
-  return 0;
+  return left.id < right.id ? -1 : left.id > right.id ? 1 : 0;
 }
 
 export function createAdapterRegistry(definitions) {
@@ -58,10 +68,11 @@ const adaptersById = new Map(
 );
 
 export function getRegisteredAdapter(id) {
-  if (!adaptersById.has(id)) {
+  const definition = adaptersById.get(id);
+  if (definition === undefined) {
     throw new Error(`unknown benchmark adapter: ${String(id)}`);
   }
-  return adaptersById.get(id);
+  return definition;
 }
 
 export function createRegisteredAdapter(id, config) {
@@ -75,11 +86,7 @@ export function getAdapterFactory(id) {
     ...definition.create(config),
     name: definition.id,
     ...installed,
-    supportClaim:
-      definition.id === "schema-shield" &&
-      (config.draft === "draft2019-09" || config.draft === "draft2020-12")
-        ? "experimental-observed"
-        : "declared"
+    supportClaim: definition.supportClaims[config.draft]
   });
 }
 
@@ -93,51 +100,46 @@ export function getBenchmarkAdapterMetadata(id, draft) {
     name: id,
     displayName: definition.displayName,
     unsupported: definition.unsupported,
-    compileEligible: supportsCompile(id, draft),
+    setupEligible: supportsSetup(id, draft),
     ...packageMetadata(definition.packageName),
-    supportClaim:
-      id === "schema-shield" &&
-      (draft === "draft2019-09" || draft === "draft2020-12")
-        ? "experimental-observed"
-        : "declared"
+    supportClaim: definition.supportClaims[draft]
   };
 }
 
-const compileSupport = new Map();
+export const participantImplementations = Object.freeze(
+  Object.fromEntries(
+    adapterRegistry.map(({ id, implementation }) => [id, implementation])
+  )
+);
 
-export const participantImplementations = Object.freeze({
-  "schema-shield": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "not-observed" }),
-  ajv: Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "observed" }),
-  schemasafe: Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "observed" }),
-  "redocly-ajv": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "observed" }),
-  "cfworker-json-schema": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "not-observed" }),
-  "json-schema-library": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "not-observed" }),
-  jsonschema: Object.freeze({ api: "validate-only", isolation: "fresh-instance", dynamicCode: "not-observed" }),
-  djv: Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "observed" }),
-  "z-schema": Object.freeze({ api: "reusable-sync", isolation: "fresh-instance", dynamicCode: "not-observed" }),
-  hyperjump: Object.freeze({ api: "reusable-async", isolation: "module-global-unavailable", dynamicCode: "not-observed" })
-});
-
-export function supportsCompile(id, draft) {
-  const key = `${draft}/${id}`;
-  if (compileSupport.has(key)) {
-    return compileSupport.get(key);
+export function getRegistrySupportClaim(id, draft) {
+  const definition = getRegisteredAdapter(id);
+  if (!definition.drafts.includes(draft)) {
+    throw new Error(`unsupported draft: ${String(draft)}`);
   }
-  const runtime = createRegisteredAdapter(id, {
-    draft,
-    formatProfile: "base",
-    resources: [],
-    unknownFormats: []
-  });
-  const supported = typeof runtime.compile === "function";
-  compileSupport.set(key, supported);
-  return supported;
+  return definition.supportClaims[draft];
 }
 
-export function getCompileRegistryParticipants(draft) {
+const setupSupport = new Map();
+
+export function supportsSetup(id, draft) {
+  const key = `${draft}/${id}`;
+  if (!setupSupport.has(key)) {
+    const runtime = createRegisteredAdapter(id, {
+      draft,
+      formatProfile: "base",
+      resources: [],
+      unknownFormats: []
+    });
+    setupSupport.set(key, typeof runtime.setup === "function");
+  }
+  return setupSupport.get(key);
+}
+
+export function getSetupRegistryParticipants(draft) {
   return adapterRegistry.filter(
     (definition) =>
-      definition.drafts.includes(draft) && supportsCompile(definition.id, draft)
+      definition.drafts.includes(draft) && supportsSetup(definition.id, draft)
   );
 }
 
@@ -159,10 +161,12 @@ export function getRegistryRoundOrder({ draft, phase, round }) {
   }
   const participants = (
     phase === "setup"
-      ? getCompileRegistryParticipants(draft)
+      ? getSetupRegistryParticipants(draft)
       : phase === "cold-execution"
         ? getColdExecutionRegistryParticipants(draft)
-      : adapterRegistry.filter((definition) => definition.drafts.includes(draft))
+        : adapterRegistry.filter((definition) =>
+            definition.drafts.includes(draft)
+          )
   )
     .sort(compareCanonicalAdapters)
     .map(({ id }) => id);

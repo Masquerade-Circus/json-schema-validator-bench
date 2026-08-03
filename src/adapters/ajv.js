@@ -7,14 +7,30 @@ import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
 import { defineAdapter } from "../adapter-api.js";
-import { commonFormats } from "../formats.js";
-import { packageMetadata, resourceIdentifiers } from "./helpers.js";
+
+const commonFormats = Object.freeze([
+  "date",
+  "time",
+  "date-time",
+  "duration",
+  "email",
+  "hostname",
+  "ipv4",
+  "ipv6",
+  "uuid",
+  "uri",
+  "uri-reference",
+  "uri-template",
+  "regex",
+  "json-pointer",
+  "relative-json-pointer"
+]);
 
 const require = createRequire(import.meta.url);
 const draft6MetaSchema = require("ajv/dist/refs/json-schema-draft-06.json");
 const draft7MetaSchema = require("ajv/dist/refs/json-schema-draft-07.json");
-const ajvVersion = packageMetadata("ajv").version;
-const draft4Version = packageMetadata("ajv-draft-04").version;
+const ajvVersion = require("ajv/package.json").version;
+const draft4Version = require("ajv-draft-04/package.json").version;
 const constructors = {
   draft4: {
     Constructor: AjvDraft4,
@@ -47,97 +63,135 @@ const constructors = {
     entrypoint: "ajv/dist/2020.js"
   }
 };
-const baseOptions = {
-  allErrors: false,
-  coerceTypes: false,
-  useDefaults: false,
-  removeAdditional: false,
-  strict: false,
-  validateFormats: true
-};
-
-function createContext(draft, formatProfile, resources, unknownFormats, messages) {
-  const { Constructor } = constructors[draft];
-  const validateFormats =
-    draft === "draft4" ||
-    draft === "draft6" ||
-    draft === "draft7" ||
-    formatProfile === "format-assertion";
-  const ajv = new Constructor({ ...baseOptions, validateFormats, messages });
-  if (draft === "draft6") {
-    ajv.addMetaSchema(draft6MetaSchema);
-  }
-  if (draft === "draft2019-09" || draft === "draft2020-12") {
-    ajv.addMetaSchema(draft7MetaSchema);
-  }
-  addFormats(ajv, { mode: "full", formats: commonFormats, keywords: false });
-  for (const format of unknownFormats) {
-    ajv.addFormat(format, true);
-  }
-  const registered = new Set();
-  for (const resource of resources) {
-    const { aliases, canonicalUri } = resourceIdentifiers(resource);
-    if (typeof canonicalUri !== "string" || registered.has(resource.schema)) {
-      continue;
-    }
-    ajv.addSchema(resource.schema, canonicalUri);
-    const target = resource.schema?.$id ?? resource.schema?.id ?? canonicalUri;
-    for (const alias of aliases) {
-      if (alias !== canonicalUri && alias !== target) {
-        ajv.addSchema({ $ref: target }, alias);
-      }
-    }
-    registered.add(resource.schema);
-  }
-  return ajv;
-}
-
-function normalizeError(error) {
-  return {
-    keyword: error?.keyword ?? null,
-    instancePath: error?.instancePath ?? null,
-    schemaPath: error?.schemaPath ?? null,
-    params: error?.params ?? null,
-    message: error?.message ?? null
-  };
-}
 
 function createImplementation({ draft, formatProfile, resources, unknownFormats }) {
+  const constructor = constructors[draft];
+  const { Constructor } = constructor;
   const validateFormats =
     draft === "draft4" ||
     draft === "draft6" ||
     draft === "draft7" ||
     formatProfile === "format-assertion";
-  const fast = createContext(draft, formatProfile, resources, unknownFormats, false);
+  const baseOptions = {
+    allErrors: false,
+    ownProperties: true,
+    coerceTypes: false,
+    useDefaults: false,
+    removeAdditional: false,
+    strict: false,
+    validateFormats
+  };
+  function createContext(messages) {
+    const instance = new Constructor({ ...baseOptions, messages });
+    if (draft === "draft6") {
+      instance.addMetaSchema(draft6MetaSchema);
+    }
+    if (draft === "draft2019-09" || draft === "draft2020-12") {
+      instance.addMetaSchema(draft7MetaSchema);
+    }
+    addFormats(instance, {
+      mode: "full",
+      formats: commonFormats,
+      keywords: false
+    });
+    for (const format of unknownFormats) {
+      instance.addFormat(format, true);
+    }
+    const registered = new Set();
+    for (const resource of resources) {
+      if (
+        typeof resource.canonicalUri !== "string" ||
+        registered.has(resource.schema)
+      ) {
+        continue;
+      }
+      instance.addSchema(resource.schema, resource.canonicalUri);
+      const target =
+        resource.schema?.$id ?? resource.schema?.id ?? resource.canonicalUri;
+      for (const alias of resource.aliases) {
+        if (alias !== resource.canonicalUri && alias !== target) {
+          instance.addSchema({ $ref: target }, alias);
+        }
+      }
+      registered.add(resource.schema);
+    }
+    return instance;
+  }
+
+  const fast = createContext(false);
   let detailed = null;
   return {
     reportOptions: {
       formatProfile,
-      fast: { ...baseOptions, validateFormats, messages: false },
-      detailed: { ...baseOptions, validateFormats, messages: true },
+      fast: { ...baseOptions, messages: false },
+      detailed: { ...baseOptions, messages: true },
       formats: { mode: "full", names: commonFormats, keywords: false },
       implementation: {
         core: { packageName: "ajv", version: ajvVersion },
         constructor: {
-          packageName: constructors[draft].packageName,
-          version: constructors[draft].version,
-          entrypoint: constructors[draft].entrypoint
+          packageName: constructor.packageName,
+          version: constructor.version,
+          entrypoint: constructor.entrypoint
         }
       }
     },
-    compile(schema) {
+    setup(schema) {
       return { schema, validate: fast.compile(schema), detailed: null };
     },
     validate(target, data) {
       return Boolean(target.validate(data));
     },
-    getError({ compiled: target, data }) {
-      detailed ??= createContext(draft, formatProfile, resources, unknownFormats, true);
+    getError({ target, data }) {
+      if (detailed === null) {
+        detailed = new Constructor({ ...baseOptions, messages: true });
+        if (draft === "draft6") {
+          detailed.addMetaSchema(draft6MetaSchema);
+        }
+        if (draft === "draft2019-09" || draft === "draft2020-12") {
+          detailed.addMetaSchema(draft7MetaSchema);
+        }
+        addFormats(detailed, {
+          mode: "full",
+          formats: commonFormats,
+          keywords: false
+        });
+        for (const format of unknownFormats) {
+          detailed.addFormat(format, true);
+        }
+        const registered = new Set();
+        for (const resource of resources) {
+          if (
+            typeof resource.canonicalUri !== "string" ||
+            registered.has(resource.schema)
+          ) {
+            continue;
+          }
+          detailed.addSchema(resource.schema, resource.canonicalUri);
+          const resourceTarget =
+            resource.schema?.$id ?? resource.schema?.id ?? resource.canonicalUri;
+          for (const alias of resource.aliases) {
+            if (
+              alias !== resource.canonicalUri &&
+              alias !== resourceTarget
+            ) {
+              detailed.addSchema({ $ref: resourceTarget }, alias);
+            }
+          }
+          registered.add(resource.schema);
+        }
+      }
       target.detailed ??= detailed.compile(target.schema);
       const valid = Boolean(target.detailed(data));
+      const error = target.detailed.errors?.[0];
       return valid
         ? null
-        : JSON.stringify(normalizeError(target.detailed.errors?.[0]));
+        : JSON.stringify({
+            keyword: error?.keyword ?? null,
+            instancePath: error?.instancePath ?? null,
+            schemaPath: error?.schemaPath ?? null,
+            params: error?.params ?? null,
+            message: error?.message ?? null
+          });
     }
   };
 }
@@ -148,7 +202,12 @@ export const adapter = defineAdapter(
     packageName: "ajv",
     displayName: "AJV",
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
-    unsupported: []
+    unsupported: [],
+    implementation: {
+      api: "reusable-sync",
+      isolation: "fresh-instance",
+      dynamicCode: "observed"
+    }
   },
   createImplementation
 );

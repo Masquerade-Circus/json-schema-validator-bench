@@ -8,16 +8,16 @@
       "relativePath": "mutations/cfworker-json-schema-4bd87c51443c94f8.md",
       "eventCount": 1454,
       "anchors": [
-        "mutation-event-3044a0c2c85dbaf96b99d0fd122b0d8e7cc18c5d9645041c32156b372933cd90",
-        "mutation-event-30c59bcb7b475cccaf2ed82fd00eb153cbc8f10639cf9450988131dc9652b910",
-        "mutation-event-3e584411d843fd3f6be193c9d5faf77ed6aa7cd78d9ff35f8dca835bde90e944",
-        "mutation-event-3f15f5a4769f577774851bf9fa1f3e485df461a15f3fee695d4d924604ce243d",
-        "mutation-event-40cb110725b8dd1f860994fbddb95605591dcefb12f82f050e061412afec58a4",
-        "mutation-event-8d39b406539ce5f05865f87807369b31173e5eee431fe35f0ceb7f963fe39b21",
-        "mutation-event-97ac32466d7d15fa5e2a080b3b060cd6715bb09d59817d6842eab3c75402584b",
-        "mutation-event-b6af8b56984b26354b3db4c19fc41fd31ae0286acd08424c2bec669063c97bc4",
-        "mutation-event-d1e8e738db2b80fe1bad3d313d9845d2e6d4e3b20a95e81ac93718cbd233a8de",
-        "mutation-event-e9428fb9ed42c6dc82cc895544b59e07a02397ae8bbb8ec9a46345c03e8e1c13",
+        "mutation-event-0d403eaf49f97fa194d089b5406f500a5fe13d69298e948ed5a68467c3ef2597",
+        "mutation-event-17b07eb9d7fffdf3e1bbe667004a059b4c8372be0235295c8f212cea9968b95c",
+        "mutation-event-2afbe2e59e6c0116b2848d8871f355a8885433b3b7069ec132348db952c56af9",
+        "mutation-event-3d77e069721684f2d52b156e5218abe9d6cdede5a145e6a80212a97d7f9c3a95",
+        "mutation-event-61834af491d16a528388d66b5161ee02f63d903668131c0f2ab8ccee468e10f3",
+        "mutation-event-7e93682cf924b35f70b745c12323097ebb02f4027deb4fdca1178dd52275fd94",
+        "mutation-event-b8923a57c31dd84cef0526708d8acd00bab0b1d70303f8183f6f33dea745fa3a",
+        "mutation-event-ba176ce1b6857b38498a23f5caa613e74e6496ffaf2662c53330c71d1f6bca10",
+        "mutation-event-dcc503a167b06ca51e3ce073ffab3a116eef064668101a747ba97e9ef506dcee",
+        "mutation-event-f3a4c6f9ab7256b7ac97aecba86ab7455aeac797bc66a7a5bf764203f2490ca1",
         "mutation-view-0acea4341b726484469ceaef7695a0f19af54ec10cc1cebf404be88b4e9cec99",
         "mutation-view-0fbf5ebc2224e90d6930be7e250e136c318e6515c1f587617188d1410dc4fc21",
         "mutation-view-213ff59f4482ae08c1de1695176aa1996a48dd8be9af032a47fbfd5195063af2",
@@ -32,7 +32,7 @@
         "mutation-view-f6bddd0a037fe3eb9f68eddd16af7f57af80e8bb2e7b694c1d21babc7cf4597e",
         "mutation-view-fb9000ce54d322d7be6d2593ff22d943d70be4b047a8e1549a5e817ae7a15e94"
       ],
-      "sha256": "c95fdd5c146fac0e674eacad1825ce4204946b3987130ef69dfa6b9938818d7b"
+      "sha256": "d3b3641b6db4621776e1eb92d56bbe8271c1be4566d2cffe7d8dfad76b8894cc"
     },
     {
       "validator": "jsonschema",

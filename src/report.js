@@ -26,8 +26,7 @@ import {
   compareValidatorIds,
   draftIds,
   formatProfiles,
-  getCompileParticipants,
-  getColdExecutionParticipants,
+  getSetupParticipants,
   getParticipants,
   getRoundOrder,
   sortParticipantsByName,
@@ -37,13 +36,10 @@ import {
 import {
   participantImplementations,
   rotateRoundOrder
-} from "./adapters/index.js";
+} from "./adapter-registry.js";
 import { canonicalJson, sha256 } from "./suite.js";
 import { getResultsRoot } from "./paths.js";
-import {
-  derivePerformanceCorpus,
-  quickPerformanceCorpusContract
-} from "./performance-corpus.js";
+import { derivePerformanceCorpus } from "./performance-corpus.js";
 import { mutationRecordKey } from "./intersection.js";
 import {
   createPerformanceEligibilityPolicy,
@@ -351,7 +347,7 @@ export function validateSampleSet({
     throw new Error(`${phase} result declares another phase`);
   }
   if (
-    result.benchmarkVersion !== 9 ||
+    result.benchmarkVersion !== 11 ||
     result.benchmarkMode !== mode ||
     result.draft !== intersection.draft ||
     result.formatProfile !== intersection.formatProfile
@@ -475,9 +471,9 @@ export function validateSampleSet({
       }
       if (phase === "setup") {
         if (
-          sample.checksum !== intersection.compileChecksum ||
-          sample.corpusCompileEntries !== intersection.compileEntries ||
-          sample.operations !== sample.corpusCompileEntries * sample.passes
+          sample.checksum !== intersection.setupChecksum ||
+          sample.corpusSetupEntries !== intersection.setupEntries ||
+          sample.operations !== sample.corpusSetupEntries * sample.passes
         ) {
           throw new Error(`${phase} checksum or corpus mismatch`);
         }
@@ -670,9 +666,9 @@ export async function writeConformanceReports(
   }
 }
 
-function compileChecksum(entries) {
+function setupChecksum(entries) {
   return createHash("sha256")
-    .update(entries.map(({ compileKey }) => compileKey).join("\n"))
+    .update(entries.map(({ setupKey }) => setupKey).join("\n"))
     .digest("hex");
 }
 
@@ -1208,7 +1204,7 @@ export function summarizePhase(result, mode, intersection = null) {
     }
   }
   return {
-    benchmarkVersion: 9,
+    benchmarkVersion: 11,
     summaryVersion: 10,
     phase: result.phase,
     draft: result.draft,
@@ -1633,7 +1629,7 @@ export function createGlobalPerformanceSummary(
             throw new Error(`global summary lacks scope ${scopeName}`);
           }
           const supportsDraft = participant.drafts.includes(draft);
-          const supportsPhase = getCompileParticipants(draft).some(
+          const supportsPhase = getSetupParticipants(draft).some(
             ({ id }) => id === participant.id
           );
           const eligibility = scope.intersections?.setup?.eligibility ?? null;
@@ -1671,7 +1667,7 @@ export function createGlobalPerformanceSummary(
           const supportsDraft = participant.drafts.includes(draft);
           const supportsPhase =
             phase !== "setup" ||
-            getCompileParticipants(draft).some(({ id }) => id === participant.id);
+            getSetupParticipants(draft).some(({ id }) => id === participant.id);
           const eligibility = scope.intersections?.[phase]?.eligibility ?? null;
           const excluded = eligibility?.roster?.excluded?.find(
             ({ id }) => id === participant.id
@@ -2562,7 +2558,7 @@ export function downloadTable(snapshot, participants) {
     "",
     "- `reusable-sync`: prepares a reusable callable synchronously.",
     "- `reusable-async`: resolves asynchronous setup before exposing a reusable callable.",
-    "- `validate-only`: exposes validation through the adapter without a separate reusable compile result.",
+    "- `validate-only`: exposes validation through the adapter without a separate reusable setup target.",
     "- `fresh-instance`: each fresh adapter creates isolated provider state.",
     "- `module-global-unavailable`: module-global provider state cannot satisfy the fresh-isolation contract, so Cold execution is `N/A`.",
     "- `observed`: the exercised adapter route uses dynamic code generation.",
@@ -2658,15 +2654,8 @@ export function renderDraftSummary({ draft, scopes, reports, snapshot, versions 
     ""
   );
   const setupIntersection = setupScope.intersections.setup;
-  const setupPerformanceCorpus = setupScope.performanceCorpora?.setup ?? null;
   lines.push(
-    `Setup eligible roster: ${setupIntersection.eligibility?.roster?.retention ?? "N/A"}. Draft intersection: ${setupIntersection.counts.total} represented cases and ${setupIntersection.counts.compileEntries} deduplicated effective operations. Roster SHA-256: \`${setupIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
-    ...(setupPerformanceCorpus === null
-      ? []
-      : [
-          "",
-          `Setup Quick performance corpus: ${setupPerformanceCorpus.selected.compileEntries} deduplicated effective operations. Selection SHA-256: \`${setupPerformanceCorpus.selectionSha256}\`.`
-        ]),
+    `Setup eligible roster: ${setupIntersection.eligibility?.roster?.retention ?? "N/A"}. Draft intersection: ${setupIntersection.counts.total} represented cases and ${setupIntersection.counts.setupEntries} deduplicated effective operations. Roster SHA-256: \`${setupIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
     ""
   );
   for (const formatProfile of formatProfiles) {
@@ -2674,25 +2663,12 @@ export function renderDraftSummary({ draft, scopes, reports, snapshot, versions 
     const executionIntersection = scope.intersections?.execution ?? scope.intersection;
     const coldExecutionIntersection =
       scope.intersections?.["cold-execution"] ?? executionIntersection;
-    const performanceCorpora = scope.performanceCorpora ?? {
-      "cold-execution": scope.performanceCorpus ?? null,
-      execution: scope.performanceCorpus ?? null
-    };
     lines.push(
       `# Profile: ${formatProfile}`,
       "",
-      `Execution eligible roster: ${executionIntersection.eligibility?.roster?.retention ?? "legacy"}. Intersection: ${executionIntersection.counts.total} cases and ${executionIntersection.counts.compileEntries} compile entries. Roster SHA-256: \`${executionIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
+      `Execution eligible roster: ${executionIntersection.eligibility?.roster?.retention ?? "legacy"}. Intersection: ${executionIntersection.counts.total} cases and ${executionIntersection.counts.setupEntries} setup entries. Roster SHA-256: \`${executionIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
       "",
       `Cold execution eligible roster: ${coldExecutionIntersection.eligibility?.roster?.retention ?? "N/A"}. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: \`${coldExecutionIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
-      ...performancePhases.flatMap((phase) => {
-        const performanceCorpus = performanceCorpora[phase];
-        return performanceCorpus === null || performanceCorpus === undefined
-          ? []
-          : [
-              "",
-              `${phase === "setup" ? "Setup" : phase === "cold-execution" ? "Cold execution" : "Execution"} Quick performance corpus: ${performanceCorpus.selected.executionCases} cases (${performanceCorpus.selected.validCases} valid and ${performanceCorpus.selected.invalidCases} invalid) and ${performanceCorpus.selected.compileEntries} deduplicated schema entries. Selection SHA-256: \`${performanceCorpus.selectionSha256}\`.`
-            ];
-      }),
       "",
       performanceTable(
         "Execution ranking",
@@ -3016,7 +2992,7 @@ export function renderBenchmarkReadme({
     "",
     `All Drafts Setup shows a raw Setup ops/s index that sums the ${draftIds.length} draft medians and a Setup score that uses their normalized geometric mean. Execution and Cold execution show Base and Formats indices, their arithmetic Average ops/s index, and a Balanced score across ${draftIds.length * formatProfiles.length} scopes.`,
     "",
-    "Setup error links open COMPILE records. Cold execution and Execution error links open RUNTIME records. COMPILE remains a conformance status and does not name a performance phase.",
+    "Setup error links open COMPILE records. Cold execution and Execution error links open RUNTIME records. COMPILE remains the historical conformance status for a failure in `setup()` and does not name a method or performance phase.",
     "",
     "N/A marks an unavailable measurement. Setup N/A identifies a validate-only API or unavailable setup measurement. Cold execution N/A identifies a provider whose state cannot be isolated under the direct fresh-operation contract.",
     "",
@@ -3039,7 +3015,7 @@ export function renderBenchmarkReadme({
     "",
     "### Participants by draft",
     "",
-    "Every participant listed for a draft runs conformance in both `base` and `format-assertion`. One atomic roster per draft governs both profiles. Setup intersects that roster with participants that expose reusable compilation. Cold execution excludes providers whose state cannot be isolated. Participant links use the pinned package names and versions recorded in `results/packages.json`.",
+    "Every participant listed for a draft runs conformance in both `base` and `format-assertion`. One atomic roster per draft governs both profiles. Setup intersects that roster with participants that expose reusable `setup()`. Cold execution excludes providers whose state cannot be isolated with a fresh adapter instance. Participant links use the pinned package names and versions recorded in `results/packages.json`.",
     "",
     ...participantList(versions),
     "",
@@ -3076,7 +3052,7 @@ export function renderBenchmarkReadme({
     "",
     "We measure conformance for every configured validator against every discovered case in Base and Formats. We preserve each `PASS`, `WRONG`, `COMPILE`, `RUNTIME` and `UNSUPPORTED` result in the reports and participant matrix.",
     "",
-    `We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured ${thresholdPercent}% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable compilation. Cold execution intersects it with adapters that provide fresh isolated state.`,
+    `We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured ${thresholdPercent}% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable \`setup()\`. Cold execution intersects it with adapters that provide fresh isolated state.`,
     "",
     "We retain every excluded validator and its exact reasons in diagnostic results. We build each common phase corpus from cases where every validator in that phase roster reports `PASS`. A ranking requires at least two qualified competitors. Smaller rosters publish `INSUFFICIENT_COMPETITORS`; competitive leader, relative score, and chart fields start with two competitors.",
     "",
@@ -3085,7 +3061,7 @@ export function renderBenchmarkReadme({
     "",
     "### Setup",
     "",
-    "We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and schema compilation. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. We prepare neutral disposable copies before the clock starts. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.",
+    "We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `setup()`. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. We prepare neutral disposable copies before the clock starts. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.",
     "",
     "### Execution",
     "",
@@ -3093,11 +3069,11 @@ export function renderBenchmarkReadme({
     "",
     "### Cold execution",
     "",
-    "Cold execution measures each case directly. Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile and analyzes schema capabilities. The timed operation creates a fresh adapter and provider context, applies integration-owned configuration and registration, obtains the callable or validate-only equivalent, validates once and ends when validation returns. Result comparison, checksum, diagnostics and telemetry remain outside the clock. The runner never derives this rate from Setup or Execution and never rewrites `$id` or references. Hyperjump is N/A because its pinned API stores schema and format state in module globals that a fresh adapter wrapper cannot isolate.",
+    "Cold execution measures each case directly. Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile and analyzes schema capabilities. The timed operation creates a fresh opaque adapter and provider context, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Result comparison, checksum, diagnostics and telemetry remain outside the clock. Module imports and process startup remain outside this phase. The runner never derives this rate from Setup or Execution and never rewrites `$id` or references. Hyperjump is N/A because its pinned API stores schema and format state in module globals that a fresh adapter wrapper cannot isolate.",
     "",
     "### Timing and scoring",
     "",
-    `Quick runs complete conformance, one performance round without warmup, and a reduced deterministic performance corpus selected by SHA-256 case-ID rank. It caps each scope at ${quickPerformanceCorpusContract.maximumCompileEntriesPerScope} deduplicated Setup entries and ${quickPerformanceCorpusContract.maximumExecutionCasesPerScope} execution cases, preserves valid and invalid cases, and records selection hashes and counts in \`results/environment.json\` and each phase's \`samples.json\`. Quick is diagnostic and does not define the canonical publication.`,
+    "Quick uses the same complete common performance corpus, 100 ms warmup, 250 ms target, 175 ms normal minimum, phases, scopes, isolation, eligibility, scoring, preparation and sample contract as Full. Quick records one deterministic round, so it provides neither complete antithetic pairs nor multi-round dispersion. Quick is diagnostic and does not define the canonical publication.",
     "",
     "Full runs complete conformance and the complete common performance corpus under the canonical contract. Each phase warms complete corpus passes for at least 100 ms, then measures complete passes toward a 250 ms target with a normal minimum of 175 ms. A pass that exceeds the target remains valid because the runner never truncates a corpus pass. Each active validator receives six isolated samples in three antithetic pairs. The pair rotations use deterministic offsets 0, floor(n / 3), and floor(2n / 3) for the eligible roster size n, so every participant has the same mean position. Reports use their median for ranking and scoring and publish the arithmetic mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum and all six rates. Compatible before-and-after analysis may pair the same rounds, but the runner makes no automatic significance claim. Run Full only for the final publication, after tests and Quick are stable.",
     "",
@@ -3118,9 +3094,9 @@ export function renderBenchmarkReadme({
     "Use this procedure for one validator:",
     "",
     "1. Establish a diagnostic baseline with `npm test`, then `npm run benchmark -- --quick`.",
-    "2. Inspect `results/<draft>/conformance/<canonical-id>.json` and its Markdown companion. `WRONG` means the validator returned the opposite boolean. `COMPILE` means a reusable adapter rejected the schema before validation. `RUNTIME` means validation, validate-only setup or detailed error extraction failed.",
-    "3. Choose the phase that matches the suspected cost. Setup isolates fresh provider construction, registration and compilation. Cold execution measures fresh setup plus one validation per case. Execution measures repeated validation through a prepared reusable callable or a prepared `validate-only` adapter context.",
-    "4. Inspect `results/<draft>/setup/samples.json` for Setup or `results/<draft>/profiles/<profile>/<phase>/samples.json` for Execution and Cold execution. Compare each round's `operations`, `actualElapsedMilliseconds`, throughput and `memory.peak.rss`, then confirm Peak RSS, the intersection hash, the performance identity and the benchmark contract hash before attributing a change.",
+    "2. Inspect `results/<draft>/conformance/<canonical-id>.json` and its Markdown companion. `WRONG` means the validator returned the opposite boolean. `COMPILE` is the historical status for a reusable adapter that rejected the schema during `setup()` before validation. `RUNTIME` means validation, validate-only setup or detailed error extraction failed.",
+    "3. Choose the phase that matches the suspected cost. Setup isolates fresh provider construction, registration and `setup()` over neutral prepared input. Cold execution measures fresh provider setup plus one validation per case. Execution measures repeated validation through a prepared reusable target or a prepared `validate-only` adapter context.",
+    "4. Inspect `results/<draft>/setup/samples.json` for Setup or `results/<draft>/profiles/<profile>/<phase>/samples.json` for Execution and Cold execution. Compare each round's `operations`, `actualElapsedMilliseconds`, throughput and `memory.peak.rss`, then confirm Peak RSS, the intersection hash, performance identity and benchmark contract hash before attributing a change.",
     "5. Keep the units separate. Raw rates belong to one scope. Scoped and Balanced relative scores compare eligible validators against their scope references. The global ops/s indices sum scope medians and serve as diagnostic indices rather than one directly measured workload.",
     "6. Before changing the validator, copy the relevant baseline artifacts outside `results/` so a refresh cannot replace them, and record the benchmark contract hash, intersection and performance identities, and baseline values for the exact draft, profile and phase under analysis.",
     "7. Keep the pinned corpus, target and adapter options fixed, make one validator change, then run `npm run benchmark -- --quick --validator <canonical-id>` when a complete compatible Quick publication exists. This command produces only the post-change state; it does not calculate a before/after comparison. Compare that post-change state with the preserved baseline for exactly the same draft, profile and phase.",
@@ -3135,7 +3111,7 @@ export function renderBenchmarkReadme({
     "",
     "We pin the npm dependency graph, npm metadata snapshot, and JSON Schema Test Suite commit and tree. We keep the suite checkout and resumable checkpoints under `.cache/`, and we record package, corpus, intersection and sample hashes in the generated artifacts.",
     "",
-    "On a clean clone, we use `npm ci` for exact dependencies and `npm test` for the local suite. `npm run benchmark` prepares the pinned suite checkout and runs Full. The `--quick` flag uses the same suite with a reduced performance corpus. Only `npm run metadata:sync` refreshes npm metadata. We stage and validate Quick diagnostics or the Full publication contract before a coordinated transactional publication of `README.md` and `results/`. The transaction rolls back failures before both paths commit. Because the public layout has two root paths, concurrent readers can observe the rename window.",
+    "On a clean clone, we use `npm ci` for exact dependencies and `npm test` for the local suite. `npm run benchmark` prepares the pinned suite checkout and runs Full. The `--quick` flag uses the same suite and performance contract with one round instead of six. Only `npm run metadata:sync` refreshes npm metadata. We stage and validate Quick diagnostics or the Full publication contract before a coordinated transactional publication of `README.md` and `results/`. The transaction rolls back failures before both paths commit. Because the public layout has two root paths, concurrent readers can observe the rename window.",
     "",
     "Canonical results come from a controlled Linux host. CI validates tests and artifact integrity. Record the environment and benchmark contract hash for every published run.",
     "",
@@ -3235,10 +3211,7 @@ export function createResultsIndex(
             count: mutationManifest.documents.length,
             mutationReportVersion: mutationManifest.mutationReportVersion
           }
-        }),
-    ...(mode === "quick"
-      ? { performanceCorpus: quickPerformanceCorpusContract }
-      : {})
+        })
   };
 }
 
@@ -3408,8 +3381,8 @@ export async function generateFinalReport({
       emptyReason: setupArtifacts.intersection.emptyReason,
       performanceCorpus: setupCorpus.metadata,
       performanceEligibility: setupArtifacts.intersection.eligibility.policy,
-      compileChecksum: compileChecksum(setupCorpus.compileEntries),
-      compileEntries: setupCorpus.compileEntries.length,
+      setupChecksum: setupChecksum(setupCorpus.setupEntries),
+      setupEntries: setupCorpus.setupEntries.length,
       execution: {
         cases: setupCases.length,
         valid: setupCases.filter(({ expected }) => expected === true).length,
@@ -3494,8 +3467,8 @@ export async function generateFinalReport({
           emptyReason: artifacts.intersection.emptyReason,
           performanceCorpus: performanceCorpus.metadata,
           performanceEligibility: artifacts.intersection.eligibility.policy,
-          compileChecksum: compileChecksum(performanceCorpus.compileEntries),
-          compileEntries: performanceCorpus.compileEntries.length,
+          setupChecksum: setupChecksum(performanceCorpus.setupEntries),
+          setupEntries: performanceCorpus.setupEntries.length,
           execution: {
             cases: cases.length,
             valid: cases.filter(({ expected }) => expected === true).length,

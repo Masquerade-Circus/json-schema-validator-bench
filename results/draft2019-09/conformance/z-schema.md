@@ -26,12 +26,12 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
-| draft2019-09:enum.json#/groups/14/tests/0 | string is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/1 | number is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/2 | null is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/3 | object is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/4 | array is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/5 | boolean is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/0 | string is invalid | false |  | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/1 | number is invalid | false |  | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/2 | null is invalid | false |  | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/3 | object is invalid | false |  | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/4 | array is invalid | false |  | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/5 | boolean is invalid | false |  | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
 | draft2019-09:optional/float-overflow.json#/groups/0/tests/0 | valid if optional overflow handling is implemented | true | false | WRONG | {"code":"MULTIPLE_OF","params":[1e+308,0.5],"message":"Value 1e+308 is not a multiple of 0.5","path":"#/","schemaPath":[],"schemaId":"https://benchmark.invalid/z-schema/b4d14cd0e481073b3d73f2d49760598d5678e7d35a72948715b7145b305082d0","keyword":"multipleOf"} |
 
 ## Detailed errors for invalid results
@@ -175,12 +175,12 @@
 | draft2019-09:enum.json#/groups/11/tests/0 | true is invalid | PASS | {"code":"ENUM_MISMATCH","params":["true"],"message":"No enum match for: true","path":"#/","schemaPath":[],"schemaId":"https://benchmark.invalid/z-schema/326b577c0a7c60e09057074d0d4296ebb9e9dc5c9430906f092f1304d735d9a4","keyword":"enum"} |
 | draft2019-09:enum.json#/groups/12/tests/0 | [true] is invalid | PASS | {"code":"ENUM_MISMATCH","params":["[true]"],"message":"No enum match for: [true]","path":"#/","schemaPath":[],"schemaId":"https://benchmark.invalid/z-schema/f4d3b6c7d453a4af8a42143401254b7729c6c191caf70779c0e320c66cceebd9","keyword":"enum"} |
 | draft2019-09:enum.json#/groups/13/tests/1 | do not match string lacking nul | PASS | {"code":"ENUM_MISMATCH","params":["\"hellothere\""],"message":"No enum match for: \"hellothere\"","path":"#/","schemaPath":[],"schemaId":"https://benchmark.invalid/z-schema/a5d0a3853ec3b769c761f6676f6ee133aa1f4f4a9bfd2dccf74d2f4e57c4e2fe","keyword":"enum"} |
-| draft2019-09:enum.json#/groups/14/tests/0 | string is invalid | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/1 | number is invalid | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/2 | null is invalid | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/3 | object is invalid | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/4 | array is invalid | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
-| draft2019-09:enum.json#/groups/14/tests/5 | boolean is invalid | COMPILE | FAST_COMPILE_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/0 | string is invalid | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/1 | number is invalid | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/2 | null is invalid | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/3 | object is invalid | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/4 | array is invalid | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
+| draft2019-09:enum.json#/groups/14/tests/5 | boolean is invalid | COMPILE | FAST_SETUP_ERROR: SCHEMA_COMPILATION_FAILED |
 | draft2019-09:exclusiveMaximum.json#/groups/0/tests/1 | boundary point is invalid | PASS | {"code":"MAXIMUM_EXCLUSIVE","params":[3,3],"message":"Value 3 is equal or greater than exclusive maximum 3","path":"#/","schemaPath":[],"schemaId":"https://benchmark.invalid/z-schema/a666889f3c7b8ca632deb7dbfa08aa3c1db282d78cee450a35118fb32c0394f6","keyword":"exclusiveMaximum"} |
 | draft2019-09:exclusiveMaximum.json#/groups/0/tests/2 | above the exclusiveMaximum is invalid | PASS | {"code":"MAXIMUM_EXCLUSIVE","params":[3.5,3],"message":"Value 3.5 is equal or greater than exclusive maximum 3","path":"#/","schemaPath":[],"schemaId":"https://benchmark.invalid/z-schema/a666889f3c7b8ca632deb7dbfa08aa3c1db282d78cee450a35118fb32c0394f6","keyword":"exclusiveMaximum"} |
 | draft2019-09:exclusiveMinimum.json#/groups/0/tests/1 | boundary point is invalid | PASS | {"code":"MINIMUM_EXCLUSIVE","params":[1.1,1.1],"message":"Value 1.1 is equal or less than exclusive minimum 1.1","path":"#/","schemaPath":[],"schemaId":"https://benchmark.invalid/z-schema/f4753146e8e7edd152b2e113192336f2e3a39fb855394203050bbed91c71cc15","keyword":"exclusiveMinimum"} |

@@ -173,23 +173,23 @@
 | draft6:ref.json#/groups/15/tests/1 | mismatch | false |  | RUNTIME | FAST_RUNTIME_ERROR: Maximum call stack size exceeded |
 | draft6:ref.json#/groups/16/tests/0 | match | true |  | RUNTIME | FAST_RUNTIME_ERROR: Maximum call stack size exceeded |
 | draft6:ref.json#/groups/16/tests/1 | mismatch | false |  | RUNTIME | FAST_RUNTIME_ERROR: Maximum call stack size exceeded |
-| draft6:ref.json#/groups/18/tests/0 | invalid on inner field | false |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/18/tests/1 | invalid on outer field | false |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/18/tests/2 | valid on both fields | true |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/19/tests/0 | invalid on inner field | false |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/19/tests/1 | invalid on outer field | false |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/19/tests/2 | valid on both fields | true |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/18/tests/0 | invalid on inner field | false |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/18/tests/1 | invalid on outer field | false |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/18/tests/2 | valid on both fields | true |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/19/tests/0 | invalid on inner field | false |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/19/tests/1 | invalid on outer field | false |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/19/tests/2 | valid on both fields | true |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
 | draft6:ref.json#/groups/26/tests/1 | a non-string is invalid | false | true | WRONG |  |
-| draft6:ref.json#/groups/27/tests/0 | a string is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'absref') |
-| draft6:ref.json#/groups/27/tests/1 | an integer is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'absref') |
-| draft6:refRemote.json#/groups/6/tests/0 | string is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'orNull') |
-| draft6:refRemote.json#/groups/6/tests/1 | null is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'orNull') |
-| draft6:refRemote.json#/groups/6/tests/2 | object is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'orNull') |
-| draft6:refRemote.json#/groups/7/tests/0 | invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'ref-and-definitions.json') |
-| draft6:refRemote.json#/groups/7/tests/1 | valid | true |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'ref-and-definitions.json') |
+| draft6:ref.json#/groups/27/tests/0 | a string is valid | true |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'absref') |
+| draft6:ref.json#/groups/27/tests/1 | an integer is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'absref') |
+| draft6:refRemote.json#/groups/6/tests/0 | string is valid | true |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'orNull') |
+| draft6:refRemote.json#/groups/6/tests/1 | null is valid | true |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'orNull') |
+| draft6:refRemote.json#/groups/6/tests/2 | object is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'orNull') |
+| draft6:refRemote.json#/groups/7/tests/0 | invalid | false |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'ref-and-definitions.json') |
+| draft6:refRemote.json#/groups/7/tests/1 | valid | true |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'ref-and-definitions.json') |
 | draft6:refRemote.json#/groups/8/tests/1 | string is invalid | false | true | WRONG |  |
-| draft6:refRemote.json#/groups/9/tests/0 | number is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'foo-ref-string.json') |
-| draft6:refRemote.json#/groups/9/tests/1 | string is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'foo-ref-string.json') |
+| draft6:refRemote.json#/groups/9/tests/0 | number is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'foo-ref-string.json') |
+| draft6:refRemote.json#/groups/9/tests/1 | string is valid | true |  | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'foo-ref-string.json') |
 | draft6:uniqueItems.json#/groups/0/tests/10 | property order of array of objects is ignored | false | true | WRONG |  |
 | draft6:uniqueItems.json#/groups/0/tests/22 | unique heterogeneous types are valid | true | false | WRONG | [object Object] |
 | draft6:uniqueItems.json#/groups/0/tests/25 | objects are non-unique despite key order | false | true | WRONG |  |
@@ -766,20 +766,20 @@
 | draft6:ref.json#/groups/16/tests/1 | mismatch | RUNTIME | FAST_RUNTIME_ERROR: Maximum call stack size exceeded |
 | draft6:ref.json#/groups/17/tests/0 | do not evaluate the $ref inside the enum, matching any string | PASS | [object Object] |
 | draft6:ref.json#/groups/17/tests/1 | do not evaluate the $ref inside the enum, definition exact match | PASS | [object Object] |
-| draft6:ref.json#/groups/18/tests/0 | invalid on inner field | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/18/tests/1 | invalid on outer field | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/18/tests/2 | valid on both fields | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/19/tests/0 | invalid on inner field | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/19/tests/1 | invalid on outer field | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
-| draft6:ref.json#/groups/19/tests/2 | valid on both fields | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/18/tests/0 | invalid on inner field | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/18/tests/1 | invalid on outer field | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/18/tests/2 | valid on both fields | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/19/tests/0 | invalid on inner field | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/19/tests/1 | invalid on outer field | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
+| draft6:ref.json#/groups/19/tests/2 | valid on both fields | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'inner') |
 | draft6:ref.json#/groups/20/tests/1 | invalid under the URN IDed schema | PASS | [object Object] |
 | draft6:ref.json#/groups/21/tests/1 | a non-string is invalid | PASS | [object Object] |
 | draft6:ref.json#/groups/22/tests/1 | a non-string is invalid | PASS | [object Object] |
 | draft6:ref.json#/groups/23/tests/1 | a non-string is invalid | PASS | [object Object] |
 | draft6:ref.json#/groups/24/tests/1 | a non-string is invalid | PASS | [object Object] |
 | draft6:ref.json#/groups/25/tests/1 | a non-string is invalid | PASS | [object Object] |
-| draft6:ref.json#/groups/27/tests/0 | a string is valid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'absref') |
-| draft6:ref.json#/groups/27/tests/1 | an integer is invalid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'absref') |
+| draft6:ref.json#/groups/27/tests/0 | a string is valid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'absref') |
+| draft6:ref.json#/groups/27/tests/1 | an integer is invalid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'absref') |
 | draft6:ref.json#/groups/28/tests/1 | non-number is invalid | PASS | [object Object] |
 | draft6:ref.json#/groups/29/tests/1 | non-number is invalid | PASS | [object Object] |
 | draft6:ref.json#/groups/30/tests/1 | non-number is invalid | PASS | [object Object] |
@@ -789,13 +789,13 @@
 | draft6:refRemote.json#/groups/3/tests/1 | base URI change ref invalid | PASS | [object Object] |
 | draft6:refRemote.json#/groups/4/tests/1 | string is invalid | PASS | [object Object] |
 | draft6:refRemote.json#/groups/5/tests/1 | string is invalid | PASS | [object Object] |
-| draft6:refRemote.json#/groups/6/tests/0 | string is valid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'orNull') |
-| draft6:refRemote.json#/groups/6/tests/1 | null is valid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'orNull') |
-| draft6:refRemote.json#/groups/6/tests/2 | object is invalid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'orNull') |
-| draft6:refRemote.json#/groups/7/tests/0 | invalid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'ref-and-definitions.json') |
-| draft6:refRemote.json#/groups/7/tests/1 | valid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'ref-and-definitions.json') |
-| draft6:refRemote.json#/groups/9/tests/0 | number is invalid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'foo-ref-string.json') |
-| draft6:refRemote.json#/groups/9/tests/1 | string is valid | COMPILE | FAST_COMPILE_ERROR: Cannot read properties of undefined (reading 'foo-ref-string.json') |
+| draft6:refRemote.json#/groups/6/tests/0 | string is valid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'orNull') |
+| draft6:refRemote.json#/groups/6/tests/1 | null is valid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'orNull') |
+| draft6:refRemote.json#/groups/6/tests/2 | object is invalid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'orNull') |
+| draft6:refRemote.json#/groups/7/tests/0 | invalid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'ref-and-definitions.json') |
+| draft6:refRemote.json#/groups/7/tests/1 | valid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'ref-and-definitions.json') |
+| draft6:refRemote.json#/groups/9/tests/0 | number is invalid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'foo-ref-string.json') |
+| draft6:refRemote.json#/groups/9/tests/1 | string is valid | COMPILE | FAST_SETUP_ERROR: Cannot read properties of undefined (reading 'foo-ref-string.json') |
 | draft6:refRemote.json#/groups/10/tests/1 | non-number is invalid | PASS | [object Object] |
 | draft6:required.json#/groups/0/tests/1 | non-present required property is invalid | PASS | [object Object] |
 | draft6:required.json#/groups/3/tests/1 | object with some properties missing is invalid | PASS | [object Object] |

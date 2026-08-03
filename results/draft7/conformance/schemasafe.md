@@ -4,8 +4,8 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","fast":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"$schemaDefault":"http://json-schema.org/draft-07/schema#","includeErrors":false},"detailed":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"$schemaDefault":"http://json-schema.org/draft-07/schema#","includeErrors":true}} | f8c90242a46c3453f212fbf6fc5bbb22bed8d5d7877d434ebe95acea90b5df6e |
-| format-assertion | {"formatProfile":"format-assertion","fast":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"$schemaDefault":"http://json-schema.org/draft-07/schema#","includeErrors":false},"detailed":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"$schemaDefault":"http://json-schema.org/draft-07/schema#","includeErrors":true}} | afd1a870fcb99e09904e4b244bdc94a9fb2c56ab4aebdab3a12ea5c2aa9d8a22 |
+| base | {"formatProfile":"base","fast":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"schemas":"registered","$schemaDefault":"http://json-schema.org/draft-07/schema#","includeErrors":false},"detailed":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"schemas":"registered","$schemaDefault":"http://json-schema.org/draft-07/schema#","includeErrors":true}} | 32390da3ea71cf7e5443df76b58f3fe823c782628889ac58bcd1349569eac4a7 |
+| format-assertion | {"formatProfile":"format-assertion","fast":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"schemas":"registered","$schemaDefault":"http://json-schema.org/draft-07/schema#","includeErrors":false},"detailed":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"schemas":"registered","$schemaDefault":"http://json-schema.org/draft-07/schema#","includeErrors":true}} | 395fc540d9026ca3d902f298535976a96d19373fc44fefd60aa1e71ba847a1e0 |
 
 ## Counts
 
@@ -26,32 +26,32 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
-| draft7:definitions.json#/groups/0/tests/0 | valid definition schema | true |  | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
-| draft7:definitions.json#/groups/0/tests/1 | invalid definition schema | false |  | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
-| draft7:format.json#/groups/1/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/5/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/12/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/13/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:definitions.json#/groups/0/tests/0 | valid definition schema | true |  | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
+| draft7:definitions.json#/groups/0/tests/1 | invalid definition schema | false |  | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
+| draft7:format.json#/groups/1/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/5/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/12/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/13/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
 | draft7:optional/content.json#/groups/0/tests/1 | an invalid JSON document | false | true | WRONG |  |
 | draft7:optional/content.json#/groups/1/tests/1 | an invalid base64 string (% is not a valid character) | false | true | WRONG |  |
 | draft7:optional/content.json#/groups/2/tests/1 | a validly-encoded invalid JSON document | false | true | WRONG |  |
@@ -80,150 +80,150 @@
 | draft7:optional/format/hostname.json#/groups/1/tests/32 | ZERO WIDTH JOINER not preceded by Virama | false | true | WRONG |  |
 | draft7:optional/format/hostname.json#/groups/1/tests/33 | ZERO WIDTH JOINER not preceded by anything | false | true | WRONG |  |
 | draft7:optional/format/hostname.json#/groups/1/tests/37 | contains "--" in the 3rd and 4th position | false | true | WRONG |  |
-| draft7:optional/format/idn-email.json#/groups/0/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/6 | a valid idn e-mail (example@example.test in Hangul) | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/7 | an invalid e-mail/idn e-mail address | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/8 | a valid e-mail address | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/9 | a non-ASCII local part with an ASCII domain is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/10 | a non-ASCII quoted local part is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/11 | a local part with a lone UTF-16 surrogate is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/12 | a domain label that is not in Unicode NFC is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/13 | a local part that is not in Unicode NFC is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/6 | a valid host name (example.test in Hangul) | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/7 | illegal first char U+302E Hangul single dot tone mark | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/8 | contains illegal char U+302E Hangul single dot tone mark | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/9 | a single label of 63 characters is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/10 | a single label of 64 characters is too long | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/11 | invalid label, correct Punycode | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/12 | valid Chinese Punycode | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/13 | invalid Punycode | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/14 | U-label contains "--" in the 3rd and 4th position | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/15 | U-label starts with a dash | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/16 | U-label ends with a dash | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/17 | U-label starts and ends with a dash | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/18 | Begins with a Spacing Combining Mark | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/19 | Begins with a Nonspacing Mark | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/20 | Begins with an Enclosing Mark | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/21 | Exceptions that are PVALID, left-to-right chars | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/22 | Exceptions that are PVALID, right-to-left chars | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/23 | Exceptions that are DISALLOWED, right-to-left chars | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/24 | Exceptions that are DISALLOWED, left-to-right chars | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/25 | MIDDLE DOT with no preceding 'l' | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/26 | MIDDLE DOT with nothing preceding | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/27 | MIDDLE DOT with no following 'l' | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/28 | MIDDLE DOT with nothing following | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/29 | MIDDLE DOT with surrounding 'l's | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/30 | Greek KERAIA not followed by Greek | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/31 | Greek KERAIA not followed by anything | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/32 | Greek KERAIA followed by Greek | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/33 | Hebrew GERESH not preceded by Hebrew | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/34 | Hebrew GERESH not preceded by anything | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/35 | Hebrew GERESH preceded by Hebrew | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/36 | Hebrew GERSHAYIM not preceded by Hebrew | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/37 | Hebrew GERSHAYIM not preceded by anything | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/38 | Hebrew GERSHAYIM preceded by Hebrew | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/39 | KATAKANA MIDDLE DOT with no Hiragana, Katakana, or Han | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/40 | KATAKANA MIDDLE DOT with no other characters | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/41 | KATAKANA MIDDLE DOT with Hiragana | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/42 | KATAKANA MIDDLE DOT with Katakana | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/43 | KATAKANA MIDDLE DOT with Han | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/44 | Arabic-Indic digits mixed with Extended Arabic-Indic digits | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/45 | Arabic-Indic digits not mixed with Extended Arabic-Indic digits | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/46 | Extended Arabic-Indic digits not mixed with Arabic-Indic digits | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/47 | ZERO WIDTH JOINER not preceded by Virama | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/48 | ZERO WIDTH JOINER not preceded by anything | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/49 | ZERO WIDTH JOINER preceded by Virama | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/50 | ZERO WIDTH NON-JOINER preceded by Virama | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/51 | ZERO WIDTH NON-JOINER not preceded by Virama but matches regexp | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/52 | single label | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/53 | single label with hyphen | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/54 | single label with digits | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/55 | single label ending with digit | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/56 | empty string | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/57 | zero width non-joiner must pass at every occurrence | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/58 | Bidi domain name with a digit-first label is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/59 | label starting with a digit before a right-to-left letter is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/60 | left-to-right label containing a right-to-left letter is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/61 | right-to-left label mixing both digit types is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/62 | A-label that decodes to a disallowed code point is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/63 | A-label that decodes to a Bidi rule violation is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/64 | a U-label whose A-label form is longer than 63 octets is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/65 | empty label between two dots is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/66 | a name longer than 253 characters is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/67 | A-label that decodes to only ASCII is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/68 | non-canonical Punycode that does not re-encode to itself is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/0 | single dot | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/1 | single ideographic full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/2 | single fullwidth full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/3 | single halfwidth ideographic full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/4 | dot as label separator | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/5 | ideographic full stop as label separator | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/6 | fullwidth full stop as label separator | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/7 | halfwidth ideographic full stop as label separator | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/8 | leading dot | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/9 | leading ideographic full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/10 | leading fullwidth full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/11 | leading halfwidth ideographic full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/12 | trailing dot | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/13 | trailing ideographic full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/14 | trailing fullwidth full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/15 | trailing halfwidth ideographic full stop | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/16 | label too long if separator ignored (full stop) | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/17 | label too long if separator ignored (ideographic full stop) | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/18 | label too long if separator ignored (fullwidth full stop) | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/19 | label too long if separator ignored (halfwidth ideographic full stop) | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/6 | a valid idn e-mail (example@example.test in Hangul) | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/7 | an invalid e-mail/idn e-mail address | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/8 | a valid e-mail address | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/9 | a non-ASCII local part with an ASCII domain is valid | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/10 | a non-ASCII quoted local part is valid | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/11 | a local part with a lone UTF-16 surrogate is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/12 | a domain label that is not in Unicode NFC is valid | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/13 | a local part that is not in Unicode NFC is valid | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/6 | a valid host name (example.test in Hangul) | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/7 | illegal first char U+302E Hangul single dot tone mark | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/8 | contains illegal char U+302E Hangul single dot tone mark | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/9 | a single label of 63 characters is valid | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/10 | a single label of 64 characters is too long | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/11 | invalid label, correct Punycode | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/12 | valid Chinese Punycode | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/13 | invalid Punycode | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/14 | U-label contains "--" in the 3rd and 4th position | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/15 | U-label starts with a dash | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/16 | U-label ends with a dash | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/17 | U-label starts and ends with a dash | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/18 | Begins with a Spacing Combining Mark | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/19 | Begins with a Nonspacing Mark | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/20 | Begins with an Enclosing Mark | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/21 | Exceptions that are PVALID, left-to-right chars | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/22 | Exceptions that are PVALID, right-to-left chars | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/23 | Exceptions that are DISALLOWED, right-to-left chars | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/24 | Exceptions that are DISALLOWED, left-to-right chars | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/25 | MIDDLE DOT with no preceding 'l' | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/26 | MIDDLE DOT with nothing preceding | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/27 | MIDDLE DOT with no following 'l' | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/28 | MIDDLE DOT with nothing following | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/29 | MIDDLE DOT with surrounding 'l's | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/30 | Greek KERAIA not followed by Greek | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/31 | Greek KERAIA not followed by anything | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/32 | Greek KERAIA followed by Greek | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/33 | Hebrew GERESH not preceded by Hebrew | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/34 | Hebrew GERESH not preceded by anything | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/35 | Hebrew GERESH preceded by Hebrew | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/36 | Hebrew GERSHAYIM not preceded by Hebrew | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/37 | Hebrew GERSHAYIM not preceded by anything | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/38 | Hebrew GERSHAYIM preceded by Hebrew | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/39 | KATAKANA MIDDLE DOT with no Hiragana, Katakana, or Han | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/40 | KATAKANA MIDDLE DOT with no other characters | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/41 | KATAKANA MIDDLE DOT with Hiragana | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/42 | KATAKANA MIDDLE DOT with Katakana | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/43 | KATAKANA MIDDLE DOT with Han | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/44 | Arabic-Indic digits mixed with Extended Arabic-Indic digits | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/45 | Arabic-Indic digits not mixed with Extended Arabic-Indic digits | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/46 | Extended Arabic-Indic digits not mixed with Arabic-Indic digits | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/47 | ZERO WIDTH JOINER not preceded by Virama | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/48 | ZERO WIDTH JOINER not preceded by anything | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/49 | ZERO WIDTH JOINER preceded by Virama | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/50 | ZERO WIDTH NON-JOINER preceded by Virama | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/51 | ZERO WIDTH NON-JOINER not preceded by Virama but matches regexp | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/52 | single label | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/53 | single label with hyphen | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/54 | single label with digits | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/55 | single label ending with digit | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/56 | empty string | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/57 | zero width non-joiner must pass at every occurrence | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/58 | Bidi domain name with a digit-first label is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/59 | label starting with a digit before a right-to-left letter is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/60 | left-to-right label containing a right-to-left letter is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/61 | right-to-left label mixing both digit types is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/62 | A-label that decodes to a disallowed code point is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/63 | A-label that decodes to a Bidi rule violation is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/64 | a U-label whose A-label form is longer than 63 octets is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/65 | empty label between two dots is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/66 | a name longer than 253 characters is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/67 | A-label that decodes to only ASCII is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/68 | non-canonical Punycode that does not re-encode to itself is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/0 | single dot | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/1 | single ideographic full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/2 | single fullwidth full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/3 | single halfwidth ideographic full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/4 | dot as label separator | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/5 | ideographic full stop as label separator | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/6 | fullwidth full stop as label separator | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/7 | halfwidth ideographic full stop as label separator | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/8 | leading dot | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/9 | leading ideographic full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/10 | leading fullwidth full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/11 | leading halfwidth ideographic full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/12 | trailing dot | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/13 | trailing ideographic full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/14 | trailing fullwidth full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/15 | trailing halfwidth ideographic full stop | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/16 | label too long if separator ignored (full stop) | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/17 | label too long if separator ignored (ideographic full stop) | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/18 | label too long if separator ignored (fullwidth full stop) | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/19 | label too long if separator ignored (halfwidth ideographic full stop) | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
 | draft7:optional/format/ipv4.json#/groups/0/tests/37 | single octet out of range in last position | false | true | WRONG |  |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/6 | a valid IRI | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/7 | a valid protocol-relative IRI Reference | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/8 | a valid relative IRI Reference | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/9 | an invalid IRI Reference | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/10 | a valid IRI Reference | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/11 | a valid IRI fragment | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/12 | an invalid IRI fragment | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/6 | a valid IRI with anchor tag | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/7 | a valid IRI with anchor tag and parentheses | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/8 | a valid IRI with URL-encoded stuff | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/9 | a valid IRI with many special characters | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/10 | a valid IRI based on IPv6 | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/11 | an IPv6 address without enclosing brackets is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/12 | an invalid relative IRI Reference | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/13 | an invalid IRI | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/14 | an invalid IRI though valid IRI reference | false |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/6 | a valid IRI | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/7 | a valid protocol-relative IRI Reference | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/8 | a valid relative IRI Reference | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/9 | an invalid IRI Reference | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/10 | a valid IRI Reference | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/11 | a valid IRI fragment | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/12 | an invalid IRI fragment | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/0 | all string formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/1 | all string formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/2 | all string formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/3 | all string formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/4 | all string formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/5 | all string formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/6 | a valid IRI with anchor tag | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/7 | a valid IRI with anchor tag and parentheses | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/8 | a valid IRI with URL-encoded stuff | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/9 | a valid IRI with many special characters | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/10 | a valid IRI based on IPv6 | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/11 | an IPv6 address without enclosing brackets is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/12 | an invalid relative IRI Reference | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/13 | an invalid IRI | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/14 | an invalid IRI though valid IRI reference | false |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
 | draft7:optional/format/time.json#/groups/0/tests/41 | no time offset | false | true | WRONG |  |
 | draft7:optional/format/time.json#/groups/0/tests/42 | no time offset with second fraction | false | true | WRONG |  |
-| draft7:optional/format/unknown.json#/groups/0/tests/0 | unknown formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/1 | unknown formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/2 | unknown formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/3 | unknown formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/4 | unknown formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/5 | unknown formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/6 | unknown formats ignore strings | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/0 | unknown formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/1 | unknown formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/2 | unknown formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/3 | unknown formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/4 | unknown formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/5 | unknown formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/6 | unknown formats ignore strings | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
 | draft7:optional/format/uri.json#/groups/0/tests/43 | non-numeric port is invalid | false | true | WRONG |  |
-| draft7:ref.json#/groups/7/tests/0 | remote ref valid | true |  | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
-| draft7:ref.json#/groups/7/tests/1 | remote ref invalid | false |  | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
+| draft7:ref.json#/groups/7/tests/0 | remote ref valid | true |  | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
+| draft7:ref.json#/groups/7/tests/1 | remote ref invalid | false |  | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
 
 ## Detailed errors for invalid results
 
@@ -318,8 +318,8 @@
 | draft7:contains.json#/groups/4/tests/3 | matches neither items nor contains | PASS | {"keywordLocation":"#/items/multipleOf","instanceLocation":"#/0"} |
 | draft7:contains.json#/groups/5/tests/1 | empty array is invalid | PASS | {"keywordLocation":"#/contains","instanceLocation":"#"} |
 | draft7:default.json#/groups/2/tests/1 | an explicit property value is checked against maximum (failing) | PASS | {"keywordLocation":"#/properties/alpha/maximum","instanceLocation":"#/alpha"} |
-| draft7:definitions.json#/groups/0/tests/0 | valid definition schema | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
-| draft7:definitions.json#/groups/0/tests/1 | invalid definition schema | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
+| draft7:definitions.json#/groups/0/tests/0 | valid definition schema | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
+| draft7:definitions.json#/groups/0/tests/1 | invalid definition schema | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
 | draft7:dependencies.json#/groups/0/tests/3 | missing dependency | PASS | {"keywordLocation":"#/dependencies/bar","instanceLocation":"#"} |
 | draft7:dependencies.json#/groups/2/tests/3 | missing dependency | PASS | {"keywordLocation":"#/dependencies/quux","instanceLocation":"#"} |
 | draft7:dependencies.json#/groups/2/tests/4 | missing other dependency | PASS | {"keywordLocation":"#/dependencies/quux","instanceLocation":"#"} |
@@ -362,30 +362,30 @@
 | draft7:exclusiveMaximum.json#/groups/0/tests/2 | above the exclusiveMaximum is invalid | PASS | {"keywordLocation":"#/exclusiveMaximum","instanceLocation":"#"} |
 | draft7:exclusiveMinimum.json#/groups/0/tests/1 | boundary point is invalid | PASS | {"keywordLocation":"#/exclusiveMinimum","instanceLocation":"#"} |
 | draft7:exclusiveMinimum.json#/groups/0/tests/2 | below the exclusiveMinimum is invalid | PASS | {"keywordLocation":"#/exclusiveMinimum","instanceLocation":"#"} |
-| draft7:format.json#/groups/1/tests/0 | all string formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/1 | all string formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/2 | all string formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/3 | all string formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/4 | all string formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/1/tests/5 | all string formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:format.json#/groups/5/tests/0 | all string formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/1 | all string formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/2 | all string formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/3 | all string formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/4 | all string formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/5/tests/5 | all string formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:format.json#/groups/12/tests/0 | all string formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/1 | all string formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/2 | all string formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/3 | all string formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/4 | all string formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/12/tests/5 | all string formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:format.json#/groups/13/tests/0 | all string formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/1 | all string formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/2 | all string formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/3 | all string formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/4 | all string formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:format.json#/groups/13/tests/5 | all string formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/1/tests/0 | all string formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/1 | all string formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/2 | all string formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/3 | all string formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/4 | all string formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/1/tests/5 | all string formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:format.json#/groups/5/tests/0 | all string formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/1 | all string formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/2 | all string formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/3 | all string formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/4 | all string formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/5/tests/5 | all string formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:format.json#/groups/12/tests/0 | all string formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/1 | all string formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/2 | all string formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/3 | all string formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/4 | all string formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/12/tests/5 | all string formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:format.json#/groups/13/tests/0 | all string formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/1 | all string formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/2 | all string formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/3 | all string formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/4 | all string formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:format.json#/groups/13/tests/5 | all string formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
 | draft7:if-then-else.json#/groups/3/tests/1 | invalid through then | PASS | {"keywordLocation":"#/then/minimum","instanceLocation":"#"} |
 | draft7:if-then-else.json#/groups/4/tests/2 | invalid through else | PASS | {"keywordLocation":"#/else/multipleOf","instanceLocation":"#"} |
 | draft7:if-then-else.json#/groups/5/tests/1 | invalid through then | PASS | {"keywordLocation":"#/then/minimum","instanceLocation":"#"} |
@@ -597,109 +597,109 @@
 | draft7:optional/format/hostname.json#/groups/0/tests/19 | contains underscore | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/hostname.json#/groups/0/tests/20 | exceeds maximum overall length (256) | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/hostname.json#/groups/0/tests/22 | exceeds maximum label length (63) | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
-| draft7:optional/format/idn-email.json#/groups/0/tests/0 | all string formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/1 | all string formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/2 | all string formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/3 | all string formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/4 | all string formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/5 | all string formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/6 | a valid idn e-mail (example@example.test in Hangul) | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/7 | an invalid e-mail/idn e-mail address | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/8 | a valid e-mail address | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/9 | a non-ASCII local part with an ASCII domain is valid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/10 | a non-ASCII quoted local part is valid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/11 | a local part with a lone UTF-16 surrogate is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/12 | a domain label that is not in Unicode NFC is valid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-email.json#/groups/0/tests/13 | a local part that is not in Unicode NFC is valid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-email" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/0 | all string formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/1 | all string formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/2 | all string formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/3 | all string formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/4 | all string formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/5 | all string formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/6 | a valid host name (example.test in Hangul) | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/7 | illegal first char U+302E Hangul single dot tone mark | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/8 | contains illegal char U+302E Hangul single dot tone mark | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/9 | a single label of 63 characters is valid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/10 | a single label of 64 characters is too long | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/11 | invalid label, correct Punycode | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/12 | valid Chinese Punycode | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/13 | invalid Punycode | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/14 | U-label contains "--" in the 3rd and 4th position | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/15 | U-label starts with a dash | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/16 | U-label ends with a dash | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/17 | U-label starts and ends with a dash | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/18 | Begins with a Spacing Combining Mark | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/19 | Begins with a Nonspacing Mark | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/20 | Begins with an Enclosing Mark | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/21 | Exceptions that are PVALID, left-to-right chars | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/22 | Exceptions that are PVALID, right-to-left chars | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/23 | Exceptions that are DISALLOWED, right-to-left chars | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/24 | Exceptions that are DISALLOWED, left-to-right chars | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/25 | MIDDLE DOT with no preceding 'l' | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/26 | MIDDLE DOT with nothing preceding | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/27 | MIDDLE DOT with no following 'l' | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/28 | MIDDLE DOT with nothing following | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/29 | MIDDLE DOT with surrounding 'l's | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/30 | Greek KERAIA not followed by Greek | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/31 | Greek KERAIA not followed by anything | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/32 | Greek KERAIA followed by Greek | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/33 | Hebrew GERESH not preceded by Hebrew | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/34 | Hebrew GERESH not preceded by anything | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/35 | Hebrew GERESH preceded by Hebrew | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/36 | Hebrew GERSHAYIM not preceded by Hebrew | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/37 | Hebrew GERSHAYIM not preceded by anything | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/38 | Hebrew GERSHAYIM preceded by Hebrew | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/39 | KATAKANA MIDDLE DOT with no Hiragana, Katakana, or Han | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/40 | KATAKANA MIDDLE DOT with no other characters | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/41 | KATAKANA MIDDLE DOT with Hiragana | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/42 | KATAKANA MIDDLE DOT with Katakana | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/43 | KATAKANA MIDDLE DOT with Han | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/44 | Arabic-Indic digits mixed with Extended Arabic-Indic digits | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/45 | Arabic-Indic digits not mixed with Extended Arabic-Indic digits | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/46 | Extended Arabic-Indic digits not mixed with Arabic-Indic digits | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/47 | ZERO WIDTH JOINER not preceded by Virama | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/48 | ZERO WIDTH JOINER not preceded by anything | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/49 | ZERO WIDTH JOINER preceded by Virama | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/50 | ZERO WIDTH NON-JOINER preceded by Virama | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/51 | ZERO WIDTH NON-JOINER not preceded by Virama but matches regexp | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/52 | single label | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/53 | single label with hyphen | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/54 | single label with digits | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/55 | single label ending with digit | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/56 | empty string | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/57 | zero width non-joiner must pass at every occurrence | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/58 | Bidi domain name with a digit-first label is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/59 | label starting with a digit before a right-to-left letter is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/60 | left-to-right label containing a right-to-left letter is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/61 | right-to-left label mixing both digit types is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/62 | A-label that decodes to a disallowed code point is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/63 | A-label that decodes to a Bidi rule violation is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/64 | a U-label whose A-label form is longer than 63 octets is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/65 | empty label between two dots is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/66 | a name longer than 253 characters is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/67 | A-label that decodes to only ASCII is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/0/tests/68 | non-canonical Punycode that does not re-encode to itself is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/0 | single dot | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/1 | single ideographic full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/2 | single fullwidth full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/3 | single halfwidth ideographic full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/4 | dot as label separator | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/5 | ideographic full stop as label separator | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/6 | fullwidth full stop as label separator | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/7 | halfwidth ideographic full stop as label separator | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/8 | leading dot | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/9 | leading ideographic full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/10 | leading fullwidth full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/11 | leading halfwidth ideographic full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/12 | trailing dot | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/13 | trailing ideographic full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/14 | trailing fullwidth full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/15 | trailing halfwidth ideographic full stop | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/16 | label too long if separator ignored (full stop) | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/17 | label too long if separator ignored (ideographic full stop) | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/18 | label too long if separator ignored (fullwidth full stop) | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
-| draft7:optional/format/idn-hostname.json#/groups/1/tests/19 | label too long if separator ignored (halfwidth ideographic full stop) | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/0 | all string formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/1 | all string formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/2 | all string formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/3 | all string formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/4 | all string formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/5 | all string formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/6 | a valid idn e-mail (example@example.test in Hangul) | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/7 | an invalid e-mail/idn e-mail address | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/8 | a valid e-mail address | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/9 | a non-ASCII local part with an ASCII domain is valid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/10 | a non-ASCII quoted local part is valid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/11 | a local part with a lone UTF-16 surrogate is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/12 | a domain label that is not in Unicode NFC is valid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-email.json#/groups/0/tests/13 | a local part that is not in Unicode NFC is valid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-email" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/0 | all string formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/1 | all string formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/2 | all string formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/3 | all string formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/4 | all string formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/5 | all string formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/6 | a valid host name (example.test in Hangul) | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/7 | illegal first char U+302E Hangul single dot tone mark | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/8 | contains illegal char U+302E Hangul single dot tone mark | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/9 | a single label of 63 characters is valid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/10 | a single label of 64 characters is too long | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/11 | invalid label, correct Punycode | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/12 | valid Chinese Punycode | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/13 | invalid Punycode | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/14 | U-label contains "--" in the 3rd and 4th position | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/15 | U-label starts with a dash | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/16 | U-label ends with a dash | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/17 | U-label starts and ends with a dash | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/18 | Begins with a Spacing Combining Mark | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/19 | Begins with a Nonspacing Mark | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/20 | Begins with an Enclosing Mark | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/21 | Exceptions that are PVALID, left-to-right chars | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/22 | Exceptions that are PVALID, right-to-left chars | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/23 | Exceptions that are DISALLOWED, right-to-left chars | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/24 | Exceptions that are DISALLOWED, left-to-right chars | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/25 | MIDDLE DOT with no preceding 'l' | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/26 | MIDDLE DOT with nothing preceding | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/27 | MIDDLE DOT with no following 'l' | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/28 | MIDDLE DOT with nothing following | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/29 | MIDDLE DOT with surrounding 'l's | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/30 | Greek KERAIA not followed by Greek | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/31 | Greek KERAIA not followed by anything | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/32 | Greek KERAIA followed by Greek | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/33 | Hebrew GERESH not preceded by Hebrew | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/34 | Hebrew GERESH not preceded by anything | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/35 | Hebrew GERESH preceded by Hebrew | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/36 | Hebrew GERSHAYIM not preceded by Hebrew | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/37 | Hebrew GERSHAYIM not preceded by anything | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/38 | Hebrew GERSHAYIM preceded by Hebrew | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/39 | KATAKANA MIDDLE DOT with no Hiragana, Katakana, or Han | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/40 | KATAKANA MIDDLE DOT with no other characters | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/41 | KATAKANA MIDDLE DOT with Hiragana | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/42 | KATAKANA MIDDLE DOT with Katakana | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/43 | KATAKANA MIDDLE DOT with Han | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/44 | Arabic-Indic digits mixed with Extended Arabic-Indic digits | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/45 | Arabic-Indic digits not mixed with Extended Arabic-Indic digits | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/46 | Extended Arabic-Indic digits not mixed with Arabic-Indic digits | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/47 | ZERO WIDTH JOINER not preceded by Virama | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/48 | ZERO WIDTH JOINER not preceded by anything | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/49 | ZERO WIDTH JOINER preceded by Virama | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/50 | ZERO WIDTH NON-JOINER preceded by Virama | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/51 | ZERO WIDTH NON-JOINER not preceded by Virama but matches regexp | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/52 | single label | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/53 | single label with hyphen | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/54 | single label with digits | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/55 | single label ending with digit | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/56 | empty string | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/57 | zero width non-joiner must pass at every occurrence | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/58 | Bidi domain name with a digit-first label is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/59 | label starting with a digit before a right-to-left letter is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/60 | left-to-right label containing a right-to-left letter is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/61 | right-to-left label mixing both digit types is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/62 | A-label that decodes to a disallowed code point is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/63 | A-label that decodes to a Bidi rule violation is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/64 | a U-label whose A-label form is longer than 63 octets is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/65 | empty label between two dots is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/66 | a name longer than 253 characters is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/67 | A-label that decodes to only ASCII is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/0/tests/68 | non-canonical Punycode that does not re-encode to itself is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/0 | single dot | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/1 | single ideographic full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/2 | single fullwidth full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/3 | single halfwidth ideographic full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/4 | dot as label separator | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/5 | ideographic full stop as label separator | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/6 | fullwidth full stop as label separator | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/7 | halfwidth ideographic full stop as label separator | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/8 | leading dot | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/9 | leading ideographic full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/10 | leading fullwidth full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/11 | leading halfwidth ideographic full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/12 | trailing dot | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/13 | trailing ideographic full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/14 | trailing fullwidth full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/15 | trailing halfwidth ideographic full stop | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/16 | label too long if separator ignored (full stop) | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/17 | label too long if separator ignored (ideographic full stop) | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/18 | label too long if separator ignored (fullwidth full stop) | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
+| draft7:optional/format/idn-hostname.json#/groups/1/tests/19 | label too long if separator ignored (halfwidth ideographic full stop) | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "idn-hostname" at # |
 | draft7:optional/format/ipv4.json#/groups/0/tests/7 | an IP address with too many components | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/ipv4.json#/groups/0/tests/8 | an IP address with out-of-range values | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/ipv4.json#/groups/0/tests/9 | an IP address without 4 components | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
@@ -751,34 +751,34 @@
 | draft7:optional/format/ipv6.json#/groups/0/tests/37 | a long invalid ipv6, below length limit, second | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/ipv6.json#/groups/0/tests/38 | invalid non-ASCII '৪' (a Bengali 4) | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/ipv6.json#/groups/0/tests/39 | invalid non-ASCII '৪' (a Bengali 4) in the IPv4 portion | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/0 | all string formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/1 | all string formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/2 | all string formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/3 | all string formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/4 | all string formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/5 | all string formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/6 | a valid IRI | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/7 | a valid protocol-relative IRI Reference | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/8 | a valid relative IRI Reference | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/9 | an invalid IRI Reference | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/10 | a valid IRI Reference | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/11 | a valid IRI fragment | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri-reference.json#/groups/0/tests/12 | an invalid IRI fragment | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri-reference" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/0 | all string formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/1 | all string formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/2 | all string formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/3 | all string formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/4 | all string formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/5 | all string formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/6 | a valid IRI with anchor tag | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/7 | a valid IRI with anchor tag and parentheses | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/8 | a valid IRI with URL-encoded stuff | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/9 | a valid IRI with many special characters | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/10 | a valid IRI based on IPv6 | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/11 | an IPv6 address without enclosing brackets is invalid | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/12 | an invalid relative IRI Reference | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/13 | an invalid IRI | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
-| draft7:optional/format/iri.json#/groups/0/tests/14 | an invalid IRI though valid IRI reference | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/0 | all string formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/1 | all string formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/2 | all string formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/3 | all string formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/4 | all string formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/5 | all string formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/6 | a valid IRI | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/7 | a valid protocol-relative IRI Reference | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/8 | a valid relative IRI Reference | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/9 | an invalid IRI Reference | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/10 | a valid IRI Reference | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/11 | a valid IRI fragment | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri-reference.json#/groups/0/tests/12 | an invalid IRI fragment | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri-reference" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/0 | all string formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/1 | all string formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/2 | all string formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/3 | all string formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/4 | all string formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/5 | all string formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/6 | a valid IRI with anchor tag | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/7 | a valid IRI with anchor tag and parentheses | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/8 | a valid IRI with URL-encoded stuff | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/9 | a valid IRI with many special characters | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/10 | a valid IRI based on IPv6 | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/11 | an IPv6 address without enclosing brackets is invalid | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/12 | an invalid relative IRI Reference | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/13 | an invalid IRI | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
+| draft7:optional/format/iri.json#/groups/0/tests/14 | an invalid IRI though valid IRI reference | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "iri" at # |
 | draft7:optional/format/json-pointer.json#/groups/0/tests/7 | not a valid JSON-pointer (~ not escaped) | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/json-pointer.json#/groups/0/tests/27 | not a valid JSON-pointer (URI Fragment Identifier) #1 | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/json-pointer.json#/groups/0/tests/28 | not a valid JSON-pointer (URI Fragment Identifier) #2 | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
@@ -826,13 +826,13 @@
 | draft7:optional/format/time.json#/groups/0/tests/44 | offset not starting with plus or minus | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/time.json#/groups/0/tests/45 | contains letters | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/time.json#/groups/0/tests/46 | an invalid time string in date-time format | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
-| draft7:optional/format/unknown.json#/groups/0/tests/0 | unknown formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/1 | unknown formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/2 | unknown formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/3 | unknown formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/4 | unknown formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/5 | unknown formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft7:optional/format/unknown.json#/groups/0/tests/6 | unknown formats ignore strings | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/0 | unknown formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/1 | unknown formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/2 | unknown formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/3 | unknown formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/4 | unknown formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/5 | unknown formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft7:optional/format/unknown.json#/groups/0/tests/6 | unknown formats ignore strings | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
 | draft7:optional/format/uri-reference.json#/groups/0/tests/9 | an invalid URI Reference | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/uri-reference.json#/groups/0/tests/12 | an invalid URI fragment | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft7:optional/format/uri-reference.json#/groups/0/tests/13 | unescaped non US-ASCII characters | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
@@ -909,8 +909,8 @@
 | draft7:ref.json#/groups/4/tests/1 | nested ref invalid | PASS | {"keywordLocation":"#/allOf/0/$ref/$ref/$ref/type","instanceLocation":"#"} |
 | draft7:ref.json#/groups/5/tests/2 | ref invalid | PASS | {"keywordLocation":"#/properties/foo/$ref/type","instanceLocation":"#/foo"} |
 | draft7:ref.json#/groups/6/tests/0 | $ref resolves to /definitions/base_foo, data does not validate | PASS | {"keywordLocation":"#/allOf/0/$ref/type","instanceLocation":"#"} |
-| draft7:ref.json#/groups/7/tests/0 | remote ref valid | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
-| draft7:ref.json#/groups/7/tests/1 | remote ref invalid | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
+| draft7:ref.json#/groups/7/tests/0 | remote ref valid | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
+| draft7:ref.json#/groups/7/tests/1 | remote ref invalid | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-07/schema#" at # |
 | draft7:ref.json#/groups/8/tests/1 | property named $ref invalid | PASS | {"keywordLocation":"#/properties/$ref/type","instanceLocation":"#/$ref"} |
 | draft7:ref.json#/groups/9/tests/1 | property named $ref invalid | PASS | {"keywordLocation":"#/properties/$ref/$ref/type","instanceLocation":"#/$ref"} |
 | draft7:ref.json#/groups/11/tests/0 | any value is invalid | PASS | {"keywordLocation":"#/allOf/0/$ref","instanceLocation":"#"} |

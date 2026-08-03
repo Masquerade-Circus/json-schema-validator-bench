@@ -163,20 +163,20 @@ export async function classifySchemaCases({
     ? null
     : createIntegrityTracker(resources);
   let validationTarget;
-  let compileError = null;
+  let setupError = null;
   try {
-    validationTarget = typeof adapter.compile === "function"
-      ? await adapter.compile(disposableSchema)
+    validationTarget = typeof adapter.setup === "function"
+      ? await adapter.setup(disposableSchema)
       : disposableSchema;
   } catch (error) {
-    compileError = error;
+    setupError = error;
   }
-  const compileMutations = checkpointMutations({
+  const setupMutations = checkpointMutations({
     schemaTracker,
     resourcesTracker,
-    mutationClass: "compile"
+    mutationClass: "setup"
   });
-  addMutationEvents(mutationEvents, compileMutations, {
+  addMutationEvents(mutationEvents, setupMutations, {
     adapter,
     draft,
     formatProfile,
@@ -184,18 +184,18 @@ export async function classifySchemaCases({
     subjectId: schemaMetadata.id,
     caseId: null,
     schemaId: schemaMetadata.id,
-    moment: "after compile"
+    moment: "after setup"
   });
   schemaTracker = null;
   resourcesTracker = null;
-  if (compileError !== null) {
+  if (setupError !== null) {
     const records = failedRecords(
       adapter,
       cases,
-      typeof adapter.compile === "function" ? "COMPILE" : "RUNTIME",
-      compileError,
-      typeof adapter.compile === "function"
-        ? "FAST_COMPILE_ERROR"
+      typeof adapter.setup === "function" ? "COMPILE" : "RUNTIME",
+      setupError,
+      typeof adapter.setup === "function"
+        ? "FAST_SETUP_ERROR"
         : "FAST_RUNTIME_ERROR"
     );
     return records;
@@ -269,7 +269,7 @@ export async function classifySchemaCases({
       try {
         const detail = await adapter.getError({
           schema: disposableSchema,
-          compiled: validationTarget,
+          target: validationTarget,
           testCase: detailedTestCase,
           data: detailedTestCase.data
         });
@@ -423,10 +423,10 @@ export async function runAdapterConformance({
       const setupRecords = failedRecords(
         adapter,
         schemaCases,
-        adapter.compileEligible === true ? "COMPILE" : "RUNTIME",
+        adapter.setupEligible === true ? "COMPILE" : "RUNTIME",
         setupError,
-        adapter.compileEligible === true
-          ? "FAST_COMPILE_ERROR"
+        adapter.setupEligible === true
+          ? "FAST_SETUP_ERROR"
           : "FAST_RUNTIME_ERROR"
       );
       records.push(...setupRecords);

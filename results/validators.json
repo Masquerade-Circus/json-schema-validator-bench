@@ -25,6 +25,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -34,6 +35,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -78,6 +80,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -87,6 +90,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -129,8 +133,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "72e285f3adb03f5a8338a6ec7dc116375c2ddce2a1ba7c87a6da8c249ba5374a",
-      "format-assertion": "259dd5af2c2309798aaf03710a42fc4ddb8cfc0fbc85a78e86e776b6a6cac976"
+      "base": "a17645765859603a6077320f6679761b732d1baa158dd3539b144a0a90264557",
+      "format-assertion": "279317a09508bc5bc202c96556f7030097e52cade9870ff7add527d8abc99dca"
     }
   },
   "draft4/hyperjump": {
@@ -161,6 +165,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -170,6 +175,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -214,6 +220,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -223,6 +230,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -265,8 +273,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "7afcbb6e15a58ae1d1f674edc867e3cc2c768cebcaa5f3b1d0cfdbfc93a7d9b7",
-      "format-assertion": "73fe8ee6d39ec896725ee34e8955c0f6d6100f1d527df949eccf68b59e52446d"
+      "base": "199f8c10c98b89c2fccd980bca2cee29e23bf8a230a7281916020fb612af9a77",
+      "format-assertion": "e1dd74a546325f115bf393d38258645fe2868e61bed162e909c7484003ed1ae0"
     }
   },
   "draft4/schema-shield": {
@@ -368,6 +376,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-04/schema#",
           "includeErrors": false
         },
@@ -382,6 +391,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-04/schema#",
           "includeErrors": true
         }
@@ -399,6 +409,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-04/schema#",
           "includeErrors": false
         },
@@ -413,14 +424,15 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-04/schema#",
           "includeErrors": true
         }
       }
     },
     "reportOptionsSha256": {
-      "base": "b3dc17c5b87349296ad3579c78bf270d6745dd5385fe5caf7df60047f5527d55",
-      "format-assertion": "cd2ee745efe41ff7c75ce0b753f4b17b11e9b4ac1527a865a1ac933306ed7257"
+      "base": "380ab6e5445baac0132e74391ccde9319d2ffee9318fde14e2acc3bccc0fd669",
+      "format-assertion": "459ad82c5fa713fdc594a38f289503fe886cf85fb53c3a949aa0574432a4f96a"
     }
   },
   "draft4/z-schema": {
@@ -457,6 +469,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -466,6 +479,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -510,6 +524,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -519,6 +534,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -561,8 +577,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "ee82c4cf5340b0788ac004ca2575ebd6eb93f59cf3edef9b343cb0649a60eb59",
-      "format-assertion": "e72785a3681d8188f48b63ed9262bfdb2798373c6e79f595a70948f17b8ba4bb"
+      "base": "c8b0934d88ac5e2e09e1233275f893178f8220c36d35ba6f9d04234e53839917",
+      "format-assertion": "700c34e907e07de49b8404ec82dfb21269fcdfdde0f5851e25a7cab5c270f1f1"
     }
   },
   "draft6/hyperjump": {
@@ -593,6 +609,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -602,6 +619,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -646,6 +664,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -655,6 +674,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -697,8 +717,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "83e0b57d9adce9dd5b8a06e3fe39d1fde444120c987cb133bb732f0307c4384d",
-      "format-assertion": "262b2b712de664740fdbc6ebd1311506d42977620c7a0dcb60710016a683e893"
+      "base": "8c3278ebabb0092ade8857851eed143c09db774c40ffd869d308c6d055c35803",
+      "format-assertion": "d4d8c61377839d3f76a1a7771a038def933cd6a5b816795cd5722fd1a2eae52f"
     }
   },
   "draft6/schema-shield": {
@@ -817,6 +837,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-06/schema#",
           "includeErrors": false
         },
@@ -831,6 +852,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-06/schema#",
           "includeErrors": true
         }
@@ -848,6 +870,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-06/schema#",
           "includeErrors": false
         },
@@ -862,14 +885,15 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-06/schema#",
           "includeErrors": true
         }
       }
     },
     "reportOptionsSha256": {
-      "base": "79e71bac062c685ffc225694d13a929bb8c9f2ffcb3cfd4541f39204475a03f5",
-      "format-assertion": "eb3874216c0ce93adf65f84ec066a9c98faa7966b4f62463944e8bc19405c445"
+      "base": "ca89bc215a1f351a18515bcec41850fa95a1bd128f58721d6fecc42f83ad4068",
+      "format-assertion": "0f425a34879369dfec286c584e6d6251c60ebe768991c25f91d3e04b112f48c7"
     }
   },
   "draft6/z-schema": {
@@ -925,6 +949,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -934,6 +959,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -978,6 +1004,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -987,6 +1014,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1029,8 +1057,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "ee82c4cf5340b0788ac004ca2575ebd6eb93f59cf3edef9b343cb0649a60eb59",
-      "format-assertion": "e72785a3681d8188f48b63ed9262bfdb2798373c6e79f595a70948f17b8ba4bb"
+      "base": "c8b0934d88ac5e2e09e1233275f893178f8220c36d35ba6f9d04234e53839917",
+      "format-assertion": "700c34e907e07de49b8404ec82dfb21269fcdfdde0f5851e25a7cab5c270f1f1"
     }
   },
   "draft7/hyperjump": {
@@ -1061,6 +1089,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1070,6 +1099,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1114,6 +1144,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1123,6 +1154,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1165,8 +1197,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "83e0b57d9adce9dd5b8a06e3fe39d1fde444120c987cb133bb732f0307c4384d",
-      "format-assertion": "262b2b712de664740fdbc6ebd1311506d42977620c7a0dcb60710016a683e893"
+      "base": "8c3278ebabb0092ade8857851eed143c09db774c40ffd869d308c6d055c35803",
+      "format-assertion": "d4d8c61377839d3f76a1a7771a038def933cd6a5b816795cd5722fd1a2eae52f"
     }
   },
   "draft7/schema-shield": {
@@ -1268,6 +1300,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-07/schema#",
           "includeErrors": false
         },
@@ -1282,6 +1315,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-07/schema#",
           "includeErrors": true
         }
@@ -1299,6 +1333,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-07/schema#",
           "includeErrors": false
         },
@@ -1313,14 +1348,15 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "http://json-schema.org/draft-07/schema#",
           "includeErrors": true
         }
       }
     },
     "reportOptionsSha256": {
-      "base": "f8c90242a46c3453f212fbf6fc5bbb22bed8d5d7877d434ebe95acea90b5df6e",
-      "format-assertion": "afd1a870fcb99e09904e4b244bdc94a9fb2c56ab4aebdab3a12ea5c2aa9d8a22"
+      "base": "32390da3ea71cf7e5443df76b58f3fe823c782628889ac58bcd1349569eac4a7",
+      "format-assertion": "395fc540d9026ca3d902f298535976a96d19373fc44fefd60aa1e71ba847a1e0"
     }
   },
   "draft7/z-schema": {
@@ -1376,6 +1412,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1385,6 +1422,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1429,6 +1467,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1438,6 +1477,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1480,8 +1520,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "886dd32efe7ba3447b441f34e95a15fe495882b94765f058290def1e66befa8a",
-      "format-assertion": "887e103d314becd26ca343ae5f40ac45f6655b9742bfe791307a51c61863ec4d"
+      "base": "953dac931e61f3e7249df04fbbfcccf462a893e7851809ef350f27b2d3bf8fa7",
+      "format-assertion": "11cc2884c31ad97d6e9a888ea752169c54115f9202fee4c270718840da3dce8a"
     }
   },
   "draft2019-09/hyperjump": {
@@ -1512,6 +1552,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1521,6 +1562,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1565,6 +1607,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1574,6 +1617,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1616,8 +1660,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "d1e0f7407ba2766a2122a78833d42e49540b3c76eca938a0b6886c9bdccea608",
-      "format-assertion": "c571376811c8d3e403646a21d0aa3097e8e7964ff1c0151f12d006f6fa7f84dc"
+      "base": "2c62298c726066f3c0dd41c0dec82cee8ed347e645e4c3009767240921d772ce",
+      "format-assertion": "17d3adb3decc948252b49e4e406d576987fe2e86857ccf80ce80d7a2e3a77d4d"
     }
   },
   "draft2019-09/schema-shield": {
@@ -1702,6 +1746,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "https://json-schema.org/draft/2019-09/schema",
           "includeErrors": false
         },
@@ -1716,6 +1761,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "https://json-schema.org/draft/2019-09/schema",
           "includeErrors": true
         }
@@ -1733,6 +1779,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "https://json-schema.org/draft/2019-09/schema",
           "includeErrors": false
         },
@@ -1747,14 +1794,15 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "https://json-schema.org/draft/2019-09/schema",
           "includeErrors": true
         }
       }
     },
     "reportOptionsSha256": {
-      "base": "bab1e9e1e87b5e87ba3bcef31f8a0ea527dff17d47a0706f30e0c72a0679ad9d",
-      "format-assertion": "5ef9b7e509c5bc187bedff5f8b5d3dcee7b6f6bc2548b27ada514fd27e9d9f23"
+      "base": "77775f36b816c327a96503729169dd795a08a77060a5dc2c3f90dc13fef13c72",
+      "format-assertion": "790e9b22f5a73d10177a6146f8f9d584ea1145a24c2fb57566cd83748698e816"
     }
   },
   "draft2019-09/z-schema": {
@@ -1810,6 +1858,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1819,6 +1868,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1863,6 +1913,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1872,6 +1923,7 @@
         },
         "detailed": {
           "allErrors": false,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1914,8 +1966,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "055900e4ccf8a2da45676385f13c8d7b34d3345d570b5f1a494a4cebc1c1ba93",
-      "format-assertion": "a77eee69ef65f64c263449171aae3bd4cc9b17687798c43c8834e7ccda5ee789"
+      "base": "02336c49dfcdd160ecdd020b33a622146a60a4c32503514a4a2f96f73afc994d",
+      "format-assertion": "ce7ae2848d46799708a4168d352a6953f9084d10c326cd2a694d0af066abe5c3"
     }
   },
   "draft2020-12/hyperjump": {
@@ -1946,6 +1998,7 @@
         "formatProfile": "base",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1955,6 +2008,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -1999,6 +2053,7 @@
         "formatProfile": "format-assertion",
         "fast": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -2008,6 +2063,7 @@
         },
         "detailed": {
           "allErrors": true,
+          "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
@@ -2050,8 +2106,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "fedc1952deffcbdff7ab2eac2bcc545ddc1e9e1236d3a8013d200aeef38af2bf",
-      "format-assertion": "c60741bd967cd6ec8bfd3bcd399b408647af5d1633964eda6851615ecab7f745"
+      "base": "39762ad0326266ab3a6afd459bb24b603ae29886f8acbb9636f18be04686cb8b",
+      "format-assertion": "3bb27ae41da04fa7b928f444579a3369ca54781c360d581699683c7f4873df17"
     }
   },
   "draft2020-12/schema-shield": {
@@ -2136,6 +2192,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "https://json-schema.org/draft/2020-12/schema",
           "includeErrors": false
         },
@@ -2150,6 +2207,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "https://json-schema.org/draft/2020-12/schema",
           "includeErrors": true
         }
@@ -2167,6 +2225,7 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "https://json-schema.org/draft/2020-12/schema",
           "includeErrors": false
         },
@@ -2181,14 +2240,15 @@
           "weakFormats": true,
           "allowUnusedKeywords": true,
           "allowUnreachable": true,
+          "schemas": "registered",
           "$schemaDefault": "https://json-schema.org/draft/2020-12/schema",
           "includeErrors": true
         }
       }
     },
     "reportOptionsSha256": {
-      "base": "9220c41402fc50d9f34a25300eae9682cf50ecc0a2a2a141b6d2c61451dd3509",
-      "format-assertion": "2f4cc70a079861858a5823e870c366a75973018100dce6bdf29d495e57113c33"
+      "base": "d11f9b583d672640cd6d2af7b437927f3ac1cd8a1856d5d4373018b948e6f664",
+      "format-assertion": "09315961e7d34f25dd7e8dc86955755394bf24eb426243f520295ee90630e5d5"
     }
   },
   "draft2020-12/z-schema": {

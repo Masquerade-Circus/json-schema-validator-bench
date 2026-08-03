@@ -35,7 +35,7 @@ import {
   getAdapterFactory,
   getRegisteredAdapter,
   rotateRoundOrder
-} from "../src/adapters/index.js";
+} from "../src/adapter-registry.js";
 import { defineAdapter } from "../src/adapter-api.js";
 import * as Hyperjump2019 from "@hyperjump/json-schema/draft-2019-09";
 import * as Hyperjump2020 from "@hyperjump/json-schema/draft-2020-12";
@@ -56,7 +56,7 @@ import {
   validateSampleSet
 } from "../src/report.js";
 import {
-  createCompileEntries,
+  createSetupEntries,
   createIntersection,
   createPhaseEligibility,
   mutationRecordKey,
@@ -65,9 +65,9 @@ import {
   validateIntersectionInputs
 } from "../src/intersection.js";
 import {
-  compileChecksum,
+  setupChecksum,
   executeWorkerRequest,
-  runCompileSample,
+  runSetupSample,
   runExecutionSample,
   validateWorkerRequest
 } from "../src/worker.js";
@@ -100,7 +100,7 @@ import { createIntegrityTracker } from "../src/integrity.js";
 import {
   draftIds,
   getColdExecutionParticipants,
-  getCompileParticipants,
+  getSetupParticipants,
   getParticipants,
   getRoundOrder
 } from "../src/matrix.js";
@@ -208,6 +208,33 @@ test("child process failures preserve actionable TAP, stdout, stderr, and proces
       return true;
     }
   );
+});
+
+test("the adapters directory contains only ten opaque adapter modules", async () => {
+  const adapterDirectory = new URL("../src/adapters/", import.meta.url);
+  const files = (await readdir(adapterDirectory)).sort();
+  assert.deepEqual(files, [
+    "ajv.js",
+    "cfworker-json-schema.js",
+    "djv.js",
+    "hyperjump.js",
+    "json-schema-library.js",
+    "jsonschema.js",
+    "redocly-ajv.js",
+    "schema-shield.js",
+    "schemasafe.js",
+    "z-schema.js"
+  ]);
+  for (const file of files) {
+    const source = await readFile(
+      new URL(`../src/adapters/${file}`, import.meta.url),
+      "utf8"
+    );
+    assert.match(source, /from ["'][^"']+["']/);
+    assert.match(source, /defineAdapter/);
+    assert.equal(source.includes("./helpers.js"), false, file);
+    assert.equal(source.includes("createRawAdapter"), false, file);
+  }
 });
 
 test("child streaming honors independent stdout and stderr backpressure", async () => {
@@ -589,7 +616,7 @@ test("benchmark rounds use three deterministic antithetic pairs", () => {
     for (const phase of ["setup", "execution", "cold-execution"]) {
       const participants =
         phase === "setup"
-          ? getCompileParticipants(draft)
+          ? getSetupParticipants(draft)
           : phase === "cold-execution"
             ? getColdExecutionParticipants(draft)
             : getParticipants(draft);
@@ -650,16 +677,16 @@ test("non-metric registry, matrix, contract, and validator profile metadata use 
   const contract = createBenchmarkContract("full");
   for (const draft of draftIds) {
     const execution = getParticipants(draft);
-    const compile = getCompileParticipants(draft);
+    const setup = getSetupParticipants(draft);
     assert.deepEqual(
       execution.map(({ id }) => id),
       canonicalIds(execution),
       `${draft}/execution matrix`
     );
     assert.deepEqual(
-      compile.map(({ id }) => id),
-      canonicalIds(compile),
-      `${draft}/compile matrix`
+      setup.map(({ id }) => id),
+      canonicalIds(setup),
+      `${draft}/setup matrix`
     );
     assert.deepEqual(
       contract.participantsByDraft[draft].execution,
@@ -668,7 +695,7 @@ test("non-metric registry, matrix, contract, and validator profile metadata use 
     );
     assert.deepEqual(
       contract.participantsByDraft[draft].setup,
-      canonicalIds(compile),
+      canonicalIds(setup),
       `${draft}/setup contract`
     );
   }
@@ -916,7 +943,7 @@ test("adapters reject unknown drafts", () => {
   }
 });
 
-test("compiled adapters create independent targets and expose a singular error", async () => {
+test("setup adapters create independent targets and expose a singular error", async () => {
   for (const [name, createAdapter] of adapterFactories) {
     const adapter = createAdapter({
       draft: "draft7",
@@ -924,13 +951,13 @@ test("compiled adapters create independent targets and expose a singular error",
       unknownFormats: []
     });
     const schema = { type: "integer" };
-    const first = await adapter.compile(schema);
-    const second = await adapter.compile(schema);
+    const first = await adapter.setup(schema);
+    const second = await adapter.setup(schema);
     assert.notEqual(first, second, name);
     assert.equal(adapter.validate(first, 1), true, name);
     assert.equal(adapter.validate(first, "1"), false, name);
     assert.equal(
-      typeof await adapter.getError({ schema, compiled: first, data: "1" }),
+      typeof await adapter.getError({ schema, target: first, data: "1" }),
       "string",
       name
     );
@@ -969,7 +996,7 @@ test("adapters disable defaults, coercion, removal, and input mutation", async (
     for (const contract of contracts) {
       const data = structuredClone(contract.data);
       const before = sha256(canonicalJson(data));
-      const target = await adapter.compile(contract.schema);
+      const target = await adapter.setup(contract.schema);
       assert.equal(adapter.validate(target, data), contract.expected, name);
       assert.equal(sha256(canonicalJson(data)), before, name);
     }
@@ -983,18 +1010,18 @@ test("adapters assert common formats and expose first error", async () => {
       resources: [],
       unknownFormats: ["vendor-format"]
     });
-    const email = await adapter.compile({ type: "string", format: "email" });
+    const email = await adapter.setup({ type: "string", format: "email" });
     assert.equal(
       adapter.validate(email, "not-an-email"),
       false,
       name
     );
-    const integer = await adapter.compile({ type: "integer" });
+    const integer = await adapter.setup({ type: "integer" });
     assert.equal(adapter.validate(integer, "wrong"), false, name);
     assert.equal(
       typeof await adapter.getError({
         schema: { type: "integer" },
-        compiled: integer,
+        target: integer,
         data: "wrong"
       }),
       "string",
@@ -1018,8 +1045,8 @@ test("unknown format handling preserves each adapter conformance behavior", asyn
       resources: [],
       unknownFormats: ["vendor-format"]
     });
-    const compiled = await adapter.compile(schema);
-    assert.equal(adapter.validate(compiled, "anything"), true, id);
+    const target = await adapter.setup(schema);
+    assert.equal(adapter.validate(target, "anything"), true, id);
   }
   const schemasafe = getAdapterFactory("schemasafe")({
     draft: "draft7",
@@ -1027,7 +1054,7 @@ test("unknown format handling preserves each adapter conformance behavior", asyn
     resources: [],
     unknownFormats: ["vendor-format"]
   });
-  assert.throws(() => schemasafe.compile(schema), /Unrecognized format used/);
+  assert.throws(() => schemasafe.setup(schema), /Unrecognized format used/);
 });
 
 test("resource-capable adapters resolve local resources", async () => {
@@ -1045,7 +1072,7 @@ test("resource-capable adapters resolve local resources", async () => {
     ["schemasafe", getAdapterFactory("schemasafe")]
   ]) {
     const adapter = createAdapter({ draft: "draft7", resources, unknownFormats: [] });
-    const target = await adapter.compile(schema);
+    const target = await adapter.setup(schema);
     assert.equal(adapter.validate(target, 1), true, name);
     assert.equal(adapter.validate(target, "1"), false, name);
   }
@@ -1057,7 +1084,7 @@ test("resource-capable adapters resolve local resources", async () => {
     resources,
     unknownFormats: []
   });
-  const target = await runtime.compile(schema);
+  const target = await runtime.setup(schema);
   assert.equal(runtime.validate(target, 1), true);
   assert.equal(runtime.validate(target, "1"), false);
 });
@@ -1082,10 +1109,10 @@ test("conformance executes adapter despite globally recognized unsupported forma
   const adapter = {
     name: "fixture",
     version: "1.0.0",
-    compile() {
+    setup() {
       return (data) => data === 1;
     },
-    validate: (compiled, data) => compiled(data)
+    validate: (target, data) => target(data)
   };
 
   const records = await classifySchemaCases({
@@ -1167,7 +1194,7 @@ test("conformance rejects data mutation while isolating schemas and resources", 
     engines: null,
     supportClaim: "declared",
     unsupported: [],
-    compileEligible: true
+    setupEligible: true
   };
   let factoryCalls = 0;
   const adapterFactory = ({ resources }) => {
@@ -1177,13 +1204,13 @@ test("conformance rejects data mutation while isolating schemas and resources", 
     return {
       reportOptions: { isolated: true },
       reportOptionsSha256: "b".repeat(64),
-      compile(disposableSchema) {
+      setup(disposableSchema) {
         assert.equal(Object.hasOwn(disposableSchema, "mutated"), false);
         disposableSchema.mutated = true;
         return (data) => data[0];
       },
-      validate(compiled, data) {
-        const observed = compiled(data);
+      validate(target, data) {
+        const observed = target(data);
         delete data[0];
         Object.defineProperties(data, {
           ["__proto__"]: { value: null, enumerable: true },
@@ -1232,25 +1259,25 @@ test("conformance rejects data mutation while isolating schemas and resources", 
   assert.equal(factoryCalls, 2);
 });
 
-test("conformance expands reusable compile failures", async () => {
+test("conformance expands reusable setup failures", async () => {
   const cases = fixtureCases();
   const adapter = {
     name: "fixture",
     version: "1.0.0",
-    compile() {
-      throw new Error("compile exploded");
+    setup() {
+      throw new Error("setup exploded");
     },
     validate: () => true
   };
 
-  const compileErrors = await classifySchemaCases({
+  const setupErrors = await classifySchemaCases({
     adapter,
     schema: {},
     schemaMetadata: { id: cases[0].schemaId },
     cases,
     capabilities: { unsupportedFormats: [], unknownFormats: [], externalRefs: [] }
   });
-  assert.deepEqual(compileErrors.map(({ status }) => status), [
+  assert.deepEqual(setupErrors.map(({ status }) => status), [
     "COMPILE",
     "COMPILE"
   ]);
@@ -1265,7 +1292,7 @@ test("conformance reports schema mutation without changing the source", async ()
     adapter: {
       name: "schema-mutator",
       version: "1.0.0",
-      compile(disposableSchema) {
+      setup(disposableSchema) {
         Object.defineProperty(disposableSchema, Symbol("mutated"), {
           value: { cycle: disposableSchema },
           enumerable: false,
@@ -1273,7 +1300,7 @@ test("conformance reports schema mutation without changing the source", async ()
         });
         return () => true;
       },
-      validate: (compiled, data) => compiled(data)
+      validate: (target, data) => target(data)
     },
     schema,
     schemaMetadata: { id: cases[0].schemaId },
@@ -1286,7 +1313,7 @@ test("conformance reports schema mutation without changing the source", async ()
   assert.equal(mutationEvents[0].scope, "schema");
   assert.equal(mutationEvents[0].subjectId, cases[0].schemaId);
   assert.equal(mutationEvents[0].mutationTarget, "schema");
-  assert.equal(mutationEvents[0].mutationClass, "compile");
+  assert.equal(mutationEvents[0].mutationClass, "setup");
   assert.equal(canonicalJson(schema), before);
 });
 
@@ -1303,18 +1330,18 @@ test("conformance keeps correct mutating results as PASS and reports schema-scop
       engines: null,
       supportClaim: "declared",
       unsupported: [],
-      compileEligible: true
+      setupEligible: true
     },
     adapterFactory: () => ({
       name: "schema-mutator",
       version: "1.0.0",
       reportOptions: {},
       reportOptionsSha256: "b".repeat(64),
-      compile(schema) {
+      setup(schema) {
         schema.normalized = true;
         return (data) => data === 1;
       },
-      validate: (compiled, data) => compiled(data)
+      validate: (target, data) => target(data)
     }),
     adapterConfiguration: { draft: "draft7" },
     draft: "draft7",
@@ -1354,7 +1381,7 @@ test("conformance keeps correct mutating results as PASS and reports schema-scop
       subjectId: schemaId,
       schemaId,
       mutationTarget: "schema",
-      mutationClass: "compile"
+      mutationClass: "setup"
     }
   );
 });
@@ -1367,10 +1394,10 @@ test("conformance records data mutation with structured origin fields", async ()
     adapter: {
       name: "data-mutator",
       version: "1.0.0",
-      compile: () => () => true,
-      validate(compiled, data) {
+      setup: () => () => true,
+      validate(target, data) {
         data.value = false;
-        return compiled(data);
+        return target(data);
       }
     },
     schema: {},
@@ -1389,7 +1416,7 @@ test("conformance records data mutation with structured origin fields", async ()
 
 test("conformance tracks the prepared schema instance through adapter-api", async () => {
   const cases = fixtureCases();
-  for (const mutationPhase of ["compile", "validate"]) {
+  for (const mutationPhase of ["setup", "validate"]) {
     const schema = { type: "integer" };
     const before = canonicalJson(schema);
     const definition = defineAdapter(
@@ -1402,8 +1429,8 @@ test("conformance tracks the prepared schema instance through adapter-api", asyn
       },
       () => ({
         reportOptions: { mutationPhase },
-        compile(preparedSchema) {
-          if (mutationPhase === "compile") {
+        setup(preparedSchema) {
+          if (mutationPhase === "setup") {
             preparedSchema.immediateMutation = true;
           }
           return data => {
@@ -1413,7 +1440,7 @@ test("conformance tracks the prepared schema instance through adapter-api", asyn
             return data === 1;
           };
         },
-        validate: (compiled, data) => compiled(data)
+        validate: (target, data) => target(data)
       })
     );
     const adapter = definition.create({
@@ -1442,7 +1469,7 @@ test("conformance tracks the prepared schema instance through adapter-api", asyn
     assert.equal(mutationEvents.length, 1);
     assert.equal(
       mutationEvents[0].scope,
-      mutationPhase === "compile" ? "schema" : "case"
+      mutationPhase === "setup" ? "schema" : "case"
     );
     assert.equal(canonicalJson(schema), before);
   }
@@ -1483,7 +1510,7 @@ test("conformance prioritizes resource mutation when adapter factory throws", as
     license: "MIT",
     engines: null,
     supportClaim: "declared",
-    compileEligible: true
+    setupEligible: true
   };
   const report = await runAdapterConformance({
     adapter,
@@ -1513,8 +1540,8 @@ test("conformance prioritizes resource mutation when adapter factory throws", as
     "COMPILE"
   ]);
   assert.deepEqual(report.cases.map(({ errorCode }) => errorCode), [
-    "FAST_COMPILE_ERROR",
-    "FAST_COMPILE_ERROR"
+    "FAST_SETUP_ERROR",
+    "FAST_SETUP_ERROR"
   ]);
   assert.equal(report.mutations.length, 1);
   assert.equal(report.mutations[0].scope, "adapter");
@@ -1547,18 +1574,18 @@ async function runConformanceMutationScenario(hooks) {
     engines: null,
     supportClaim: "declared",
     unsupported: [],
-    compileEligible: true
+    setupEligible: true
   };
   const report = await runAdapterConformance({
     adapter,
     adapterFactory({ resources }) {
-      hooks.setup?.({ resources });
+      hooks.adapterSetup?.({ resources });
       return {
         ...adapter,
         reportOptions: { fixture: true },
         reportOptionsSha256: "b".repeat(64),
-        compile(schema) {
-          hooks.compile?.({ schema, resources });
+        setup(schema) {
+          hooks.setup?.({ schema, resources });
           return { schema, resources };
         },
         validate(target, data) {
@@ -1567,8 +1594,8 @@ async function runConformanceMutationScenario(hooks) {
         },
         ...(typeof hooks.detailed === "function"
           ? {
-              getError({ compiled, data }) {
-                hooks.detailed({ ...compiled, data });
+              getError({ target, data }) {
+                hooks.detailed({ ...target, data });
                 return "fixture error";
               }
             }
@@ -1604,40 +1631,40 @@ function mutationPairs(report) {
   );
 }
 
-test("conformance checkpoints successful compile resource mutation", async () => {
+test("conformance checkpoints successful setup resource mutation", async () => {
   const report = await runConformanceMutationScenario({
-    compile({ resources }) {
-      resources[0].schema.compileMutation = true;
+    setup({ resources }) {
+      resources[0].schema.setupMutation = true;
     }
   });
 
-  assert.deepEqual(mutationPairs(report), ["resources/compile"]);
+  assert.deepEqual(mutationPairs(report), ["resources/setup"]);
 });
 
-test("conformance checkpoints resource mutation when compile throws", async () => {
+test("conformance checkpoints resource mutation when setup throws", async () => {
   const report = await runConformanceMutationScenario({
-    compile({ resources }) {
-      resources[0].schema.compileMutation = true;
-      throw new Error("compile failed after mutation");
+    setup({ resources }) {
+      resources[0].schema.setupMutation = true;
+      throw new Error("setup failed after mutation");
     }
   });
 
-  assert.deepEqual(mutationPairs(report), ["resources/compile"]);
+  assert.deepEqual(mutationPairs(report), ["resources/setup"]);
   assert.equal(report.cases[0].status, "COMPILE");
-  assert.equal(report.cases[0].errorCode, "FAST_COMPILE_ERROR");
+  assert.equal(report.cases[0].errorCode, "FAST_SETUP_ERROR");
 });
 
-test("conformance preserves simultaneous schema and resource compile mutations", async () => {
+test("conformance preserves simultaneous schema and resource setup mutations", async () => {
   const report = await runConformanceMutationScenario({
-    compile({ schema, resources }) {
-      schema.compileMutation = true;
-      resources[0].schema.compileMutation = true;
+    setup({ schema, resources }) {
+      schema.setupMutation = true;
+      resources[0].schema.setupMutation = true;
     }
   });
 
   assert.deepEqual(mutationPairs(report), [
-    "resources/compile",
-    "schema/compile"
+    "resources/setup",
+    "schema/setup"
   ]);
 });
 
@@ -1658,13 +1685,13 @@ test("conformance preserves simultaneous data, schema, and resource validation m
   ]);
 });
 
-test("conformance preserves setup, compile, and validation mutations for one case", async () => {
+test("conformance preserves adapter setup, schema setup, and validation mutations for one case", async () => {
   const report = await runConformanceMutationScenario({
+    adapterSetup({ resources }) {
+      resources[0].schema.adapterSetupMutation = true;
+    },
     setup({ resources }) {
       resources[0].schema.setupMutation = true;
-    },
-    compile({ resources }) {
-      resources[0].schema.compileMutation = true;
     },
     validate({ resources }) {
       resources[0].schema.validationMutation = true;
@@ -1674,7 +1701,7 @@ test("conformance preserves setup, compile, and validation mutations for one cas
   assert.deepEqual(mutationPairs(report), [
     "resources/adapter-setup",
     "resources/validation",
-    "resources/compile"
+    "resources/setup"
   ]);
 });
 
@@ -1699,7 +1726,7 @@ test("conformance classifier isolates runtime errors and records wrong results",
   const adapter = {
     name: "fixture",
     version: "1.0.0",
-    compile() {
+    setup() {
       return (data) => {
         if (data === 0) {
           throw new Error("runtime exploded");
@@ -1707,7 +1734,7 @@ test("conformance classifier isolates runtime errors and records wrong results",
         return data === 2;
       };
     },
-    validate: (compiled, data) => compiled(data),
+    validate: (target, data) => target(data),
     getError: () => "fixture error"
   };
   const records = await classifySchemaCases({
@@ -1730,10 +1757,10 @@ test("conformance preserves fast status on detail failure and detects profile di
   const detailCompileFailureAdapter = {
     name: "fixture",
     version: "1.0.0",
-    compile: () => () => false,
-    validate: (compiled, data) => compiled(data),
+    setup: () => () => false,
+    validate: (target, data) => target(data),
     getError() {
-      throw new Error("detail compile exploded");
+      throw new Error("detail setup exploded");
     }
   };
   const detailFailure = await classifySchemaCases({
@@ -1745,7 +1772,7 @@ test("conformance preserves fast status on detail failure and detects profile di
   });
   assert.equal(detailFailure[0].status, "PASS");
   assert.equal(detailFailure[0].detailErrorCode, "DETAIL_RUNTIME_ERROR");
-  assert.match(detailFailure[0].detailError, /detail compile exploded/);
+  assert.match(detailFailure[0].detailError, /detail setup exploded/);
 
   const divergenceAdapter = {
     ...detailCompileFailureAdapter,
@@ -2100,10 +2127,10 @@ test("Setup creates one atomic draft scope from Base and Formats", () => {
   assert.equal(intersection.formatProfile, null);
   assert.equal(intersection.phase, "setup");
   assert.equal(intersection.caseIds.length, 6);
-  assert.equal(intersection.compileEntries.length, 2);
+  assert.equal(intersection.setupEntries.length, 2);
   assert.deepEqual(
     new Set(
-      intersection.compileEntries.flatMap(
+      intersection.setupEntries.flatMap(
         ({ sourceFormatProfiles }) => sourceFormatProfiles
       )
     ),
@@ -2537,7 +2564,7 @@ test("intersection preserves structured data, schema, and resource mutations out
     status: "RUNTIME",
     errorCode: "INPUT_MUTATION",
     mutationTarget: "schema",
-    mutationClass: "compile"
+    mutationClass: "setup"
   });
   Object.assign(fixture.reports[2].cases[0], {
     status: "RUNTIME",
@@ -2575,7 +2602,7 @@ test("intersection preserves structured data, schema, and resource mutations out
     ]
   );
   for (const [index, target, mutationClass] of [
-    [1, "schema", "compile"],
+    [1, "schema", "setup"],
     [2, "resources", "validation"]
   ]) {
     const validator = fixture.reports[index].validator;
@@ -2680,7 +2707,7 @@ test("intersection records empty and rejects one-sided draft corpora", () => {
   );
 });
 
-test("compile keys canonicalize effective operations and separate draft or resources", () => {
+test("setup keys canonicalize effective operations and separate draft or resources", () => {
   const schemas = [
     { id: "d6-a", draft: "draft6", schema: { type: "object", minProperties: 1 } },
     { id: "d6-b", draft: "draft6", schema: { minProperties: 1, type: "object" } },
@@ -2720,7 +2747,7 @@ test("compile keys canonicalize effective operations and separate draft or resou
       schema: { type: "string" }
     }
   ];
-  const entries = createCompileEntries({
+  const entries = createSetupEntries({
     schemas,
     representedSchemaIds: schemas.map(({ id }) => id),
     remoteEntries
@@ -2732,12 +2759,12 @@ test("compile keys canonicalize effective operations and separate draft or resou
   );
   assert.deepEqual(duplicate.memberSchemaIds, ["d6-a", "d6-b"]);
   assert.notEqual(
-    entries.find((entry) => entry.representativeSchemaId === "d7-a").compileKey,
-    duplicate.compileKey
+    entries.find((entry) => entry.representativeSchemaId === "d7-a").setupKey,
+    duplicate.setupKey
   );
   const resourceKeys = entries
     .filter((entry) => entry.resources.length === 1)
-    .map(({ compileKey }) => compileKey);
+    .map(({ setupKey }) => setupKey);
   assert.equal(new Set(resourceKeys).size, 2);
   const mergedProfiles = entries.find((entry) =>
     entry.memberSchemaIds.includes("d6-profile-base")
@@ -2767,7 +2794,7 @@ test("Setup deduplicates modern Base schemas after removing format", () => {
       schema: { type: "string" }
     }
   ];
-  const baseEntries = createCompileEntries({
+  const baseEntries = createSetupEntries({
     schemas,
     representedSchemaIds: schemas.map(({ id }) => id),
     remoteEntries: [],
@@ -2780,8 +2807,8 @@ test("Setup deduplicates modern Base schemas after removing format", () => {
   ]);
 });
 
-test("compile entries treat the active draft metaschema as built-in adapter setup", () => {
-  const entries = createCompileEntries({
+test("setup entries treat the active draft metaschema as built-in adapter setup", () => {
+  const entries = createSetupEntries({
     schemas: [
       {
         id: "draft4:metaschema.json#/groups/0",
@@ -2882,9 +2909,9 @@ test("benchmark worker rejects invalid arguments and an exhausted deadline", asy
   );
   await assert.rejects(
     () =>
-      runCompileSample({
+      runSetupSample({
         request: { ...validRequest, deadline: Date.now() - 1 },
-        compileEntries: [],
+        setupEntries: [],
         schemas: [],
         remotes: new Map(),
         createAdapter: () => ({})
@@ -2999,17 +3026,17 @@ test("benchmark artifact verification rejects stale manifest and intersection ha
   );
 });
 
-test("compile worker times fresh adapter setup but keeps neutral preparation outside", async () => {
+test("setup worker times fresh adapter setup but keeps neutral preparation outside", async () => {
   const events = [];
   const calls = [];
-  const compileEntries = [
+  const setupEntries = [
     {
-      compileKey: `draft6:${"a".repeat(64)}`,
+      setupKey: `draft6:${"a".repeat(64)}`,
       draft: "draft6",
       representativeSchemaId: "schema-a"
     },
     {
-      compileKey: `draft6:${"b".repeat(64)}`,
+      setupKey: `draft6:${"b".repeat(64)}`,
       draft: "draft6",
       representativeSchemaId: "schema-b"
     }
@@ -3019,7 +3046,7 @@ test("compile worker times fresh adapter setup but keeps neutral preparation out
     { id: "schema-b", draft: "draft6", schema: { type: "string" } }
   ];
   let clock = 0;
-  const sample = await runCompileSample({
+  const sample = await runSetupSample({
     request: {
       phase: "setup",
       validator: "fixture",
@@ -3027,7 +3054,7 @@ test("compile worker times fresh adapter setup but keeps neutral preparation out
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries,
+    setupEntries,
     schemas,
     remotes: new Map(),
     resourceRegistry: {
@@ -3042,12 +3069,12 @@ test("compile worker times fresh adapter setup but keeps neutral preparation out
       return {
         name: "fixture",
         version: "1.0.0",
-        compile(schema) {
-          events.push("compile");
+        setup(schema) {
+          events.push("setup");
           calls.push(schema.type);
           return () => true;
         },
-        validate: (compiled, data) => compiled(data)
+        validate: (target, data) => target(data)
       };
     },
     now() {
@@ -3076,8 +3103,8 @@ test("compile worker times fresh adapter setup but keeps neutral preparation out
   assert.equal(sample.operations, 2);
   assert.equal(sample.warmupPasses, 1);
   assert.equal(sample.passes, 1);
-  assert.equal(sample.corpusCompileEntries, 2);
-  assert.equal(sample.checksum, compileChecksum(compileEntries));
+  assert.equal(sample.corpusSetupEntries, 2);
+  assert.equal(sample.checksum, setupChecksum(setupEntries));
   assert.equal(sample.seconds, 0.002);
   assert.equal(sample.throughput, 1000);
   assert.equal(Object.hasOwn(sample, "detailed"), false);
@@ -3091,7 +3118,7 @@ test("compile worker times fresh adapter setup but keeps neutral preparation out
   }
 });
 
-test("compile worker gives every operation disposable schemas and resources", async () => {
+test("setup worker gives every operation disposable schemas and resources", async () => {
   const schemaId = "draft6:mutating-schema";
   const schema = {
     type: "array",
@@ -3110,7 +3137,7 @@ test("compile worker gives every operation disposable schemas and resources", as
   let clock = -1;
   let operations = 0;
 
-  const sample = await runCompileSample({
+  const sample = await runSetupSample({
     request: {
       phase: "setup",
       validator: "fixture",
@@ -3119,9 +3146,9 @@ test("compile worker gives every operation disposable schemas and resources", as
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: [
+    setupEntries: [
       {
-        compileKey: `${schemaId}:fixture`,
+        setupKey: `${schemaId}:fixture`,
         draft: "draft6",
         representativeSchemaId: schemaId,
         memberSchemaIds: [schemaId]
@@ -3136,15 +3163,15 @@ test("compile worker gives every operation disposable schemas and resources", as
       return {
         name: "fixture",
         version: "1.0.0",
-        compile(disposableSchema) {
+        setup(disposableSchema) {
           assert.equal(Object.hasOwn(disposableSchema, "mutated"), false);
           operations += 1;
           disposableSchema.mutated = true;
           disposableSchema.items[0] = undefined;
-          resources[0].schema.compileMutation = true;
+          resources[0].schema.setupMutation = true;
           return () => true;
         },
-        validate: (compiled, data) => compiled(data)
+        validate: (target, data) => target(data)
       };
     },
     timing: {
@@ -3163,16 +3190,16 @@ test("compile worker gives every operation disposable schemas and resources", as
   assert.equal(Object.hasOwn(sample, "mutations"), false);
 });
 
-test("compile worker keeps boolean preparation outside the timed vendor operation", async () => {
+test("setup worker keeps boolean preparation outside the timed vendor operation", async () => {
   const events = [];
   let clock = 0;
-  const compileEntries = [true, false].map((schema, index) => ({
-    compileKey: `draft6:boolean-${index}`,
+  const setupEntries = [true, false].map((schema, index) => ({
+    setupKey: `draft6:boolean-${index}`,
     draft: "draft6",
     representativeSchemaId: `boolean-${index}`
   }));
 
-  const sample = await runCompileSample({
+  const sample = await runSetupSample({
     request: {
       phase: "setup",
       validator: "fixture",
@@ -3181,7 +3208,7 @@ test("compile worker keeps boolean preparation outside the timed vendor operatio
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries,
+    setupEntries,
     schemas: [
       { id: "boolean-0", draft: "draft6", schema: true },
       { id: "boolean-1", draft: "draft6", schema: false }
@@ -3191,11 +3218,11 @@ test("compile worker keeps boolean preparation outside the timed vendor operatio
       events.push("factory");
       return {
         version: "1.0.0",
-        compile(schema) {
-          events.push(`compile:${schema}`);
+        setup(schema) {
+          events.push(`setup:${schema}`);
           return schema;
         },
-        validate: (compiled) => compiled
+        validate: (target) => target
       };
     },
     now() {
@@ -3213,22 +3240,22 @@ test("compile worker keeps boolean preparation outside the timed vendor operatio
   assert.deepEqual(events, [
     "clock",
     "factory",
-    "compile:true",
+    "setup:true",
     "clock",
     "clock",
     "factory",
-    "compile:false",
+    "setup:false",
     "clock"
   ]);
   assert.equal(sample.operations, 2);
 });
 
-test("compile worker sustains complete fresh-context passes to the temporal target", async () => {
+test("setup worker sustains complete fresh-context passes to the temporal target", async () => {
   let clock = -10;
   let adapters = 0;
-  let compiles = 0;
+  let setups = 0;
   const entries = executionFixtureEntries();
-  const sample = await runCompileSample({
+  const sample = await runSetupSample({
     request: {
       phase: "setup",
       validator: "fixture",
@@ -3237,7 +3264,7 @@ test("compile worker sustains complete fresh-context passes to the temporal targ
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: entries,
+    setupEntries: entries,
     schemas: [
       {
         id: entries[0].representativeSchemaId,
@@ -3250,11 +3277,11 @@ test("compile worker sustains complete fresh-context passes to the temporal targ
       adapters += 1;
       return {
         version: "1.0.0",
-        compile: () => {
-          compiles += 1;
+        setup: () => {
+          setups += 1;
           return () => true;
         },
-        validate: (compiled, data) => compiled(data)
+        validate: (target, data) => target(data)
       };
     },
     timing: {
@@ -3272,10 +3299,10 @@ test("compile worker sustains complete fresh-context passes to the temporal targ
   assert.equal(sample.operations, 250);
   assert.equal(sample.actualElapsedMilliseconds, 2500);
   assert.equal(adapters, 251);
-  assert.equal(compiles, 251);
+  assert.equal(setups, 251);
 });
 
-test("compile telemetry records start, finish, peak, and stops only after a complete pass", async () => {
+test("setup telemetry records start, finish, peak, and stops only after a complete pass", async () => {
   const entries = executionFixtureEntries();
   const schemas = [
     {
@@ -3286,7 +3313,7 @@ test("compile telemetry records start, finish, peak, and stops only after a comp
   ];
   let clock = 0;
   let memory = 0;
-  let compiles = 0;
+  let setups = 0;
   const request = {
     phase: "setup",
     validator: "fixture",
@@ -3297,15 +3324,15 @@ test("compile telemetry records start, finish, peak, and stops only after a comp
   };
   const createAdapter = () => ({
     version: "1.0.0",
-    compile: () => {
-      compiles += 1;
+    setup: () => {
+      setups += 1;
       return () => true;
     },
-    validate: (compiled, data) => compiled(data)
+    validate: (target, data) => target(data)
   });
-  const sample = await runCompileSample({
+  const sample = await runSetupSample({
     request,
-    compileEntries: entries,
+    setupEntries: entries,
     schemas,
     remotes: new Map(),
     createAdapter,
@@ -3328,12 +3355,12 @@ test("compile telemetry records start, finish, peak, and stops only after a comp
   assert.equal(sample.memory.peak.rss, 40);
 
   memory = 0;
-  compiles = 0;
+  setups = 0;
   await assert.rejects(
     () =>
-      runCompileSample({
+      runSetupSample({
         request,
-        compileEntries: entries,
+        setupEntries: entries,
         schemas,
         remotes: new Map(),
         createAdapter,
@@ -3361,7 +3388,7 @@ test("compile telemetry records start, finish, peak, and stops only after a comp
       error.code === "COOPERATIVE_BUDGET_EXCEEDED" &&
       error.telemetry.observedAt === "complete-pass-boundary"
   );
-  assert.equal(compiles, 1);
+  assert.equal(setups, 1);
 });
 
 test("sustained growth ignores safe startup expansion and stops under material pressure", async () => {
@@ -3384,15 +3411,15 @@ test("sustained growth ignores safe startup expansion and stops under material p
   const run = (memoryStep) => {
     let clock = 0;
     let memory = -memoryStep;
-    return runCompileSample({
+    return runSetupSample({
       request,
-      compileEntries: entries,
+      setupEntries: entries,
       schemas,
       remotes: new Map(),
       createAdapter: () => ({
         version: "1.0.0",
-        compile: () => () => true,
-        validate: (compiled, data) => compiled(data)
+        setup: () => () => true,
+        validate: (target, data) => target(data)
       }),
       now: () => {
         clock += 5;
@@ -3479,7 +3506,7 @@ test("granular checkpoints hit, miss stale identities, overwrite atomically, and
     actualElapsedMilliseconds: benchmarkConstants.setupTargetMilliseconds,
     singlePassExceededTarget: false,
     passes: 1,
-    corpusCompileEntries: 1,
+    corpusSetupEntries: 1,
     operations: 1,
     seconds: 1,
     throughput: 1,
@@ -4075,7 +4102,7 @@ function executionFixtureCases(expected = [true, false]) {
 function executionFixtureEntries() {
   return [
     {
-      compileKey: `draft6:${"a".repeat(64)}`,
+      setupKey: `draft6:${"a".repeat(64)}`,
       draft: "draft6",
       representativeSchemaId: "draft6:fixture.json#/groups/0",
       memberSchemaIds: ["draft6:fixture.json#/groups/0"]
@@ -4101,8 +4128,8 @@ test("execution worker rejects one-sided, missing, and previously incorrect corp
   const createAdapter = (result) => () => ({
     name: "fixture",
     version: "1.0.0",
-    compile: () => () => result,
-    validate: (compiled, data) => compiled(data)
+    setup: () => () => result,
+    validate: (target, data) => target(data)
   });
 
   for (const expected of [[true], [false]]) {
@@ -4110,7 +4137,7 @@ test("execution worker rejects one-sided, missing, and previously incorrect corp
       () =>
         runExecutionSample({
           request,
-          compileEntries: executionFixtureEntries(),
+          setupEntries: executionFixtureEntries(),
           cases: executionFixtureCases(expected),
           caseIds: executionFixtureCases(expected).map(({ id }) => id),
           schemas,
@@ -4126,7 +4153,7 @@ test("execution worker rejects one-sided, missing, and previously incorrect corp
     () =>
       runExecutionSample({
         request,
-        compileEntries: executionFixtureEntries(),
+        setupEntries: executionFixtureEntries(),
         cases,
         caseIds: [...cases.map(({ id }) => id), "missing-case"],
         schemas,
@@ -4139,7 +4166,7 @@ test("execution worker rejects one-sided, missing, and previously incorrect corp
     () =>
       runExecutionSample({
         request,
-        compileEntries: executionFixtureEntries(),
+        setupEntries: executionFixtureEntries(),
         cases,
         caseIds: cases.map(({ id }) => id),
         schemas,
@@ -4163,7 +4190,7 @@ test("execution worker completes timed warmup and sustained full-corpus passes",
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: executionFixtureEntries(),
+    setupEntries: executionFixtureEntries(),
     cases,
     caseIds: cases.map(({ id }) => id),
     schemas: [
@@ -4179,14 +4206,14 @@ test("execution worker completes timed warmup and sustained full-corpus passes",
       return {
         name: "fixture",
         version: "1.0.0",
-        compile() {
-          events.push("compile");
+        setup() {
+          events.push("setup");
           return (data) => {
             calls += 1;
             return data.value;
           };
         },
-        validate: (compiled, data) => compiled(data)
+        validate: (target, data) => target(data)
       };
     },
     timing: {
@@ -4204,7 +4231,7 @@ test("execution worker completes timed warmup and sustained full-corpus passes",
     }
   });
 
-  assert.deepEqual(events.slice(0, 2), ["adapter", "compile"]);
+  assert.deepEqual(events.slice(0, 2), ["adapter", "setup"]);
   assert.equal(sample.warmupPasses, 3);
   assert.equal(sample.warmupMilliseconds, 1200);
   assert.equal(sample.targetSampleMilliseconds, 2500);
@@ -4233,7 +4260,7 @@ test("execution worker exceeds 100 passes when the temporal target requires it",
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: executionFixtureEntries(),
+    setupEntries: executionFixtureEntries(),
     cases,
     caseIds: cases.map(({ id }) => id),
     schemas: [{ id: cases[0].schemaId, draft: "draft6", schema: {} }],
@@ -4241,10 +4268,10 @@ test("execution worker exceeds 100 passes when the temporal target requires it",
     createAdapter: () => ({
       name: "fixture",
       version: "1.0.0",
-      compile: () => (data) => data.value,
-      validate(compiled, data) {
+      setup: () => (data) => data.value,
+      validate(target, data) {
         dataIdentities.add(data);
-        return compiled(data);
+        return target(data);
       }
     }),
     timing: {
@@ -4274,7 +4301,7 @@ test("execution worker documents a single complete pass that exceeds target", as
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: executionFixtureEntries(),
+    setupEntries: executionFixtureEntries(),
     cases,
     caseIds: cases.map(({ id }) => id),
     schemas: [{ id: cases[0].schemaId, draft: "draft6", schema: {} }],
@@ -4282,8 +4309,8 @@ test("execution worker documents a single complete pass that exceeds target", as
     createAdapter: () => ({
       name: "fixture",
       version: "1.0.0",
-      compile: () => (data) => data.value,
-      validate: (compiled, data) => compiled(data)
+      setup: () => (data) => data.value,
+      validate: (target, data) => target(data)
     }),
     timing: {
       warmupMinimumMilliseconds: 1000,
@@ -4348,7 +4375,7 @@ test("execution worker reuses one isolated mutable measurement set per round", a
         round,
         deadline: Date.now() + 60_000
       },
-      compileEntries: executionFixtureEntries(),
+      setupEntries: executionFixtureEntries(),
       cases,
       caseIds: cases.map(({ id }) => id),
       schemas: [{ id: schemaId, draft: "draft6", schema }],
@@ -4359,7 +4386,7 @@ test("execution worker reuses one isolated mutable measurement set per round", a
         return {
           name: "fixture",
           version: "1.0.0",
-          compile(disposableSchema) {
+          setup(disposableSchema) {
             assert.equal(Object.hasOwn(disposableSchema, "mutated"), false);
             return data => {
               calls.push(data);
@@ -4367,7 +4394,7 @@ test("execution worker reuses one isolated mutable measurement set per round", a
               return Array.isArray(data) ? data[0] : data.value;
             };
           },
-          validate: (compiled, data) => compiled(data)
+          validate: (target, data) => target(data)
         };
       },
       timing: {
@@ -4403,7 +4430,7 @@ test("execution worker reuses one isolated mutable measurement set per round", a
   assert.notEqual(identitiesByRound[1], identitiesByRound[3]);
 });
 
-test("cfworker draft4 compile mutation stays confined without performance tracking", async () => {
+test("cfworker draft4 setup mutation stays confined without performance tracking", async () => {
   const schemaId = "draft4:smoke.json#/groups/0";
   const schema = { type: "integer" };
   const cases = [
@@ -4420,9 +4447,9 @@ test("cfworker draft4 compile mutation stays confined without performance tracki
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: [
+    setupEntries: [
       {
-        compileKey: `draft4:${"a".repeat(64)}`,
+        setupKey: `draft4:${"a".repeat(64)}`,
         draft: "draft4",
         representativeSchemaId: schemaId,
         memberSchemaIds: [schemaId]
@@ -4469,7 +4496,7 @@ test("execution confines private mutations without tracking them", async () => {
       round: 2,
       deadline: Date.now() + 60_000
     },
-    compileEntries: executionFixtureEntries(),
+    setupEntries: executionFixtureEntries(),
     cases,
     caseIds: cases.map(({ id }) => id),
     schemas: [{ id: cases[0].schemaId, draft: "draft6", schema }],
@@ -4480,12 +4507,12 @@ test("execution confines private mutations without tracking them", async () => {
       return {
       name: "confined-mutator",
       version: "1.0.0",
-      compile(privateSchema) {
+      setup(privateSchema) {
         privateSchema.normalized = true;
         return (data) => data.value;
       },
-      validate(compiled, data) {
-        const observed = compiled(data);
+      validate(target, data) {
+        const observed = target(data);
         data.visited = true;
         return observed;
       }
@@ -4516,7 +4543,7 @@ test("execution confines private mutations without tracking them", async () => {
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: executionFixtureEntries(),
+    setupEntries: executionFixtureEntries(),
     cases,
     caseIds: cases.map(({ id }) => id),
     schemas: [{ id: cases[0].schemaId, draft: "draft6", schema }],
@@ -4530,13 +4557,13 @@ test("execution confines private mutations without tracking them", async () => {
       return {
         name: "clean-adapter",
         version: "1.0.0",
-        compile(privateSchema) {
+        setup(privateSchema) {
           assert.equal(Object.hasOwn(privateSchema, "normalized"), false);
           return (data) => data.value;
         },
-        validate(compiled, data) {
+        validate(target, data) {
           assert.equal(Object.hasOwn(data, "visited"), false);
-          return compiled(data);
+          return target(data);
         }
       };
     },
@@ -4570,7 +4597,7 @@ test("execution rejects changed results without mutation tracking", async () => 
           round: 1,
           deadline: Date.now() + 60_000
         },
-        compileEntries: executionFixtureEntries(),
+        setupEntries: executionFixtureEntries(),
         cases,
         caseIds: cases.map(({ id }) => id),
         schemas: [{ id: cases[0].schemaId, draft: "draft6", schema: {} }],
@@ -4578,13 +4605,13 @@ test("execution rejects changed results without mutation tracking", async () => 
         createAdapter: () => ({
           name: "checksum-mutator",
           version: "1.0.0",
-          compile: () => (data) => data.value,
-          validate(compiled, data) {
+          setup: () => (data) => data.value,
+          validate(target, data) {
             validations += 1;
             if (validations > cases.length) {
               data.value = !data.value;
             }
-            return compiled(data);
+            return target(data);
           }
         }),
         timing: {
@@ -4645,7 +4672,7 @@ test("execution rejects changed results during warmup and measurement", async ()
             round: 1,
             deadline: Date.now() + 60_000
           },
-          compileEntries: executionFixtureEntries(),
+          setupEntries: executionFixtureEntries(),
           cases,
           caseIds: cases.map(({ id }) => id),
           schemas: [{ id: schemaId, draft: "draft6", schema: {} }],
@@ -4653,13 +4680,13 @@ test("execution rejects changed results during warmup and measurement", async ()
           createAdapter: () => ({
             name: `collision-${label}`,
             version: "1.0.0",
-            compile: () => (data) => {
+            setup: () => (data) => {
               calls += 1;
               return calls <= cases.length
                 ? expected[data.index]
                 : collision[data.index];
             },
-            validate: (compiled, data) => compiled(data)
+            validate: (target, data) => target(data)
           }),
           timing: {
             warmupMinimumMilliseconds,
@@ -4697,7 +4724,7 @@ test("execution does not track confined measured-corpus mutations", async () => 
         round: 1,
         deadline: Date.now() + 60_000
       },
-      compileEntries: executionFixtureEntries(),
+      setupEntries: executionFixtureEntries(),
       cases,
       caseIds: cases.map(({ id }) => id),
       schemas: [{ id: cases[0].schemaId, draft: "draft6", schema: {} }],
@@ -4705,7 +4732,7 @@ test("execution does not track confined measured-corpus mutations", async () => 
       createAdapter: () => ({
         name: "mutating-fixture",
         version: "1.0.0",
-        compile: () => data => {
+        setup: () => data => {
           const observed = data.value;
           validations += 1;
           if (validations > cases.length) {
@@ -4713,7 +4740,7 @@ test("execution does not track confined measured-corpus mutations", async () => 
           }
           return observed;
         },
-        validate: (compiled, data) => compiled(data)
+        validate: (target, data) => target(data)
       }),
       now: () => {
         clock += 1;
@@ -4755,7 +4782,7 @@ test("execution confines deferred schema and resource mutations without tracking
           round: 1,
           deadline: Date.now() + 60_000
         },
-        compileEntries: executionFixtureEntries(),
+        setupEntries: executionFixtureEntries(),
         cases,
         caseIds: cases.map(({ id }) => id),
         schemas: [{ id: cases[0].schemaId, draft: "draft6", schema }],
@@ -4765,7 +4792,7 @@ test("execution confines deferred schema and resource mutations without tracking
           return {
             name: `${mutationTarget}-mutator`,
             version: "1.0.0",
-            compile(disposableSchema) {
+            setup(disposableSchema) {
               return data => {
                 const observed = Array.isArray(data) ? data[0] : data.value;
                 validations += 1;
@@ -4782,7 +4809,7 @@ test("execution confines deferred schema and resource mutations without tracking
                 return observed;
               };
             },
-            validate: (compiled, data) => compiled(data)
+            validate: (target, data) => target(data)
           };
         },
         now: () => {
@@ -4868,9 +4895,9 @@ test("only conformance reports jsonschema mutation of special-name property case
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: [
+    setupEntries: [
       {
-        compileKey: `${schemaId}:fixture`,
+        setupKey: `${schemaId}:fixture`,
         draft: "draft7",
         representativeSchemaId: schemaId,
         memberSchemaIds: [schemaId]
@@ -4907,8 +4934,8 @@ test("AJV draft2020-12 base runs a large isolated corpus under the real memory b
     formatProfile,
     schema: { type: "integer", minimum: index }
   }));
-  const compileEntries = schemas.map(({ id }, index) => ({
-    compileKey: `${draft}:${formatProfile}:memory-${index}`,
+  const setupEntries = schemas.map(({ id }, index) => ({
+    setupKey: `${draft}:${formatProfile}:memory-${index}`,
     draft,
     formatProfile,
     representativeSchemaId: id,
@@ -4929,7 +4956,7 @@ test("AJV draft2020-12 base runs a large isolated corpus under the real memory b
   });
   const caseIds = cases.map(({ id }) => id);
   assert.equal(caseIds.length, 1339);
-  assert.equal(compileEntries.length, 382);
+  assert.equal(setupEntries.length, 382);
   const selectedById = new Map(cases.map((testCase) => [testCase.id, testCase]));
   const before = canonicalJson(
     caseIds.map((id) => selectedById.get(id).data)
@@ -4944,7 +4971,7 @@ test("AJV draft2020-12 base runs a large isolated corpus under the real memory b
       round: 2,
       deadline: Date.now() + 2 * 60_000
     },
-    compileEntries,
+    setupEntries,
     cases,
     caseIds,
     schemas,
@@ -4991,7 +5018,7 @@ test("execution worker still stops genuine memory budget growth", async () => {
         round: 1,
         deadline: Date.now() + 60_000
       },
-      compileEntries: executionFixtureEntries(),
+      setupEntries: executionFixtureEntries(),
       cases,
       caseIds: cases.map(({ id }) => id),
       schemas: [{ id: cases[0].schemaId, draft: "draft6", schema: {} }],
@@ -4999,8 +5026,8 @@ test("execution worker still stops genuine memory budget growth", async () => {
       createAdapter: () => ({
         name: "fixture",
         version: "1.0.0",
-        compile: () => (data) => data.value,
-        validate: (compiled, data) => compiled(data)
+        setup: () => (data) => data.value,
+        validate: (target, data) => target(data)
       }),
       now: () => {
         clock += 1;
@@ -5033,7 +5060,7 @@ test("execution worker still stops genuine memory budget growth", async () => {
 function reportSampleFixture(phase) {
   const draft = "draft6";
   const formatProfile = null;
-  const participants = getCompileParticipants(draft);
+  const participants = getSetupParticipants(draft);
   const samples = [];
   for (let round = 1; round <= benchmarkConstants.rounds; round += 1) {
     for (const participant of participants) {
@@ -5057,7 +5084,7 @@ function reportSampleFixture(phase) {
           actualElapsedMilliseconds: benchmarkConstants.setupTargetMilliseconds,
           singlePassExceededTarget: false,
           passes: 1,
-          corpusCompileEntries: 10,
+          corpusSetupEntries: 10,
           operations: 10,
           seconds: 2.5,
           throughput: 4,
@@ -5075,7 +5102,7 @@ function reportSampleFixture(phase) {
     }
   }
   return {
-    benchmarkVersion: 9,
+    benchmarkVersion: 11,
     benchmarkMode: "full",
     phase,
     draft,
@@ -5102,11 +5129,11 @@ test("report validation rejects missing, stale, incomplete, bad checksum, and ve
     hash: "a".repeat(64),
     emptyReason: null,
     performanceEligibility: performanceEligibilityPolicy,
-    compileChecksum: "fixture",
-    compileEntries: 10,
+    setupChecksum: "fixture",
+    setupEntries: 10,
     execution: {}
   };
-  const participants = getCompileParticipants("draft6");
+  const participants = getSetupParticipants("draft6");
   const versions = new Map(participants.map(({ id }) => [id, "1.0.0"]));
   assert.throws(
     () => validateSampleSet({ phase: "setup", result: null, intersection, installedVersions: versions, participants }),
@@ -5141,18 +5168,18 @@ test("report validation rejects missing, stale, incomplete, bad checksum, and ve
     () => validateSampleSet({ phase: "setup", result: badVersion, intersection, installedVersions: versions, participants }),
     /installed version/
   );
-  const compileDataMutation = reportSampleFixture("setup");
-  const compileSample = compileDataMutation.samples[0];
-  compileSample.mutations = [
+  const setupDataMutation = reportSampleFixture("setup");
+  const setupSample = setupDataMutation.samples[0];
+  setupSample.mutations = [
     {
-      validator: compileSample.validator,
-      draft: compileSample.draft,
-      formatProfile: compileSample.formatProfile,
+      validator: setupSample.validator,
+      draft: setupSample.draft,
+      formatProfile: setupSample.formatProfile,
       phase: "setup",
-      round: compileSample.round,
+      round: setupSample.round,
       mutationTarget: "data",
-      mutationClass: "compile",
-      moment: "after compile",
+      mutationClass: "setup",
+      moment: "after setup",
       scope: "case",
       subjectId: "case-id",
       caseId: "case-id",
@@ -5170,7 +5197,7 @@ test("report validation rejects missing, stale, incomplete, bad checksum, and ve
     () =>
       validateSampleSet({
         phase: "setup",
-        result: compileDataMutation,
+      result: setupDataMutation,
         intersection,
         installedVersions: versions,
         participants
@@ -5448,8 +5475,8 @@ test("resource registry gives roots without $id a complete transitive local clos
 
 async function prepareAdapter(id, config, schema) {
   const adapter = getAdapterFactory(id)(config);
-  const target = typeof adapter.compile === "function"
-    ? await adapter.compile(schema)
+  const target = typeof adapter.setup === "function"
+    ? await adapter.setup(schema)
     : schema;
   return {
     adapter,
@@ -5474,7 +5501,7 @@ test("sync adapters execute every active draft through the runtime contract", as
       assert.equal(validate(1), true, `${participant.id}/${draft}`);
       assert.equal(validate("1"), false, `${participant.id}/${draft}`);
       assert.equal(
-        typeof adapter.compile === "function",
+        typeof adapter.setup === "function",
         participant.id !== "jsonschema"
       );
     }
@@ -5484,7 +5511,7 @@ test("sync adapters execute every active draft through the runtime contract", as
 test("cfworker executes draft4 boolean exclusivity through its native draft mode", async () => {
   const create = getAdapterFactory("cfworker-json-schema");
   const exclusive = create({ draft: "draft4", formatProfile: "base", resources: [] });
-  const exclusiveTarget = await exclusive.compile({
+  const exclusiveTarget = await exclusive.setup({
     maximum: 2,
     exclusiveMaximum: true
   });
@@ -5723,7 +5750,7 @@ test("AJV adapters validate registered resources through the public addSchema co
   }
 });
 
-test("z-schema reuses one compiled public cache with remote resources deterministically", async () => {
+test("z-schema reuses one prepared public cache with remote resources deterministically", async () => {
   const resourceUri = "https://example.test/z-schema-integer.json";
   const schema = {
     type: "object",
@@ -6169,7 +6196,7 @@ test("Hyperjump resolves async to reusable callables for every active draft", as
       formatProfile: "base",
       resources: []
     });
-    const pending = adapter.compile({ type: "integer" });
+    const pending = adapter.setup({ type: "integer" });
     assert.equal(typeof pending.then, "function");
     const target = await pending;
     assert.equal(adapter.validate(target, 1), true, draft);
@@ -6177,7 +6204,7 @@ test("Hyperjump resolves async to reusable callables for every active draft", as
   }
 });
 
-test("Hyperjump compiles boolean schemas without mutation in drafts that support them", async () => {
+test("Hyperjump sets up boolean schemas without mutation in drafts that support them", async () => {
   for (const draft of draftIds.filter((candidate) => candidate !== "draft4")) {
     for (const schema of [true, false]) {
       const { validate } = await prepareAdapter(
@@ -6338,11 +6365,11 @@ test("Hyperjump resolves embedded and registered anchors", async () => {
   assert.equal(remote("1"), false);
 });
 
-test("async compile timing includes resolution and execution excludes setup", async () => {
+test("async setup timing includes resolution and execution excludes setup", async () => {
   const cases = executionFixtureCases();
   const events = [];
-  let compileClock = 0;
-  const compileSample = await runCompileSample({
+  let setupClock = 0;
+  const setupSample = await runSetupSample({
     request: {
       phase: "setup",
       validator: "hyperjump",
@@ -6350,24 +6377,24 @@ test("async compile timing includes resolution and execution excludes setup", as
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: executionFixtureEntries(),
+    setupEntries: executionFixtureEntries(),
     schemas: [{ id: cases[0].schemaId, draft: "draft6", schema: {} }],
     remotes: new Map(),
     createAdapter: () => ({
       version: "1.0.0",
-      compileMode: "async",
-      async compile() {
-        events.push("compile-start");
+      setupMode: "async",
+      async setup() {
+        events.push("setup-start");
         await Promise.resolve();
-        events.push("compile-resolved");
+        events.push("setup-resolved");
         return () => true;
       },
-      validate: (compiled, data) => compiled(data)
+      validate: (target, data) => target(data)
     }),
     now: () => {
-      events.push("compile-clock");
-      compileClock += 5;
-      return compileClock;
+      events.push("setup-clock");
+      setupClock += 5;
+      return setupClock;
     },
     timing: {
       warmupMinimumMilliseconds: 5,
@@ -6375,12 +6402,12 @@ test("async compile timing includes resolution and execution excludes setup", as
       minimumSampleMilliseconds: 5
     }
   });
-  assert.equal(compileSample.seconds, 0.005);
+  assert.equal(setupSample.seconds, 0.005);
   assert.deepEqual(events.slice(-4), [
-    "compile-clock",
-    "compile-start",
-    "compile-resolved",
-    "compile-clock"
+    "setup-clock",
+    "setup-start",
+    "setup-resolved",
+    "setup-clock"
   ]);
 
   events.length = 0;
@@ -6393,7 +6420,7 @@ test("async compile timing includes resolution and execution excludes setup", as
       round: 1,
       deadline: Date.now() + 60_000
     },
-    compileEntries: executionFixtureEntries(),
+    setupEntries: executionFixtureEntries(),
     cases,
     caseIds: cases.map(({ id }) => id),
     schemas: [{ id: cases[0].schemaId, draft: "draft6", schema: {} }],
@@ -6401,14 +6428,14 @@ test("async compile timing includes resolution and execution excludes setup", as
     createAdapter: () => ({
       name: "hyperjump",
       version: "1.0.0",
-      compileMode: "async",
-      async compile() {
+      setupMode: "async",
+      async setup() {
         events.push("setup-start");
         await Promise.resolve();
         events.push("setup-resolved");
         return (data) => data.value;
       },
-      validate: (compiled, data) => compiled(data)
+      validate: (target, data) => target(data)
     }),
     timing: {
       warmupMinimumMilliseconds: 1,

@@ -26,8 +26,8 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
-| draft2020-12:anchor.json#/groups/3/tests/0 | $ref resolves to /$defs/A/allOf/1 | true |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "http://localhost:1234/draft2020-12/child2". |
-| draft2020-12:anchor.json#/groups/3/tests/1 | $ref does not resolve to /$defs/A/allOf/0 | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "http://localhost:1234/draft2020-12/child2". |
+| draft2020-12:anchor.json#/groups/3/tests/0 | $ref resolves to /$defs/A/allOf/1 | true |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "http://localhost:1234/draft2020-12/child2". |
+| draft2020-12:anchor.json#/groups/3/tests/1 | $ref does not resolve to /$defs/A/allOf/0 | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "http://localhost:1234/draft2020-12/child2". |
 | draft2020-12:defs.json#/groups/0/tests/0 | valid definition schema | true |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "https://json-schema.org/draft/2020-12/schema". Known schemas: - https://github.com/cfworker |
 | draft2020-12:defs.json#/groups/0/tests/1 | invalid definition schema | false |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "https://json-schema.org/draft/2020-12/schema". Known schemas: - https://github.com/cfworker |
 | draft2020-12:dynamicRef.json#/groups/0/tests/1 | An array containing non-strings is invalid | false | true | WRONG |  |
@@ -48,12 +48,12 @@
 | draft2020-12:dynamicRef.json#/groups/16/tests/1 | incorrect extended schema | false | true | WRONG |  |
 | draft2020-12:dynamicRef.json#/groups/17/tests/1 | non-number is invalid | false | true | WRONG |  |
 | draft2020-12:dynamicRef.json#/groups/18/tests/1 | follow $dynamicRef to a false schema | false | true | WRONG |  |
-| draft2020-12:dynamicRef.json#/groups/19/tests/0 | integer property passes | true |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/item". |
-| draft2020-12:dynamicRef.json#/groups/19/tests/1 | string property fails | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/item". |
+| draft2020-12:dynamicRef.json#/groups/19/tests/0 | integer property passes | true |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/item". |
+| draft2020-12:dynamicRef.json#/groups/19/tests/1 | string property fails | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/item". |
 | draft2020-12:dynamicRef.json#/groups/20/tests/1 | data is not sufficient for schema at second#/$defs/length | false | true | WRONG |  |
 | draft2020-12:optional/cross-draft.json#/groups/0/tests/0 | first item not a string is valid | true | false | WRONG | {"instanceLocation":"#","keyword":"$ref","keywordLocation":"#/$ref","error":"A subschema had errors."} |
-| draft2020-12:optional/dynamicRef.json#/groups/0/tests/0 | integer property passes | true |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/optional/item". |
-| draft2020-12:optional/dynamicRef.json#/groups/0/tests/1 | string property fails | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/optional/item". |
+| draft2020-12:optional/dynamicRef.json#/groups/0/tests/0 | integer property passes | true |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/optional/item". |
+| draft2020-12:optional/dynamicRef.json#/groups/0/tests/1 | string property fails | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/optional/item". |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/11 | a valid date-time with a leap second, with minus offset | true | false | WRONG | {"instanceLocation":"#","keyword":"format","keywordLocation":"#/format","error":"String does not match format \"date-time\"."} |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/16 | an invalid offset in date-time string | false | true | WRONG |  |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/20 | an invalid offset minute in date-time string | false | true | WRONG |  |
@@ -167,9 +167,9 @@
 | draft2020-12:optional/format/uuid.json#/groups/0/tests/22 | URN prefixed UUID is invalid | false | true | WRONG |  |
 | draft2020-12:optional/refOfUnknownKeyword.json#/groups/3/tests/0 | match | true |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "#/examples/0".  Absolute URI "https://github.com/cfworker#/examples/0". Known schemas: - https://github.com/cfworker |
 | draft2020-12:optional/refOfUnknownKeyword.json#/groups/3/tests/1 | mismatch | false |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "#/examples/0".  Absolute URI "https://github.com/cfworker#/examples/0". Known schemas: - https://github.com/cfworker |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
 | draft2020-12:properties.json#/groups/5/tests/2 | none of the properties mentioned | true | false | WRONG | {"instanceLocation":"#","keyword":"properties","keywordLocation":"#/properties","error":"Property \"__proto__\" does not match schema."} |
 | draft2020-12:ref.json#/groups/6/tests/0 | remote ref valid | true |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "https://json-schema.org/draft/2020-12/schema". Known schemas: - https://github.com/cfworker |
 | draft2020-12:ref.json#/groups/6/tests/1 | remote ref invalid | false |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "https://json-schema.org/draft/2020-12/schema". Known schemas: - https://github.com/cfworker |
@@ -219,8 +219,8 @@
 | draft2020-12:anchor.json#/groups/0/tests/1 | mismatch | PASS | {"instanceLocation":"#","keyword":"$ref","keywordLocation":"#/$ref","error":"A subschema had errors."} |
 | draft2020-12:anchor.json#/groups/1/tests/1 | mismatch | PASS | {"instanceLocation":"#","keyword":"$ref","keywordLocation":"#/$ref","error":"A subschema had errors."} |
 | draft2020-12:anchor.json#/groups/2/tests/1 | mismatch | PASS | {"instanceLocation":"#","keyword":"$ref","keywordLocation":"#/$ref","error":"A subschema had errors."} |
-| draft2020-12:anchor.json#/groups/3/tests/0 | $ref resolves to /$defs/A/allOf/1 | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "http://localhost:1234/draft2020-12/child2". |
-| draft2020-12:anchor.json#/groups/3/tests/1 | $ref does not resolve to /$defs/A/allOf/0 | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "http://localhost:1234/draft2020-12/child2". |
+| draft2020-12:anchor.json#/groups/3/tests/0 | $ref resolves to /$defs/A/allOf/1 | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "http://localhost:1234/draft2020-12/child2". |
+| draft2020-12:anchor.json#/groups/3/tests/1 | $ref does not resolve to /$defs/A/allOf/0 | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "http://localhost:1234/draft2020-12/child2". |
 | draft2020-12:anyOf.json#/groups/0/tests/3 | neither anyOf valid | PASS | {"instanceLocation":"#","keyword":"anyOf","keywordLocation":"#/anyOf","error":"Instance does not match any subschemas."} |
 | draft2020-12:anyOf.json#/groups/1/tests/0 | mismatch base schema | PASS | {"instanceLocation":"#","keyword":"type","keywordLocation":"#/type","error":"Instance type \"number\" is invalid. Expected \"string\"."} |
 | draft2020-12:anyOf.json#/groups/1/tests/2 | both anyOf invalid | PASS | {"instanceLocation":"#","keyword":"anyOf","keywordLocation":"#/anyOf","error":"Instance does not match any subschemas."} |
@@ -302,8 +302,8 @@
 | draft2020-12:dynamicRef.json#/groups/14/tests/0 | incorrect parent schema | PASS | {"instanceLocation":"#","keyword":"$ref","keywordLocation":"#/$ref","error":"A subschema had errors."} |
 | draft2020-12:dynamicRef.json#/groups/15/tests/0 | incorrect parent schema | PASS | {"instanceLocation":"#","keyword":"allOf","keywordLocation":"#/allOf","error":"Instance does not match every subschema."} |
 | draft2020-12:dynamicRef.json#/groups/16/tests/0 | incorrect parent schema | PASS | {"instanceLocation":"#","keyword":"allOf","keywordLocation":"#/allOf","error":"Instance does not match every subschema."} |
-| draft2020-12:dynamicRef.json#/groups/19/tests/0 | integer property passes | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/item". |
-| draft2020-12:dynamicRef.json#/groups/19/tests/1 | string property fails | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/item". |
+| draft2020-12:dynamicRef.json#/groups/19/tests/0 | integer property passes | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/item". |
+| draft2020-12:dynamicRef.json#/groups/19/tests/1 | string property fails | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/item". |
 | draft2020-12:enum.json#/groups/0/tests/1 | something else is invalid | PASS | {"instanceLocation":"#","keyword":"enum","keywordLocation":"#/enum","error":"Instance does not match any of [1,2,3]."} |
 | draft2020-12:enum.json#/groups/1/tests/1 | something else is invalid | PASS | {"instanceLocation":"#","keyword":"enum","keywordLocation":"#/enum","error":"Instance does not match any of [6,\"foo\",[],true,{\"foo\":12}]."} |
 | draft2020-12:enum.json#/groups/1/tests/2 | objects are deep compared | PASS | {"instanceLocation":"#","keyword":"enum","keywordLocation":"#/enum","error":"Instance does not match any of [6,\"foo\",[],true,{\"foo\":12}]."} |
@@ -463,8 +463,8 @@
 | draft2020-12:optional/dependencies-compatibility.json#/groups/6/tests/1 | quoted quote | PASS | {"instanceLocation":"#","keyword":"dependencies","keywordLocation":"#/dependencies","error":"Instance has \"foo'bar\" but does not match dependant schema."} |
 | draft2020-12:optional/dependencies-compatibility.json#/groups/6/tests/2 | quoted tab invalid under dependent schema | PASS | {"instanceLocation":"#","keyword":"dependencies","keywordLocation":"#/dependencies","error":"Instance has \"foo\tbar\" but does not match dependant schema."} |
 | draft2020-12:optional/dependencies-compatibility.json#/groups/6/tests/3 | quoted quote invalid under dependent schema | PASS | {"instanceLocation":"#","keyword":"dependencies","keywordLocation":"#/dependencies","error":"Instance has \"foo'bar\" but does not match dependant schema."} |
-| draft2020-12:optional/dynamicRef.json#/groups/0/tests/0 | integer property passes | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/optional/item". |
-| draft2020-12:optional/dynamicRef.json#/groups/0/tests/1 | string property fails | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/optional/item". |
+| draft2020-12:optional/dynamicRef.json#/groups/0/tests/0 | integer property passes | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/optional/item". |
+| draft2020-12:optional/dynamicRef.json#/groups/0/tests/1 | string property fails | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://test.json-schema.org/dynamic-ref-skips-intermediate-resource/optional/item". |
 | draft2020-12:optional/ecmascript-regex.json#/groups/0/tests/0 | matches in Python, but not in ECMA 262 | PASS | {"instanceLocation":"#","keyword":"pattern","keywordLocation":"#/pattern","error":"String does not match pattern."} |
 | draft2020-12:optional/ecmascript-regex.json#/groups/1/tests/0 | does not match | PASS | {"instanceLocation":"#","keyword":"pattern","keywordLocation":"#/pattern","error":"String does not match pattern."} |
 | draft2020-12:optional/ecmascript-regex.json#/groups/2/tests/0 | does not match | PASS | {"instanceLocation":"#","keyword":"pattern","keywordLocation":"#/pattern","error":"String does not match pattern."} |
@@ -761,9 +761,9 @@
 | draft2020-12:optional/refOfUnknownKeyword.json#/groups/3/tests/0 | match | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "#/examples/0".  Absolute URI "https://github.com/cfworker#/examples/0". Known schemas: - https://github.com/cfworker |
 | draft2020-12:optional/refOfUnknownKeyword.json#/groups/3/tests/1 | mismatch | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "#/examples/0".  Absolute URI "https://github.com/cfworker#/examples/0". Known schemas: - https://github.com/cfworker |
 | draft2020-12:optional/refOfUnknownKeyword.json#/groups/4/tests/1 | mismatch | PASS | {"instanceLocation":"#","keyword":"properties","keywordLocation":"#/properties","error":"Property \"bar\" does not match schema."} |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json". |
 | draft2020-12:pattern.json#/groups/0/tests/1 | a non-matching pattern is invalid | PASS | {"instanceLocation":"#","keyword":"pattern","keywordLocation":"#/pattern","error":"String does not match pattern."} |
 | draft2020-12:pattern.json#/groups/2/tests/2 | Digits do not match | PASS | {"instanceLocation":"#","keyword":"pattern","keywordLocation":"#/pattern","error":"String does not match pattern."} |
 | draft2020-12:patternProperties.json#/groups/0/tests/2 | a single invalid match is invalid | PASS | {"instanceLocation":"#","keyword":"patternProperties","keywordLocation":"#/patternProperties","error":"Property \"foo\" matches pattern \"f.*o\" but does not match associated schema."} |

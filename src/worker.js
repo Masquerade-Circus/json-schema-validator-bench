@@ -4,11 +4,11 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 
 import {
-  getCompileRegistryParticipants,
+  getSetupRegistryParticipants,
   getColdExecutionRegistryParticipants,
   getAdapterFactory,
   getRegisteredAdapter
-} from "./adapters/index.js";
+} from "./adapter-registry.js";
 import {
   draftIds,
   formatProfiles,
@@ -143,7 +143,7 @@ export function validateWorkerRequest(request) {
   }
   const participants =
     request.phase === "setup"
-      ? getCompileRegistryParticipants(request.draft)
+      ? getSetupRegistryParticipants(request.draft)
       : request.phase === "cold-execution"
         ? getColdExecutionRegistryParticipants(request.draft)
       : getParticipants(request.draft);
@@ -186,15 +186,15 @@ export function validateWorkerRequest(request) {
   return { ...request, eligibilityThresholdPercent };
 }
 
-export function compileChecksum(compileEntries) {
+export function setupChecksum(setupEntries) {
   return createHash("sha256")
-    .update(compileEntries.map(({ compileKey }) => compileKey).join("\n"))
+    .update(setupEntries.map(({ setupKey }) => setupKey).join("\n"))
     .digest("hex");
 }
 
-export async function runCompileSample({
+export async function runSetupSample({
   request,
-  compileEntries,
+  setupEntries,
   schemas,
   remotes,
   resourceRegistry = null,
@@ -213,16 +213,16 @@ export async function runCompileSample({
   if (Date.now() > request.deadline) {
     throw deadlineError("setup");
   }
-  if (compileEntries.length === 0) {
-    throw new Error(`compile corpus is empty for ${request.draft}`);
+  if (setupEntries.length === 0) {
+    throw new Error(`setup corpus is empty for ${request.draft}`);
   }
   const memory = createMemoryTelemetry(memoryUsage, memoryBudget);
 
   const schemaById = new Map(schemas.map((schema) => [schema.id, schema.schema]));
-  const prepared = compileEntries.map((entry) => {
+  const prepared = setupEntries.map((entry) => {
     const schema = schemaById.get(entry.representativeSchemaId);
     if (schema === undefined) {
-      throw new Error(`compile schema is absent: ${entry.representativeSchemaId}`);
+      throw new Error(`setup schema is absent: ${entry.representativeSchemaId}`);
     }
     const formatProfile =
       typeof entry.setupConfiguration?.formatAssertion === "boolean"
@@ -231,7 +231,7 @@ export async function runCompileSample({
             : "base")
         : (entry.formatProfile ?? request.formatProfile ?? "base");
     if (!formatProfiles.includes(formatProfile)) {
-      throw new Error(`compile entry has no effective format profile: ${entry.compileKey}`);
+      throw new Error(`setup entry has no effective format profile: ${entry.setupKey}`);
     }
     const effectiveSchema = structuredClone(schema);
     prepareSchemaForFormatProfile(
@@ -252,15 +252,15 @@ export async function runCompileSample({
     "minimumSampleMilliseconds"
   ]) {
     if (!Number.isFinite(timing[field]) || timing[field] < 0) {
-      throw new Error(`compile timing ${field} must be finite and non-negative`);
+      throw new Error(`setup timing ${field} must be finite and non-negative`);
     }
   }
   if (timing.minimumSampleMilliseconds > timing.targetSampleMilliseconds) {
-    throw new Error("compile minimum sample duration cannot exceed its target");
+    throw new Error("setup minimum sample duration cannot exceed its target");
   }
 
   let adapterMetadata = null;
-  async function compilePass() {
+  async function setupPass() {
     let elapsed = 0;
     for (const { entry, schema, formatProfile, unknownFormats } of prepared) {
       const resources = structuredClone(
@@ -280,20 +280,20 @@ export async function runCompileSample({
         unknownFormats: [...unknownFormats].sort()
       });
       adapterMetadata ??= adapter;
-      if (typeof adapter.compile !== "function") {
-        throw new Error(`${request.validator} does not expose compile`);
+      if (typeof adapter.setup !== "function") {
+        throw new Error(`${request.validator} does not expose setup`);
       }
-      if (adapter.compileMode === "async") {
-        await adapter.compile(disposableSchema);
+      if (adapter.setupMode === "async") {
+        await adapter.setup(disposableSchema);
       } else {
-        const target = adapter.compile(disposableSchema);
+        const target = adapter.setup(disposableSchema);
         if (
           target !== null &&
           (typeof target === "object" || typeof target === "function") &&
           typeof target.then === "function"
         ) {
           throw new Error(
-            `${request.validator} returned a Promise from synchronous compile`
+            `${request.validator} returned a Promise from synchronous setup`
           );
         }
       }
@@ -309,7 +309,7 @@ export async function runCompileSample({
       if (Date.now() > request.deadline) {
         throw deadlineError("setup");
       }
-      warmupMilliseconds += await compilePass();
+      warmupMilliseconds += await setupPass();
       warmupPasses += 1;
       await yieldAfterPass();
       memory.observe();
@@ -325,7 +325,7 @@ export async function runCompileSample({
     if (Date.now() > request.deadline) {
       throw deadlineError("setup");
     }
-    measuredMilliseconds += await compilePass();
+    measuredMilliseconds += await setupPass();
     passes += 1;
     await yieldAfterPass();
     memory.observe();
@@ -340,7 +340,7 @@ export async function runCompileSample({
     !singlePassExceededTarget
   ) {
     throw new Error(
-      `compile sample ended before its minimum duration: ${measuredMilliseconds}ms`
+      `setup sample ended before its minimum duration: ${measuredMilliseconds}ms`
     );
   }
   const seconds = measuredMilliseconds / 1000;
@@ -361,12 +361,12 @@ export async function runCompileSample({
     actualElapsedMilliseconds: measuredMilliseconds,
     singlePassExceededTarget,
     passes,
-    corpusCompileEntries: prepared.length,
+    corpusSetupEntries: prepared.length,
     operations,
     seconds,
     throughput,
     nanosecondsPerOperation: 1e9 / throughput,
-    checksum: compileChecksum(compileEntries),
+    checksum: setupChecksum(setupEntries),
     memory: memory.finish()
   };
 }
@@ -407,6 +407,27 @@ export async function runColdExecutionSample({
   }
   const schemaById = new Map(schemas.map(({ id, schema }) => [id, schema]));
   const memory = createMemoryTelemetry(memoryUsage, memoryBudget);
+  const prepared = canonicalCases.map((testCase) => {
+    const sourceSchema = schemaById.get(testCase.schemaId);
+    if (sourceSchema === undefined) {
+      throw new Error(`cold-execution schema is absent: ${testCase.schemaId}`);
+    }
+    const schema = structuredClone(sourceSchema);
+    prepareSchemaForFormatProfile(
+      schema,
+      request.draft,
+      request.formatProfile ?? "base"
+    );
+    return {
+      testCase,
+      schema,
+      resources: structuredClone(
+        resourceRegistry?.resourcesFor(testCase.schemaId) ?? []
+      ),
+      unknownFormats: analyzeSchemaCapabilities(schema).unknownFormats,
+      data: structuredClone(testCase.data)
+    };
+  });
   for (const field of [
     "warmupMinimumMilliseconds",
     "targetSampleMilliseconds",
@@ -423,40 +444,27 @@ export async function runColdExecutionSample({
   async function coldPass() {
     let elapsed = 0;
     let checksum = 0;
-    for (let index = 0; index < canonicalCases.length; index += 1) {
+    for (let index = 0; index < prepared.length; index += 1) {
       if (Date.now() > request.deadline) {
         throw deadlineError("cold-execution");
       }
-      const testCase = canonicalCases[index];
-      const sourceSchema = schemaById.get(testCase.schemaId);
-      if (sourceSchema === undefined) {
-        throw new Error(`cold-execution schema is absent: ${testCase.schemaId}`);
-      }
-      const schema = structuredClone(sourceSchema);
-      const resources = structuredClone(
-        resourceRegistry?.resourcesFor(testCase.schemaId) ?? []
-      );
-      prepareSchemaForFormatProfile(
-        schema,
-        request.draft,
-        request.formatProfile ?? "base"
-      );
-      const unknownFormats = analyzeSchemaCapabilities(schema).unknownFormats;
-      const data = structuredClone(testCase.data);
+      const { testCase, schema, resources, unknownFormats, data } = prepared[index];
+      const disposableSchema = structuredClone(schema);
+      const disposableResources = structuredClone(resources);
+      const disposableData = structuredClone(data);
       const start = now();
       const adapter = createAdapter({
         draft: request.draft,
         formatProfile: request.formatProfile,
-        resources,
-        unknownFormats
+        resources: disposableResources,
+        unknownFormats: [...unknownFormats]
       });
-      let target = schema;
-      if (typeof adapter.compile === "function") {
-        target = adapter.compileMode === "async"
-          ? await adapter.compile(schema)
-          : adapter.compile(schema);
-      }
-      const observed = adapter.validate(target, data);
+      const target = typeof adapter.setup === "function"
+        ? adapter.setupMode === "async"
+          ? await adapter.setup(disposableSchema)
+          : adapter.setup(disposableSchema)
+        : disposableSchema;
+      const observed = adapter.validate(target, disposableData);
       elapsed += now() - start;
       adapterMetadata ??= adapter;
       if (observed !== testCase.expected) {
@@ -602,7 +610,7 @@ function mismatchDiagnostic({ moment, caseId, schemaId, expected, observed }) {
 
 export async function runExecutionSample({
   request,
-  compileEntries,
+  setupEntries,
   cases,
   caseIds,
   schemas,
@@ -657,7 +665,7 @@ export async function runExecutionSample({
   const schemaById = new Map(schemas.map((schema) => [schema.id, schema.schema]));
   const unknownFormats = [
     ...new Set(
-      compileEntries.flatMap((entry) => {
+      setupEntries.flatMap((entry) => {
         const schema = schemaById.get(entry.representativeSchemaId);
         if (schema === undefined) {
           throw new Error(
@@ -670,7 +678,7 @@ export async function runExecutionSample({
   ].sort();
   const validatorsBySchemaId = new Map();
   let adapterMetadata = null;
-  for (const entry of compileEntries) {
+  for (const entry of setupEntries) {
     if (Date.now() > request.deadline) {
       throw deadlineError("execution");
     }
@@ -703,29 +711,29 @@ export async function runExecutionSample({
     );
     let target;
     try {
-      if (typeof adapter.compile !== "function") {
+      if (typeof adapter.setup !== "function") {
         target = disposableSchema;
-      } else if (adapter.compileMode === "async") {
-        target = await adapter.compile(disposableSchema);
+      } else if (adapter.setupMode === "async") {
+        target = await adapter.setup(disposableSchema);
       } else {
-        target = adapter.compile(disposableSchema);
+        target = adapter.setup(disposableSchema);
         if (
           target !== null &&
           (typeof target === "object" || typeof target === "function") &&
           typeof target.then === "function"
         ) {
           throw new Error(
-            `${request.validator} returned a Promise from synchronous compile`
+            `${request.validator} returned a Promise from synchronous setup`
           );
         }
       }
     } catch (error) {
-      const compileError = executionError("EXECUTION_COMPILE_FAILED", request, {
-        moment: "compile",
+      const setupError = executionError("EXECUTION_SETUP_FAILED", request, {
+        moment: "setup",
         schemaId: entry.representativeSchemaId
       });
-      compileError.cause = error;
-      throw compileError;
+      setupError.cause = error;
+      throw setupError;
     }
     const validate = (data) => adapter.validate(target, data);
     for (const schemaId of entry.memberSchemaIds) {
@@ -739,7 +747,7 @@ export async function runExecutionSample({
   }
   schemaById.clear();
   schemas = null;
-  compileEntries = null;
+  setupEntries = null;
   remotes = null;
   resourceRegistry = null;
   createAdapter = null;
@@ -967,7 +975,7 @@ export async function executeWorkerRequest(
     intersection: artifacts.intersection,
     cases: artifacts.suite.cases
   });
-  const compileEntries = corpus.compileEntries.filter(
+  const setupEntries = corpus.setupEntries.filter(
     (entry) => entry.draft === request.draft
   );
   const schemas = artifacts.suite.schemas.filter(
@@ -975,9 +983,9 @@ export async function executeWorkerRequest(
   );
   const sample =
     request.phase === "setup"
-      ? await runCompileSample({
+      ? await runSetupSample({
           request,
-          compileEntries,
+          setupEntries,
           schemas,
           remotes: artifacts.suite.remotes,
           resourceRegistry: artifacts.suite.resourceRegistry,
@@ -1002,7 +1010,7 @@ export async function executeWorkerRequest(
           })
         : await runExecutionSample({
           request,
-          compileEntries,
+          setupEntries,
           cases: artifacts.suite.cases.filter(
             (testCase) => testCase.draft === request.draft
           ),
@@ -1022,9 +1030,6 @@ export async function executeWorkerRequest(
   sample.intersectionSha256 = request.intersectionSha256;
   sample.sampleCacheIdentitySha256 = request.sampleCacheIdentitySha256;
   sample.validatorRuntimeSha256 = request.validatorRuntimeSha256;
-  if (request.benchmarkMode === "quick") {
-    sample.performanceCorpus = corpus.metadata;
-  }
   return sample;
 }
 

@@ -103,16 +103,16 @@ Unique mutations in this view: 1454
 Displayed mutation links: 10
 Omitted mutation links: 1444. Full records remain in JSON results.
 
-- [schema compile draft2019-09:additionalItems.json\#/groups/0](#mutation-event-3044a0c2c85dbaf96b99d0fd122b0d8e7cc18c5d9645041c32156b372933cd90)
-- [schema compile draft2019-09:additionalItems.json\#/groups/1](#mutation-event-d1e8e738db2b80fe1bad3d313d9845d2e6d4e3b20a95e81ac93718cbd233a8de)
-- [schema compile draft2019-09:additionalItems.json\#/groups/2](#mutation-event-8d39b406539ce5f05865f87807369b31173e5eee431fe35f0ceb7f963fe39b21)
-- [schema compile draft2019-09:additionalItems.json\#/groups/3](#mutation-event-b6af8b56984b26354b3db4c19fc41fd31ae0286acd08424c2bec669063c97bc4)
-- [schema compile draft2019-09:additionalItems.json\#/groups/4](#mutation-event-3e584411d843fd3f6be193c9d5faf77ed6aa7cd78d9ff35f8dca835bde90e944)
-- [schema compile draft2019-09:additionalItems.json\#/groups/5](#mutation-event-3f15f5a4769f577774851bf9fa1f3e485df461a15f3fee695d4d924604ce243d)
-- [schema compile draft2019-09:additionalItems.json\#/groups/6](#mutation-event-97ac32466d7d15fa5e2a080b3b060cd6715bb09d59817d6842eab3c75402584b)
-- [schema compile draft2019-09:additionalItems.json\#/groups/7](#mutation-event-30c59bcb7b475cccaf2ed82fd00eb153cbc8f10639cf9450988131dc9652b910)
-- [schema compile draft2019-09:additionalItems.json\#/groups/8](#mutation-event-e9428fb9ed42c6dc82cc895544b59e07a02397ae8bbb8ec9a46345c03e8e1c13)
-- [schema compile draft2019-09:additionalItems.json\#/groups/9](#mutation-event-40cb110725b8dd1f860994fbddb95605591dcefb12f82f050e061412afec58a4)
+- [schema setup draft2019-09:additionalItems.json\#/groups/0](#mutation-event-7e93682cf924b35f70b745c12323097ebb02f4027deb4fdca1178dd52275fd94)
+- [schema setup draft2019-09:additionalItems.json\#/groups/1](#mutation-event-b8923a57c31dd84cef0526708d8acd00bab0b1d70303f8183f6f33dea745fa3a)
+- [schema setup draft2019-09:additionalItems.json\#/groups/2](#mutation-event-2afbe2e59e6c0116b2848d8871f355a8885433b3b7069ec132348db952c56af9)
+- [schema setup draft2019-09:additionalItems.json\#/groups/3](#mutation-event-0d403eaf49f97fa194d089b5406f500a5fe13d69298e948ed5a68467c3ef2597)
+- [schema setup draft2019-09:additionalItems.json\#/groups/4](#mutation-event-61834af491d16a528388d66b5161ee02f63d903668131c0f2ab8ccee468e10f3)
+- [schema setup draft2019-09:additionalItems.json\#/groups/5](#mutation-event-dcc503a167b06ca51e3ce073ffab3a116eef064668101a747ba97e9ef506dcee)
+- [schema setup draft2019-09:additionalItems.json\#/groups/6](#mutation-event-ba176ce1b6857b38498a23f5caa613e74e6496ffaf2662c53330c71d1f6bca10)
+- [schema setup draft2019-09:additionalItems.json\#/groups/7](#mutation-event-3d77e069721684f2d52b156e5218abe9d6cdede5a145e6a80212a97d7f9c3a95)
+- [schema setup draft2019-09:additionalItems.json\#/groups/8](#mutation-event-17b07eb9d7fffdf3e1bbe667004a059b4c8372be0235295c8f212cea9968b95c)
+- [schema setup draft2019-09:additionalItems.json\#/groups/9](#mutation-event-f3a4c6f9ab7256b7ac97aecba86ab7455aeac797bc66a7a5bf764203f2490ca1)
 
 <a id="mutation-view-0fbf5ebc2224e90d6930be7e250e136c318e6515c1f587617188d1410dc4fc21"></a>
 ### draft2019-09 conformance
@@ -121,16 +121,16 @@ Unique mutations in this view: 455
 Displayed mutation links: 10
 Omitted mutation links: 445. Full records remain in JSON results.
 
-- [schema compile draft2019-09:additionalItems.json\#/groups/0](#mutation-event-3044a0c2c85dbaf96b99d0fd122b0d8e7cc18c5d9645041c32156b372933cd90)
-- [schema compile draft2019-09:additionalItems.json\#/groups/1](#mutation-event-d1e8e738db2b80fe1bad3d313d9845d2e6d4e3b20a95e81ac93718cbd233a8de)
-- [schema compile draft2019-09:additionalItems.json\#/groups/2](#mutation-event-8d39b406539ce5f05865f87807369b31173e5eee431fe35f0ceb7f963fe39b21)
-- [schema compile draft2019-09:additionalItems.json\#/groups/3](#mutation-event-b6af8b56984b26354b3db4c19fc41fd31ae0286acd08424c2bec669063c97bc4)
-- [schema compile draft2019-09:additionalItems.json\#/groups/4](#mutation-event-3e584411d843fd3f6be193c9d5faf77ed6aa7cd78d9ff35f8dca835bde90e944)
-- [schema compile draft2019-09:additionalItems.json\#/groups/5](#mutation-event-3f15f5a4769f577774851bf9fa1f3e485df461a15f3fee695d4d924604ce243d)
-- [schema compile draft2019-09:additionalItems.json\#/groups/6](#mutation-event-97ac32466d7d15fa5e2a080b3b060cd6715bb09d59817d6842eab3c75402584b)
-- [schema compile draft2019-09:additionalItems.json\#/groups/7](#mutation-event-30c59bcb7b475cccaf2ed82fd00eb153cbc8f10639cf9450988131dc9652b910)
-- [schema compile draft2019-09:additionalItems.json\#/groups/8](#mutation-event-e9428fb9ed42c6dc82cc895544b59e07a02397ae8bbb8ec9a46345c03e8e1c13)
-- [schema compile draft2019-09:additionalItems.json\#/groups/9](#mutation-event-40cb110725b8dd1f860994fbddb95605591dcefb12f82f050e061412afec58a4)
+- [schema setup draft2019-09:additionalItems.json\#/groups/0](#mutation-event-7e93682cf924b35f70b745c12323097ebb02f4027deb4fdca1178dd52275fd94)
+- [schema setup draft2019-09:additionalItems.json\#/groups/1](#mutation-event-b8923a57c31dd84cef0526708d8acd00bab0b1d70303f8183f6f33dea745fa3a)
+- [schema setup draft2019-09:additionalItems.json\#/groups/2](#mutation-event-2afbe2e59e6c0116b2848d8871f355a8885433b3b7069ec132348db952c56af9)
+- [schema setup draft2019-09:additionalItems.json\#/groups/3](#mutation-event-0d403eaf49f97fa194d089b5406f500a5fe13d69298e948ed5a68467c3ef2597)
+- [schema setup draft2019-09:additionalItems.json\#/groups/4](#mutation-event-61834af491d16a528388d66b5161ee02f63d903668131c0f2ab8ccee468e10f3)
+- [schema setup draft2019-09:additionalItems.json\#/groups/5](#mutation-event-dcc503a167b06ca51e3ce073ffab3a116eef064668101a747ba97e9ef506dcee)
+- [schema setup draft2019-09:additionalItems.json\#/groups/6](#mutation-event-ba176ce1b6857b38498a23f5caa613e74e6496ffaf2662c53330c71d1f6bca10)
+- [schema setup draft2019-09:additionalItems.json\#/groups/7](#mutation-event-3d77e069721684f2d52b156e5218abe9d6cdede5a145e6a80212a97d7f9c3a95)
+- [schema setup draft2019-09:additionalItems.json\#/groups/8](#mutation-event-17b07eb9d7fffdf3e1bbe667004a059b4c8372be0235295c8f212cea9968b95c)
+- [schema setup draft2019-09:additionalItems.json\#/groups/9](#mutation-event-f3a4c6f9ab7256b7ac97aecba86ab7455aeac797bc66a7a5bf764203f2490ca1)
 
 <a id="mutation-view-f109ce5109ec9111c8a0fbab08d7d02f6816bf8f87cc3e6bf24ca2c280215a6f"></a>
 ### draft2020-12 conformance
@@ -163,16 +163,16 @@ Unique mutations in this view: 433
 Displayed mutation links: 10
 Omitted mutation links: 423. Full records remain in JSON results.
 
-- [schema compile draft2019-09:additionalItems.json\#/groups/0](#mutation-event-3044a0c2c85dbaf96b99d0fd122b0d8e7cc18c5d9645041c32156b372933cd90)
-- [schema compile draft2019-09:additionalItems.json\#/groups/1](#mutation-event-d1e8e738db2b80fe1bad3d313d9845d2e6d4e3b20a95e81ac93718cbd233a8de)
-- [schema compile draft2019-09:additionalItems.json\#/groups/2](#mutation-event-8d39b406539ce5f05865f87807369b31173e5eee431fe35f0ceb7f963fe39b21)
-- [schema compile draft2019-09:additionalItems.json\#/groups/3](#mutation-event-b6af8b56984b26354b3db4c19fc41fd31ae0286acd08424c2bec669063c97bc4)
-- [schema compile draft2019-09:additionalItems.json\#/groups/4](#mutation-event-3e584411d843fd3f6be193c9d5faf77ed6aa7cd78d9ff35f8dca835bde90e944)
-- [schema compile draft2019-09:additionalItems.json\#/groups/5](#mutation-event-3f15f5a4769f577774851bf9fa1f3e485df461a15f3fee695d4d924604ce243d)
-- [schema compile draft2019-09:additionalItems.json\#/groups/6](#mutation-event-97ac32466d7d15fa5e2a080b3b060cd6715bb09d59817d6842eab3c75402584b)
-- [schema compile draft2019-09:additionalItems.json\#/groups/7](#mutation-event-30c59bcb7b475cccaf2ed82fd00eb153cbc8f10639cf9450988131dc9652b910)
-- [schema compile draft2019-09:additionalItems.json\#/groups/8](#mutation-event-e9428fb9ed42c6dc82cc895544b59e07a02397ae8bbb8ec9a46345c03e8e1c13)
-- [schema compile draft2019-09:additionalItems.json\#/groups/9](#mutation-event-40cb110725b8dd1f860994fbddb95605591dcefb12f82f050e061412afec58a4)
+- [schema setup draft2019-09:additionalItems.json\#/groups/0](#mutation-event-7e93682cf924b35f70b745c12323097ebb02f4027deb4fdca1178dd52275fd94)
+- [schema setup draft2019-09:additionalItems.json\#/groups/1](#mutation-event-b8923a57c31dd84cef0526708d8acd00bab0b1d70303f8183f6f33dea745fa3a)
+- [schema setup draft2019-09:additionalItems.json\#/groups/2](#mutation-event-2afbe2e59e6c0116b2848d8871f355a8885433b3b7069ec132348db952c56af9)
+- [schema setup draft2019-09:additionalItems.json\#/groups/3](#mutation-event-0d403eaf49f97fa194d089b5406f500a5fe13d69298e948ed5a68467c3ef2597)
+- [schema setup draft2019-09:additionalItems.json\#/groups/4](#mutation-event-61834af491d16a528388d66b5161ee02f63d903668131c0f2ab8ccee468e10f3)
+- [schema setup draft2019-09:additionalItems.json\#/groups/5](#mutation-event-dcc503a167b06ca51e3ce073ffab3a116eef064668101a747ba97e9ef506dcee)
+- [schema setup draft2019-09:additionalItems.json\#/groups/6](#mutation-event-ba176ce1b6857b38498a23f5caa613e74e6496ffaf2662c53330c71d1f6bca10)
+- [schema setup draft2019-09:additionalItems.json\#/groups/7](#mutation-event-3d77e069721684f2d52b156e5218abe9d6cdede5a145e6a80212a97d7f9c3a95)
+- [schema setup draft2019-09:additionalItems.json\#/groups/8](#mutation-event-17b07eb9d7fffdf3e1bbe667004a059b4c8372be0235295c8f212cea9968b95c)
+- [schema setup draft2019-09:additionalItems.json\#/groups/9](#mutation-event-f3a4c6f9ab7256b7ac97aecba86ab7455aeac797bc66a7a5bf764203f2490ca1)
 
 <a id="mutation-view-6dbb59ab08d978d7a5eea881ba576389cab7b9a445a05b132b8f757edb55b475"></a>
 ### draft2019-09/format-assertion/conformance
@@ -232,16 +232,16 @@ Omitted mutation links: 20. Full records remain in JSON results.
 
 ## Event details
 
-<a id="mutation-event-3044a0c2c85dbaf96b99d0fd122b0d8e7cc18c5d9645041c32156b372933cd90"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/0
+<a id="mutation-event-7e93682cf924b35f70b745c12323097ebb02f4027deb4fdca1178dd52275fd94"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/0
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/0
 - **Path:** $.items\[0\].\_\_absolute\_uri\_\_
@@ -268,16 +268,16 @@ Conformance used disposable copies and recorded the related error or non-PASS re
       }
     }
 
-<a id="mutation-event-d1e8e738db2b80fe1bad3d313d9845d2e6d4e3b20a95e81ac93718cbd233a8de"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/1
+<a id="mutation-event-b8923a57c31dd84cef0526708d8acd00bab0b1d70303f8183f6f33dea745fa3a"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/1
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/1
 - **Path:** $.items.\_\_absolute\_uri\_\_
@@ -304,16 +304,16 @@ Conformance used disposable copies and recorded the related error or non-PASS re
       }
     }
 
-<a id="mutation-event-8d39b406539ce5f05865f87807369b31173e5eee431fe35f0ceb7f963fe39b21"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/2
+<a id="mutation-event-2afbe2e59e6c0116b2848d8871f355a8885433b3b7069ec132348db952c56af9"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/2
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/2
 - **Path:** $.items.\_\_absolute\_uri\_\_
@@ -340,16 +340,16 @@ Conformance used a disposable copy, and the case retained PASS status.
       }
     }
 
-<a id="mutation-event-b6af8b56984b26354b3db4c19fc41fd31ae0286acd08424c2bec669063c97bc4"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/3
+<a id="mutation-event-0d403eaf49f97fa194d089b5406f500a5fe13d69298e948ed5a68467c3ef2597"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/3
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/3
 - **Path:** $.items\[0\].\_\_absolute\_uri\_\_
@@ -376,16 +376,16 @@ Conformance used disposable copies and recorded the related error or non-PASS re
       }
     }
 
-<a id="mutation-event-3e584411d843fd3f6be193c9d5faf77ed6aa7cd78d9ff35f8dca835bde90e944"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/4
+<a id="mutation-event-61834af491d16a528388d66b5161ee02f63d903668131c0f2ab8ccee468e10f3"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/4
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/4
 - **Path:** $.\_\_absolute\_uri\_\_
@@ -412,16 +412,16 @@ Conformance used a disposable copy, and the case retained PASS status.
       }
     }
 
-<a id="mutation-event-3f15f5a4769f577774851bf9fa1f3e485df461a15f3fee695d4d924604ce243d"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/5
+<a id="mutation-event-dcc503a167b06ca51e3ce073ffab3a116eef064668101a747ba97e9ef506dcee"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/5
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/5
 - **Path:** $.items\[0\].\_\_absolute\_uri\_\_
@@ -448,16 +448,16 @@ Conformance used a disposable copy, and the case retained PASS status.
       }
     }
 
-<a id="mutation-event-97ac32466d7d15fa5e2a080b3b060cd6715bb09d59817d6842eab3c75402584b"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/6
+<a id="mutation-event-ba176ce1b6857b38498a23f5caa613e74e6496ffaf2662c53330c71d1f6bca10"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/6
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/6
 - **Path:** $.allOf\[0\].items\[0\].\_\_absolute\_uri\_\_
@@ -484,16 +484,16 @@ Conformance used disposable copies and recorded the related error or non-PASS re
       }
     }
 
-<a id="mutation-event-30c59bcb7b475cccaf2ed82fd00eb153cbc8f10639cf9450988131dc9652b910"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/7
+<a id="mutation-event-3d77e069721684f2d52b156e5218abe9d6cdede5a145e6a80212a97d7f9c3a95"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/7
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/7
 - **Path:** $.items\[0\].\_\_absolute\_uri\_\_
@@ -520,16 +520,16 @@ Conformance used disposable copies and recorded the related error or non-PASS re
       }
     }
 
-<a id="mutation-event-e9428fb9ed42c6dc82cc895544b59e07a02397ae8bbb8ec9a46345c03e8e1c13"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/8
+<a id="mutation-event-17b07eb9d7fffdf3e1bbe667004a059b4c8372be0235295c8f212cea9968b95c"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/8
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/8
 - **Path:** $.items\[0\].\_\_absolute\_uri\_\_
@@ -556,16 +556,16 @@ Conformance used disposable copies and recorded the related error or non-PASS re
       }
     }
 
-<a id="mutation-event-40cb110725b8dd1f860994fbddb95605591dcefb12f82f050e061412afec58a4"></a>
-### schema compile draft2019-09:additionalItems.json\#/groups/9
+<a id="mutation-event-f3a4c6f9ab7256b7ac97aecba86ab7455aeac797bc66a7a5bf764203f2490ca1"></a>
+### schema setup draft2019-09:additionalItems.json\#/groups/9
 
 - **Draft:** draft2019-09
 - **Profile:** base
 - **Phase:** conformance
 - **Round:** N/A
-- **Moment:** after compile
+- **Moment:** after setup
 - **Target:** schema
-- **mutationClass:** compile
+- **mutationClass:** setup
 - **Scope:** schema
 - **subjectId:** draft2019-09:additionalItems.json\#/groups/9
 - **Path:** $.additionalItems.\_\_absolute\_uri\_\_

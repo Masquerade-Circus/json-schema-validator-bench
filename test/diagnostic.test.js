@@ -115,10 +115,10 @@ async function diagnosticBaselineFixture(label) {
         ] = {};
         const intersectionPath = `${phaseRoot}/intersections/${phase}.json`;
         const intersection = {
-          intersectionVersion: 11,
-          performanceIdentityVersion: 7,
+          intersectionVersion: 12,
+          performanceIdentityVersion: 8,
           performanceIdentity: {
-            performanceIdentityVersion: 7,
+            performanceIdentityVersion: 8,
             draft,
             formatProfile,
             phase
@@ -129,7 +129,7 @@ async function diagnosticBaselineFixture(label) {
         const intersectionArtifact = sha256(intersectionRaw);
         const samplePath = `${phaseRoot}/${phase}/samples.json`;
         const sampleRaw = `${JSON.stringify({
-          benchmarkVersion: 9,
+          benchmarkVersion: 11,
           benchmarkMode: "full",
           phase,
           draft,
@@ -568,7 +568,7 @@ test("diagnostic baseline permits only the selected validator runtime to change"
 test("diagnostic intersection guard rejects roster, eligibility, or common corpus changes", () => {
   const previous = {
     "draft6/base": {
-      compile: "compile-hash",
+      setup: "setup-hash",
       execution: "execution-hash"
     }
   };
@@ -577,8 +577,8 @@ test("diagnostic intersection guard rejects roster, eligibility, or common corpu
   );
   for (const changed of [
     {},
-    { "draft6/base": { compile: "changed", execution: "execution-hash" } },
-    { "draft6/base": { compile: "compile-hash", execution: "changed" } }
+    { "draft6/base": { setup: "changed", execution: "execution-hash" } },
+    { "draft6/base": { setup: "setup-hash", execution: "changed" } }
   ]) {
     assert.throws(
       () => assertCompatibleIntersections(previous, changed, "full"),

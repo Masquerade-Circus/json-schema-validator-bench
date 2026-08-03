@@ -4,15 +4,15 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","fast":{"allErrors":false,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":false,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"ajv","version":"8.20.0"},"constructor":{"packageName":"ajv","version":"8.20.0","entrypoint":"ajv"}}} | ee82c4cf5340b0788ac004ca2575ebd6eb93f59cf3edef9b343cb0649a60eb59 |
-| format-assertion | {"formatProfile":"format-assertion","fast":{"allErrors":false,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":false,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"ajv","version":"8.20.0"},"constructor":{"packageName":"ajv","version":"8.20.0","entrypoint":"ajv"}}} | e72785a3681d8188f48b63ed9262bfdb2798373c6e79f595a70948f17b8ba4bb |
+| base | {"formatProfile":"base","fast":{"allErrors":false,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":false,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"ajv","version":"8.20.0"},"constructor":{"packageName":"ajv","version":"8.20.0","entrypoint":"ajv"}}} | c8b0934d88ac5e2e09e1233275f893178f8220c36d35ba6f9d04234e53839917 |
+| format-assertion | {"formatProfile":"format-assertion","fast":{"allErrors":false,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":false,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"ajv","version":"8.20.0"},"constructor":{"packageName":"ajv","version":"8.20.0","entrypoint":"ajv"}}} | 700c34e907e07de49b8404ec82dfb21269fcdfdde0f5851e25a7cab5c270f1f1 |
 
 ## Counts
 
 | Profile | Status | Cases | Percentage |
 | --- | --- | ---: | ---: |
-| base | PASS | 933 | 98.73% |
-| base | WRONG | 9 | 0.95% |
+| base | PASS | 937 | 99.15% |
+| base | WRONG | 5 | 0.53% |
 | base | COMPILE | 3 | 0.32% |
 | base | RUNTIME | 0 | 0.00% |
 | base | UNSUPPORTED | 0 | 0.00% |
@@ -29,17 +29,13 @@
 | draft6:optional/float-overflow.json#/groups/0/tests/0 | valid if optional overflow handling is implemented | true | false | WRONG | {"keyword":"multipleOf","instancePath":"","schemaPath":"#/multipleOf","params":{"multipleOf":0.5},"message":"must be multiple of 0.5"} |
 | draft6:optional/format/hostname.json#/groups/0/tests/26 | trailing dot | false | true | WRONG |  |
 | draft6:optional/format/uri.json#/groups/0/tests/43 | non-numeric port is invalid | false | true | WRONG |  |
-| draft6:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft6:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft6:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft6:properties.json#/groups/5/tests/2 | none of the properties mentioned | true | false | WRONG | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","params":{"type":"number"},"message":"must be number"} |
+| draft6:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft6:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft6:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft6:properties.json#/groups/5/tests/3 | __proto__ not valid | false | true | WRONG |  |
 | draft6:ref.json#/groups/5/tests/1 | ref valid, maxItems ignored | true | false | WRONG | {"keyword":"maxItems","instancePath":"/foo","schemaPath":"#/properties/foo/maxItems","params":{"limit":2},"message":"must NOT have more than 2 items"} |
 | draft6:ref.json#/groups/6/tests/0 | $ref resolves to /definitions/base_foo, data does not validate | false | true | WRONG |  |
 | draft6:ref.json#/groups/6/tests/1 | $ref resolves to /definitions/base_foo, data validates | true | false | WRONG | {"keyword":"type","instancePath":"","schemaPath":"foo.json/type","params":{"type":"string"},"message":"must be string"} |
-| draft6:required.json#/groups/4/tests/2 | none of the properties mentioned | false | true | WRONG |  |
-| draft6:required.json#/groups/4/tests/3 | __proto__ present | false | true | WRONG |  |
-| draft6:required.json#/groups/4/tests/4 | toString present | false | true | WRONG |  |
-| draft6:required.json#/groups/4/tests/5 | constructor present | false | true | WRONG |  |
 
 ## Detailed errors for invalid results
 
@@ -428,9 +424,9 @@
 | draft6:optional/non-bmp-regex.json#/groups/0/tests/6 | doesn't match two ASCII | PASS | {"keyword":"pattern","instancePath":"","schemaPath":"#/pattern","params":{"pattern":"^🐲*$"},"message":"must match pattern \"^🐲*$\""} |
 | draft6:optional/non-bmp-regex.json#/groups/1/tests/3 | doesn't match one | PASS | {"keyword":"type","instancePath":"/🐲","schemaPath":"#/patternProperties/%5E%F0%9F%90%B2*%24/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft6:optional/non-bmp-regex.json#/groups/1/tests/4 | doesn't match two | PASS | {"keyword":"type","instancePath":"/🐲🐲","schemaPath":"#/patternProperties/%5E%F0%9F%90%B2*%24/type","params":{"type":"integer"},"message":"must be integer"} |
-| draft6:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft6:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft6:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft6:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft6:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft6:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
 | draft6:pattern.json#/groups/0/tests/1 | a non-matching pattern is invalid | PASS | {"keyword":"pattern","instancePath":"","schemaPath":"#/pattern","params":{"pattern":"^a*$"},"message":"must match pattern \"^a*$\""} |
 | draft6:patternProperties.json#/groups/0/tests/2 | a single invalid match is invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"#/patternProperties/f.*o/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft6:patternProperties.json#/groups/0/tests/3 | multiple invalid matches is invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"#/patternProperties/f.*o/type","params":{"type":"integer"},"message":"must be integer"} |
@@ -451,8 +447,6 @@
 | draft6:properties.json#/groups/2/tests/2 | only 'false' property present is invalid | PASS | {"keyword":"false schema","instancePath":"/bar","schemaPath":"#/properties/bar/false schema","params":{},"message":"boolean schema is false"} |
 | draft6:properties.json#/groups/2/tests/3 | both properties present is invalid | PASS | {"keyword":"false schema","instancePath":"/bar","schemaPath":"#/properties/bar/false schema","params":{},"message":"boolean schema is false"} |
 | draft6:properties.json#/groups/3/tests/1 | object with strings is invalid | PASS | {"keyword":"type","instancePath":"/foo\nbar","schemaPath":"#/properties/foo%0Abar/type","params":{"type":"number"},"message":"must be number"} |
-| draft6:properties.json#/groups/5/tests/2 | none of the properties mentioned | WRONG | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","params":{"type":"number"},"message":"must be number"} |
-| draft6:properties.json#/groups/5/tests/3 | __proto__ not valid | PASS | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","params":{"type":"number"},"message":"must be number"} |
 | draft6:properties.json#/groups/5/tests/4 | toString not valid | PASS | {"keyword":"type","instancePath":"/toString/length","schemaPath":"#/properties/toString/properties/length/type","params":{"type":"string"},"message":"must be string"} |
 | draft6:properties.json#/groups/5/tests/5 | constructor not valid | PASS | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","params":{"type":"number"},"message":"must be number"} |
 | draft6:propertyNames.json#/groups/0/tests/1 | some property names invalid | PASS | {"keyword":"maxLength","instancePath":"","schemaPath":"#/propertyNames/maxLength","params":{"limit":3},"message":"must NOT have more than 3 characters"} |
@@ -510,6 +504,10 @@
 | draft6:refRemote.json#/groups/10/tests/1 | non-number is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#detached/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft6:required.json#/groups/0/tests/1 | non-present required property is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"foo"},"message":"must have required property 'foo'"} |
 | draft6:required.json#/groups/3/tests/1 | object with some properties missing is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"foo\\bar"},"message":"must have required property 'foo\\bar'"} |
+| draft6:required.json#/groups/4/tests/2 | none of the properties mentioned | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"__proto__"},"message":"must have required property '__proto__'"} |
+| draft6:required.json#/groups/4/tests/3 | __proto__ present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"toString"},"message":"must have required property 'toString'"} |
+| draft6:required.json#/groups/4/tests/4 | toString present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"__proto__"},"message":"must have required property '__proto__'"} |
+| draft6:required.json#/groups/4/tests/5 | constructor present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"__proto__"},"message":"must have required property '__proto__'"} |
 | draft6:type.json#/groups/0/tests/2 | a float is not an integer | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft6:type.json#/groups/0/tests/3 | a string is not an integer | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft6:type.json#/groups/0/tests/4 | a string is still not an integer, even if it looks like one | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","params":{"type":"integer"},"message":"must be integer"} |

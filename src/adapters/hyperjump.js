@@ -9,47 +9,37 @@ import * as Draft201909 from "@hyperjump/json-schema/draft-2019-09";
 import * as Draft202012 from "@hyperjump/json-schema/draft-2020-12";
 
 import { defineAdapter } from "../adapter-api.js";
-import { resourceIdentifiers } from "./helpers.js";
-
-const dialects = {
-  draft4: {
-    api: Draft4,
-    uri: "http://json-schema.org/draft-04/schema#"
-  },
-  draft6: {
-    api: Draft6,
-    uri: "http://json-schema.org/draft-06/schema#"
-  },
-  draft7: {
-    api: Draft7,
-    uri: "http://json-schema.org/draft-07/schema#"
-  },
-  "draft2019-09": {
-    api: Draft201909,
-    uri: "https://json-schema.org/draft/2019-09/schema"
-  },
-  "draft2020-12": {
-    api: Draft202012,
-    uri: "https://json-schema.org/draft/2020-12/schema"
-  }
-};
-
-function forbidNetwork(uri) {
-  const error = new Error(`network access forbidden: ${uri}`);
-  error.code = "NETWORK_ACCESS_FORBIDDEN";
-  throw error;
-}
-
-addUriSchemePlugin("http", { retrieve: forbidNetwork });
-addUriSchemePlugin("https", { retrieve: forbidNetwork });
-
-function register(api, schema, uri, dialect) {
-  api.unregisterSchema(uri);
-  api.registerSchema(schema, uri, dialect);
-}
 
 function createImplementation({ draft, formatProfile, resources }) {
-  const { api, uri: dialect } = dialects[draft];
+  function forbidNetwork(uri) {
+    const error = new Error(`network access forbidden: ${uri}`);
+    error.code = "NETWORK_ACCESS_FORBIDDEN";
+    throw error;
+  }
+  addUriSchemePlugin("http", { retrieve: forbidNetwork });
+  addUriSchemePlugin("https", { retrieve: forbidNetwork });
+  const { api, dialect } = {
+    draft4: {
+      api: Draft4,
+      dialect: "http://json-schema.org/draft-04/schema#"
+    },
+    draft6: {
+      api: Draft6,
+      dialect: "http://json-schema.org/draft-06/schema#"
+    },
+    draft7: {
+      api: Draft7,
+      dialect: "http://json-schema.org/draft-07/schema#"
+    },
+    "draft2019-09": {
+      api: Draft201909,
+      dialect: "https://json-schema.org/draft/2019-09/schema"
+    },
+    "draft2020-12": {
+      api: Draft202012,
+      dialect: "https://json-schema.org/draft/2020-12/schema"
+    }
+  }[draft];
   const validateFormat =
     formatProfile === "format-assertion" ||
     draft === "draft4" ||
@@ -58,20 +48,19 @@ function createImplementation({ draft, formatProfile, resources }) {
   api.setShouldValidateFormat(validateFormat);
   const uniqueResources = new Map();
   for (const resource of resources) {
-    const { canonicalUri } = resourceIdentifiers(resource);
-    if (typeof canonicalUri === "string") {
-      uniqueResources.set(canonicalUri, resource);
+    if (typeof resource.canonicalUri === "string") {
+      uniqueResources.set(resource.canonicalUri, resource);
     }
   }
   for (const resource of uniqueResources.values()) {
-    const { aliases, canonicalUri } = resourceIdentifiers(resource);
-    for (const alias of aliases) {
-      api.unregisterSchema(alias);
+    // Hyperjump rejects duplicate public registrations. Internal dialect entries and
+    // reused harness URIs therefore require removal before the requested register.
+    if (api.hasSchema(resource.canonicalUri)) {
+      api.unregisterSchema(resource.canonicalUri);
     }
-    register(
-      api,
+    api.registerSchema(
       resource.schema,
-      canonicalUri,
+      resource.canonicalUri,
       resource.dialect ?? dialect
     );
   }
@@ -83,7 +72,7 @@ function createImplementation({ draft, formatProfile, resources }) {
       validateFormat,
       network: "forbidden"
     },
-    async compile(schema) {
+    async setup(schema) {
       const objectSchema =
         schema !== null && typeof schema === "object" && !Array.isArray(schema);
       const id = objectSchema ? schema.$id ?? schema.id : null;
@@ -93,14 +82,17 @@ function createImplementation({ draft, formatProfile, resources }) {
           : `https://benchmark.invalid/hyperjump/${createHash("sha256")
               .update(JSON.stringify(schema))
               .digest("hex")}`;
-      register(api, schema, uri, dialect);
+      if (api.hasSchema(uri)) {
+        api.unregisterSchema(uri);
+      }
+      api.registerSchema(schema, uri, dialect);
       return await api.validate(uri);
     },
-    validate(compiled, data) {
-      return compiled(data).valid;
+    validate(target, data) {
+      return target(data).valid;
     },
-    getError({ compiled, data }) {
-      const detail = compiled(data, "BASIC");
+    getError({ target, data }) {
+      const detail = target(data, "BASIC");
       return detail.valid ? null : JSON.stringify(detail);
     }
   };
@@ -112,7 +104,12 @@ export const adapter = defineAdapter(
     packageName: "@hyperjump/json-schema",
     displayName: "Hyperjump",
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
-    unsupported: []
+    unsupported: [],
+    implementation: {
+      api: "reusable-async",
+      isolation: "module-global-unavailable",
+      dynamicCode: "not-observed"
+    }
   },
   createImplementation
 );

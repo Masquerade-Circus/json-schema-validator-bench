@@ -4,8 +4,8 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","fast":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"$schemaDefault":"http://json-schema.org/draft-06/schema#","includeErrors":false},"detailed":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"$schemaDefault":"http://json-schema.org/draft-06/schema#","includeErrors":true}} | 79e71bac062c685ffc225694d13a929bb8c9f2ffcb3cfd4541f39204475a03f5 |
-| format-assertion | {"formatProfile":"format-assertion","fast":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"$schemaDefault":"http://json-schema.org/draft-06/schema#","includeErrors":false},"detailed":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"$schemaDefault":"http://json-schema.org/draft-06/schema#","includeErrors":true}} | eb3874216c0ce93adf65f84ec066a9c98faa7966b4f62463944e8bc19405c445 |
+| base | {"formatProfile":"base","fast":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"schemas":"registered","$schemaDefault":"http://json-schema.org/draft-06/schema#","includeErrors":false},"detailed":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"schemas":"registered","$schemaDefault":"http://json-schema.org/draft-06/schema#","includeErrors":true}} | ca89bc215a1f351a18515bcec41850fa95a1bd128f58721d6fecc42f83ad4068 |
+| format-assertion | {"formatProfile":"format-assertion","fast":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"schemas":"registered","$schemaDefault":"http://json-schema.org/draft-06/schema#","includeErrors":false},"detailed":{"mode":"lax","allErrors":false,"useDefaults":false,"removeAdditional":false,"contentValidation":false,"formatAssertion":true,"extraFormats":false,"weakFormats":true,"allowUnusedKeywords":true,"allowUnreachable":true,"schemas":"registered","$schemaDefault":"http://json-schema.org/draft-06/schema#","includeErrors":true}} | 0f425a34879369dfec286c584e6d6251c60ebe768991c25f91d3e04b112f48c7 |
 
 ## Counts
 
@@ -26,20 +26,20 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
-| draft6:definitions.json#/groups/0/tests/0 | valid definition schema | true |  | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
-| draft6:definitions.json#/groups/0/tests/1 | invalid definition schema | false |  | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
+| draft6:definitions.json#/groups/0/tests/0 | valid definition schema | true |  | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
+| draft6:definitions.json#/groups/0/tests/1 | invalid definition schema | false |  | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
 | draft6:optional/format/hostname.json#/groups/0/tests/26 | trailing dot | false | true | WRONG |  |
 | draft6:optional/format/ipv4.json#/groups/0/tests/37 | single octet out of range in last position | false | true | WRONG |  |
-| draft6:optional/format/unknown.json#/groups/0/tests/0 | unknown formats ignore integers | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/1 | unknown formats ignore floats | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/2 | unknown formats ignore objects | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/3 | unknown formats ignore arrays | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/4 | unknown formats ignore booleans | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/5 | unknown formats ignore nulls | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/6 | unknown formats ignore strings | true |  | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/0 | unknown formats ignore integers | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/1 | unknown formats ignore floats | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/2 | unknown formats ignore objects | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/3 | unknown formats ignore arrays | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/4 | unknown formats ignore booleans | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/5 | unknown formats ignore nulls | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/6 | unknown formats ignore strings | true |  | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
 | draft6:optional/format/uri.json#/groups/0/tests/43 | non-numeric port is invalid | false | true | WRONG |  |
-| draft6:ref.json#/groups/7/tests/0 | remote ref valid | true |  | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
-| draft6:ref.json#/groups/7/tests/1 | remote ref invalid | false |  | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
+| draft6:ref.json#/groups/7/tests/0 | remote ref valid | true |  | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
+| draft6:ref.json#/groups/7/tests/1 | remote ref invalid | false |  | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
 
 ## Detailed errors for invalid results
 
@@ -133,8 +133,8 @@
 | draft6:contains.json#/groups/4/tests/1 | does not match items, matches contains | PASS | {"keywordLocation":"#/items/multipleOf","instanceLocation":"#/0"} |
 | draft6:contains.json#/groups/4/tests/3 | matches neither items nor contains | PASS | {"keywordLocation":"#/items/multipleOf","instanceLocation":"#/0"} |
 | draft6:default.json#/groups/2/tests/1 | an explicit property value is checked against maximum (failing) | PASS | {"keywordLocation":"#/properties/alpha/maximum","instanceLocation":"#/alpha"} |
-| draft6:definitions.json#/groups/0/tests/0 | valid definition schema | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
-| draft6:definitions.json#/groups/0/tests/1 | invalid definition schema | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
+| draft6:definitions.json#/groups/0/tests/0 | valid definition schema | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
+| draft6:definitions.json#/groups/0/tests/1 | invalid definition schema | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
 | draft6:dependencies.json#/groups/0/tests/3 | missing dependency | PASS | {"keywordLocation":"#/dependencies/bar","instanceLocation":"#"} |
 | draft6:dependencies.json#/groups/2/tests/3 | missing dependency | PASS | {"keywordLocation":"#/dependencies/quux","instanceLocation":"#"} |
 | draft6:dependencies.json#/groups/2/tests/4 | missing other dependency | PASS | {"keywordLocation":"#/dependencies/quux","instanceLocation":"#"} |
@@ -391,13 +391,13 @@
 | draft6:optional/format/json-pointer.json#/groups/0/tests/35 | not a valid JSON-pointer (isn't empty nor starts with /) #1 | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft6:optional/format/json-pointer.json#/groups/0/tests/36 | not a valid JSON-pointer (isn't empty nor starts with /) #2 | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft6:optional/format/json-pointer.json#/groups/0/tests/37 | not a valid JSON-pointer (isn't empty nor starts with /) #3 | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
-| draft6:optional/format/unknown.json#/groups/0/tests/0 | unknown formats ignore integers | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/1 | unknown formats ignore floats | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/2 | unknown formats ignore objects | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/3 | unknown formats ignore arrays | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/4 | unknown formats ignore booleans | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/5 | unknown formats ignore nulls | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
-| draft6:optional/format/unknown.json#/groups/0/tests/6 | unknown formats ignore strings | COMPILE | FAST_COMPILE_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/0 | unknown formats ignore integers | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/1 | unknown formats ignore floats | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/2 | unknown formats ignore objects | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/3 | unknown formats ignore arrays | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/4 | unknown formats ignore booleans | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/5 | unknown formats ignore nulls | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
+| draft6:optional/format/unknown.json#/groups/0/tests/6 | unknown formats ignore strings | COMPILE | FAST_SETUP_ERROR: Unrecognized format used: "unknown" at # |
 | draft6:optional/format/uri-reference.json#/groups/0/tests/9 | an invalid URI Reference | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft6:optional/format/uri-reference.json#/groups/0/tests/12 | an invalid URI fragment | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
 | draft6:optional/format/uri-reference.json#/groups/0/tests/13 | unescaped non US-ASCII characters | PASS | {"keywordLocation":"#/format","instanceLocation":"#"} |
@@ -474,8 +474,8 @@
 | draft6:ref.json#/groups/4/tests/1 | nested ref invalid | PASS | {"keywordLocation":"#/allOf/0/$ref/$ref/$ref/type","instanceLocation":"#"} |
 | draft6:ref.json#/groups/5/tests/2 | ref invalid | PASS | {"keywordLocation":"#/properties/foo/$ref/type","instanceLocation":"#/foo"} |
 | draft6:ref.json#/groups/6/tests/0 | $ref resolves to /definitions/base_foo, data does not validate | PASS | {"keywordLocation":"#/allOf/0/$ref/type","instanceLocation":"#"} |
-| draft6:ref.json#/groups/7/tests/0 | remote ref valid | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
-| draft6:ref.json#/groups/7/tests/1 | remote ref invalid | COMPILE | FAST_COMPILE_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
+| draft6:ref.json#/groups/7/tests/0 | remote ref valid | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
+| draft6:ref.json#/groups/7/tests/1 | remote ref invalid | COMPILE | FAST_SETUP_ERROR: failed to resolve $ref: "http://json-schema.org/draft-06/schema#" at # |
 | draft6:ref.json#/groups/8/tests/1 | property named $ref invalid | PASS | {"keywordLocation":"#/properties/$ref/type","instanceLocation":"#/$ref"} |
 | draft6:ref.json#/groups/9/tests/1 | property named $ref invalid | PASS | {"keywordLocation":"#/properties/$ref/$ref/type","instanceLocation":"#/$ref"} |
 | draft6:ref.json#/groups/11/tests/0 | any value is invalid | PASS | {"keywordLocation":"#/allOf/0/$ref","instanceLocation":"#"} |

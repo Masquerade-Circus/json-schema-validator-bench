@@ -26,8 +26,8 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
-| draft2019-09:anchor.json#/groups/3/tests/0 | $ref resolves to /$defs/A/allOf/1 | true |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "http://localhost:1234/draft2019-09/child2". |
-| draft2019-09:anchor.json#/groups/3/tests/1 | $ref does not resolve to /$defs/A/allOf/0 | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "http://localhost:1234/draft2019-09/child2". |
+| draft2019-09:anchor.json#/groups/3/tests/0 | $ref resolves to /$defs/A/allOf/1 | true |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "http://localhost:1234/draft2019-09/child2". |
+| draft2019-09:anchor.json#/groups/3/tests/1 | $ref does not resolve to /$defs/A/allOf/0 | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "http://localhost:1234/draft2019-09/child2". |
 | draft2019-09:defs.json#/groups/0/tests/0 | valid definition schema | true |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "https://json-schema.org/draft/2019-09/schema". Known schemas: - https://github.com/cfworker |
 | draft2019-09:defs.json#/groups/0/tests/1 | invalid definition schema | false |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "https://json-schema.org/draft/2019-09/schema". Known schemas: - https://github.com/cfworker |
 | draft2019-09:optional/cross-draft.json#/groups/1/tests/0 | missing bar is valid | true | false | WRONG | {"instanceLocation":"#","keyword":"allOf","keywordLocation":"#/allOf","error":"Instance does not match every subschema."} |
@@ -139,9 +139,9 @@
 | draft2019-09:optional/format/uuid.json#/groups/0/tests/22 | URN prefixed UUID is invalid | false | true | WRONG |  |
 | draft2019-09:optional/refOfUnknownKeyword.json#/groups/3/tests/0 | match | true |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "#/examples/0".  Absolute URI "https://github.com/cfworker#/examples/0". Known schemas: - https://github.com/cfworker |
 | draft2019-09:optional/refOfUnknownKeyword.json#/groups/3/tests/1 | mismatch | false |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "#/examples/0".  Absolute URI "https://github.com/cfworker#/examples/0". Known schemas: - https://github.com/cfworker |
-| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
-| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
-| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
+| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
+| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
+| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
 | draft2019-09:properties.json#/groups/5/tests/2 | none of the properties mentioned | true | false | WRONG | {"instanceLocation":"#","keyword":"properties","keywordLocation":"#/properties","error":"Property \"__proto__\" does not match schema."} |
 | draft2019-09:ref.json#/groups/6/tests/0 | remote ref valid | true |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "https://json-schema.org/draft/2019-09/schema". Known schemas: - https://github.com/cfworker |
 | draft2019-09:ref.json#/groups/6/tests/1 | remote ref invalid | false |  | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "https://json-schema.org/draft/2019-09/schema". Known schemas: - https://github.com/cfworker |
@@ -195,8 +195,8 @@
 | draft2019-09:anchor.json#/groups/0/tests/1 | mismatch | PASS | {"instanceLocation":"#","keyword":"$ref","keywordLocation":"#/$ref","error":"A subschema had errors."} |
 | draft2019-09:anchor.json#/groups/1/tests/1 | mismatch | PASS | {"instanceLocation":"#","keyword":"$ref","keywordLocation":"#/$ref","error":"A subschema had errors."} |
 | draft2019-09:anchor.json#/groups/2/tests/1 | mismatch | PASS | {"instanceLocation":"#","keyword":"$ref","keywordLocation":"#/$ref","error":"A subschema had errors."} |
-| draft2019-09:anchor.json#/groups/3/tests/0 | $ref resolves to /$defs/A/allOf/1 | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "http://localhost:1234/draft2019-09/child2". |
-| draft2019-09:anchor.json#/groups/3/tests/1 | $ref does not resolve to /$defs/A/allOf/0 | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "http://localhost:1234/draft2019-09/child2". |
+| draft2019-09:anchor.json#/groups/3/tests/0 | $ref resolves to /$defs/A/allOf/1 | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "http://localhost:1234/draft2019-09/child2". |
+| draft2019-09:anchor.json#/groups/3/tests/1 | $ref does not resolve to /$defs/A/allOf/0 | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "http://localhost:1234/draft2019-09/child2". |
 | draft2019-09:anyOf.json#/groups/0/tests/3 | neither anyOf valid | PASS | {"instanceLocation":"#","keyword":"anyOf","keywordLocation":"#/anyOf","error":"Instance does not match any subschemas."} |
 | draft2019-09:anyOf.json#/groups/1/tests/0 | mismatch base schema | PASS | {"instanceLocation":"#","keyword":"type","keywordLocation":"#/type","error":"Instance type \"number\" is invalid. Expected \"string\"."} |
 | draft2019-09:anyOf.json#/groups/1/tests/2 | both anyOf invalid | PASS | {"instanceLocation":"#","keyword":"anyOf","keywordLocation":"#/anyOf","error":"Instance does not match any subschemas."} |
@@ -717,9 +717,9 @@
 | draft2019-09:optional/refOfUnknownKeyword.json#/groups/3/tests/0 | match | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "#/examples/0".  Absolute URI "https://github.com/cfworker#/examples/0". Known schemas: - https://github.com/cfworker |
 | draft2019-09:optional/refOfUnknownKeyword.json#/groups/3/tests/1 | mismatch | RUNTIME | FAST_RUNTIME_ERROR: Unresolved $ref "#/examples/0".  Absolute URI "https://github.com/cfworker#/examples/0". Known schemas: - https://github.com/cfworker |
 | draft2019-09:optional/refOfUnknownKeyword.json#/groups/4/tests/1 | mismatch | PASS | {"instanceLocation":"#","keyword":"properties","keywordLocation":"#/properties","error":"Property \"bar\" does not match schema."} |
-| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
-| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
-| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_COMPILE_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
+| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
+| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
+| draft2019-09:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_SETUP_ERROR: Duplicate schema URI "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json". |
 | draft2019-09:pattern.json#/groups/0/tests/1 | a non-matching pattern is invalid | PASS | {"instanceLocation":"#","keyword":"pattern","keywordLocation":"#/pattern","error":"String does not match pattern."} |
 | draft2019-09:patternProperties.json#/groups/0/tests/2 | a single invalid match is invalid | PASS | {"instanceLocation":"#","keyword":"patternProperties","keywordLocation":"#/patternProperties","error":"Property \"foo\" matches pattern \"f.*o\" but does not match associated schema."} |
 | draft2019-09:patternProperties.json#/groups/0/tests/3 | multiple invalid matches is invalid | PASS | {"instanceLocation":"#","keyword":"patternProperties","keywordLocation":"#/patternProperties","error":"Property \"foo\" matches pattern \"f.*o\" but does not match associated schema."} |

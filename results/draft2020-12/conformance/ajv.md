@@ -4,15 +4,15 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","fast":{"allErrors":false,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":false,"messages":false},"detailed":{"allErrors":false,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":false,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"ajv","version":"8.20.0"},"constructor":{"packageName":"ajv","version":"8.20.0","entrypoint":"ajv/dist/2020.js"}}} | 055900e4ccf8a2da45676385f13c8d7b34d3345d570b5f1a494a4cebc1c1ba93 |
-| format-assertion | {"formatProfile":"format-assertion","fast":{"allErrors":false,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":false,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"ajv","version":"8.20.0"},"constructor":{"packageName":"ajv","version":"8.20.0","entrypoint":"ajv/dist/2020.js"}}} | a77eee69ef65f64c263449171aae3bd4cc9b17687798c43c8834e7ccda5ee789 |
+| base | {"formatProfile":"base","fast":{"allErrors":false,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":false,"messages":false},"detailed":{"allErrors":false,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":false,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"ajv","version":"8.20.0"},"constructor":{"packageName":"ajv","version":"8.20.0","entrypoint":"ajv/dist/2020.js"}}} | 02336c49dfcdd160ecdd020b33a622146a60a4c32503514a4a2f96f73afc994d |
+| format-assertion | {"formatProfile":"format-assertion","fast":{"allErrors":false,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":false},"detailed":{"allErrors":false,"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"ajv","version":"8.20.0"},"constructor":{"packageName":"ajv","version":"8.20.0","entrypoint":"ajv/dist/2020.js"}}} | ce7ae2848d46799708a4168d352a6953f9084d10c326cd2a694d0af066abe5c3 |
 
 ## Counts
 
 | Profile | Status | Cases | Percentage |
 | --- | --- | ---: | ---: |
-| base | PASS | 1389 | 95.33% |
-| base | WRONG | 36 | 2.47% |
+| base | PASS | 1393 | 95.61% |
+| base | WRONG | 32 | 2.20% |
 | base | COMPILE | 24 | 1.65% |
 | base | RUNTIME | 8 | 0.55% |
 | base | UNSUPPORTED | 0 | 0.00% |
@@ -34,14 +34,14 @@
 | draft2020-12:dynamicRef.json#/groups/6/tests/0 | Any array is valid | true | false | WRONG | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","params":{"type":"array"},"message":"must be array"} |
 | draft2020-12:dynamicRef.json#/groups/7/tests/0 | Any array is valid | true | false | WRONG | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","params":{"type":"array"},"message":"must be array"} |
 | draft2020-12:dynamicRef.json#/groups/8/tests/0 | Any array is valid | true | false | WRONG | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","params":{"type":"array"},"message":"must be array"} |
-| draft2020-12:dynamicRef.json#/groups/9/tests/0 | The recursive part is valid against the root | true |  | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/9/tests/1 | The recursive part is not valid against the root | false |  | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/10/tests/0 | The recursive part doesn't need to validate against the root | true |  | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/9/tests/0 | The recursive part is valid against the root | true |  | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/9/tests/1 | The recursive part is not valid against the root | false |  | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/10/tests/0 | The recursive part doesn't need to validate against the root | true |  | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
 | draft2020-12:dynamicRef.json#/groups/11/tests/1 | number list with string values | false | true | WRONG |  |
 | draft2020-12:dynamicRef.json#/groups/11/tests/2 | string list with number values | false | true | WRONG |  |
-| draft2020-12:dynamicRef.json#/groups/12/tests/0 | string matches /$defs/thingy, but the $dynamicRef does not stop here | false |  | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/12/tests/1 | first_scope is not in dynamic scope for the $dynamicRef | false |  | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/12/tests/2 | /then/$defs/thingy is the final stop for the $dynamicRef | true |  | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/12/tests/0 | string matches /$defs/thingy, but the $dynamicRef does not stop here | false |  | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/12/tests/1 | first_scope is not in dynamic scope for the $dynamicRef | false |  | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/12/tests/2 | /then/$defs/thingy is the final stop for the $dynamicRef | true |  | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
 | draft2020-12:dynamicRef.json#/groups/14/tests/2 | correct extended schema | true | false | WRONG | {"keyword":"required","instancePath":"/elements/0","schemaPath":"#/required","params":{"missingProperty":"elements"},"message":"must have required property 'elements'"} |
 | draft2020-12:dynamicRef.json#/groups/15/tests/2 | correct extended schema | true | false | WRONG | {"keyword":"required","instancePath":"/elements/0","schemaPath":"#/required","params":{"missingProperty":"elements"},"message":"must have required property 'elements'"} |
 | draft2020-12:dynamicRef.json#/groups/16/tests/2 | correct extended schema | true | false | WRONG | {"keyword":"required","instancePath":"/elements/0","schemaPath":"#/required","params":{"missingProperty":"elements"},"message":"must have required property 'elements'"} |
@@ -51,19 +51,19 @@
 | draft2020-12:dynamicRef.json#/groups/19/tests/0 | integer property passes | true | false | WRONG | {"keyword":"type","instancePath":"/bar-item/content","schemaPath":"#/type","params":{"type":"object"},"message":"must be object"} |
 | draft2020-12:dynamicRef.json#/groups/20/tests/0 | data is sufficient for schema at second#/$defs/length | true |  | RUNTIME | FAST_RUNTIME_ERROR: Maximum call stack size exceeded |
 | draft2020-12:dynamicRef.json#/groups/20/tests/1 | data is not sufficient for schema at second#/$defs/length | false |  | RUNTIME | FAST_RUNTIME_ERROR: Maximum call stack size exceeded |
-| draft2020-12:enum.json#/groups/14/tests/0 | string is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/1 | number is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/2 | null is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/3 | object is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/4 | array is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/5 | boolean is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:optional/cross-draft.json#/groups/0/tests/0 | first item not a string is valid | true |  | COMPILE | FAST_COMPILE_ERROR: no schema with key or ref "https://json-schema.org/draft/2019-09/schema" |
+| draft2020-12:enum.json#/groups/14/tests/0 | string is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/1 | number is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/2 | null is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/3 | object is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/4 | array is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/5 | boolean is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:optional/cross-draft.json#/groups/0/tests/0 | first item not a string is valid | true |  | COMPILE | FAST_SETUP_ERROR: no schema with key or ref "https://json-schema.org/draft/2019-09/schema" |
 | draft2020-12:optional/dynamicRef.json#/groups/0/tests/0 | integer property passes | true | false | WRONG | {"keyword":"type","instancePath":"/bar-item/content","schemaPath":"#/type","params":{"type":"object"},"message":"must be object"} |
 | draft2020-12:optional/float-overflow.json#/groups/0/tests/0 | valid if optional overflow handling is implemented | true | false | WRONG | {"keyword":"multipleOf","instancePath":"","schemaPath":"#/multipleOf","params":{"multipleOf":0.5},"message":"must be multiple of 0.5"} |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/0 | format-assertion: false: valid string | true |  | COMPILE | FAST_COMPILE_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-false.json |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | false |  | COMPILE | FAST_COMPILE_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-false.json |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/0 | format-assertion: true: valid string | true |  | COMPILE | FAST_COMPILE_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-true.json |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | false |  | COMPILE | FAST_COMPILE_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-true.json |
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/0 | format-assertion: false: valid string | true |  | COMPILE | FAST_SETUP_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-false.json |
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | false |  | COMPILE | FAST_SETUP_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-false.json |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/0 | format-assertion: true: valid string | true |  | COMPILE | FAST_SETUP_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-true.json |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | false |  | COMPILE | FAST_SETUP_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-true.json |
 | draft2020-12:optional/format/duration.json#/groups/0/tests/37 | years and days cannot appear without months | false | true | WRONG |  |
 | draft2020-12:optional/format/duration.json#/groups/0/tests/40 | hours and seconds cannot appear without minutes | false | true | WRONG |  |
 | draft2020-12:optional/format/ecmascript-regex.json#/groups/0/tests/0 | when used as a pattern | false | true | WRONG |  |
@@ -160,22 +160,18 @@
 | draft2020-12:optional/format/iri.json#/groups/0/tests/14 | an invalid IRI though valid IRI reference | false | true | WRONG |  |
 | draft2020-12:optional/format/uri.json#/groups/0/tests/43 | non-numeric port is invalid | false | true | WRONG |  |
 | draft2020-12:optional/format/uuid.json#/groups/0/tests/22 | URN prefixed UUID is invalid | false | true | WRONG |  |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft2020-12:properties.json#/groups/5/tests/2 | none of the properties mentioned | true | false | WRONG | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","params":{"type":"number"},"message":"must be number"} |
-| draft2020-12:ref.json#/groups/15/tests/0 | invalid on inner field | false |  | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/15/tests/1 | invalid on outer field | false |  | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/15/tests/2 | valid on both fields | true |  | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/16/tests/0 | invalid on inner field | false |  | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/16/tests/1 | invalid on outer field | false |  | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/16/tests/2 | valid on both fields | true |  | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/28/tests/0 | a string is valid | true |  | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/28/tests/1 | a non-string is invalid | false |  | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:required.json#/groups/4/tests/2 | none of the properties mentioned | false | true | WRONG |  |
-| draft2020-12:required.json#/groups/4/tests/3 | __proto__ present | false | true | WRONG |  |
-| draft2020-12:required.json#/groups/4/tests/4 | toString present | false | true | WRONG |  |
-| draft2020-12:required.json#/groups/4/tests/5 | constructor present | false | true | WRONG |  |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | true |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft2020-12:properties.json#/groups/5/tests/3 | __proto__ not valid | false | true | WRONG |  |
+| draft2020-12:ref.json#/groups/15/tests/0 | invalid on inner field | false |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/15/tests/1 | invalid on outer field | false |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/15/tests/2 | valid on both fields | true |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/16/tests/0 | invalid on inner field | false |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/16/tests/1 | invalid on outer field | false |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/16/tests/2 | valid on both fields | true |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/28/tests/0 | a string is valid | true |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/28/tests/1 | a non-string is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
 | draft2020-12:unevaluatedItems.json#/groups/8/tests/1 | with no additional items | true | false | WRONG | {"keyword":"type","instancePath":"/true","schemaPath":"#/unevaluatedItems/type","params":{"type":"boolean"},"message":"must be boolean"} |
 | draft2020-12:unevaluatedItems.json#/groups/8/tests/2 | with invalid additional item | false | true | WRONG |  |
 | draft2020-12:unevaluatedItems.json#/groups/18/tests/0 | with no unevaluated items | true |  | RUNTIME | FAST_RUNTIME_ERROR: Maximum call stack size exceeded |
@@ -321,12 +317,12 @@
 | draft2020-12:dynamicRef.json#/groups/6/tests/0 | Any array is valid | WRONG | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","params":{"type":"array"},"message":"must be array"} |
 | draft2020-12:dynamicRef.json#/groups/7/tests/0 | Any array is valid | WRONG | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","params":{"type":"array"},"message":"must be array"} |
 | draft2020-12:dynamicRef.json#/groups/8/tests/0 | Any array is valid | WRONG | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","params":{"type":"array"},"message":"must be array"} |
-| draft2020-12:dynamicRef.json#/groups/9/tests/0 | The recursive part is valid against the root | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/9/tests/1 | The recursive part is not valid against the root | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/10/tests/0 | The recursive part doesn't need to validate against the root | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/12/tests/0 | string matches /$defs/thingy, but the $dynamicRef does not stop here | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/12/tests/1 | first_scope is not in dynamic scope for the $dynamicRef | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
-| draft2020-12:dynamicRef.json#/groups/12/tests/2 | /then/$defs/thingy is the final stop for the $dynamicRef | COMPILE | FAST_COMPILE_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/9/tests/0 | The recursive part is valid against the root | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/9/tests/1 | The recursive part is not valid against the root | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/10/tests/0 | The recursive part doesn't need to validate against the root | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/12/tests/0 | string matches /$defs/thingy, but the $dynamicRef does not stop here | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/12/tests/1 | first_scope is not in dynamic scope for the $dynamicRef | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
+| draft2020-12:dynamicRef.json#/groups/12/tests/2 | /then/$defs/thingy is the final stop for the $dynamicRef | COMPILE | FAST_SETUP_ERROR: "$dynamicRef" only supports hash fragment reference |
 | draft2020-12:dynamicRef.json#/groups/13/tests/0 | instance with misspelled field | PASS | {"keyword":"unevaluatedProperties","instancePath":"/children/0","schemaPath":"#/unevaluatedProperties","params":{"unevaluatedProperty":"daat"},"message":"must NOT have unevaluated properties"} |
 | draft2020-12:dynamicRef.json#/groups/14/tests/0 | incorrect parent schema | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"elements"},"message":"must have required property 'elements'"} |
 | draft2020-12:dynamicRef.json#/groups/14/tests/1 | incorrect extended schema | PASS | {"keyword":"required","instancePath":"/elements/0","schemaPath":"#/required","params":{"missingProperty":"elements"},"message":"must have required property 'elements'"} |
@@ -366,12 +362,12 @@
 | draft2020-12:enum.json#/groups/11/tests/0 | true is invalid | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/enum","params":{"allowedValues":[1]},"message":"must be equal to one of the allowed values"} |
 | draft2020-12:enum.json#/groups/12/tests/0 | [true] is invalid | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/enum","params":{"allowedValues":[[1]]},"message":"must be equal to one of the allowed values"} |
 | draft2020-12:enum.json#/groups/13/tests/1 | do not match string lacking nul | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/enum","params":{"allowedValues":["hello\u0000there"]},"message":"must be equal to one of the allowed values"} |
-| draft2020-12:enum.json#/groups/14/tests/0 | string is invalid | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/1 | number is invalid | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/2 | null is invalid | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/3 | object is invalid | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/4 | array is invalid | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
-| draft2020-12:enum.json#/groups/14/tests/5 | boolean is invalid | COMPILE | FAST_COMPILE_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/0 | string is invalid | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/1 | number is invalid | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/2 | null is invalid | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/3 | object is invalid | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/4 | array is invalid | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2020-12:enum.json#/groups/14/tests/5 | boolean is invalid | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
 | draft2020-12:exclusiveMaximum.json#/groups/0/tests/1 | boundary point is invalid | PASS | {"keyword":"exclusiveMaximum","instancePath":"","schemaPath":"#/exclusiveMaximum","params":{"comparison":"<","limit":3},"message":"must be < 3"} |
 | draft2020-12:exclusiveMaximum.json#/groups/0/tests/2 | above the exclusiveMaximum is invalid | PASS | {"keyword":"exclusiveMaximum","instancePath":"","schemaPath":"#/exclusiveMaximum","params":{"comparison":"<","limit":3},"message":"must be < 3"} |
 | draft2020-12:exclusiveMinimum.json#/groups/0/tests/1 | boundary point is invalid | PASS | {"keyword":"exclusiveMinimum","instancePath":"","schemaPath":"#/exclusiveMinimum","params":{"comparison":">","limit":1.1},"message":"must be > 1.1"} |
@@ -487,7 +483,7 @@
 | draft2020-12:optional/bignum.json#/groups/2/tests/0 | a bignum is not a string | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","params":{"type":"string"},"message":"must be string"} |
 | draft2020-12:optional/bignum.json#/groups/4/tests/0 | comparison works for high numbers | PASS | {"keyword":"exclusiveMaximum","instancePath":"","schemaPath":"#/exclusiveMaximum","params":{"comparison":"<","limit":9.727837981879871e+26},"message":"must be < 9.727837981879871e+26"} |
 | draft2020-12:optional/bignum.json#/groups/6/tests/0 | comparison works for very negative numbers | PASS | {"keyword":"exclusiveMinimum","instancePath":"","schemaPath":"#/exclusiveMinimum","params":{"comparison":">","limit":-9.727837981879871e+26},"message":"must be > -9.727837981879871e+26"} |
-| draft2020-12:optional/cross-draft.json#/groups/0/tests/0 | first item not a string is valid | COMPILE | FAST_COMPILE_ERROR: no schema with key or ref "https://json-schema.org/draft/2019-09/schema" |
+| draft2020-12:optional/cross-draft.json#/groups/0/tests/0 | first item not a string is valid | COMPILE | FAST_SETUP_ERROR: no schema with key or ref "https://json-schema.org/draft/2019-09/schema" |
 | draft2020-12:optional/dependencies-compatibility.json#/groups/0/tests/3 | missing dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","params":{"property":"bar","missingProperty":"foo","depsCount":1,"deps":"foo"},"message":"must have property foo when property bar is present"} |
 | draft2020-12:optional/dependencies-compatibility.json#/groups/2/tests/3 | missing dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","params":{"property":"quux","missingProperty":"bar","depsCount":2,"deps":"foo, bar"},"message":"must have properties foo, bar when property quux is present"} |
 | draft2020-12:optional/dependencies-compatibility.json#/groups/2/tests/4 | missing other dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","params":{"property":"quux","missingProperty":"foo","depsCount":2,"deps":"foo, bar"},"message":"must have properties foo, bar when property quux is present"} |
@@ -543,10 +539,10 @@
 | draft2020-12:optional/ecmascript-regex.json#/groups/18/tests/2 | non-ascii digits (BENGALI DIGIT FOUR, BENGALI DIGIT TWO) | PASS | {"keyword":"additionalProperties","instancePath":"","schemaPath":"#/additionalProperties","params":{"additionalProperty":"৪২"},"message":"must NOT have additional properties"} |
 | draft2020-12:optional/ecmascript-regex.json#/groups/19/tests/1 | ascii non-digits | PASS | {"keyword":"additionalProperties","instancePath":"","schemaPath":"#/additionalProperties","params":{"additionalProperty":"-%#"},"message":"must NOT have additional properties"} |
 | draft2020-12:optional/float-overflow.json#/groups/0/tests/0 | valid if optional overflow handling is implemented | WRONG | {"keyword":"multipleOf","instancePath":"","schemaPath":"#/multipleOf","params":{"multipleOf":0.5},"message":"must be multiple of 0.5"} |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/0 | format-assertion: false: valid string | COMPILE | FAST_COMPILE_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-false.json |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | COMPILE | FAST_COMPILE_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-false.json |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/0 | format-assertion: true: valid string | COMPILE | FAST_COMPILE_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-true.json |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | COMPILE | FAST_COMPILE_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-true.json |
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/0 | format-assertion: false: valid string | COMPILE | FAST_SETUP_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-false.json |
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | COMPILE | FAST_SETUP_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-false.json |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/0 | format-assertion: true: valid string | COMPILE | FAST_SETUP_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-true.json |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | COMPILE | FAST_SETUP_ERROR: can't resolve reference https://json-schema.org/draft/2020-12/meta/format-assertion from id http://localhost:1234/draft2020-12/format-assertion-true.json |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/12 | an invalid date-time past leap second, UTC | PASS | {"keyword":"format","instancePath":"","schemaPath":"#/format","params":{"format":"date-time"},"message":"must match format \"date-time\""} |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/13 | an invalid date-time with leap second on a wrong minute, UTC | PASS | {"keyword":"format","instancePath":"","schemaPath":"#/format","params":{"format":"date-time"},"message":"must match format \"date-time\""} |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/14 | an invalid date-time with leap second on a wrong hour, UTC | PASS | {"keyword":"format","instancePath":"","schemaPath":"#/format","params":{"format":"date-time"},"message":"must match format \"date-time\""} |
@@ -807,9 +803,9 @@
 | draft2020-12:optional/refOfUnknownKeyword.json#/groups/2/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/properties/foo/unknown-keyword/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft2020-12:optional/refOfUnknownKeyword.json#/groups/3/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/examples/0/type","params":{"type":"string"},"message":"must be string"} |
 | draft2020-12:optional/refOfUnknownKeyword.json#/groups/4/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/properties/foo/unknown~1keyword/type","params":{"type":"integer"},"message":"must be integer"} |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
-| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_COMPILE_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/0 | type matches second anyOf, which has a real schema in it | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
+| draft2020-12:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/draft2020-12/unknownKeyword/my_identifier.json" resolves to more than one schema |
 | draft2020-12:pattern.json#/groups/0/tests/1 | a non-matching pattern is invalid | PASS | {"keyword":"pattern","instancePath":"","schemaPath":"#/pattern","params":{"pattern":"^a*$"},"message":"must match pattern \"^a*$\""} |
 | draft2020-12:pattern.json#/groups/2/tests/2 | Digits do not match | PASS | {"keyword":"pattern","instancePath":"","schemaPath":"#/pattern","params":{"pattern":"^\\p{Letter}+$"},"message":"must match pattern \"^\\p{Letter}+$\""} |
 | draft2020-12:patternProperties.json#/groups/0/tests/2 | a single invalid match is invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"#/patternProperties/f.*o/type","params":{"type":"integer"},"message":"must be integer"} |
@@ -833,8 +829,6 @@
 | draft2020-12:properties.json#/groups/2/tests/2 | only 'false' property present is invalid | PASS | {"keyword":"false schema","instancePath":"/bar","schemaPath":"#/properties/bar/false schema","params":{},"message":"boolean schema is false"} |
 | draft2020-12:properties.json#/groups/2/tests/3 | both properties present is invalid | PASS | {"keyword":"false schema","instancePath":"/bar","schemaPath":"#/properties/bar/false schema","params":{},"message":"boolean schema is false"} |
 | draft2020-12:properties.json#/groups/3/tests/1 | object with strings is invalid | PASS | {"keyword":"type","instancePath":"/foo\nbar","schemaPath":"#/properties/foo%0Abar/type","params":{"type":"number"},"message":"must be number"} |
-| draft2020-12:properties.json#/groups/5/tests/2 | none of the properties mentioned | WRONG | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","params":{"type":"number"},"message":"must be number"} |
-| draft2020-12:properties.json#/groups/5/tests/3 | __proto__ not valid | PASS | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","params":{"type":"number"},"message":"must be number"} |
 | draft2020-12:properties.json#/groups/5/tests/4 | toString not valid | PASS | {"keyword":"type","instancePath":"/toString/length","schemaPath":"#/properties/toString/properties/length/type","params":{"type":"string"},"message":"must be string"} |
 | draft2020-12:properties.json#/groups/5/tests/5 | constructor not valid | PASS | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","params":{"type":"number"},"message":"must be number"} |
 | draft2020-12:propertyNames.json#/groups/0/tests/1 | some property names invalid | PASS | {"keyword":"maxLength","instancePath":"","schemaPath":"#/propertyNames/maxLength","params":{"limit":3},"message":"must NOT have more than 3 characters"} |
@@ -861,12 +855,12 @@
 | draft2020-12:ref.json#/groups/13/tests/0 | referenced subschema doesn't see annotations from properties | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/$defs/A/unevaluatedProperties","params":{"unevaluatedProperty":"prop1"},"message":"must NOT have unevaluated properties"} |
 | draft2020-12:ref.json#/groups/14/tests/0 | do not evaluate the $ref inside the enum, matching any string | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/enum","params":{"allowedValues":[{"$ref":"#/$defs/a_string"}]},"message":"must be equal to one of the allowed values"} |
 | draft2020-12:ref.json#/groups/14/tests/1 | do not evaluate the $ref inside the enum, definition exact match | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/enum","params":{"allowedValues":[{"$ref":"#/$defs/a_string"}]},"message":"must be equal to one of the allowed values"} |
-| draft2020-12:ref.json#/groups/15/tests/0 | invalid on inner field | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/15/tests/1 | invalid on outer field | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/15/tests/2 | valid on both fields | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/16/tests/0 | invalid on inner field | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/16/tests/1 | invalid on outer field | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/16/tests/2 | valid on both fields | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/15/tests/0 | invalid on inner field | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/15/tests/1 | invalid on outer field | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/15/tests/2 | valid on both fields | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/16/tests/0 | invalid on inner field | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/16/tests/1 | invalid on outer field | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/16/tests/2 | valid on both fields | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
 | draft2020-12:ref.json#/groups/17/tests/1 | non-number is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://example.com/b/d.json/type","params":{"type":"number"},"message":"must be number"} |
 | draft2020-12:ref.json#/groups/18/tests/1 | data is invalid against first definition | PASS | {"keyword":"maximum","instancePath":"","schemaPath":"int.json/maximum","params":{"comparison":"<=","limit":10},"message":"must be <= 10"} |
 | draft2020-12:ref.json#/groups/19/tests/1 | data is invalid against first definition | PASS | {"keyword":"maximum","instancePath":"","schemaPath":"#bigint/maximum","params":{"comparison":"<=","limit":10},"message":"must be <= 10"} |
@@ -878,8 +872,8 @@
 | draft2020-12:ref.json#/groups/25/tests/1 | a non-string is invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"#/$defs/bar/type","params":{"type":"string"},"message":"must be string"} |
 | draft2020-12:ref.json#/groups/26/tests/1 | a non-string is invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"urn:uuid:deadbeef-1234-0000-0000-4321feebdaed#/$defs/bar/type","params":{"type":"string"},"message":"must be string"} |
 | draft2020-12:ref.json#/groups/27/tests/1 | a non-string is invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"urn:uuid:deadbeef-1234-ff00-00ff-4321feebdaed#something/type","params":{"type":"string"},"message":"must be string"} |
-| draft2020-12:ref.json#/groups/28/tests/0 | a string is valid | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
-| draft2020-12:ref.json#/groups/28/tests/1 | a non-string is invalid | COMPILE | FAST_COMPILE_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/28/tests/0 | a string is valid | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2020-12:ref.json#/groups/28/tests/1 | a non-string is invalid | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
 | draft2020-12:ref.json#/groups/29/tests/0 | a non-integer is invalid due to the $ref | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://example.com/ref/if/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft2020-12:ref.json#/groups/30/tests/0 | a non-integer is invalid due to the $ref | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://example.com/ref/then/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft2020-12:ref.json#/groups/31/tests/0 | a non-integer is invalid due to the $ref | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://example.com/ref/else/type","params":{"type":"integer"},"message":"must be integer"} |
@@ -904,6 +898,10 @@
 | draft2020-12:refRemote.json#/groups/14/tests/1 | non-number is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#detached/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft2020-12:required.json#/groups/0/tests/1 | non-present required property is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"foo"},"message":"must have required property 'foo'"} |
 | draft2020-12:required.json#/groups/3/tests/1 | object with some properties missing is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"foo\\bar"},"message":"must have required property 'foo\\bar'"} |
+| draft2020-12:required.json#/groups/4/tests/2 | none of the properties mentioned | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"__proto__"},"message":"must have required property '__proto__'"} |
+| draft2020-12:required.json#/groups/4/tests/3 | __proto__ present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"toString"},"message":"must have required property 'toString'"} |
+| draft2020-12:required.json#/groups/4/tests/4 | toString present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"__proto__"},"message":"must have required property '__proto__'"} |
+| draft2020-12:required.json#/groups/4/tests/5 | constructor present | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","params":{"missingProperty":"__proto__"},"message":"must have required property '__proto__'"} |
 | draft2020-12:type.json#/groups/0/tests/2 | a float is not an integer | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft2020-12:type.json#/groups/0/tests/3 | a string is not an integer | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","params":{"type":"integer"},"message":"must be integer"} |
 | draft2020-12:type.json#/groups/0/tests/4 | a string is still not an integer, even if it looks like one | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/type","params":{"type":"integer"},"message":"must be integer"} |

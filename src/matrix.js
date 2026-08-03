@@ -1,10 +1,11 @@
 import {
   compareCanonicalAdapters,
   getColdExecutionRegistryParticipants,
-  getCompileRegistryParticipants,
   getRegistryRoundOrder,
+  getRegistrySupportClaim,
+  getSetupRegistryParticipants,
   registryMetadata
-} from "./adapters/index.js";
+} from "./adapter-registry.js";
 
 export const draftIds = Object.freeze([
   "draft4",
@@ -60,9 +61,9 @@ export function getParticipants(draft) {
   );
 }
 
-export function getCompileParticipants(draft) {
+export function getSetupParticipants(draft) {
   getDraft(draft);
-  return sortParticipantsByName(getCompileRegistryParticipants(draft));
+  return sortParticipantsByName(getSetupRegistryParticipants(draft));
 }
 
 export function getColdExecutionParticipants(draft) {
@@ -76,11 +77,5 @@ export function getRoundOrder(options) {
 }
 
 export function getSupportClaim(validatorId, draft) {
-  if (
-    validatorId === "schema-shield" &&
-    (draft === "draft2019-09" || draft === "draft2020-12")
-  ) {
-    return "experimental-observed";
-  }
-  return "declared";
+  return getRegistrySupportClaim(validatorId, draft);
 }

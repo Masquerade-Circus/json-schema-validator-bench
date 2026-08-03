@@ -40,14 +40,11 @@ import {
 import * as reportApi from "../src/report.js";
 import {
   draftIds,
-  getCompileParticipants,
+  getSetupParticipants,
   getParticipants,
   validators
 } from "../src/matrix.js";
-import {
-  derivePerformanceCorpus,
-  quickPerformanceCorpusContract
-} from "../src/performance-corpus.js";
+import { derivePerformanceCorpus } from "../src/performance-corpus.js";
 import { createPerformanceEligibilityPolicy } from "../src/eligibility.js";
 
 const benchmarkRoot = path.resolve(
@@ -282,7 +279,7 @@ function reportScopes() {
       );
       const setupValidators = Object.fromEntries(
         Object.entries(validators).filter(([id]) =>
-          getCompileParticipants(draft).some(
+          getSetupParticipants(draft).some(
             ({ id: candidate }) => candidate === id
           )
         )
@@ -296,7 +293,7 @@ function reportScopes() {
                 policy: createPerformanceEligibilityPolicy(),
                 roster: { eligible: Object.keys(setupValidators), excluded: [] }
               },
-              counts: { total: 20, compileEntries: 3 }
+              counts: { total: 20, setupEntries: 3 }
             }
           },
           setupSummary: {
@@ -312,7 +309,7 @@ function reportScopes() {
         return [
           `${draft}/${profile}`,
           {
-            intersection: { counts: { total: 10, compileEntries: 2 } },
+            intersection: { counts: { total: 10, setupEntries: 2 } },
             coldExecutionSummary: structuredClone(executionSummary),
             executionSummary
           }
@@ -444,11 +441,11 @@ function mutationReportingFixture(validator = "validator/id [special]") {
     ...(scope === "schema" ? { schemaId: subjectId } : {}),
     difference: { path, kind: "changed", before, after }
   });
-  const compileRecords = [
+  const setupRecords = [
     mutation({
       phase: "conformance",
       target: "schema",
-      mutationClass: "compile",
+      mutationClass: "setup",
       scope: "schema",
       subjectId: "draft6:schema/one",
       path: "$.__normalized"
@@ -456,7 +453,7 @@ function mutationReportingFixture(validator = "validator/id [special]") {
     mutation({
       phase: "conformance",
       target: "resources",
-      mutationClass: "compile",
+      mutationClass: "setup",
       scope: "schema",
       subjectId: "draft6:schema/one",
       path: "$[0].schema.cached"
@@ -511,7 +508,7 @@ function mutationReportingFixture(validator = "validator/id [special]") {
             validators: {
               [validator]: {
                 count: 2,
-                records: [...compileRecords, compileRecords[0]]
+                records: [...setupRecords, setupRecords[0]]
               }
             }
           },
@@ -529,7 +526,7 @@ function mutationReportingFixture(validator = "validator/id [special]") {
           draft: "draft6",
           formatProfile: "base",
           mutations: {
-            validators: validators([...compileRecords, ...executionRecords])
+            validators: validators([...setupRecords, ...executionRecords])
           },
           validators: { [validator]: performanceValues(20) }
         }
@@ -571,8 +568,8 @@ function mutationReportingFixture(validator = "validator/id [special]") {
           schemaId: "draft6:schema/one",
           formatProfile: "base",
           status: "COMPILE",
-          errorCode: "FAST_COMPILE_ERROR",
-          error: "fixture compile error"
+          errorCode: "FAST_SETUP_ERROR",
+          error: "fixture setup error"
         }
       ]
     }
@@ -582,7 +579,7 @@ function mutationReportingFixture(validator = "validator/id [special]") {
     scopes,
     reports,
     versions: new Map([[validator, "9.8.7"]]),
-    compileRecords,
+    setupRecords,
     executionRecords
   };
 }
@@ -645,7 +642,7 @@ test("mutation documents are deterministic, bounded, scoped, and omit zero valid
   assert.match(document.content, /mutationClass/);
   assert.match(document.content, /subjectId/);
   assert.match(document.content, /Related status:.*PASS/);
-  assert.match(document.content, /FAST\\_COMPILE\\_ERROR: fixture compile error/);
+  assert.match(document.content, /FAST\\_SETUP\\_ERROR: fixture setup error/);
   assert.match(document.content, /TRUNCATED.*full structured value remains in JSON results/);
   assert.equal(fixture.executionRecords[0].difference.before.payload.length, 5000);
   const anchors = [...document.content.matchAll(/<a id="([A-Za-z0-9._-]+)"><\/a>/g)]
@@ -1032,7 +1029,7 @@ test("performance tables show mutations and Peak RSS without changing throughput
     draft: "draft6",
     caseId: "shared-case",
     mutationTarget: "schema",
-    mutationClass: "compile"
+    mutationClass: "setup"
   };
   const baseSummary = {
     mutations: {
@@ -1471,15 +1468,15 @@ test("generated participant snapshots are complete and alphabetic while metric t
 });
 
 function performanceCorpusFixture(draft = "draft6", formatProfile = "base") {
-  const compileEntries = Array.from({ length: 20 }, (_, index) => ({
-    compileKey: `${draft}:${formatProfile}:compile-${index}`,
+  const setupEntries = Array.from({ length: 20 }, (_, index) => ({
+    setupKey: `${draft}:${formatProfile}:setup-${index}`,
     draft,
     formatProfile,
     representativeSchemaId: `${draft}:schema-${index}`,
     memberSchemaIds: [`${draft}:schema-${index}`],
     resources: []
   }));
-  const cases = compileEntries.flatMap((entry, index) => [
+  const cases = setupEntries.flatMap((entry, index) => [
     {
       id: `${draft}:case-${index}-valid`,
       schemaId: entry.representativeSchemaId,
@@ -1500,7 +1497,7 @@ function performanceCorpusFixture(draft = "draft6", formatProfile = "base") {
       formatProfile,
       emptyReason: null,
       caseIds: cases.map(({ id }) => id),
-      compileEntries
+      setupEntries
     }
   };
 }
@@ -1636,77 +1633,17 @@ test("controller deadlines are validated at the benchmark boundary", () => {
   }
 });
 
-test("Quick corpus selection is deterministic, bounded and balanced", () => {
-  for (const draft of draftIds) {
-    for (const formatProfile of ["base", "format-assertion"]) {
-      const fixture = performanceCorpusFixture(draft, formatProfile);
-      const selected = derivePerformanceCorpus({ mode: "quick", ...fixture });
-      const reversed = derivePerformanceCorpus({
-        mode: "quick",
-        cases: [...fixture.cases].reverse(),
-        intersection: {
-          ...fixture.intersection,
-          caseIds: [...fixture.intersection.caseIds].reverse(),
-          compileEntries: [...fixture.intersection.compileEntries].reverse()
-        }
-      });
-
-      assert.deepEqual(selected, reversed);
-      assert.ok(
-        selected.compileEntries.length <=
-          quickPerformanceCorpusContract.maximumCompileEntriesPerScope
-      );
-      assert.ok(
-        selected.caseIds.length <=
-          quickPerformanceCorpusContract.maximumExecutionCasesPerScope
-      );
-      assert.ok(selected.metadata.selected.validCases > 0);
-      assert.ok(selected.metadata.selected.invalidCases > 0);
-
-      const selectedCaseIds = new Set(selected.caseIds);
-      const selectedSchemaIds = new Set(
-        fixture.cases
-          .filter(({ id }) => selectedCaseIds.has(id))
-          .map(({ schemaId }) => schemaId)
-      );
-      const representedSchemaIds = new Set(
-        selected.compileEntries.flatMap(({ memberSchemaIds }) => memberSchemaIds)
-      );
-      assert.ok(
-        [...selectedSchemaIds].every((schemaId) =>
-          representedSchemaIds.has(schemaId)
-        )
-      );
-    }
-  }
-});
-
-test("Quick corpus rejects a one-sided intersection", () => {
-  const fixture = performanceCorpusFixture();
-  const validOnly = fixture.cases.filter(({ expected }) => expected === true);
-  assert.throws(
-    () =>
-      derivePerformanceCorpus({
-        mode: "quick",
-        cases: validOnly,
-        intersection: {
-          ...fixture.intersection,
-          caseIds: validOnly.map(({ id }) => id)
-        }
-      }),
-    /requires valid and invalid cases/
-  );
-});
-
-test("Full keeps the complete intersection and has an isolated contract", () => {
+test("Quick and Full keep the same complete performance intersection", () => {
   const fixture = performanceCorpusFixture();
   const full = derivePerformanceCorpus({ mode: "full", ...fixture });
   const quick = derivePerformanceCorpus({ mode: "quick", ...fixture });
 
   assert.strictEqual(full.caseIds, fixture.intersection.caseIds);
-  assert.strictEqual(full.compileEntries, fixture.intersection.compileEntries);
+  assert.strictEqual(full.setupEntries, fixture.intersection.setupEntries);
   assert.equal(full.metadata, null);
-  assert.notDeepEqual(quick.caseIds, full.caseIds);
+  assert.strictEqual(quick.caseIds, full.caseIds);
+  assert.strictEqual(quick.setupEntries, full.setupEntries);
+  assert.equal(quick.metadata, null);
   assert.notEqual(
     createBenchmarkContractHash({ mode: "quick" }),
     createBenchmarkContractHash({ mode: "full" })
@@ -2190,7 +2127,7 @@ test("generated methodology documents the complete benchmark flow in active voic
   );
   assert.match(
     methodology,
-    /The timed operation creates a fresh adapter and provider context, applies integration-owned configuration and registration, obtains the callable or validate-only equivalent, validates once and ends when validation returns/
+    /The timed operation creates a fresh opaque adapter and provider context, applies provider-specific configuration and registration, calls `setup\(\)` when available, validates once and ends when validation returns/
   );
   assert.match(
     methodology,
@@ -2198,8 +2135,9 @@ test("generated methodology documents the complete benchmark flow in active voic
   );
   assert.match(
     methodology,
-    /Quick runs complete conformance, one performance round without warmup, and a reduced deterministic performance corpus/
+    /Quick uses the same complete common performance corpus, 100 ms warmup, 250 ms target, 175 ms normal minimum, phases, scopes, isolation, eligibility, scoring, preparation and sample contract as Full/
   );
+  assert.match(methodology, /neither complete antithetic pairs nor multi-round dispersion/);
   assert.match(methodology, /Quick is diagnostic and does not define the canonical publication/);
   assert.match(
     methodology,
@@ -2316,7 +2254,7 @@ test("global error aggregation preserves exact statuses and zero totals", () => 
     )
     .cases.push({
       id: "draft6:fixture#/tests/0",
-      description: "compile failure",
+      description: "setup failure",
       formatProfile: "base",
       status: "COMPILE",
       error: "failed"
