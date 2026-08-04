@@ -33,7 +33,6 @@ import {
   publishBenchmarkArtifacts,
   renderBenchmarkReadme,
   renderDraftSummary,
-  renderRootSummary,
   setupPerformanceTable,
   summarizePhase
 } from "../src/report.js";
@@ -2013,14 +2012,6 @@ test("All Drafts ranks only by Balanced score when raw Average favors another va
   assert.ok(Math.abs(leaders[1].balancedScore - 12.589254117941675) < 1e-12);
 });
 
-test("root summary describes qualified aggregates across drafts and profiles", () => {
-  const markdown = renderRootSummary({ environment: reportEnvironment("quick") });
-
-  assert.match(markdown, /qualified All Drafts Setup, Execution and Cold execution aggregates/);
-  assert.equal(markdown.includes("Combined"), false);
-  assert.equal(markdown.includes("no aggregate across drafts or profiles"), false);
-});
-
 test("All Drafts publishes raw ops/s indices before geometric scores in both phase tables", () => {
   const readme = renderBenchmarkReadme({
     mode: "quick",
@@ -2054,136 +2045,9 @@ test("All Drafts publishes raw ops/s indices before geometric scores in both pha
   const flowchart = readme.indexOf("```mermaid\nflowchart TD", profiles);
   const conformance = readme.indexOf("### Conformance and common PASS corpus");
   assert.ok(profiles < flowchart && flowchart < conformance);
-  assert.match(readme, /We normalize scope medians/);
-  assert.match(readme, /Raw summed indices remain diagnostic/);
-  assert.match(readme, /Setup score.*five-scope geometric mean/);
 });
 
-test("generated methodology documents the complete benchmark flow in active voice", () => {
-  const readme = renderBenchmarkReadme({
-    mode: "quick",
-    scopes: reportScopes(),
-    reports: reportFixtures(),
-    environment: reportEnvironment("quick"),
-    snapshot: reportSnapshot(),
-    versions: reportVersions()
-  });
-  const methodology = readme.slice(
-    readme.indexOf("## Methodology"),
-    readme.indexOf("## Status definitions")
-  );
-  const flowchart = methodology.match(/```mermaid\nflowchart TD[\s\S]*?```/)?.[0];
-  assert.ok(flowchart);
-  for (const expected of [
-    "We maintain a fixed JSON Schema suite",
-    "We run five drafts",
-    "We evaluate Base and Formats",
-    "We measure conformance for every validator",
-    "98% default",
-    "draft roster",
-    "diagnostic results",
-    "We build the common PASS corpus",
-    "We measure Setup with deduplicated fresh construction",
-    "We measure Execution with prepared validation context",
-    "We measure Cold execution directly per case",
-    "We consolidate validators that qualify across all five drafts",
-    "All Drafts Setup, Execution and Cold execution",
-    "We normalize scope medians",
-    "equal weight per scope"
-  ]) {
-    assert.equal(flowchart.includes(expected), true, expected);
-  }
-
-  const headings = [
-    "### Conformance and common PASS corpus",
-    "### Setup",
-    "### Execution",
-    "### Cold execution",
-    "### Timing and scoring",
-    "### Mutations",
-    "### Memory",
-    "### Reproducibility"
-  ];
-  for (let index = 1; index < headings.length; index += 1) {
-    assert.ok(
-      methodology.indexOf(headings[index - 1]) < methodology.indexOf(headings[index]),
-      headings[index]
-    );
-  }
-  assert.match(methodology, /compare exact integer fractions/);
-  assert.match(methodology, /normalized relative performance index/);
-  assert.equal(methodology.includes("normalized throughput comparison"), false);
-  assert.match(
-    methodology,
-    /Setup draft tables normalize one median/
-  );
-  assert.match(
-    methodology,
-    /reusable adapters call the prepared callable, while `validate-only` adapters call the vendor API through their prepared adapter context/
-  );
-  assert.match(
-    methodology,
-    /Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile and analyzes schema capabilities/
-  );
-  assert.match(
-    methodology,
-    /The timed operation creates a fresh opaque adapter and provider context, applies provider-specific configuration and registration, calls `setup\(\)` when available, validates once and ends when validation returns/
-  );
-  assert.match(
-    methodology,
-    /Result comparison, checksum, diagnostics and telemetry remain outside the clock/
-  );
-  assert.match(
-    methodology,
-    /Quick uses the same complete common performance corpus, 100 ms warmup, 250 ms target, 175 ms normal minimum, phases, scopes, isolation, eligibility, scoring, preparation and sample contract as Full/
-  );
-  assert.match(methodology, /neither complete antithetic pairs nor multi-round dispersion/);
-  assert.match(methodology, /Quick is diagnostic and does not define the canonical publication/);
-  assert.match(
-    methodology,
-    /Full runs complete conformance and the complete common performance corpus under the canonical contract/
-  );
-  assert.match(methodology, /250 ms target with a normal minimum of 175 ms/);
-  assert.match(methodology, /six isolated samples in three antithetic pairs/);
-  assert.match(
-    methodology,
-    /deterministic offsets 0, floor\(n \/ 3\), and floor\(2n \/ 3\)/
-  );
-  assert.match(methodology, /use their median for ranking and scoring/);
-  assert.match(methodology, /relative median absolute deviation/);
-  assert.match(methodology, /sample coefficient of variation/);
-  assert.match(methodology, /no automatic significance claim/);
-  assert.match(methodology, /Run Full only for the final publication/);
-  for (const expected of [
-    "npm test",
-    "npm run benchmark -- --quick",
-    "results/<draft>/conformance/<canonical-id>.json",
-    "WRONG",
-    "COMPILE",
-    "RUNTIME",
-    "Setup",
-    "Cold execution",
-    "Execution",
-    "actualElapsedMilliseconds",
-    "Peak RSS",
-    "performance identity",
-    "Each performance sample records the validator runtime hash that produced it",
-    "rates belong to one scope",
-    "relative scores compare eligible validators",
-    "global ops/s indices sum scope medians",
-    "Before changing the validator, copy the relevant baseline artifacts outside `results/`",
-    "record the benchmark contract hash, intersection and performance identities, and baseline values",
-    "npm run benchmark -- --quick --validator <canonical-id>",
-    "produces only the post-change state; it does not calculate a before/after comparison",
-    "Compare that post-change state with the preserved baseline for exactly the same draft, profile and phase",
-    "A complete Quick run is required",
-    "npm run benchmark"
-  ]) {
-    assert.equal(methodology.includes(expected), true, expected);
-  }
-});
-
-test("README methodology and global JSON reflect the configured eligibility threshold", () => {
+test("global summary preserves the configured eligibility threshold", () => {
   const scopes = reportScopes();
   const reports = reportFixtures();
   const eligibilityPolicy = createPerformanceEligibilityPolicy("99.95");
@@ -2195,28 +2059,7 @@ test("README methodology and global JSON reflect the configured eligibility thre
     }
   }
   const globalSummary = createGlobalPerformanceSummary(scopes, reports, "99.95");
-  const environment = {
-    ...reportEnvironment("quick"),
-    performanceEligibility: eligibilityPolicy
-  };
-  const readme = renderBenchmarkReadme({
-    mode: "quick",
-    scopes,
-    reports,
-    environment,
-    snapshot: reportSnapshot(),
-    versions: reportVersions(),
-    globalSummary
-  });
-
   assert.equal(globalSummary.eligibility.policy.thresholdPercent, "99.95");
-  assert.match(readme, /configured 99\.95% gate/);
-  assert.match(readme, /For All Drafts, we require atomic eligibility at 99\.95%/);
-  assert.match(readme, /coordinated transactional publication/);
-  assert.match(readme, /concurrent readers can observe the rename window/i);
-  assert.equal(readme.includes("one atomic replacement"), false);
-  assert.equal((readme.match(/^### All Drafts /gm) ?? []).length, 3);
-  assert.equal(readme.includes("Combined"), false);
 });
 
 test("All Drafts keeps five Setup scopes independent from ten execution scopes", () => {

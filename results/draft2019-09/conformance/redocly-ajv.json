@@ -10,23 +10,26 @@
     "base": {
       "formatProfile": "base",
       "fast": {
-        "allErrors": true,
         "ownProperties": true,
         "coerceTypes": false,
         "useDefaults": false,
         "removeAdditional": false,
         "strict": false,
         "validateFormats": false,
-        "messages": false
+        "allErrors": false,
+        "messages": false,
+        "code": {
+          "process": "isolate-visited-references-per-root-validation"
+        }
       },
       "detailed": {
-        "allErrors": true,
         "ownProperties": true,
         "coerceTypes": false,
         "useDefaults": false,
         "removeAdditional": false,
         "strict": false,
         "validateFormats": false,
+        "allErrors": true,
         "messages": true
       },
       "formats": {
@@ -65,23 +68,26 @@
     "format-assertion": {
       "formatProfile": "format-assertion",
       "fast": {
-        "allErrors": true,
         "ownProperties": true,
         "coerceTypes": false,
         "useDefaults": false,
         "removeAdditional": false,
         "strict": false,
         "validateFormats": true,
-        "messages": false
+        "allErrors": false,
+        "messages": false,
+        "code": {
+          "process": "isolate-visited-references-per-root-validation"
+        }
       },
       "detailed": {
-        "allErrors": true,
         "ownProperties": true,
         "coerceTypes": false,
         "useDefaults": false,
         "removeAdditional": false,
         "strict": false,
         "validateFormats": true,
+        "allErrors": true,
         "messages": true
       },
       "formats": {
@@ -119,8 +125,8 @@
     }
   },
   "reportOptionsSha256": {
-    "base": "2c62298c726066f3c0dd41c0dec82cee8ed347e645e4c3009767240921d772ce",
-    "format-assertion": "17d3adb3decc948252b49e4e406d576987fe2e86857ccf80ce80d7a2e3a77d4d"
+    "base": "57032cfe05906154cd5e346f8446dae72832c11b2d706e40c38d39e1007f513e",
+    "format-assertion": "13c788255e57c2a232bda5183e4735c46dfffa090a6248aa1546423314c3bf3c"
   },
   "suite": {
     "commit": "0c7b65dc16dd8eaa7bd83e21099c76610c3b246a",

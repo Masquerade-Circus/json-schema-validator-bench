@@ -71,7 +71,7 @@ const exactDependencies = Object.freeze({
   djv: "2.1.4",
   "json-schema-library": "11.6.2",
   jsonschema: "1.5.0",
-  "schema-shield": "1.2.0",
+  "schema-shield": "1.3.0",
   "z-schema": "12.4.0"
 });
 export function validateBenchmarkPackage(packageJson) {

@@ -1,34 +1,53 @@
-import { isDeepStrictEqual } from "node:util";
-import { readFileSync } from "node:fs";
-
 import { SchemaShield } from "schema-shield";
 
 import { ADAPTER_CAPABILITIES, defineAdapter } from "../adapter-api.js";
 
-let metaschemaManifest = null;
-const metaschemaCache = new Map();
+const builtinMetaschemaUris = [
+  "http://json-schema.org/draft-04/schema#",
+  "http://json-schema.org/draft-06/schema#",
+  "http://json-schema.org/draft-07/schema#",
+  "https://json-schema.org/draft/2019-09/schema",
+  "https://json-schema.org/draft/2019-09/meta/core",
+  "https://json-schema.org/draft/2019-09/meta/applicator",
+  "https://json-schema.org/draft/2019-09/meta/validation",
+  "https://json-schema.org/draft/2019-09/meta/meta-data",
+  "https://json-schema.org/draft/2019-09/meta/format",
+  "https://json-schema.org/draft/2019-09/meta/content",
+  "https://json-schema.org/draft/2020-12/schema",
+  "https://json-schema.org/draft/2020-12/meta/core",
+  "https://json-schema.org/draft/2020-12/meta/applicator",
+  "https://json-schema.org/draft/2020-12/meta/unevaluated",
+  "https://json-schema.org/draft/2020-12/meta/validation",
+  "https://json-schema.org/draft/2020-12/meta/meta-data",
+  "https://json-schema.org/draft/2020-12/meta/format-annotation",
+  "https://json-schema.org/draft/2020-12/meta/content"
+];
+const builtinMetaschemaAliases = new Map([
+  ["https://json-schema.org/draft-04/schema", builtinMetaschemaUris[0]],
+  ["https://json-schema.org/draft-06/schema", builtinMetaschemaUris[1]],
+  ["https://json-schema.org/draft-07/schema", builtinMetaschemaUris[2]],
+  ["http://json-schema.org/draft/2019-09/schema", builtinMetaschemaUris[3]],
+  ["http://json-schema.org/draft/2020-12/schema", builtinMetaschemaUris[10]]
+]);
+const builtinMetaschemaByResourceUri = new Map([
+  ...builtinMetaschemaUris.map((uri) => [resourceUri(uri), uri]),
+  ...builtinMetaschemaAliases
+]);
 
-function createImplementation({ draft, formatProfile, resources, unknownFormats }) {
-  metaschemaManifest ??= JSON.parse(
-    readFileSync(new URL("../../metaschemas/manifest.json", import.meta.url), "utf8")
-  );
-  if (!metaschemaCache.has(draft)) {
-    metaschemaCache.set(
-      draft,
-      metaschemaManifest.files
-        .filter((entry) => entry.draft === draft)
-        .map((entry) => ({
-          ...entry,
-          schema: JSON.parse(
-            readFileSync(
-              new URL(`../../metaschemas/${entry.path}`, import.meta.url),
-              "utf8"
-            )
-          )
-        }))
-    );
+function resourceUri(value) {
+  if (typeof value !== "string" || value.length === 0) {
+    return null;
   }
-  const metaschemas = metaschemaCache.get(draft);
+  try {
+    const url = new URL(value);
+    url.hash = "";
+    return url.href;
+  } catch {
+    return null;
+  }
+}
+
+function createImplementation({ draft, formatProfile, resources }) {
   const dialect = {
     draft4: "http://json-schema.org/draft-04/schema#",
     draft6: "http://json-schema.org/draft-06/schema#",
@@ -42,75 +61,43 @@ function createImplementation({ draft, formatProfile, resources, unknownFormats 
     useDefaults: false,
     immutable: false
   };
-  function identity(value) {
-    if (typeof value !== "string" || value.length === 0) {
-      return null;
-    }
-    try {
-      const url = new URL(value);
-      url.hash = "";
-      return url.href;
-    } catch {
-      return value.split("#")[0];
-    }
-  }
+  const compileOptions = { validateSchema: true };
   function createInstance(options) {
     const instance = new SchemaShield(options);
-    for (const format of unknownFormats) {
-      instance.addFormat(format, () => true);
-    }
-    const consumed = new Set();
-    for (const metaschema of metaschemas) {
-      const identities = new Set(
-        [
-          metaschema.uri,
-          metaschema.schema.$id,
-          metaschema.schema.id,
-          ...metaschema.aliases
-        ]
-          .map(identity)
-          .filter((value) => value !== null)
-      );
-      let foundMatch = true;
-      while (foundMatch) {
-        foundMatch = false;
-        for (const resource of resources) {
-          if (consumed.has(resource)) {
-            continue;
-          }
-          const resourceIdentities = [
-            ...resource.aliases,
-            resource.schema?.$id,
-            resource.schema?.id
-          ]
-            .map(identity)
-            .filter((value) => value !== null);
-          if (
-            resourceIdentities.some((value) => identities.has(value)) &&
-            isDeepStrictEqual(resource.schema, metaschema.schema)
-          ) {
-            for (const value of resourceIdentities) {
-              identities.add(value);
-            }
-            consumed.add(resource);
-            foundMatch = true;
-          }
-        }
-      }
-      const idKeyword = typeof metaschema.schema.$id === "string" ? "$id" : "id";
-      const schemaId = metaschema.schema[idKeyword];
-      const registrationSchema =
-        typeof schemaId === "string" && schemaId.endsWith("#")
-          ? { ...metaschema.schema, [idKeyword]: schemaId.slice(0, -1) }
-          : metaschema.schema;
-      const uri = identity(metaschema.uri);
-      instance.addSchema(registrationSchema, {
-        uri,
-        aliases: [...identities].filter((value) => value !== uri)
-      });
+    for (const [alias, builtinUri] of builtinMetaschemaAliases) {
+      instance.addSchema({ $ref: builtinUri }, { uri: alias });
     }
     for (const resource of resources) {
-      if (consumed.has(resource)) {
+      const identities = [
+        resource.canonicalUri,
+        ...resource.aliases,
+        resource.schema?.$id,
+        resource.schema?.id
+      ];
+      const builtinUri = identities
+        .map(resourceUri)
+        .map((uri) => builtinMetaschemaByResourceUri.get(uri))
+        .find((uri) => typeof uri === "string");
+      if (typeof builtinUri === "string") {
+        instance.addSchema(resource.schema, { uri: builtinUri });
+        const aliases = [
+          ...new Set(
+            identities
+              .map(resourceUri)
+              .filter(
+                (uri) =>
+                  uri !== null &&
+                  uri !== resourceUri(builtinUri) &&
+                  !builtinMetaschemaByResourceUri.has(uri)
+              )
+          )
+        ];
+        if (aliases.length > 0) {
+          instance.addSchema(
+            { $ref: builtinUri },
+            { uri: aliases[0], aliases: aliases.slice(1) }
+          );
+        }
         continue;
       }
       const schema =
@@ -138,6 +125,9 @@ function createImplementation({ draft, formatProfile, resources, unknownFormats 
       defaultDialect: dialect,
       fast: fastOptions,
       detailed: detailedOptions,
+      compile: compileOptions,
+      formats: "built-in; unknown formats ignored",
+      metaschemas: "built-in",
       resources: "registered"
     },
     setup(schema) {
@@ -150,7 +140,7 @@ function createImplementation({ draft, formatProfile, resources, unknownFormats 
           : schema;
       return {
         schema: prepared,
-        validate: fast.compile(prepared),
+        validate: fast.compile(prepared, compileOptions),
         detailed: null
       };
     },
@@ -159,114 +149,9 @@ function createImplementation({ draft, formatProfile, resources, unknownFormats 
     },
     getError({ target, data }) {
       if (detailed === null) {
-        detailed = new SchemaShield(detailedOptions);
-        for (const format of unknownFormats) {
-          detailed.addFormat(format, () => true);
-        }
-        const consumed = new Set();
-        for (const metaschema of metaschemas) {
-          const identities = new Set(
-            [
-              metaschema.uri,
-              metaschema.schema.$id,
-              metaschema.schema.id,
-              ...metaschema.aliases
-            ]
-              .map((value) => {
-                if (typeof value !== "string" || value.length === 0) {
-                  return null;
-                }
-                try {
-                  const url = new URL(value);
-                  url.hash = "";
-                  return url.href;
-                } catch {
-                  return value.split("#")[0];
-                }
-              })
-              .filter((value) => value !== null)
-          );
-          let foundMatch = true;
-          while (foundMatch) {
-            foundMatch = false;
-            for (const resource of resources) {
-              if (consumed.has(resource)) {
-                continue;
-              }
-              const resourceIdentities = [
-                ...resource.aliases,
-                resource.schema?.$id,
-                resource.schema?.id
-              ]
-                .map((value) => {
-                  if (typeof value !== "string" || value.length === 0) {
-                    return null;
-                  }
-                  try {
-                    const url = new URL(value);
-                    url.hash = "";
-                    return url.href;
-                  } catch {
-                    return value.split("#")[0];
-                  }
-                })
-                .filter((value) => value !== null);
-              if (
-                resourceIdentities.some((value) => identities.has(value)) &&
-                isDeepStrictEqual(resource.schema, metaschema.schema)
-              ) {
-                for (const value of resourceIdentities) {
-                  identities.add(value);
-                }
-                consumed.add(resource);
-                foundMatch = true;
-              }
-            }
-          }
-          const idKeyword =
-            typeof metaschema.schema.$id === "string" ? "$id" : "id";
-          const schemaId = metaschema.schema[idKeyword];
-          const registrationSchema =
-            typeof schemaId === "string" && schemaId.endsWith("#")
-              ? { ...metaschema.schema, [idKeyword]: schemaId.slice(0, -1) }
-              : metaschema.schema;
-          let uri;
-          if (typeof metaschema.uri !== "string" || metaschema.uri.length === 0) {
-            uri = null;
-          } else {
-            try {
-              const url = new URL(metaschema.uri);
-              url.hash = "";
-              uri = url.href;
-            } catch {
-              uri = metaschema.uri.split("#")[0];
-            }
-          }
-          detailed.addSchema(registrationSchema, {
-            uri,
-            aliases: [...identities].filter((value) => value !== uri)
-          });
-        }
-        for (const resource of resources) {
-          if (consumed.has(resource)) {
-            continue;
-          }
-          const schema =
-            resource.schema !== null &&
-            typeof resource.schema === "object" &&
-            !Array.isArray(resource.schema) &&
-            typeof resource.schema.$schema !== "string"
-              ? { ...resource.schema, $schema: resource.dialect ?? dialect }
-              : resource.schema;
-          detailed.addSchema(schema, {
-            uri: resource.canonicalUri,
-            aliases: resource.aliases.filter(
-              (alias) => alias !== resource.canonicalUri
-            )
-          });
-        }
+        detailed = createInstance(detailedOptions);
       }
-      target.detailed ??= detailed.compile(target.schema);
+      target.detailed ??= detailed.compile(target.schema, compileOptions);
       const result = target.detailed(data);
       if (result.valid) {
         return null;

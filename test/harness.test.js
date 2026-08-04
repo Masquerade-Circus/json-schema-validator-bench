@@ -5102,7 +5102,7 @@ function reportSampleFixture(phase) {
     }
   }
   return {
-    benchmarkVersion: 11,
+    benchmarkVersion: 13,
     benchmarkMode: "full",
     phase,
     draft,
@@ -5890,7 +5890,7 @@ test("Redocly AJV returns a stable recursive-reference result for pristine input
     [validate(data), validate(data), validate(data)],
     [false, false, false]
   );
-  assert.equal(adapter.reportOptions.fast.allErrors, true);
+  assert.equal(adapter.reportOptions.fast.allErrors, false);
   assert.equal(canonicalJson(data), before);
 });
 

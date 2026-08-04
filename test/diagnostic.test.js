@@ -129,7 +129,7 @@ async function diagnosticBaselineFixture(label) {
         const intersectionArtifact = sha256(intersectionRaw);
         const samplePath = `${phaseRoot}/${phase}/samples.json`;
         const sampleRaw = `${JSON.stringify({
-          benchmarkVersion: 11,
+          benchmarkVersion: 13,
           benchmarkMode: "full",
           phase,
           draft,

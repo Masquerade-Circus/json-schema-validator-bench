@@ -44,8 +44,8 @@ import { reconcileDiagnosticPhaseResult } from "./diagnostic.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const workerPath = path.join(benchmarksRoot, "src", "worker.js");
-export const sampleContractVersion = 23;
-export const sampleCacheIdentityVersion = 16;
+export const sampleContractVersion = 25;
+export const sampleCacheIdentityVersion = 18;
 const sampleCheckpointNamespace = `granular-samples-v${sampleCacheIdentityVersion}`;
 const checkpointEnvelopeVersion = 1;
 const hashPattern = /^[a-f0-9]{64}$/;
@@ -782,32 +782,6 @@ async function hashInstalledPackageClosure(packageNames, projectRoot = benchmark
   return hash.digest("hex");
 }
 
-async function hashLocalRuntimeAssets(draft, projectRoot = benchmarksRoot) {
-  const root = path.join(projectRoot, "metaschemas");
-  let manifest;
-  try {
-    manifest = JSON.parse(
-      await readFile(path.join(root, "manifest.json"), "utf8")
-    );
-  } catch (error) {
-    if (error?.code === "ENOENT") {
-      return null;
-    }
-    throw error;
-  }
-  const entries = manifest.files.filter((entry) => entry.draft === draft);
-  const hash = createHash("sha256");
-  hash.update(canonicalJson(entries));
-  for (const entry of entries) {
-    await addPathToHash(
-      hash,
-      path.join(root, entry.path),
-      `metaschemas/${entry.path}`
-    );
-  }
-  return hash.digest("hex");
-}
-
 export async function createValidatorRuntimeIdentity({
   validator,
   draft,
@@ -825,14 +799,9 @@ export async function createValidatorRuntimeIdentity({
     packageNames,
     projectRoot
   );
-  const localRuntimeAssetsSha256 = await hashLocalRuntimeAssets(
-    draft,
-    projectRoot
-  );
   const identity = {
     adapterSourcesSha256: sourceIdentity.sha256,
-    packageRuntimeSha256,
-    localRuntimeAssetsSha256
+    packageRuntimeSha256
   };
   return Object.freeze({
     ...identity,
@@ -1938,7 +1907,7 @@ export async function runBenchmarkPhase(
         continue;
       }
       const result = {
-        benchmarkVersion: 11,
+        benchmarkVersion: 13,
         phase,
         draft,
         formatProfile,
@@ -1961,7 +1930,7 @@ export async function runBenchmarkPhase(
   }
 
   return {
-    benchmarkVersion: 11,
+    benchmarkVersion: 13,
     phase,
     startedAt: new Date(started).toISOString(),
     endedAt: new Date().toISOString(),

@@ -38,18 +38,14 @@
       "validator": "jsonschema",
       "version": "1.5.0",
       "relativePath": "mutations/jsonschema-9bbbc0e7d004cda6.md",
-      "eventCount": 12,
+      "eventCount": 6,
       "anchors": [
         "mutation-event-3885a4b41ffba00fce111dfa838512b6ee594ec64984506d9aa598c093f00085",
         "mutation-event-497495ad06ae19bce54ad9b5556f1f42d6ff7761514606b19b2c99458beaafcd",
+        "mutation-event-6adc99f40a6dc2a0cd6b50ea7d7e1c629bc5702c33500a4cecfd9a08b12e57e4",
         "mutation-event-781318811522fe9fe345d43cddf25fd4a9718f2c5ae35095b5d44f08ca509be5",
-        "mutation-event-85abb657a71422ac7f1bed5032cb4fea47834d07d1f187ab90f0c54e5a5a361a",
-        "mutation-event-b4cd94b4f0fff3bdf41aeb1be0b3703a5846e7c26f8c50fe25db80aa4c3453cb",
         "mutation-event-b96a860fb65da173f0f93627781a23a15aea7b7e1e6e9d645418e41d68872bf6",
-        "mutation-event-beb2366c882969098a03ef0e5a98d3bda49bab9eb4058a67a2f8ead28517becc",
         "mutation-event-d225a8e8e26d67cf1bc42782c0ceffb6796cc84becbf4bf6d499ab3e76a1e001",
-        "mutation-event-d632b9c709e5b27b836fe1b2b1609f08fe780d9e1b33e4d2880717991621b691",
-        "mutation-event-dcac4b0c26dea89d47c7a40ef6629e5f3a61a7747cdc9b7b2c4afde4d315ede8",
         "mutation-view-213ff59f4482ae08c1de1695176aa1996a48dd8be9af032a47fbfd5195063af2",
         "mutation-view-36704b9c44d181a4097c9b025b14a2f8eb77be2eb04a5e93b00406e9f653466e",
         "mutation-view-536cbcb7c56e21de37040aa770c7a7a12b6f3935ecdc63fbca781864d3e14b33",
@@ -58,7 +54,7 @@
         "mutation-view-e1c8792ef89991bc9294679c04e72f6da05340ac259c82993af0ae13bef1052a",
         "mutation-view-f6bddd0a037fe3eb9f68eddd16af7f57af80e8bb2e7b694c1d21babc7cf4597e"
       ],
-      "sha256": "6bd8ef50df14bc03b7117606a5bf53c7f4580e9e9f023fb5913795f1b8dda098"
+      "sha256": "0906dab331fc150464d610711766c2ec5623be5934809f7927485d4e068bec7a"
     }
   ]
 }

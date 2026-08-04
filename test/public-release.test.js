@@ -39,8 +39,7 @@ test("third-party notices preserve the locked JSON Schema Test Suite license", a
 
   assert.match(notices, new RegExp(`Commit: ${lock.commit}`));
   assert.equal(notices.includes(suiteLicense), true);
-  assert.match(notices, /metaschemas\/NOTICE-AJV/);
-  assert.match(notices, /metaschemas\/NOTICE-REDOCLY-AJV/);
+  assert.equal(notices.includes("metaschemas/"), false);
 });
 
 test("public source contract uses Cold execution without Cold start infrastructure", async () => {

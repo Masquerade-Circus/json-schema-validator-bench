@@ -7,6 +7,7 @@ import {
   getSetupRegistryParticipants,
   getColdExecutionRegistryParticipants,
   getAdapterFactory,
+  getColdExecutionAdapterFactory,
   getRegisteredAdapter
 } from "./adapter-registry.js";
 import {
@@ -26,7 +27,10 @@ import {
   analyzeSchemaCapabilities,
 } from "./suite.js";
 import { derivePerformanceCorpus } from "./performance-corpus.js";
-import { prepareSchemaForFormatProfile } from "./schema-profile.js";
+import {
+  markPreparedSchema,
+  prepareSchemaForFormatProfile
+} from "./schema-profile.js";
 import { parseEligibilityThresholdPercent } from "./eligibility.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -377,7 +381,7 @@ export async function runColdExecutionSample({
   caseIds,
   schemas,
   resourceRegistry = null,
-  createAdapter,
+  prepareAdapter,
   now = () => performance.now(),
   yieldAfterPass = () => new Promise((resolve) => setImmediate(resolve)),
   memoryUsage = () => process.memoryUsage(),
@@ -452,21 +456,29 @@ export async function runColdExecutionSample({
       const disposableSchema = structuredClone(schema);
       const disposableResources = structuredClone(resources);
       const disposableData = structuredClone(data);
-      const start = now();
-      const adapter = createAdapter({
+      markPreparedSchema(
+        disposableSchema,
+        request.draft,
+        request.formatProfile ?? "base"
+      );
+      const operation = prepareAdapter({
         draft: request.draft,
         formatProfile: request.formatProfile,
         resources: disposableResources,
         unknownFormats: [...unknownFormats]
       });
-      const target = typeof adapter.setup === "function"
-        ? adapter.setupMode === "async"
-          ? await adapter.setup(disposableSchema)
-          : adapter.setup(disposableSchema)
-        : disposableSchema;
-      const observed = adapter.validate(target, disposableData);
+      const start = now();
+      const operationResult = operation.execute(disposableSchema, disposableData);
+      const rawObserved =
+        operationResult !== null &&
+        (typeof operationResult === "object" ||
+          typeof operationResult === "function") &&
+        typeof operationResult.then === "function"
+          ? await operationResult
+          : operationResult;
       elapsed += now() - start;
-      adapterMetadata ??= adapter;
+      adapterMetadata ??= operation;
+      const observed = operation.complete(rawObserved);
       if (observed !== testCase.expected) {
         throw executionError(
           "COLD_EXECUTION_RESULT_MISMATCH",
@@ -1004,7 +1016,7 @@ export async function executeWorkerRequest(
             ),
             schemas,
             resourceRegistry: artifacts.suite.resourceRegistry,
-            createAdapter: getAdapterFactory(request.validator),
+            prepareAdapter: getColdExecutionAdapterFactory(request.validator),
             memoryBudget: request.memoryBudget,
             timing: request.timing
           })

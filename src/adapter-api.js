@@ -151,6 +151,50 @@ function normalizeConfig(config, drafts) {
   });
 }
 
+function assertAdapterImplementation(implementation) {
+  if (
+    implementation === null ||
+    typeof implementation !== "object" ||
+    Array.isArray(implementation)
+  ) {
+    throw new Error("adapter factory must return an object");
+  }
+  const implementationFields = Object.keys(implementation);
+  const allowedImplementationFields = [
+    "reportOptions",
+    "setup",
+    "validate",
+    "getError"
+  ];
+  if (Object.hasOwn(implementation, "compile")) {
+    throw new Error("adapter compile is forbidden; expose setup instead");
+  }
+  if (
+    implementationFields.some(
+      (field) => !allowedImplementationFields.includes(field)
+    )
+  ) {
+    throw new Error(
+      "adapter factory returned a field outside the public contract"
+    );
+  }
+  if (typeof implementation.validate !== "function") {
+    throw new Error("adapter validate must be a function");
+  }
+  if (
+    Object.hasOwn(implementation, "setup") &&
+    typeof implementation.setup !== "function"
+  ) {
+    throw new Error("adapter setup must be a function when present");
+  }
+  if (
+    Object.hasOwn(implementation, "getError") &&
+    typeof implementation.getError !== "function"
+  ) {
+    throw new Error("adapter getError must be a function when present");
+  }
+}
+
 export function defineAdapter(declaration, factory) {
   if (
     declaration === null ||
@@ -250,50 +294,46 @@ export function defineAdapter(declaration, factory) {
 
   return Object.freeze({
     ...metadata,
+    prepareColdExecution(config) {
+      const normalizedConfig = normalizeConfig(config, metadata.drafts);
+      let implementation = null;
+      return Object.freeze({
+        execute(schema, data) {
+          implementation = factory(normalizedConfig);
+          if (typeof implementation.setup !== "function") {
+            return implementation.validate(schema, data);
+          }
+          if (implementation.setup.constructor.name === "AsyncFunction") {
+            return implementation
+              .setup(schema)
+              .then((target) => implementation.validate(target, data));
+          }
+          const target = implementation.setup(schema);
+          if (
+            target !== null &&
+            (typeof target === "object" || typeof target === "function") &&
+            typeof target.then === "function"
+          ) {
+            throw new Error(
+              "adapter setup must be declared async when it returns a Promise"
+            );
+          }
+          return implementation.validate(target, data);
+        },
+        complete(observed) {
+          assertAdapterImplementation(implementation);
+          normalizeReportOptions(implementation.reportOptions);
+          if (observed !== true && observed !== false) {
+            throw new Error("adapter validate must return exactly boolean");
+          }
+          return observed;
+        }
+      });
+    },
     create(config) {
       const normalizedConfig = normalizeConfig(config, metadata.drafts);
       const implementation = factory(normalizedConfig);
-      if (
-        implementation === null ||
-        typeof implementation !== "object" ||
-        Array.isArray(implementation)
-      ) {
-        throw new Error("adapter factory must return an object");
-      }
-      const implementationFields = Object.keys(implementation);
-      const allowedImplementationFields = [
-        "reportOptions",
-        "setup",
-        "validate",
-        "getError"
-      ];
-      if (Object.hasOwn(implementation, "compile")) {
-        throw new Error("adapter compile is forbidden; expose setup instead");
-      }
-      if (
-        implementationFields.some(
-          (field) => !allowedImplementationFields.includes(field)
-        )
-      ) {
-        throw new Error(
-          "adapter factory returned a field outside the public contract"
-        );
-      }
-      if (typeof implementation.validate !== "function") {
-        throw new Error("adapter validate must be a function");
-      }
-      if (
-        Object.hasOwn(implementation, "setup") &&
-        typeof implementation.setup !== "function"
-      ) {
-        throw new Error("adapter setup must be a function when present");
-      }
-      if (
-        Object.hasOwn(implementation, "getError") &&
-        typeof implementation.getError !== "function"
-      ) {
-        throw new Error("adapter getError must be a function when present");
-      }
+      assertAdapterImplementation(implementation);
       const reporting = normalizeReportOptions(implementation.reportOptions);
       let lastValidation = null;
       let lastTarget = null;

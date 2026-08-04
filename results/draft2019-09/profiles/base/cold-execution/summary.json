@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 11,
+  "benchmarkVersion": 13,
   "summaryVersion": 10,
   "phase": "cold-execution",
   "draft": "draft2019-09",
@@ -21,7 +21,7 @@
       "format-assertion"
     ]
   },
-  "intersectionSha256": "3171626e4ac2d40199813168bc7db7e29b21ad634a20c1c5773de75a7391acc3",
+  "intersectionSha256": "6d14b88d55542776262511ae0950c443a987422f4fdabd9cd54d4b3e5ac2bea5",
   "primaryUnit": "operations per second",
   "units": {
     "throughput": "operations per second",
@@ -12068,47 +12068,47 @@
   "validators": {
     "schema-shield": {
       "roundThroughputs": [
-        2240.145404946707,
-        2092.2405218217928,
-        2217.120078572467,
-        2174.660716375394,
-        2201.676362315894,
-        2194.090035492985
+        4885.07244699779,
+        5047.948758656589,
+        4868.188157835315,
+        4689.592673362294,
+        5109.0352484741,
+        5192.247547944367
       ],
-      "median": 2197.8831989044393,
-      "mean": 2186.6555199208733,
-      "medianAbsoluteDeviation": 21.229681098536503,
-      "relativeMedianAbsoluteDeviation": 0.009659148907056884,
-      "sampleStandardDeviation": 51.241042222236935,
-      "coefficientOfVariation": 0.023433522909951154,
-      "minimum": 2092.2405218217928,
-      "maximum": 2240.145404946707,
-      "nanosecondsPerOperation": 454983.2313648249,
+      "median": 4966.510602827189,
+      "mean": 4965.347472211743,
+      "medianAbsoluteDeviation": 120.42354531939236,
+      "relativeMedianAbsoluteDeviation": 0.02424711330543444,
+      "sampleStandardDeviation": 184.86617595911582,
+      "coefficientOfVariation": 0.03723126669255432,
+      "minimum": 4689.592673362294,
+      "maximum": 5192.247547944367,
+      "nanosecondsPerOperation": 201348.60870542578,
       "mutationCount": 0,
-      "peakRssBytes": 337707008,
+      "peakRssBytes": 284999680,
       "scoreRelativeToBest": 100
     },
     "z-schema": {
       "roundThroughputs": [
-        1804.7711998943555,
-        1720.864488211876,
-        1832.728430699709,
-        1784.7299673560842,
-        1748.0649646102727,
-        1789.8995155362607
+        2147.43151478664,
+        2102.7945881155406,
+        2171.4406216323937,
+        2142.8521152707203,
+        2184.3751221520497,
+        2106.732616324326
       ],
-      "median": 1787.3147414461723,
-      "mean": 1780.176427718093,
-      "medianAbsoluteDeviation": 28.35311764204141,
-      "relativeMedianAbsoluteDeviation": 0.01586352810982805,
-      "sampleStandardDeviation": 40.077278417204504,
-      "coefficientOfVariation": 0.022513093530048194,
-      "minimum": 1720.864488211876,
-      "maximum": 1832.728430699709,
-      "nanosecondsPerOperation": 559498.5465127808,
+      "median": 2145.14181502868,
+      "mean": 2142.604429713612,
+      "medianAbsoluteDeviation": 32.35400265403382,
+      "relativeMedianAbsoluteDeviation": 0.015082453955894406,
+      "sampleStandardDeviation": 33.079568599061595,
+      "coefficientOfVariation": 0.015438952771829715,
+      "minimum": 2102.7945881155406,
+      "maximum": 2184.3751221520497,
+      "nanosecondsPerOperation": 466169.64575212955,
       "mutationCount": 0,
-      "peakRssBytes": 317100032,
-      "scoreRelativeToBest": 81.3198236529166
+      "peakRssBytes": 208818176,
+      "scoreRelativeToBest": 43.19213199318565
     }
   }
 }

@@ -1,8 +1,8 @@
 {
   "snapshotVersion": 1,
-  "start": "2026-07-20",
-  "end": "2026-07-26",
-  "retrievedAt": "2026-07-31T05:01:12.902Z",
+  "start": "2026-07-27",
+  "end": "2026-08-02",
+  "retrievedAt": "2026-08-04T03:17:09.810Z",
   "packages": {
     "@cfworker/json-schema": {
       "version": "4.1.1",
@@ -10,8 +10,8 @@
       "engines": null,
       "integrity": "sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og==",
       "tarball": "https://registry.npmjs.org/@cfworker/json-schema/-/json-schema-4.1.1.tgz",
-      "weeklyDownloads": 5891999,
-      "downloadsResponseSha256": "2dfd973400d9824ad023378d9aa4bf6940e9f227daee1a470b9e6d296ce3976c",
+      "weeklyDownloads": 6655864,
+      "downloadsResponseSha256": "d3460175694afc635c81d8ba898720a929a8f6727c94c026ce3bdfee11b07d7e",
       "registryResponseSha256": "ae474e5b08b09be3c2d8388583eb0b7807c9d80805b7a1172f3eb4f119148d75"
     },
     "@exodus/schemasafe": {
@@ -20,8 +20,8 @@
       "engines": null,
       "integrity": "sha512-5Aap/GaRupgNx/feGBwLLTVv8OQFfv3pq2lPRzPg9R+IOBnDgghTGW7l7EuVXOvg5cc/xSAlRW8rBrjIC3Nvqw==",
       "tarball": "https://registry.npmjs.org/@exodus/schemasafe/-/schemasafe-1.3.0.tgz",
-      "weeklyDownloads": 4742721,
-      "downloadsResponseSha256": "dddae50f18348291c746c79d08136b3629431b1d4388358d0b711c2e0d22cc80",
+      "weeklyDownloads": 4851948,
+      "downloadsResponseSha256": "f4ae84bfd5d824140ed42eb5fe68c727e571557b014c2f3dec987d40d3a2eb03",
       "registryResponseSha256": "6ae5beaa85ad0ba5bc70d015bdd8bf75a1ebcee6631bcbddaf367cdf6cefcaf2"
     },
     "@hyperjump/json-schema": {
@@ -30,8 +30,8 @@
       "engines": null,
       "integrity": "sha512-CP4OTm4y5U200z3Ir6SAQk9aGM61m1LZpd4TMNXTZbOgHg02TvYFhtQLQcG2WPx6nmmM6DPS9ha+N7poY6e+uA==",
       "tarball": "https://registry.npmjs.org/@hyperjump/json-schema/-/json-schema-1.17.7.tgz",
-      "weeklyDownloads": 247240,
-      "downloadsResponseSha256": "fddce230204e16fba31d486ec64720e1fb1de5ee89c2fc34b479ce8d19f4c3f7",
+      "weeklyDownloads": 255244,
+      "downloadsResponseSha256": "8e729790f510535f1ebd82d7ba0de147ee9a3fc10c35a79fc6d39652b8612c0c",
       "registryResponseSha256": "8cad4c3a22900f525b455fc7147325894e648b1fa091aa534c79ed01953bfd43"
     },
     "@redocly/ajv": {
@@ -40,8 +40,8 @@
       "engines": null,
       "integrity": "sha512-l42u0of3hY98sN2A+M4qTX1O/KrpgGH32Hu9kP2GtHyD5Dfqq86PKFLe5dwaD8DEnNmlOlll2BAmeEtf0DaySg==",
       "tarball": "https://registry.npmjs.org/@redocly/ajv/-/ajv-8.18.3.tgz",
-      "weeklyDownloads": 7551204,
-      "downloadsResponseSha256": "5832b082e9918a582255f40f804c242dd1ee586e241f87f27599cb770009f955",
+      "weeklyDownloads": 8304494,
+      "downloadsResponseSha256": "c43505aa9c2c589c62d60fd799843b5d5dcbb69e7d632696c1438d0bc6a87541",
       "registryResponseSha256": "b6cfa7388417c31a3ed82961d2d4929cfa2f69dbcaeda94de905a02176e09544"
     },
     "ajv": {
@@ -50,8 +50,8 @@
       "engines": null,
       "integrity": "sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==",
       "tarball": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz",
-      "weeklyDownloads": 351242149,
-      "downloadsResponseSha256": "6a02eef92865026240287d7baec1b22d50aa8d8de11fdec308c152062c7ebfed",
+      "weeklyDownloads": 366039890,
+      "downloadsResponseSha256": "e82a90e698ee77d5263b69e7e6c6a2caae5140ee45f1573ea86e297f3ca037fb",
       "registryResponseSha256": "da1e811c437dcaed32870e5023e0a1fc6e672027023a0648fddfbc122fb84c58"
     },
     "ajv-draft-04": {
@@ -60,8 +60,8 @@
       "engines": null,
       "integrity": "sha512-mv00Te6nmYbRp5DCwclxtt7yV/joXJPGS7nM+97GdxvuttCOfgI3K4U25zboyeX0O+myI8ERluxQe5wljMmVIw==",
       "tarball": "https://registry.npmjs.org/ajv-draft-04/-/ajv-draft-04-1.0.0.tgz",
-      "weeklyDownloads": 14981015,
-      "downloadsResponseSha256": "d26bf9a32b3d8baefb29f1dd31bfb2c6017215800178ce0a523f4d296496ad1c",
+      "weeklyDownloads": 15269418,
+      "downloadsResponseSha256": "b6927052eb62e13a5a470659cd346e106bead26bb25ede3096b84807badc1620",
       "registryResponseSha256": "265a6eea392d1e4e0fcf1b15f4280c9c285210a1dc8de09a899d7865109fca04"
     },
     "ajv-formats": {
@@ -70,8 +70,8 @@
       "engines": null,
       "integrity": "sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==",
       "tarball": "https://registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz",
-      "weeklyDownloads": 114476160,
-      "downloadsResponseSha256": "8aa2bf3c5c6389810aa71127a04f909b841d5b5be9eabeefa38ae3da8a873f44",
+      "weeklyDownloads": 118589474,
+      "downloadsResponseSha256": "2ea9dd65b46e819601eced72f810d7db46f5e6a40a1a6d080640f15e919698f6",
       "registryResponseSha256": "4285e5c887c98572f0aef6736cc2908e68c0f7a4656292b3004d3ddb6b8420d1"
     },
     "djv": {
@@ -80,8 +80,8 @@
       "engines": null,
       "integrity": "sha512-giDn+BVbtLlwtkvtcsZjbjzpALHB77skiv3FIu6Wp8b5j8BunDcVJYH0cGUaexp6s0Sb7IkquXXjsLBJhXwQpA==",
       "tarball": "https://registry.npmjs.org/djv/-/djv-2.1.4.tgz",
-      "weeklyDownloads": 81251,
-      "downloadsResponseSha256": "6ecf574cf5cb544f88e5a57498ab7bc0dc01a9e2583ee71b5d25920230d8c03c",
+      "weeklyDownloads": 65678,
+      "downloadsResponseSha256": "a98bd21b6411ee47ab0775934ab0be403f13e7d3c6d746ed864f792b11713744",
       "registryResponseSha256": "ca4a9f60851d41b99d2f09833f0fceb90425dc438d111e6ee05b8591e7bfba55"
     },
     "json-schema-library": {
@@ -90,8 +90,8 @@
       "engines": null,
       "integrity": "sha512-BwvoJfc6RNrYRxQ9AujaTMaLdQosdceRe0huKMnnIJa2b4QZlnmPgQm7iUMoyxS2ioTsTMVPWjuoqvFYF0HZ4Q==",
       "tarball": "https://registry.npmjs.org/json-schema-library/-/json-schema-library-11.6.2.tgz",
-      "weeklyDownloads": 513747,
-      "downloadsResponseSha256": "4df43662255658d766819d506183bc8cf2350d1e3c9c9c042b8ae486fadae546",
+      "weeklyDownloads": 532097,
+      "downloadsResponseSha256": "55114bf0c04eb6da00b7d65e3860b88ead0119d8e0fa65b881d428936721d2ec",
       "registryResponseSha256": "d96e5efdb489bb9be7b2632231042e183eb269003c9a89f8911bc8c5de15a3c8"
     },
     "jsonschema": {
@@ -102,21 +102,21 @@
       },
       "integrity": "sha512-K+A9hhqbn0f3pJX17Q/7H6yQfD/5OXgdrR5UE12gMXCiN9D5Xq2o5mddV2QEcX/bjla99ASsAAQUyMCCRWAEhw==",
       "tarball": "https://registry.npmjs.org/jsonschema/-/jsonschema-1.5.0.tgz",
-      "weeklyDownloads": 6227344,
-      "downloadsResponseSha256": "2d5a55bc89064c485721a80ff4395c9444b9eaaebf29e180acd6db4f5859a6a9",
+      "weeklyDownloads": 6186992,
+      "downloadsResponseSha256": "32740c5f121cd8bc22dd0b2a993d615fd452c6f97efc8578a6843000b1a550f0",
       "registryResponseSha256": "73a54f080038c51a71e2088eb3292a431455d47e88d7c4fff32e7652e4e840dd"
     },
     "schema-shield": {
-      "version": "1.2.0",
+      "version": "1.3.0",
       "license": "Apache-2.0",
       "engines": {
         "node": ">=18"
       },
-      "integrity": "sha512-rpofsEjiSccPt2pXJCBVaswdJfpLAgmXZCtFAtcYwktNt/YFBiehBkvjfSyY+I6ty4/OC/ShvAs9kMII6+9GMA==",
-      "tarball": "https://registry.npmjs.org/schema-shield/-/schema-shield-1.2.0.tgz",
-      "weeklyDownloads": 261,
-      "downloadsResponseSha256": "6298bc929a99669baa9b5b11d5977008c5857c02cabf16f74e42ed618ff548e0",
-      "registryResponseSha256": "fd024d2af12ffe7ce6930ecb5e6b12e2e02fbd2a7c57fdc27fd46940298b48ce"
+      "integrity": "sha512-45usqrnri0JyToBf9Gq8jEu9f4qbXm4mgD272PIhvUHAj9D9Gfpn5NDiULdzz7UgnwmyQmcPBf1XP3+x+E9OxA==",
+      "tarball": "https://registry.npmjs.org/schema-shield/-/schema-shield-1.3.0.tgz",
+      "weeklyDownloads": 279,
+      "downloadsResponseSha256": "45a69bb8398efc765a1eeb0dfe297b0b8640f6f44adffc8348dbd5c695b4d86a",
+      "registryResponseSha256": "44633aea34787989e7fb857544b1df2b2b7d454cd6f811b33cab496dcfe744c5"
     },
     "z-schema": {
       "version": "12.4.0",
@@ -126,8 +126,8 @@
       },
       "integrity": "sha512-rJ23I1iy23FD4bOBrtHJI2UyTqDRemdEdBlUl3h3i8iyHGKig5vzmc3tuyetzBeRUNXbarJLnhQ3lVBzX56qGg==",
       "tarball": "https://registry.npmjs.org/z-schema/-/z-schema-12.4.0.tgz",
-      "weeklyDownloads": 3436312,
-      "downloadsResponseSha256": "c2bb43f69f67cd7408d2cc490aaef7aa44fd2d58e90e1364f03e38b1e4f021ed",
+      "weeklyDownloads": 3261931,
+      "downloadsResponseSha256": "dfb3fdca21c2e3e92a7e3694c081fed945203d23c6686dc30ae6befba0519420",
       "registryResponseSha256": "688da2383dd7367bf3e52bb12b9a02f3139eb210b818982633978e15beaff862"
     }
   }

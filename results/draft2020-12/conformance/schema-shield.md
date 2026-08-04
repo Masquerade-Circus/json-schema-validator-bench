@@ -1,24 +1,24 @@
-# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.2.0) draft2020-12
+# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) draft2020-12
 
 ## Report options
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","defaultDialect":"https://json-schema.org/draft/2020-12/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"resources":"registered"} | 4118a4d82872113c3dc4006c1c06cc099892b09e07bc47c5cce5436a635d4ca9 |
-| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"https://json-schema.org/draft/2020-12/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"resources":"registered"} | 6508e817cb2694397922a8013a362f14fcb3a026342dbb5792189ae86e208726 |
+| base | {"formatProfile":"base","defaultDialect":"https://json-schema.org/draft/2020-12/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in","resources":"registered"} | 65cefe41ac7a51050e89df0ad18b0871bd3344950bc65b7881ea586af91af9b6 |
+| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"https://json-schema.org/draft/2020-12/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in","resources":"registered"} | 4a0e1aca10db71004e03b6be1cbb581173d15be2427993cc01f477cb41ad5e41 |
 
 ## Counts
 
 | Profile | Status | Cases | Percentage |
 | --- | --- | ---: | ---: |
-| base | PASS | 1457 | 100.00% |
+| base | PASS | 1452 | 99.66% |
 | base | WRONG | 0 | 0.00% |
-| base | COMPILE | 0 | 0.00% |
+| base | COMPILE | 5 | 0.34% |
 | base | RUNTIME | 0 | 0.00% |
 | base | UNSUPPORTED | 0 | 0.00% |
-| format-assertion | PASS | 667 | 100.00% |
+| format-assertion | PASS | 663 | 99.40% |
 | format-assertion | WRONG | 0 | 0.00% |
-| format-assertion | COMPILE | 0 | 0.00% |
+| format-assertion | COMPILE | 4 | 0.60% |
 | format-assertion | RUNTIME | 0 | 0.00% |
 | format-assertion | UNSUPPORTED | 0 | 0.00% |
 
@@ -26,8 +26,15 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
-
-Every reported case has PASS status.
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/0 | format-assertion: false: valid string | true |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-false.json |
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | false |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-false.json |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/0 | format-assertion: true: valid string | true |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-true.json |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | false |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-true.json |
+| draft2020-12:vocabulary.json#/groups/0/tests/0 | applicator vocabulary still works | false |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json |
+| draft2020-12:vocabulary.json#/groups/0/tests/1 | no validation: valid number | true |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json |
+| draft2020-12:vocabulary.json#/groups/0/tests/2 | no validation: invalid number, but it still validates | true |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json |
+| draft2020-12:vocabulary.json#/groups/1/tests/0 | string value | false |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-optional-vocabulary.json |
+| draft2020-12:vocabulary.json#/groups/1/tests/1 | number value | true |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-optional-vocabulary.json |
 
 ## Detailed errors for invalid results
 
@@ -360,8 +367,10 @@ Every reported case has PASS status.
 | draft2020-12:optional/ecmascript-regex.json#/groups/18/tests/1 | ascii non-digits | PASS | {"name":"Error","message":"Additional properties are not allowed","keyword":"patternProperties","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Additional properties are not allowed","keyword":"patternProperties","item":"-%#","schemaPath":"#/patternProperties","instancePath":"#/-%#","data":"spending the year dead for tax reasons"}} |
 | draft2020-12:optional/ecmascript-regex.json#/groups/18/tests/2 | non-ascii digits (BENGALI DIGIT FOUR, BENGALI DIGIT TWO) | PASS | {"name":"Error","message":"Additional properties are not allowed","keyword":"patternProperties","code":null,"schemaPath":"#/patternProperties","instancePath":"#/-%#","tree":{"message":"Additional properties are not allowed","keyword":"patternProperties","item":"৪২","schemaPath":"#/patternProperties","instancePath":"#/৪২","data":"khajit has wares if you have coin"}} |
 | draft2020-12:optional/ecmascript-regex.json#/groups/19/tests/1 | ascii non-digits | PASS | {"name":"Error","message":"Additional properties are not allowed","keyword":"patternProperties","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Additional properties are not allowed","keyword":"patternProperties","item":"-%#","schemaPath":"#/patternProperties","instancePath":"#/-%#","data":"spending the year dead for tax reasons"}} |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"not-an-ipv4"}} |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"not-an-ipv4"}} |
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/0 | format-assertion: false: valid string | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-false.json |
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-false.json |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/0 | format-assertion: true: valid string | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-true.json |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-true.json |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/12 | an invalid date-time past leap second, UTC | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"1998-12-31T23:59:61Z"}} |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/13 | an invalid date-time with leap second on a wrong minute, UTC | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"#/format","instancePath":"#","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"1998-12-31T23:58:60Z"}} |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/14 | an invalid date-time with leap second on a wrong hour, UTC | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"#/format","instancePath":"#","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"1998-12-31T22:59:60Z"}} |
@@ -973,5 +982,8 @@ Every reported case has PASS status.
 | draft2020-12:uniqueItems.json#/groups/2/tests/3 | [true, true] from items array is not valid | PASS | {"name":"Error","message":"Array items are not unique","keyword":"uniqueItems","code":null,"schemaPath":"#/uniqueItems","instancePath":"#","tree":{"message":"Array items are not unique","keyword":"uniqueItems","schemaPath":"#/uniqueItems","instancePath":"#","data":true}} |
 | draft2020-12:uniqueItems.json#/groups/2/tests/4 | extra items are invalid even if unique | PASS | {"name":"Error","message":"Array items are not allowed","keyword":"items","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Array items are not allowed","keyword":"items","schemaPath":"#/items","instancePath":"#","data":[false,true,null]}} |
 | draft2020-12:uniqueItems.json#/groups/5/tests/4 | extra items are invalid even if unique | PASS | {"name":"Error","message":"Array items are not allowed","keyword":"items","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Array items are not allowed","keyword":"items","schemaPath":"#/items","instancePath":"#","data":[false,true,null]}} |
-| draft2020-12:vocabulary.json#/groups/0/tests/0 | applicator vocabulary still works | PASS | {"name":"Error","message":"Property is invalid","keyword":"properties","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Property is invalid","keyword":"properties","item":"badProperty","schemaPath":"#/properties/badProperty","instancePath":"#/badProperty","data":"this property should not exist","cause":{"message":"Value is not valid","keyword":"oneOf","schemaPath":"#/properties/badProperty/oneOf","instancePath":"#/badProperty","data":"this property should not exist"}}} |
-| draft2020-12:vocabulary.json#/groups/1/tests/0 | string value | PASS | {"name":"Error","message":"Invalid type","keyword":"type","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Invalid type","keyword":"type","schemaPath":"#/type","instancePath":"#","data":"foobar"}} |
+| draft2020-12:vocabulary.json#/groups/0/tests/0 | applicator vocabulary still works | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json |
+| draft2020-12:vocabulary.json#/groups/0/tests/1 | no validation: valid number | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json |
+| draft2020-12:vocabulary.json#/groups/0/tests/2 | no validation: invalid number, but it still validates | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json |
+| draft2020-12:vocabulary.json#/groups/1/tests/0 | string value | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-optional-vocabulary.json |
+| draft2020-12:vocabulary.json#/groups/1/tests/1 | number value | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-optional-vocabulary.json |

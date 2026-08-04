@@ -405,7 +405,7 @@ export async function assertCompleteDiagnosticBaseline({
             : observedRounds.length === 0;
           if (
             result.benchmarkMode !== mode ||
-            result.benchmarkVersion !== 11 ||
+            result.benchmarkVersion !== 13 ||
             result.phase !== phase ||
             result.draft !== draft ||
             result.formatProfile !== formatProfile ||

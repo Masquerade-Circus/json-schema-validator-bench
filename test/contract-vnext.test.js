@@ -17,6 +17,7 @@ import { normalizedGeometricScore, summarizePhase } from "../src/report.js";
 import { runColdExecutionSample, runSetupSample } from "../src/worker.js";
 import { adapterRegistry, rotateRoundOrder } from "../src/adapter-registry.js";
 import { createSetupEntries, mergeSetupEntries } from "../src/intersection.js";
+import { isPreparedSchema } from "../src/schema-profile.js";
 
 test("Quick and Full share one performance contract except for rounds", () => {
   const contract = createBenchmarkContract("full");
@@ -364,18 +365,17 @@ test("Cold execution measures one fresh adapter setup and validation per case", 
     caseIds: [`${schemaId}/tests/0`, `${schemaId}/tests/1`],
     schemas: [{ id: schemaId, schema: { type: "integer" } }],
     resourceRegistry: { resourcesFor: () => [] },
-    createAdapter() {
-      factories += 1;
+    prepareAdapter() {
       return {
         version: "1.0.0",
-        setupMode: "sync",
-        setup(schema) {
+        execute(schema, data) {
+          factories += 1;
           setups += 1;
-          return schema;
-        },
-        validate(schema, data) {
           validations += 1;
           return schema.type === "integer" && typeof data === "number";
+        },
+        complete(observed) {
+          return observed;
         }
       };
     },
@@ -451,18 +451,23 @@ test("Cold execution prepares neutral inputs before the provider clock", async (
         return [resource];
       }
     },
-    createAdapter() {
-      events.push("factory");
+    prepareAdapter() {
+      events.push("prepare-adapter");
       return {
         version: "1.0.0",
-        setupMode: "sync",
-        setup(targetSchema) {
+        execute(targetSchema, targetData) {
+          assert.equal(
+            isPreparedSchema(targetSchema, "draft6", "base"),
+            true
+          );
+          events.push("factory");
           events.push("setup");
-          return targetSchema;
-        },
-        validate(_targetSchema, targetData) {
           events.push("validate");
           return targetData.value === 1;
+        },
+        complete(observed) {
+          events.push("complete");
+          return observed;
         }
       };
     },
@@ -482,7 +487,8 @@ test("Cold execution prepares neutral inputs before the provider clock", async (
     "schema-clone",
     "resource-closure",
     "resource-clone",
-    "data-clone"
+    "data-clone",
+    "prepare-adapter"
   ]) {
     assert.ok(events.indexOf(event) < events.indexOf("clock-1"), event);
   }
@@ -490,6 +496,7 @@ test("Cold execution prepares neutral inputs before the provider clock", async (
   assert.ok(events.indexOf("factory") < events.indexOf("setup"));
   assert.ok(events.indexOf("setup") < events.indexOf("validate"));
   assert.ok(events.indexOf("validate") < events.indexOf("clock-2"));
+  assert.ok(events.indexOf("clock-2") < events.indexOf("complete"));
   assert.equal(sample.memory !== null, true);
 });
 

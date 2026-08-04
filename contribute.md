@@ -76,7 +76,7 @@ npm run metadata:sync
 
 Metadata sync updates `npm-snapshot-lock.json` and its generated snapshot. Quick and Full consume that pinned metadata.
 
-The versioned metaschemas under `metaschemas/` are byte-for-byte snapshots from the package versions and source paths recorded in `metaschemas/manifest.json`. The manifest also records each package integrity from `package-lock.json`. Keep the matching notice file for every recorded source; AJV and Redocly AJV distribute these snapshots under the MIT license.
+SchemaShield provides its official metaschemas inside the locked npm package. The adapter uses those built-in resources and adds only the URI aliases required by the suite.
 
 ## Architecture
 
@@ -477,6 +477,8 @@ export const adapter = defineAdapter(
 
 A validate-only adapter omits `setup()`, so its Setup performance is `N/A`. It participates in Execution through the provider's public validation call. It participates in Cold execution when a fresh adapter instance isolates its provider state.
 
+The fast `validate` path must use the provider's first-error or fail-fast option when its public API exposes one. `getError` may create a separate detailed context because it runs only after a false conformance result and remains outside performance timing.
+
 ## Timing boundaries
 
 The adapter factory belongs to conformance setup, measured Setup and measured Cold execution. Its lifetime differs by stage.
@@ -484,7 +486,7 @@ The adapter factory belongs to conformance setup, measured Setup and measured Co
 - Conformance first detects statically unsupported capabilities. For a supported schema, it creates one factory context for that schema and profile, calls `setup()` once when available, validates every case in the schema group, and may call `getError` after a false result. Factory, setup, validation and diagnostic behavior all contribute to classification. Throughput timers apply to the performance phases.
 - Setup performance forms one draft-scoped union of effective Base and Formats operations. It deduplicates by transformed schema, resource closure and effective adapter configuration before it prepares neutral copies. Primitive schemas, including `true` and `false`, pass directly into each fresh adapter. The timer then covers the adapter factory, provider construction, format and metaschema registration, resource registration, and `setup(schema)`. Post-call yielding, serialization, deadline checks, memory sampling and harness diagnostics remain outside the accumulated Setup duration.
 - Execution performance creates one adapter context for each representative setup entry before warmup and measurement. Reusable adapters prepare a target, while `validate-only` adapters prepare their adapter context and profiled schema. Resource and format registration, validator-to-schema mapping and the correctness precheck all occur outside the execution timer. The measured interval covers repeated complete-corpus passes through the prepared target or prepared `validate-only` context, plus the runner's minimal traversal, checksum, clock, deadline and memory bookkeeping.
-- Cold execution prepares disposable schema, data and resource copies before the operation clock. The timed interval creates a fresh opaque adapter and provider context, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Module imports, process startup, result comparison, checksum, diagnostics and telemetry remain outside the clock. Hyperjump is `N/A` because its module-global state cannot satisfy this fresh-isolation contract.
+- Cold execution prepares disposable schema, data and resource copies, analyzes capabilities and normalizes the common adapter configuration before the operation clock. The timed interval creates the provider context through the opaque adapter, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Module imports, process startup, common contract checks, result comparison, checksum, diagnostics and telemetry remain outside the clock. Hyperjump is `N/A` because its module-global state cannot satisfy this fresh-isolation contract.
 - `getError` runs during conformance after `validate` returns `false`. Setup, Execution and Cold execution throughput measure their phase contracts.
 
 Quick and Full use the complete common corpus and the same timing, phases, scopes, isolation, eligibility, scoring, preparation and sample contract. Every sample warms complete passes for at least 100 ms, targets 250 ms of measured work, and requires a normal minimum of 175 ms. Full records six isolated samples per participant and scope in three antithetic order pairs with deterministic offsets `0`, `floor(n / 3)`, and `floor(2n / 3)` for roster size `n`. Quick records only the deterministic first round, so it provides neither complete antithetic pairs nor multi-round dispersion. Full reports rank by the six-round median and publish the mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum, and all six rates. These diagnostics do not establish statistical significance.
@@ -543,7 +545,7 @@ Canonical results come from a controlled Linux host. CI runs `npm test` and arti
 
 Before publishing, verify that the generated clone command uses the public repository URL, then regenerate all publication artifacts through the Full pipeline and its coordinated publication transaction.
 
-The JSON Schema Test Suite corpus retains its MIT license and attribution. `THIRD_PARTY_NOTICES` records the exact commit from `suite-lock.json` and the full upstream MIT text. Original benchmark code and documentation use Apache-2.0. Dependencies and bundled metaschemas retain their respective licenses, including the AJV and Redocly AJV terms under `metaschemas/`.
+The JSON Schema Test Suite corpus retains its MIT license and attribution. `THIRD_PARTY_NOTICES` records the exact commit from `suite-lock.json` and the full upstream MIT text. Original benchmark code and documentation use Apache-2.0. Dependencies retain their respective licenses.
 
 Review generated conformance JSON, intersections, performance samples, checksums, summaries, error links, package metadata, and the final README before publication. Performance values can vary across hosts. Corpus identities, counts, checksums, contract versions, and report structure must remain internally consistent.
 

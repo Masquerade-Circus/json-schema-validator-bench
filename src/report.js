@@ -347,7 +347,7 @@ export function validateSampleSet({
     throw new Error(`${phase} result declares another phase`);
   }
   if (
-    result.benchmarkVersion !== 11 ||
+    result.benchmarkVersion !== 13 ||
     result.benchmarkMode !== mode ||
     result.draft !== intersection.draft ||
     result.formatProfile !== intersection.formatProfile
@@ -1204,7 +1204,7 @@ export function summarizePhase(result, mode, intersection = null) {
     }
   }
   return {
-    benchmarkVersion: 11,
+    benchmarkVersion: 13,
     summaryVersion: 10,
     phase: result.phase,
     draft: result.draft,
@@ -3069,7 +3069,7 @@ export function renderBenchmarkReadme({
     "",
     "### Cold execution",
     "",
-    "Cold execution measures each case directly. Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile and analyzes schema capabilities. The timed operation creates a fresh opaque adapter and provider context, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Result comparison, checksum, diagnostics and telemetry remain outside the clock. Module imports and process startup remain outside this phase. The runner never derives this rate from Setup or Execution and never rewrites `$id` or references. Hyperjump is N/A because its pinned API stores schema and format state in module globals that a fresh adapter wrapper cannot isolate.",
+    "Cold execution measures each case directly. Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile, analyzes schema capabilities and normalizes the common adapter configuration. The timed operation creates the provider context through the fresh opaque adapter, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Common contract checks, result comparison, checksum, diagnostics and telemetry remain outside the clock. Module imports and process startup remain outside this phase. The runner never derives this rate from Setup or Execution and never rewrites `$id` or references. Hyperjump is N/A because its pinned API stores schema and format state in module globals that a fresh adapter wrapper cannot isolate.",
     "",
     "### Timing and scoring",
     "",
@@ -3151,7 +3151,7 @@ export function renderBenchmarkReadme({
     "",
     `The benchmark corpus comes from the JSON Schema Test Suite. JSON Schema Test Suite commit: \`${environment.suite.commit}\`. Copyright (c) 2012 Julian Berman. The corpus remains under the MIT License. See [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) for its full terms and attribution.`,
     "",
-    "Dependencies, bundled metaschema snapshots, and other third-party materials retain their own licenses. The third-party notices also point to the existing AJV and Redocly AJV metaschema notices."
+    "Dependencies and other third-party materials retain their own licenses."
   ].join("\n")}\n`;
 }
 

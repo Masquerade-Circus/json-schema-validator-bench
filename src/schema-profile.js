@@ -67,10 +67,7 @@ export function prepareSchemaForFormatProfile(schema, draft, formatProfile) {
   ) {
     removeFormats(schema);
   }
-  if (schema !== null && typeof schema === "object") {
-    preparedProfiles.set(schema, `${draft}/${formatProfile}`);
-  }
-  return schema;
+  return markPreparedSchema(schema, draft, formatProfile);
 }
 
 export function isPreparedSchema(schema, draft, formatProfile) {
@@ -79,6 +76,13 @@ export function isPreparedSchema(schema, draft, formatProfile) {
     typeof schema === "object" &&
     preparedProfiles.get(schema) === `${draft}/${formatProfile}`
   );
+}
+
+export function markPreparedSchema(schema, draft, formatProfile) {
+  if (schema !== null && typeof schema === "object") {
+    preparedProfiles.set(schema, `${draft}/${formatProfile}`);
+  }
+  return schema;
 }
 
 export function schemaForFormatProfile(schema, draft, formatProfile) {

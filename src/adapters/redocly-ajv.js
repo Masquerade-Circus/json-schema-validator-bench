@@ -44,6 +44,31 @@ const constructors = {
   }
 };
 
+function isolateVisitedReferences(source) {
+  const declaration = "const visitedNodesForRef = new WeakMap();";
+  const declarationIndex = source.indexOf(declaration);
+  const functionStart = source.indexOf("return function ");
+  const bodyStart = source.indexOf("){", functionStart) + 1;
+  const bodyEnd = source.lastIndexOf("}");
+  if (
+    declarationIndex < 0 ||
+    functionStart < 0 ||
+    bodyStart <= functionStart ||
+    bodyEnd <= bodyStart
+  ) {
+    throw new Error("Redocly AJV generated an unsupported validation function");
+  }
+  const prefix = source
+    .slice(0, bodyStart + 1)
+    .replace(
+      declaration,
+      "let visitedNodesForRef = new WeakMap();let validationDepth = 0;"
+    );
+  const body = source.slice(bodyStart + 1, bodyEnd);
+  const suffix = source.slice(bodyEnd + 1);
+  return `${prefix}const rootValidation = validationDepth++ === 0;try {${body}} finally {validationDepth--;if (rootValidation) visitedNodesForRef = new WeakMap();}}${suffix}`;
+}
+
 function createImplementation({ draft, formatProfile, resources }) {
   const constructor = constructors[draft];
   const { Constructor } = constructor;
@@ -53,7 +78,6 @@ function createImplementation({ draft, formatProfile, resources }) {
     draft === "draft7" ||
     formatProfile === "format-assertion";
   const baseOptions = {
-    allErrors: true,
     ownProperties: true,
     coerceTypes: false,
     useDefaults: false,
@@ -61,8 +85,21 @@ function createImplementation({ draft, formatProfile, resources }) {
     strict: false,
     validateFormats
   };
-  function createContext(messages) {
-    const instance = new Constructor({ ...baseOptions, messages });
+  const fastOptions = {
+    ...baseOptions,
+    allErrors: false,
+    messages: false,
+    code: { process: isolateVisitedReferences }
+  };
+  const fastReportOptions = {
+    ...baseOptions,
+    allErrors: false,
+    messages: false,
+    code: { process: "isolate-visited-references-per-root-validation" }
+  };
+  const detailedOptions = { ...baseOptions, allErrors: true, messages: true };
+  function createContext(options) {
+    const instance = new Constructor(options);
     if (draft === "draft6") {
       instance.addMetaSchema(draft6MetaSchema);
     }
@@ -95,13 +132,13 @@ function createImplementation({ draft, formatProfile, resources }) {
     return instance;
   }
 
-  const fast = createContext(false);
+  const fast = createContext(fastOptions);
   let detailed = null;
   return {
     reportOptions: {
       formatProfile,
-      fast: { ...baseOptions, messages: false },
-      detailed: { ...baseOptions, messages: true },
+      fast: fastReportOptions,
+      detailed: detailedOptions,
       formats: { mode: "full", names: commonFormats, keywords: false },
       implementation: {
         core: { packageName: "@redocly/ajv", version: redoclyVersion },
@@ -120,39 +157,7 @@ function createImplementation({ draft, formatProfile, resources }) {
     },
     getError({ target, data }) {
       if (detailed === null) {
-        detailed = new Constructor({ ...baseOptions, messages: true });
-        if (draft === "draft6") {
-          detailed.addMetaSchema(draft6MetaSchema);
-        }
-        if (draft === "draft2019-09" || draft === "draft2020-12") {
-          detailed.addMetaSchema(draft7MetaSchema);
-        }
-        addFormats(detailed, {
-          mode: "full",
-          formats: commonFormats,
-          keywords: false
-        });
-        const registered = new Set();
-        for (const resource of resources) {
-          if (
-            typeof resource.canonicalUri !== "string" ||
-            registered.has(resource.schema)
-          ) {
-            continue;
-          }
-          detailed.addSchema(resource.schema, resource.canonicalUri);
-          const resourceTarget =
-            resource.schema?.$id ?? resource.schema?.id ?? resource.canonicalUri;
-          for (const alias of resource.aliases) {
-            if (
-              alias !== resource.canonicalUri &&
-              alias !== resourceTarget
-            ) {
-              detailed.addSchema({ $ref: resourceTarget }, alias);
-            }
-          }
-          registered.add(resource.schema);
-        }
+        detailed = createContext(detailedOptions);
       }
       target.detailed ??= detailed.compile(target.schema);
       const valid = Boolean(target.detailed(data));

@@ -1,11 +1,11 @@
-# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.2.0) draft6
+# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) draft6
 
 ## Report options
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","defaultDialect":"http://json-schema.org/draft-06/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"resources":"registered"} | afa1358308a7a4df3c301472a3cddaf552c6ba5aa99e606b5a3cbfbc8888fcd4 |
-| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"http://json-schema.org/draft-06/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"resources":"registered"} | cc9853a79fdbcbfb2331807f5de5d5467ecbfa1bd00ab50d1d383ca98158ea88 |
+| base | {"formatProfile":"base","defaultDialect":"http://json-schema.org/draft-06/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in","resources":"registered"} | e80c6c024e818963fc895b359af622ed8ba828e29ae9da167d64b92cfb2adce6 |
+| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"http://json-schema.org/draft-06/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in","resources":"registered"} | 6efa2edd8f10dd5703309c0b0a588713d51669384f38dea80e1a51471a2a9c15 |
 
 ## Counts
 

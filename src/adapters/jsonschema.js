@@ -3,7 +3,7 @@ import { createRequire } from "node:module";
 import { defineAdapter } from "../adapter-api.js";
 
 const require = createRequire(import.meta.url);
-const { Validator } = require("jsonschema");
+const { Validator, ValidatorResultError } = require("jsonschema");
 
 function createImplementation({ formatProfile, resources }) {
   const instance = new Validator();
@@ -14,10 +14,21 @@ function createImplementation({ formatProfile, resources }) {
   }
   let lastResult = null;
   return {
-    reportOptions: { formatProfile, nestedErrors: false },
+    reportOptions: { formatProfile, nestedErrors: false, throwFirst: true },
     validate(schema, data) {
-      lastResult = instance.validate(data, schema);
-      return lastResult.valid;
+      try {
+        lastResult = instance.validate(data, schema, {
+          nestedErrors: false,
+          throwFirst: true
+        });
+        return lastResult.valid;
+      } catch (error) {
+        if (!(error instanceof ValidatorResultError)) {
+          throw error;
+        }
+        lastResult = error;
+        return false;
+      }
     },
     getError() {
       const error = lastResult?.errors?.[0];

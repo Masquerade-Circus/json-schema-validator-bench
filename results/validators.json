@@ -164,23 +164,26 @@
       "base": {
         "formatProfile": "base",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -219,23 +222,26 @@
       "format-assertion": {
         "formatProfile": "format-assertion",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -273,12 +279,12 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "199f8c10c98b89c2fccd980bca2cee29e23bf8a230a7281916020fb612af9a77",
-      "format-assertion": "e1dd74a546325f115bf393d38258645fe2868e61bed162e909c7484003ed1ae0"
+      "base": "aee96591858301ecbb64cb13ec1c83943b2fb166f2039b66458ce651f6fade98",
+      "format-assertion": "2988a74e0e30ba239b875e44a0bbfbe1568a7da0a63246b10e84cb5946542e82"
     }
   },
   "draft4/schema-shield": {
-    "version": "1.2.0",
+    "version": "1.3.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
@@ -293,6 +299,11 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       },
       "format-assertion": {
@@ -308,12 +319,17 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       }
     },
     "reportOptionsSha256": {
-      "base": "998a55057459165345c0eb6d240f62e8438c5ba7d2861959ffb858709d6dc108",
-      "format-assertion": "7120c464ff74a165c37c3aa2831c35e5385ad32a22a2f84eb843abf358990c93"
+      "base": "c74c9e6c9f30617c4670cccfc93f886b54bc1ec0b49e62d3115770b52f80a6cd",
+      "format-assertion": "783eabcb5de2455a7b0e445f03e54327095393010df6fc86aa91d50eaa6b3b13"
     }
   },
   "draft4/json-schema-library": {
@@ -348,16 +364,18 @@
     "reportOptions": {
       "base": {
         "formatProfile": "base",
-        "nestedErrors": false
+        "nestedErrors": false,
+        "throwFirst": true
       },
       "format-assertion": {
         "formatProfile": "format-assertion",
-        "nestedErrors": false
+        "nestedErrors": false,
+        "throwFirst": true
       }
     },
     "reportOptionsSha256": {
-      "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
-      "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+      "base": "3a92992afbf56b1e7d15d31fd1c50c2eadf664641d9905939efb97e643d93844",
+      "format-assertion": "b3317e19cdec3ee9ac9705adea843220e826f3c6361154bf54281cd60bd958b2"
     }
   },
   "draft4/schemasafe": {
@@ -608,23 +626,26 @@
       "base": {
         "formatProfile": "base",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -663,23 +684,26 @@
       "format-assertion": {
         "formatProfile": "format-assertion",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -717,12 +741,12 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "8c3278ebabb0092ade8857851eed143c09db774c40ffd869d308c6d055c35803",
-      "format-assertion": "d4d8c61377839d3f76a1a7771a038def933cd6a5b816795cd5722fd1a2eae52f"
+      "base": "cf2a9dba785576100f2cb50e8c382820d47e0622be0c4c308487ea13b0a53f0b",
+      "format-assertion": "85be232d5d24fd1d68fa60ba2da674a8abe7a02481e7062efc4c41928d92340a"
     }
   },
   "draft6/schema-shield": {
-    "version": "1.2.0",
+    "version": "1.3.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
@@ -737,6 +761,11 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       },
       "format-assertion": {
@@ -752,12 +781,17 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       }
     },
     "reportOptionsSha256": {
-      "base": "afa1358308a7a4df3c301472a3cddaf552c6ba5aa99e606b5a3cbfbc8888fcd4",
-      "format-assertion": "cc9853a79fdbcbfb2331807f5de5d5467ecbfa1bd00ab50d1d383ca98158ea88"
+      "base": "e80c6c024e818963fc895b359af622ed8ba828e29ae9da167d64b92cfb2adce6",
+      "format-assertion": "6efa2edd8f10dd5703309c0b0a588713d51669384f38dea80e1a51471a2a9c15"
     }
   },
   "draft6/djv": {
@@ -809,16 +843,18 @@
     "reportOptions": {
       "base": {
         "formatProfile": "base",
-        "nestedErrors": false
+        "nestedErrors": false,
+        "throwFirst": true
       },
       "format-assertion": {
         "formatProfile": "format-assertion",
-        "nestedErrors": false
+        "nestedErrors": false,
+        "throwFirst": true
       }
     },
     "reportOptionsSha256": {
-      "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
-      "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+      "base": "3a92992afbf56b1e7d15d31fd1c50c2eadf664641d9905939efb97e643d93844",
+      "format-assertion": "b3317e19cdec3ee9ac9705adea843220e826f3c6361154bf54281cd60bd958b2"
     }
   },
   "draft6/schemasafe": {
@@ -1088,23 +1124,26 @@
       "base": {
         "formatProfile": "base",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -1143,23 +1182,26 @@
       "format-assertion": {
         "formatProfile": "format-assertion",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -1197,12 +1239,12 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "8c3278ebabb0092ade8857851eed143c09db774c40ffd869d308c6d055c35803",
-      "format-assertion": "d4d8c61377839d3f76a1a7771a038def933cd6a5b816795cd5722fd1a2eae52f"
+      "base": "cf2a9dba785576100f2cb50e8c382820d47e0622be0c4c308487ea13b0a53f0b",
+      "format-assertion": "85be232d5d24fd1d68fa60ba2da674a8abe7a02481e7062efc4c41928d92340a"
     }
   },
   "draft7/schema-shield": {
-    "version": "1.2.0",
+    "version": "1.3.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
@@ -1217,6 +1259,11 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       },
       "format-assertion": {
@@ -1232,12 +1279,17 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       }
     },
     "reportOptionsSha256": {
-      "base": "caaa45379bd31ec7b862208c234aa1ea6522a72037511376f56536e448427d4e",
-      "format-assertion": "988662ecb5ca17541d5a23b41413256db90ce533f5dee08cde99be1541da29fb"
+      "base": "fc2868b422d9ee65505bf877cf442ad01b691648840fe8f26094b451566d2483",
+      "format-assertion": "7237a4fdd3b60228c020a370447e6741fb04a6ddcec83b5bbb8940d2399f1ea2"
     }
   },
   "draft7/json-schema-library": {
@@ -1272,16 +1324,18 @@
     "reportOptions": {
       "base": {
         "formatProfile": "base",
-        "nestedErrors": false
+        "nestedErrors": false,
+        "throwFirst": true
       },
       "format-assertion": {
         "formatProfile": "format-assertion",
-        "nestedErrors": false
+        "nestedErrors": false,
+        "throwFirst": true
       }
     },
     "reportOptionsSha256": {
-      "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
-      "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+      "base": "3a92992afbf56b1e7d15d31fd1c50c2eadf664641d9905939efb97e643d93844",
+      "format-assertion": "b3317e19cdec3ee9ac9705adea843220e826f3c6361154bf54281cd60bd958b2"
     }
   },
   "draft7/schemasafe": {
@@ -1551,23 +1605,26 @@
       "base": {
         "formatProfile": "base",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": false,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": false,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -1606,23 +1663,26 @@
       "format-assertion": {
         "formatProfile": "format-assertion",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -1660,12 +1720,12 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "2c62298c726066f3c0dd41c0dec82cee8ed347e645e4c3009767240921d772ce",
-      "format-assertion": "17d3adb3decc948252b49e4e406d576987fe2e86857ccf80ce80d7a2e3a77d4d"
+      "base": "57032cfe05906154cd5e346f8446dae72832c11b2d706e40c38d39e1007f513e",
+      "format-assertion": "13c788255e57c2a232bda5183e4735c46dfffa090a6248aa1546423314c3bf3c"
     }
   },
   "draft2019-09/schema-shield": {
-    "version": "1.2.0",
+    "version": "1.3.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
@@ -1680,6 +1740,11 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       },
       "format-assertion": {
@@ -1695,12 +1760,17 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       }
     },
     "reportOptionsSha256": {
-      "base": "1fe9f10c982512174612de573d4a145acbb1b9bcdb42fc711e586e73094b73cf",
-      "format-assertion": "7a39f912f7707787be7bd8f7f483b804a6a327aa1425fbea19a066475cde5667"
+      "base": "d7e222bd1eae525f825bbf1085daabca4bfcd91383001f8f2170505b1eb4026a",
+      "format-assertion": "7329f2fda34eb1fdd1ead4078a508a4814b19706d6280956a24a649ea046669c"
     }
   },
   "draft2019-09/json-schema-library": {
@@ -1997,23 +2067,26 @@
       "base": {
         "formatProfile": "base",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": false,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": false,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -2052,23 +2125,26 @@
       "format-assertion": {
         "formatProfile": "format-assertion",
         "fast": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
-          "messages": false
+          "allErrors": false,
+          "messages": false,
+          "code": {
+            "process": "isolate-visited-references-per-root-validation"
+          }
         },
         "detailed": {
-          "allErrors": true,
           "ownProperties": true,
           "coerceTypes": false,
           "useDefaults": false,
           "removeAdditional": false,
           "strict": false,
           "validateFormats": true,
+          "allErrors": true,
           "messages": true
         },
         "formats": {
@@ -2106,12 +2182,12 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "39762ad0326266ab3a6afd459bb24b603ae29886f8acbb9636f18be04686cb8b",
-      "format-assertion": "3bb27ae41da04fa7b928f444579a3369ca54781c360d581699683c7f4873df17"
+      "base": "64066f169400a9f529ec81f08d5a22e1f853515080e31ec34ed163e1f0f9b0b8",
+      "format-assertion": "97c1d9a98dea58d73b97a9bc0c189a641f6aae2d9170e7546701f937ea3a3456"
     }
   },
   "draft2020-12/schema-shield": {
-    "version": "1.2.0",
+    "version": "1.3.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
@@ -2126,6 +2202,11 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       },
       "format-assertion": {
@@ -2141,12 +2222,17 @@
           "useDefaults": false,
           "immutable": false
         },
+        "compile": {
+          "validateSchema": true
+        },
+        "formats": "built-in; unknown formats ignored",
+        "metaschemas": "built-in",
         "resources": "registered"
       }
     },
     "reportOptionsSha256": {
-      "base": "4118a4d82872113c3dc4006c1c06cc099892b09e07bc47c5cce5436a635d4ca9",
-      "format-assertion": "6508e817cb2694397922a8013a362f14fcb3a026342dbb5792189ae86e208726"
+      "base": "65cefe41ac7a51050e89df0ad18b0871bd3344950bc65b7881ea586af91af9b6",
+      "format-assertion": "4a0e1aca10db71004e03b6be1cbb581173d15be2427993cc01f477cb41ad5e41"
     }
   },
   "draft2020-12/json-schema-library": {

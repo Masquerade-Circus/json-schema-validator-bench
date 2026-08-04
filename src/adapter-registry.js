@@ -90,6 +90,15 @@ export function getAdapterFactory(id) {
   });
 }
 
+export function getColdExecutionAdapterFactory(id) {
+  const definition = getRegisteredAdapter(id);
+  const installed = packageMetadata(definition.packageName);
+  return (config) => {
+    const operation = definition.prepareColdExecution(config);
+    return Object.freeze({ version: installed.version, ...operation });
+  };
+}
+
 export function getBenchmarkAdapterMetadata(id, draft) {
   const definition = getRegisteredAdapter(id);
   if (!definition.drafts.includes(draft)) {

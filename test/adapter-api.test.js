@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { defineAdapter } from "../src/adapter-api.js";
-import { loadMetaschemas } from "../src/metaschemas.js";
 import {
   CAPABILITIES,
   detectSchemaCapabilities,
@@ -30,6 +30,19 @@ const jsonschema = getRegisteredAdapter("jsonschema");
 const djv = getRegisteredAdapter("djv");
 const zSchema = getRegisteredAdapter("z-schema");
 const hyperjump = getRegisteredAdapter("hyperjump");
+const draft6MetaschemaFixture = {
+  uri: "http://json-schema.org/draft-06/schema",
+  aliases: ["https://json-schema.org/draft-06/schema"],
+  schema: JSON.parse(
+    readFileSync(
+      new URL(
+        "../node_modules/schema-shield/meta-schemas/sources/draft-06/schema.json",
+        import.meta.url
+      ),
+      "utf8"
+    )
+  )
+};
 
 const declaration = {
   id: "fixture",
@@ -112,6 +125,25 @@ test("adapter contract rejects compile and exposes no raw factory", () => {
   }));
   assert.throws(() => definition.create({ draft: "draft7" }), /compile is forbidden/);
   assert.equal(Object.hasOwn(definition, "createRaw"), false);
+});
+
+test("Cold execution preparation rejects invalid config before provider creation", () => {
+  let factoryCalls = 0;
+  const definition = defineAdapter(declaration, () => {
+    factoryCalls += 1;
+    return { reportOptions: {}, validate: () => true };
+  });
+
+  assert.throws(
+    () => definition.prepareColdExecution({ draft: "draft6" }),
+    /unsupported draft/
+  );
+  assert.equal(factoryCalls, 0);
+
+  const operation = definition.prepareColdExecution({ draft: "draft7" });
+  assert.equal(factoryCalls, 0);
+  assert.equal(operation.complete(operation.execute({}, null)), true);
+  assert.equal(factoryCalls, 1);
 });
 
 test("adapter wrapper preserves synchronous and asynchronous setup contracts", async () => {
@@ -620,6 +652,43 @@ test("migrated adapters preserve resources, profiles, and input", async () => {
   }
 });
 
+test("fast validation profiles stop after the first provider error", async () => {
+  const schema = {
+    type: "object",
+    required: ["first", "second"]
+  };
+  for (const id of ["redocly-ajv", "jsonschema"]) {
+    const runtime = createRegisteredAdapter(id, {
+      draft: "draft7",
+      formatProfile: "base",
+      resources: [],
+      unknownFormats: []
+    });
+    const target = typeof runtime.setup === "function"
+      ? await runtime.setup(schema)
+      : schema;
+    assert.equal(runtime.validate(target, {}), false, id);
+    const detail = JSON.parse(
+      await runtime.getError({ schema, target, testCase: { id }, data: {} })
+    );
+    if (id === "redocly-ajv") {
+      assert.equal(runtime.reportOptions.fast.allErrors, false);
+      assert.equal(runtime.reportOptions.detailed.allErrors, true);
+      assert.equal(
+        runtime.reportOptions.fast.code.process,
+        "isolate-visited-references-per-root-validation"
+      );
+      assert.deepEqual(
+        [runtime.validate(target, {}), runtime.validate(target, {})],
+        [false, false]
+      );
+    } else {
+      assert.equal(runtime.reportOptions.throwFirst, true);
+      assert.equal(typeof detail.message, "string");
+    }
+  }
+});
+
 test("SchemaShield registers aliases, transitive and boolean resources in fast and detailed profiles", async () => {
   const integerSchema = {
     $id: "https://ids.example/integer",
@@ -665,6 +734,9 @@ test("SchemaShield registers aliases, transitive and boolean resources in fast a
     unknownFormats: []
   });
   assert.equal(runtime.reportOptions.resources, "registered");
+  assert.equal(runtime.reportOptions.metaschemas, "built-in");
+  assert.equal(runtime.reportOptions.formats, "built-in; unknown formats ignored");
+  assert.deepEqual(runtime.reportOptions.compile, { validateSchema: true });
   const schema = {
     allOf: [
       { $ref: "https://retrieval.example/middle.json" },
@@ -770,9 +842,9 @@ test("SchemaShield preloads each draft metaschema for the 20 official setup case
   }
 });
 
-test("SchemaShield metaschema preload unions snapshot and suite aliases", async () => {
+test("SchemaShield built-in metaschema unions package and suite aliases", async () => {
   const definition = getRegisteredAdapter("schema-shield");
-  const [snapshot] = loadMetaschemas("draft6");
+  const snapshot = draft6MetaschemaFixture;
   const extraAlias = "https://schemas.example.test/draft-06/schema";
   const runtime = definition.create({
     draft: "draft6",
@@ -803,9 +875,9 @@ test("SchemaShield metaschema preload unions snapshot and suite aliases", async 
   );
 });
 
-test("SchemaShield metaschema preload rejects a real schema conflict", () => {
+test("SchemaShield built-in metaschema rejects a real schema conflict", () => {
   const definition = getRegisteredAdapter("schema-shield");
-  const [snapshot] = loadMetaschemas("draft6");
+  const snapshot = draft6MetaschemaFixture;
   assert.throws(
     () =>
       definition.create({
@@ -820,7 +892,7 @@ test("SchemaShield metaschema preload rejects a real schema conflict", () => {
         ],
         unknownFormats: []
       }),
-    (error) => error?.code === "DUPLICATE_SCHEMA_ID"
+    (error) => error?.code === "BUILTIN_SCHEMA_ID_COLLISION"
   );
 });
 
@@ -843,4 +915,29 @@ test("migrated adapters keep representative conformance booleans", async () => {
     });
     assert.deepEqual(records.map(({ status }) => status), ["PASS", "PASS"], id);
   }
+});
+
+test("Redocly AJV fast and detailed profiles preserve conformance booleans", async () => {
+  const cases = fixtureCases([true, false]).map((testCase, index) => ({
+    ...testCase,
+    data: index === 0
+      ? { first: 1, second: 2 }
+      : { first: 1 }
+  }));
+  const records = await classifySchemaCases({
+    adapter: createRegisteredAdapter("redocly-ajv", {
+      draft: "draft7",
+      formatProfile: "base",
+      resources: [],
+      unknownFormats: []
+    }),
+    schema: {
+      type: "object",
+      required: ["first", "second"]
+    },
+    schemaMetadata: { id: cases[0].schemaId },
+    cases
+  });
+
+  assert.deepEqual(records.map(({ status }) => status), ["PASS", "PASS"]);
 });
