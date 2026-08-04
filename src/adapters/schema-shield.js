@@ -20,6 +20,7 @@ const builtinMetaschemaUris = [
   "https://json-schema.org/draft/2020-12/meta/validation",
   "https://json-schema.org/draft/2020-12/meta/meta-data",
   "https://json-schema.org/draft/2020-12/meta/format-annotation",
+  "https://json-schema.org/draft/2020-12/meta/format-assertion",
   "https://json-schema.org/draft/2020-12/meta/content"
 ];
 const builtinMetaschemaAliases = new Map([
@@ -158,9 +159,20 @@ function createImplementation({ draft, formatProfile, resources }) {
     "draft2019-09": "https://json-schema.org/draft/2019-09/schema",
     "draft2020-12": "https://json-schema.org/draft/2020-12/schema"
   }[draft];
-  const fastOptions = { failFast: true, useDefaults: false, immutable: false };
+  const format =
+    draft === "draft4" ||
+    draft === "draft6" ||
+    draft === "draft7" ||
+    formatProfile === "format-assertion";
+  const fastOptions = {
+    failFast: true,
+    format,
+    useDefaults: false,
+    immutable: false
+  };
   const detailedOptions = {
     failFast: false,
+    format,
     useDefaults: false,
     immutable: false
   };
@@ -383,10 +395,6 @@ export const adapter = defineAdapter(
       api: "reusable-sync",
       isolation: "fresh-instance",
       dynamicCode: "not-observed"
-    },
-    supportClaims: {
-      "draft2019-09": "experimental-observed",
-      "draft2020-12": "experimental-observed"
     }
   },
   createImplementation

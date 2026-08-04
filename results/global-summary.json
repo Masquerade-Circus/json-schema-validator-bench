@@ -1,5 +1,5 @@
 {
-  "globalSummaryVersion": 15,
+  "globalSummaryVersion": 16,
   "drafts": [
     "draft4",
     "draft6",
@@ -67,41 +67,41 @@
       "competitorCount": 3,
       "referencesByDraft": {
         "draft4": {
-          "setupMedian": 2441.0838336929855
+          "setupMedian": 4763.415714259276
         },
         "draft6": {
-          "setupMedian": 2529.587838017748
+          "setupMedian": 4193.684076789261
         },
         "draft7": {
-          "setupMedian": 2891.5625921498595
+          "setupMedian": 4051.4082112503424
         },
         "draft2019-09": {
-          "setupMedian": 2149.4355265904433
+          "setupMedian": 2688.017871488063
         },
         "draft2020-12": {
-          "setupMedian": 1881.2850153604927
+          "setupMedian": 2759.128852460317
         }
       },
       "included": [
         {
           "id": "schema-shield",
           "packageName": "schema-shield",
-          "version": "1.3.0",
+          "version": "1.4.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 2441.0838336929855
+              "setupMedian": 4468.269224096988
             },
             "draft6": {
-              "setupMedian": 2529.587838017748
+              "setupMedian": 4003.986626950602
             },
             "draft7": {
-              "setupMedian": 2891.5625921498595
+              "setupMedian": 3802.9429749081883
             },
             "draft2019-09": {
-              "setupMedian": 2149.4355265904433
+              "setupMedian": 2688.017871488063
             },
             "draft2020-12": {
-              "setupMedian": 1881.2850153604927
+              "setupMedian": 2759.128852460317
             }
           },
           "scopeStates": {
@@ -128,7 +128,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 262492160,
+          "peakRssBytes": 276807680,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -138,45 +138,12 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 11892.954805811529,
-          "setupScore": 100,
+          "setupOpsPerSecond": 17722.34554990416,
+          "setupScore": 96.588698221302,
           "errors": {
             "setup": {
-              "count": 4,
-              "records": [
-                {
-                  "draft": "draft2020-12",
-                  "profile": "format-assertion",
-                  "caseId": "draft2020-12:optional/format-assertion.json#/groups/0/tests/0",
-                  "description": "format-assertion: false: valid string",
-                  "status": "COMPILE",
-                  "message": "REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion"
-                },
-                {
-                  "draft": "draft2020-12",
-                  "profile": "format-assertion",
-                  "caseId": "draft2020-12:optional/format-assertion.json#/groups/0/tests/1",
-                  "description": "format-assertion: false: invalid string",
-                  "status": "COMPILE",
-                  "message": "REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion"
-                },
-                {
-                  "draft": "draft2020-12",
-                  "profile": "format-assertion",
-                  "caseId": "draft2020-12:optional/format-assertion.json#/groups/1/tests/0",
-                  "description": "format-assertion: true: valid string",
-                  "status": "COMPILE",
-                  "message": "REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion"
-                },
-                {
-                  "draft": "draft2020-12",
-                  "profile": "format-assertion",
-                  "caseId": "draft2020-12:optional/format-assertion.json#/groups/1/tests/1",
-                  "description": "format-assertion: true: invalid string",
-                  "status": "COMPILE",
-                  "message": "REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion"
-                }
-              ]
+              "count": 0,
+              "records": []
             }
           }
         },
@@ -186,19 +153,19 @@
           "version": "1.17.7",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 2183.1390486915298
+              "setupMedian": 4763.415714259276
             },
             "draft6": {
-              "setupMedian": 2002.2303897560419
+              "setupMedian": 4193.684076789261
             },
             "draft7": {
-              "setupMedian": 2101.958172796866
+              "setupMedian": 4051.4082112503424
             },
             "draft2019-09": {
-              "setupMedian": 1301.0825893021388
+              "setupMedian": 2354.931594407566
             },
             "draft2020-12": {
-              "setupMedian": 1214.5716704582737
+              "setupMedian": 2507.941024543641
             }
           },
           "scopeStates": {
@@ -225,7 +192,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 280039424,
+          "peakRssBytes": 277856256,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -235,8 +202,8 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 8802.98187100485,
-          "setupScore": 72.55722935383547,
+          "setupOpsPerSecond": 17871.380621250086,
+          "setupScore": 95.5472729684678,
           "errors": {
             "setup": {
               "count": 26,
@@ -459,19 +426,19 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 1839.3610589462492
+              "setupMedian": 2800.5705667050306
             },
             "draft6": {
-              "setupMedian": 1875.2422774037511
+              "setupMedian": 2648.477117724942
             },
             "draft7": {
-              "setupMedian": 1820.9780444431449
+              "setupMedian": 2513.179899939036
             },
             "draft2019-09": {
-              "setupMedian": 1176.1128638506107
+              "setupMedian": 1425.4438247505623
             },
             "draft2020-12": {
-              "setupMedian": 956.3018662521845
+              "setupMedian": 1322.922669450089
             }
           },
           "scopeStates": {
@@ -498,7 +465,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 206643200,
+          "peakRssBytes": 205959168,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -508,8 +475,8 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 7667.99611089594,
-          "setupScore": 62.8211384000561,
+          "setupOpsPerSecond": 10710.59407856966,
+          "setupScore": 56.692461112316586,
           "errors": {
             "setup": {
               "count": 12,
@@ -40084,10 +40051,10 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 117.7610965653968
+              "setupMedian": 167.60852502967208
             },
             "draft6": {
-              "setupMedian": 70.01513399471183
+              "setupMedian": 83.13745592537525
             },
             "draft7": {
               "setupMedian": null
@@ -40181,7 +40148,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 309649408,
+          "peakRssBytes": 338509824,
           "coverage": "2/5",
           "requiredScopes": [
             "draft4/setup",
@@ -40269,10 +40236,10 @@
           "version": "8.18.3",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 113.79225929714579
+              "setupMedian": null
             },
             "draft6": {
-              "setupMedian": 62.026709081953605
+              "setupMedian": null
             },
             "draft7": {
               "setupMedian": null
@@ -40286,16 +40253,51 @@
           },
           "scopeStates": {
             "draft4/setup": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft6/setup": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft7/setup": {
               "eligible": false,
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -40315,7 +40317,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -40342,7 +40344,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -40366,8 +40368,8 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 338530304,
-          "coverage": "2/5",
+          "peakRssBytes": null,
+          "coverage": "0/5",
           "requiredScopes": [
             "draft4/setup",
             "draft6/setup",
@@ -40377,8 +40379,51 @@
           ],
           "missingScopes": [
             {
+              "scope": "draft4/setup",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
+              "scope": "draft6/setup",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
               "scope": "draft7/setup",
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -40398,7 +40443,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -40425,7 +40470,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -41591,51 +41636,51 @@
       "competitorCount": 3,
       "referencesByDraft": {
         "draft4": {
-          "baseMedian": 1263807.8587059397,
-          "formatsMedian": 8898854.398903117
+          "baseMedian": 2287124.713147725,
+          "formatsMedian": 12115861.172585597
         },
         "draft6": {
-          "baseMedian": 1611820.4545796828,
-          "formatsMedian": 9472718.560431158
+          "baseMedian": 2527457.9490819946,
+          "formatsMedian": 13544680.160296135
         },
         "draft7": {
-          "baseMedian": 1351208.775154172,
-          "formatsMedian": 8971003.209471557
+          "baseMedian": 2559326.1906560385,
+          "formatsMedian": 12405220.767858364
         },
         "draft2019-09": {
-          "baseMedian": 461927.66376797046,
-          "formatsMedian": 9176741.706419181
+          "baseMedian": 862681.303033668,
+          "formatsMedian": 11372682.362195924
         },
         "draft2020-12": {
-          "baseMedian": 427020.7895287984,
-          "formatsMedian": 8257841.014264679
+          "baseMedian": 716159.6480311996,
+          "formatsMedian": 10594100.187890925
         }
       },
       "included": [
         {
           "id": "schema-shield",
           "packageName": "schema-shield",
-          "version": "1.3.0",
+          "version": "1.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 1263807.8587059397,
-              "formatsMedian": 8898854.398903117
+              "baseMedian": 2287124.713147725,
+              "formatsMedian": 12115861.172585597
             },
             "draft6": {
-              "baseMedian": 1611820.4545796828,
-              "formatsMedian": 9472718.560431158
+              "baseMedian": 2527457.9490819946,
+              "formatsMedian": 13544680.160296135
             },
             "draft7": {
-              "baseMedian": 1351208.775154172,
-              "formatsMedian": 8971003.209471557
+              "baseMedian": 2559326.1906560385,
+              "formatsMedian": 12405220.767858364
             },
             "draft2019-09": {
-              "baseMedian": 461927.66376797046,
-              "formatsMedian": 9176741.706419181
+              "baseMedian": 862681.303033668,
+              "formatsMedian": 11372682.362195924
             },
             "draft2020-12": {
-              "baseMedian": 427020.7895287984,
-              "formatsMedian": 8257841.014264679
+              "baseMedian": 716159.6480311996,
+              "formatsMedian": 10594100.187890925
             }
           },
           "scopeStates": {
@@ -41682,7 +41727,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 210636800,
+          "peakRssBytes": 246493184,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41697,9 +41742,9 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 5115785.541736563,
-          "formatsOpsPerSecond": 44777158.889489695,
-          "averageOpsPerSecond": 24946472.21561313,
+          "baseOpsPerSecond": 8952749.803950626,
+          "formatsOpsPerSecond": 60032544.650826946,
+          "averageOpsPerSecond": 34492647.227388784,
           "baseScore": 100,
           "formatsScore": 100,
           "balancedScore": 100,
@@ -41720,24 +41765,24 @@
           "version": "1.17.7",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 283154.46545644186,
-              "formatsMedian": 1195071.2630542237
+              "baseMedian": 415955.9420054989,
+              "formatsMedian": 1705779.5928699616
             },
             "draft6": {
-              "baseMedian": 316709.5105198771,
-              "formatsMedian": 1357501.0282251418
+              "baseMedian": 397711.7035746439,
+              "formatsMedian": 1851417.0559776565
             },
             "draft7": {
-              "baseMedian": 245226.79737988557,
-              "formatsMedian": 168476.6984556605
+              "baseMedian": 442038.90021391085,
+              "formatsMedian": 236222.2349927352
             },
             "draft2019-09": {
-              "baseMedian": 151465.65730117453,
-              "formatsMedian": 180208.5327875021
+              "baseMedian": 248868.405059168,
+              "formatsMedian": 265990.88062912016
             },
             "draft2020-12": {
-              "baseMedian": 149433.53028933908,
-              "formatsMedian": 175709.08879102705
+              "baseMedian": 212290.77946034263,
+              "formatsMedian": 274322.9791865839
             }
           },
           "scopeStates": {
@@ -41784,7 +41829,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 280268800,
+          "peakRssBytes": 278667264,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41799,12 +41844,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 1145989.9609467182,
-          "formatsOpsPerSecond": 3076966.6113135554,
-          "averageOpsPerSecond": 2111478.286130137,
-          "baseScore": 24.686203391976214,
-          "formatsScore": 4.32322385473811,
-          "balancedScore": 10.330730051022938,
+          "baseOpsPerSecond": 1716865.7303135642,
+          "formatsOpsPerSecond": 4333732.743656058,
+          "averageOpsPerSecond": 3025299.236984811,
+          "baseScore": 21.144795348562965,
+          "formatsScore": 4.669221449272618,
+          "balancedScore": 9.936283610182933,
           "errors": {
             "base": {
               "count": 0,
@@ -41822,24 +41867,24 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 56858.68468738163,
-              "formatsMedian": 56640.28015185008
+              "baseMedian": 76675.89914557477,
+              "formatsMedian": 86556.81488259739
             },
             "draft6": {
-              "baseMedian": 61253.39681001444,
-              "formatsMedian": 73175.35479464833
+              "baseMedian": 80333.1795703345,
+              "formatsMedian": 109295.19633461867
             },
             "draft7": {
-              "baseMedian": 62064.24576854696,
-              "formatsMedian": 62356.81856106323
+              "baseMedian": 91782.71993139276,
+              "formatsMedian": 89084.58838476846
             },
             "draft2019-09": {
-              "baseMedian": 41951.97955927769,
-              "formatsMedian": 63136.63053386679
+              "baseMedian": 63907.87440170527,
+              "formatsMedian": 89137.94001966399
             },
             "draft2020-12": {
-              "baseMedian": 39703.18242684386,
-              "formatsMedian": 58331.78226535218
+              "baseMedian": 59012.67747243095,
+              "formatsMedian": 91302.41440117006
             }
           },
           "scopeStates": {
@@ -41886,7 +41931,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 281313280,
+          "peakRssBytes": 286466048,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41901,12 +41946,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 261831.4892520646,
-          "formatsOpsPerSecond": 313640.8663067806,
-          "averageOpsPerSecond": 287736.1777794226,
-          "baseScore": 5.8119332356969995,
-          "formatsScore": 0.698346901615038,
-          "balancedScore": 2.0146328617250506,
+          "baseOpsPerSecond": 371712.3505214383,
+          "formatsOpsPerSecond": 465376.95402281854,
+          "averageOpsPerSecond": 418544.6522721284,
+          "baseScore": 4.7159691802575585,
+          "formatsScore": 0.7750309570053786,
+          "balancedScore": 1.9118112111249073,
           "errors": {
             "base": {
               "count": 0,
@@ -81564,12 +81609,12 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 1605221.9249084229,
-              "formatsMedian": 2862993.8309699288
+              "baseMedian": 2906646.421656938,
+              "formatsMedian": 3619388.171370866
             },
             "draft6": {
-              "baseMedian": 1729970.893386582,
-              "formatsMedian": 3326392.5677345106
+              "baseMedian": 3145408.3081689123,
+              "formatsMedian": 4493542.965704949
             },
             "draft7": {
               "baseMedian": null,
@@ -81744,7 +81789,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 311418880,
+          "peakRssBytes": 316145664,
           "coverage": "4/10",
           "requiredScopes": [
             "draft4/base",
@@ -81907,12 +81952,12 @@
           "version": "8.18.3",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 1195029.9539084234,
-              "formatsMedian": 2303353.10036646
+              "baseMedian": null,
+              "formatsMedian": null
             },
             "draft6": {
-              "baseMedian": 1094940.0882663867,
-              "formatsMedian": 2886678.237841236
+              "baseMedian": null,
+              "formatsMedian": null
             },
             "draft7": {
               "baseMedian": null,
@@ -81929,24 +81974,83 @@
           },
           "scopeStates": {
             "draft4/base": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft4/format-assertion": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft6/base": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft6/format-assertion": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft7/base": {
               "eligible": false,
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -81963,6 +82067,17 @@
             "draft7/format-assertion": {
               "eligible": false,
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -81982,7 +82097,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82009,7 +82124,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82036,7 +82151,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82063,7 +82178,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82087,8 +82202,8 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 332263424,
-          "coverage": "4/10",
+          "peakRssBytes": null,
+          "coverage": "0/10",
           "requiredScopes": [
             "draft4/base",
             "draft4/format-assertion",
@@ -82103,8 +82218,83 @@
           ],
           "missingScopes": [
             {
+              "scope": "draft4/base",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
+              "scope": "draft4/format-assertion",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
+              "scope": "draft6/base",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
+              "scope": "draft6/format-assertion",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
               "scope": "draft7/base",
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -82121,6 +82311,17 @@
             {
               "scope": "draft7/format-assertion",
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -82140,7 +82341,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82167,7 +82368,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82194,7 +82395,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82221,7 +82422,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -84041,51 +84242,51 @@
       "competitorCount": 2,
       "referencesByDraft": {
         "draft4": {
-          "baseMedian": 4423.345396381221,
-          "formatsMedian": 6892.800719763203
+          "baseMedian": 5541.541578217501,
+          "formatsMedian": 10632.089013218996
         },
         "draft6": {
-          "baseMedian": 4504.72100141478,
-          "formatsMedian": 6599.014154875995
+          "baseMedian": 7315.660989858475,
+          "formatsMedian": 12061.433882513633
         },
         "draft7": {
-          "baseMedian": 4779.699154532258,
-          "formatsMedian": 6707.462671526588
+          "baseMedian": 7473.1321452215325,
+          "formatsMedian": 10640.10018691654
         },
         "draft2019-09": {
-          "baseMedian": 2723.336100965603,
-          "formatsMedian": 6350.7745828447305
+          "baseMedian": 4487.457918916096,
+          "formatsMedian": 10021.349679838971
         },
         "draft2020-12": {
-          "baseMedian": 2804.4586618360872,
-          "formatsMedian": 6427.2242452256905
+          "baseMedian": 4042.7103402875614,
+          "formatsMedian": 7901.6592090646645
         }
       },
       "included": [
         {
           "id": "schema-shield",
           "packageName": "schema-shield",
-          "version": "1.3.0",
+          "version": "1.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 4423.345396381221,
-              "formatsMedian": 6892.800719763203
+              "baseMedian": 5541.541578217501,
+              "formatsMedian": 10632.089013218996
             },
             "draft6": {
-              "baseMedian": 4504.72100141478,
-              "formatsMedian": 6599.014154875995
+              "baseMedian": 7315.660989858475,
+              "formatsMedian": 12061.433882513633
             },
             "draft7": {
-              "baseMedian": 4779.699154532258,
-              "formatsMedian": 6707.462671526588
+              "baseMedian": 7473.1321452215325,
+              "formatsMedian": 10640.10018691654
             },
             "draft2019-09": {
-              "baseMedian": 2723.336100965603,
-              "formatsMedian": 6350.7745828447305
+              "baseMedian": 4487.457918916096,
+              "formatsMedian": 10021.349679838971
             },
             "draft2020-12": {
-              "baseMedian": 2804.4586618360872,
-              "formatsMedian": 6427.2242452256905
+              "baseMedian": 4042.7103402875614,
+              "formatsMedian": 7901.6592090646645
             }
           },
           "scopeStates": {
@@ -84132,7 +84333,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 289857536,
+          "peakRssBytes": 292081664,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -84147,9 +84348,9 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 19235.56031512995,
-          "formatsOpsPerSecond": 32977.27637423621,
-          "averageOpsPerSecond": 26106.41834468308,
+          "baseOpsPerSecond": 28860.502972501166,
+          "formatsOpsPerSecond": 51256.6319715528,
+          "averageOpsPerSecond": 40058.56747202698,
           "baseScore": 100,
           "formatsScore": 100,
           "balancedScore": 100,
@@ -84170,24 +84371,24 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 2545.7262929449244,
-              "formatsMedian": 2893.5477179300437
+              "baseMedian": 3544.391109991844,
+              "formatsMedian": 4592.8573969075605
             },
             "draft6": {
-              "baseMedian": 2511.4749111871242,
-              "formatsMedian": 2906.4317864867326
+              "baseMedian": 3711.7130270974094,
+              "formatsMedian": 4510.424555334219
             },
             "draft7": {
-              "baseMedian": 2443.0191377596393,
-              "formatsMedian": 2609.075558610921
+              "baseMedian": 3588.288479340147,
+              "formatsMedian": 4037.326809732973
             },
             "draft2019-09": {
-              "baseMedian": 1374.4754531300482,
-              "formatsMedian": 1603.2220086839202
+              "baseMedian": 2136.182224702995,
+              "formatsMedian": 2363.7532523770387
             },
             "draft2020-12": {
-              "baseMedian": 1158.5601381512624,
-              "formatsMedian": 1369.315327177364
+              "baseMedian": 1715.7882979239828,
+              "formatsMedian": 1907.6566752579977
             }
           },
           "scopeStates": {
@@ -84234,7 +84435,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 210472960,
+          "peakRssBytes": 212570112,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -84249,12 +84450,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 10033.255933172999,
-          "formatsOpsPerSecond": 11381.592398888983,
-          "averageOpsPerSecond": 10707.42416603099,
-          "baseScore": 50.90854426492033,
-          "formatsScore": 32.92291460516768,
-          "balancedScore": 40.93968313882475,
+          "baseOpsPerSecond": 14696.363139056377,
+          "formatsOpsPerSecond": 17412.018689609788,
+          "averageOpsPerSecond": 16054.190914333081,
+          "baseScore": 50.07363357460905,
+          "formatsScore": 32.25356872474695,
+          "balancedScore": 40.187726755770214,
           "errors": {
             "base": {
               "count": 0,
@@ -123912,12 +124113,12 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 151.21638713510634,
-              "formatsMedian": 151.35016433188588
+              "baseMedian": 208.47744127266878,
+              "formatsMedian": 222.94885012584604
             },
             "draft6": {
-              "baseMedian": 77.75268807208491,
-              "formatsMedian": 74.40195239061136
+              "baseMedian": 111.42921458712948,
+              "formatsMedian": 119.10876036793549
             },
             "draft7": {
               "baseMedian": null,
@@ -124092,7 +124293,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 435585024,
+          "peakRssBytes": 440631296,
           "coverage": "4/10",
           "requiredScopes": [
             "draft4/base",
@@ -124462,12 +124663,12 @@
           "version": "8.18.3",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 126.75125142271698,
-              "formatsMedian": 127.58184441107718
+              "baseMedian": null,
+              "formatsMedian": null
             },
             "draft6": {
-              "baseMedian": 70.37807781832558,
-              "formatsMedian": 70.03503788944388
+              "baseMedian": null,
+              "formatsMedian": null
             },
             "draft7": {
               "baseMedian": null,
@@ -124484,24 +124685,83 @@
           },
           "scopeStates": {
             "draft4/base": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft4/format-assertion": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft6/base": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft6/format-assertion": {
-              "eligible": true,
-              "reasons": []
+              "eligible": false,
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
             },
             "draft7/base": {
               "eligible": false,
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -124518,6 +124778,17 @@
             "draft7/format-assertion": {
               "eligible": false,
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -124537,7 +124808,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -124564,7 +124835,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -124591,7 +124862,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -124618,7 +124889,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -124642,8 +124913,8 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 460058624,
-          "coverage": "4/10",
+          "peakRssBytes": null,
+          "coverage": "0/10",
           "requiredScopes": [
             "draft4/base",
             "draft4/format-assertion",
@@ -124658,8 +124929,83 @@
           ],
           "missingScopes": [
             {
+              "scope": "draft4/base",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
+              "scope": "draft4/format-assertion",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 702,
+                  "total": 718,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
+              "scope": "draft6/base",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
+              "scope": "draft6/format-assertion",
+              "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 923,
+                  "total": 945,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                }
+              ]
+            },
+            {
               "scope": "draft7/base",
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -124676,6 +125022,17 @@
             {
               "scope": "draft7/format-assertion",
               "reasons": [
+                {
+                  "code": "PASS_THRESHOLD_NOT_MET",
+                  "profile": "base",
+                  "pass": 1017,
+                  "total": 1045,
+                  "thresholdPercent": "98",
+                  "thresholdFraction": {
+                    "numerator": 49,
+                    "denominator": 50
+                  }
+                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -124695,7 +125052,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -124722,7 +125079,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1386,
+                  "pass": 1359,
                   "total": 1417,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -124749,7 +125106,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -124776,7 +125133,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 1395,
+                  "pass": 1365,
                   "total": 1457,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -126684,16 +127041,16 @@
               "ratio": 1
             },
             "format-assertion": {
-              "pass": 663,
+              "pass": 667,
               "total": 667,
-              "ratio": 0.9940029985007496
+              "ratio": 1
             }
           }
         },
         "total": {
-          "pass": 7965,
+          "pass": 7969,
           "denominator": 7970,
-          "ratio": 0.9993726474278545
+          "ratio": 0.9998745294855709
         }
       },
       {
@@ -126841,78 +127198,6 @@
         }
       },
       {
-        "id": "redocly-ajv",
-        "displayName": "Redocly AJV",
-        "packageName": "@redocly/ajv",
-        "cells": {
-          "draft4": {
-            "base": {
-              "pass": 712,
-              "total": 718,
-              "ratio": 0.9916434540389972
-            },
-            "format-assertion": {
-              "pass": 204,
-              "total": 206,
-              "ratio": 0.9902912621359223
-            }
-          },
-          "draft6": {
-            "base": {
-              "pass": 937,
-              "total": 945,
-              "ratio": 0.9915343915343915
-            },
-            "format-assertion": {
-              "pass": 271,
-              "total": 273,
-              "ratio": 0.9926739926739927
-            }
-          },
-          "draft7": {
-            "base": {
-              "pass": 1031,
-              "total": 1045,
-              "ratio": 0.9866028708133971
-            },
-            "format-assertion": {
-              "pass": 500,
-              "total": 587,
-              "ratio": 0.8517887563884157
-            }
-          },
-          "draft2019-09": {
-            "base": {
-              "pass": 1386,
-              "total": 1417,
-              "ratio": 0.9781227946365562
-            },
-            "format-assertion": {
-              "pass": 565,
-              "total": 655,
-              "ratio": 0.8625954198473282
-            }
-          },
-          "draft2020-12": {
-            "base": {
-              "pass": 1395,
-              "total": 1457,
-              "ratio": 0.9574468085106383
-            },
-            "format-assertion": {
-              "pass": 567,
-              "total": 667,
-              "ratio": 0.8500749625187406
-            }
-          }
-        },
-        "total": {
-          "pass": 7568,
-          "denominator": 7970,
-          "ratio": 0.9495608531994981
-        }
-      },
-      {
         "id": "ajv",
         "displayName": "AJV",
         "packageName": "ajv",
@@ -126982,6 +127267,78 @@
           "pass": 7566,
           "denominator": 7970,
           "ratio": 0.9493099121706399
+        }
+      },
+      {
+        "id": "redocly-ajv",
+        "displayName": "Redocly AJV",
+        "packageName": "@redocly/ajv",
+        "cells": {
+          "draft4": {
+            "base": {
+              "pass": 702,
+              "total": 718,
+              "ratio": 0.9777158774373259
+            },
+            "format-assertion": {
+              "pass": 204,
+              "total": 206,
+              "ratio": 0.9902912621359223
+            }
+          },
+          "draft6": {
+            "base": {
+              "pass": 923,
+              "total": 945,
+              "ratio": 0.9767195767195768
+            },
+            "format-assertion": {
+              "pass": 271,
+              "total": 273,
+              "ratio": 0.9926739926739927
+            }
+          },
+          "draft7": {
+            "base": {
+              "pass": 1017,
+              "total": 1045,
+              "ratio": 0.9732057416267943
+            },
+            "format-assertion": {
+              "pass": 500,
+              "total": 587,
+              "ratio": 0.8517887563884157
+            }
+          },
+          "draft2019-09": {
+            "base": {
+              "pass": 1359,
+              "total": 1417,
+              "ratio": 0.9590684544812985
+            },
+            "format-assertion": {
+              "pass": 565,
+              "total": 655,
+              "ratio": 0.8625954198473282
+            }
+          },
+          "draft2020-12": {
+            "base": {
+              "pass": 1365,
+              "total": 1457,
+              "ratio": 0.9368565545641729
+            },
+            "format-assertion": {
+              "pass": 567,
+              "total": 667,
+              "ratio": 0.8500749625187406
+            }
+          }
+        },
+        "total": {
+          "pass": 7473,
+          "denominator": 7970,
+          "ratio": 0.9376411543287327
         }
       },
       {
@@ -127292,6 +127649,35 @@
   },
   "publication": {
     "diagnostic": false,
-    "benchmarkMode": "full"
+    "benchmarkMode": "full",
+    "sampleAcquisition": {
+      "policy": "current-run-only",
+      "runStartedAt": "2026-08-04T20:06:38.877Z",
+      "measuredSamples": 450,
+      "resumedSamples": 0,
+      "retainedSamples": 0,
+      "publishedSamples": 450,
+      "byPhase": {
+        "setup": {
+          "measuredSamples": 102,
+          "resumedSamples": 0,
+          "retainedSamples": 0,
+          "publishedSamples": 102
+        },
+        "execution": {
+          "measuredSamples": 204,
+          "resumedSamples": 0,
+          "retainedSamples": 0,
+          "publishedSamples": 204
+        },
+        "cold-execution": {
+          "measuredSamples": 144,
+          "resumedSamples": 0,
+          "retainedSamples": 0,
+          "publishedSamples": 144
+        }
+      },
+      "allSamplesMeasuredInCurrentRun": true
+    }
   }
 }

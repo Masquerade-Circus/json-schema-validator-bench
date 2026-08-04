@@ -1,11 +1,11 @@
-# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) draft2019-09
+# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) draft2019-09
 
 ## Report options
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","defaultDialect":"https://json-schema.org/draft/2019-09/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | b9d844e6144fedf81c1bee975e77bec3237f6939fbf1ecbb7aa5e03537fee9bd |
-| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"https://json-schema.org/draft/2019-09/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 93b451543a42d0714e352f36770e76d4a7f7bf7d1db019abab142e66ebc11f2f |
+| base | {"formatProfile":"base","defaultDialect":"https://json-schema.org/draft/2019-09/schema","fast":{"failFast":true,"format":false,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"format":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | f65099cbfa1b7da67e15ba56da1582ad1ea04b16e401714e2ee6564b371a6d1d |
+| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"https://json-schema.org/draft/2019-09/schema","fast":{"failFast":true,"format":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"format":true,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | c7ae4dc73faba6d13b3c5d276d7e51fbcf8cb4582701ab55dbb986ccac437e05 |
 
 ## Counts
 

@@ -17,6 +17,7 @@ import path from "node:path";
 import {
   getLastCompleteUtcWeek,
   runHarness,
+  validateBenchmarkPackage,
   validateMetadataSnapshot,
   verifySuiteCheckout
 } from "../src/cli.js";
@@ -31,6 +32,7 @@ import {
 } from "../src/suite.js";
 import {
   adapterRegistry,
+  benchmarkPackageNames,
   compareCanonicalAdapters,
   getAdapterFactory,
   getRegisteredAdapter,
@@ -234,6 +236,44 @@ test("the adapters directory contains only ten opaque adapter modules", async ()
     assert.match(source, /defineAdapter/);
     assert.equal(source.includes("./helpers.js"), false, file);
     assert.equal(source.includes("createRawAdapter"), false, file);
+  }
+});
+
+test("every direct adapter package import is declared in its package inventory", async () => {
+  const adapterDirectory = new URL("../src/adapters/", import.meta.url);
+  const files = (await readdir(adapterDirectory)).sort();
+  for (const file of files) {
+    const source = await readFile(new URL(file, adapterDirectory), "utf8");
+    const importedPackages = [
+      ...source.matchAll(
+        /(?:\bfrom\s+|\bimport\s+|\bimport\(\s*|\brequire\(\s*)["']([^"']+)["']/g
+      )
+    ]
+      .map(([, specifier]) => specifier)
+      .filter(
+        (specifier) =>
+          !specifier.startsWith(".") &&
+          !specifier.startsWith("/") &&
+          !specifier.startsWith("#") &&
+          !specifier.startsWith("node:")
+      )
+      .map((specifier) => {
+        const segments = specifier.split("/");
+        return specifier.startsWith("@")
+          ? segments.slice(0, 2).join("/")
+          : segments[0];
+      });
+    const id = file.slice(0, -".js".length);
+    const { packageName, additionalPackages } = getRegisteredAdapter(id);
+    const declaredPackages = new Set([packageName, ...additionalPackages]);
+
+    assert.deepEqual(
+      [...new Set(importedPackages)].filter(
+        (packageName) => !declaredPackages.has(packageName)
+      ),
+      [],
+      file
+    );
   }
 });
 
@@ -2914,7 +2954,7 @@ test("benchmark worker rejects invalid arguments and an exhausted deadline", asy
         setupEntries: [],
         schemas: [],
         remotes: new Map(),
-        createAdapter: () => ({})
+        prepareAdapter: () => ({})
       }),
     (error) => error.code === "COOPERATIVE_DEADLINE_EXCEEDED"
   );
@@ -3026,7 +3066,27 @@ test("benchmark artifact verification rejects stale manifest and intersection ha
   );
 });
 
-test("setup worker times fresh adapter setup but keeps neutral preparation outside", async () => {
+function prepareSetupFixture(factory) {
+  return (config) => {
+    let adapter = null;
+    return {
+      get version() {
+        return adapter?.version ?? "1.0.0";
+      },
+      execute(schema) {
+        adapter = factory(config);
+        return adapter.setup(schema);
+      },
+      complete() {
+        if (Object.hasOwn(adapter, "reportOptions")) {
+          void adapter.reportOptions;
+        }
+      }
+    };
+  };
+}
+
+test("setup worker normalizes adapter configuration before timing fresh provider setup", async () => {
   const events = [];
   const calls = [];
   const setupEntries = [
@@ -3063,18 +3123,20 @@ test("setup worker times fresh adapter setup but keeps neutral preparation outsi
         return [];
       }
     },
-    createAdapter({ remotes }) {
+    prepareAdapter({ remotes, resources, unknownFormats }) {
       assert.equal(remotes, undefined);
-      events.push("adapter");
+      assert.deepEqual(resources, []);
+      assert.deepEqual(unknownFormats, []);
+      events.push("prepare-adapter");
       return {
-        name: "fixture",
         version: "1.0.0",
-        setup(schema) {
+        execute(schema) {
+          events.push("adapter");
           events.push("setup");
           calls.push(schema.type);
           return () => true;
         },
-        validate: (target, data) => target(data)
+        complete() {}
       };
     },
     now() {
@@ -3098,6 +3160,7 @@ test("setup worker times fresh adapter setup but keeps neutral preparation outsi
   });
 
   assert.ok(events.indexOf("prepare") < events.indexOf("clock"));
+  assert.ok(events.indexOf("prepare-adapter") < events.indexOf("clock"));
   assert.ok(events.indexOf("clock") < events.indexOf("adapter"));
   assert.deepEqual(calls, ["integer", "string", "integer", "string"]);
   assert.equal(sample.operations, 2);
@@ -3163,8 +3226,8 @@ test("setup worker validates and hashes report options after the provider clock"
     ],
     schemas: [{ id: "schema", draft: "draft6", schema: { type: "string" } }],
     remotes: new Map(),
-    createAdapter(config, options) {
-      return definition.create(config, options);
+    prepareAdapter(config) {
+      return { version: "1.0.0", ...definition.prepareSetup(config) };
     },
     now() {
       events.push(clock === 0 ? "clock-start" : "clock-stop");
@@ -3226,7 +3289,7 @@ test("setup worker gives every operation disposable schemas and resources", asyn
     schemas: [{ id: schemaId, draft: "draft6", schema }],
     remotes: new Map(),
     resourceRegistry: { resourcesFor: () => [resource] },
-    createAdapter({ resources }) {
+    prepareAdapter: prepareSetupFixture(({ resources }) => {
       assert.equal(Object.hasOwn(resources[0].schema, "mutated"), false);
       resources[0].schema.mutated = true;
       return {
@@ -3242,7 +3305,7 @@ test("setup worker gives every operation disposable schemas and resources", asyn
         },
         validate: (target, data) => target(data)
       };
-    },
+    }),
     timing: {
       warmupMinimumMilliseconds: 1,
       targetSampleMilliseconds: 2,
@@ -3283,7 +3346,7 @@ test("setup worker keeps boolean preparation outside the timed vendor operation"
       { id: "boolean-1", draft: "draft6", schema: false }
     ],
     remotes: new Map(),
-    createAdapter() {
+    prepareAdapter: prepareSetupFixture(() => {
       events.push("factory");
       return {
         version: "1.0.0",
@@ -3293,7 +3356,7 @@ test("setup worker keeps boolean preparation outside the timed vendor operation"
         },
         validate: (target) => target
       };
-    },
+    }),
     now() {
       events.push("clock");
       clock += 1;
@@ -3342,7 +3405,7 @@ test("setup worker sustains complete fresh-context passes to the temporal target
       }
     ],
     remotes: new Map(),
-    createAdapter: () => {
+    prepareAdapter: prepareSetupFixture(() => {
       adapters += 1;
       return {
         version: "1.0.0",
@@ -3352,7 +3415,7 @@ test("setup worker sustains complete fresh-context passes to the temporal target
         },
         validate: (target, data) => target(data)
       };
-    },
+    }),
     timing: {
       warmupMinimumMilliseconds: 10,
       targetSampleMilliseconds: 2500,
@@ -3391,20 +3454,20 @@ test("setup telemetry records start, finish, peak, and stops only after a comple
     round: 1,
     deadline: Date.now() + 60_000
   };
-  const createAdapter = () => ({
+  const prepareAdapter = prepareSetupFixture(() => ({
     version: "1.0.0",
     setup: () => {
       setups += 1;
       return () => true;
     },
     validate: (target, data) => target(data)
-  });
+  }));
   const sample = await runSetupSample({
     request,
     setupEntries: entries,
     schemas,
     remotes: new Map(),
-    createAdapter,
+    prepareAdapter,
     now: () => {
       clock += 5;
       return clock;
@@ -3432,7 +3495,7 @@ test("setup telemetry records start, finish, peak, and stops only after a comple
         setupEntries: entries,
         schemas,
         remotes: new Map(),
-        createAdapter,
+        prepareAdapter,
         now: () => {
           clock += 5;
           return clock;
@@ -3485,11 +3548,11 @@ test("sustained growth ignores safe startup expansion and stops under material p
       setupEntries: entries,
       schemas,
       remotes: new Map(),
-      createAdapter: () => ({
+      prepareAdapter: prepareSetupFixture(() => ({
         version: "1.0.0",
         setup: () => () => true,
         validate: (target, data) => target(data)
-      }),
+      })),
       now: () => {
         clock += 5;
         return clock;
@@ -3838,6 +3901,123 @@ test("granular checkpoints hit, miss stale identities, overwrite atomically, and
     }),
     /project \.cache/
   );
+});
+
+test("clean Full measures through compatible checkpoints while Quick and selective refreshes may resume", async (context) => {
+  const environment = JSON.parse(
+    await readFile(path.join(benchmarkRoot, "results", "environment.json"), "utf8")
+  );
+  const intersection = JSON.parse(
+    await readFile(
+      path.join(
+        benchmarkRoot,
+        "results",
+        "draft6",
+        "intersections",
+        "setup.json"
+      ),
+      "utf8"
+    )
+  );
+  const validator = intersection.participants[0]?.id;
+  if (typeof validator !== "string") {
+    context.skip("draft6 Setup has no eligible participant");
+    return;
+  }
+  const threshold = environment.performanceEligibility.thresholdPercent;
+  const checkpointRoot = path.join(
+    benchmarkRoot,
+    ".cache",
+    `clean-full-checkpoint-test-${process.pid}-${Date.now()}`
+  );
+  const memoryPoint = { rss: 1, heapUsed: 1, heapTotal: 1, external: 1 };
+  const executor = (throughput, calls) => async (request) => {
+    calls.push(request);
+    return {
+      sampleContractVersion,
+      benchmarkMode: request.benchmarkMode,
+      benchmarkContractSha256: request.benchmarkContractSha256,
+      phase: request.phase,
+      validator: request.validator,
+      validatorVersion: "1.0.0",
+      draft: request.draft,
+      formatProfile: request.formatProfile,
+      round: request.round,
+      intersectionSha256: request.intersectionSha256,
+      sampleCacheIdentitySha256: request.sampleCacheIdentitySha256,
+      validatorRuntimeSha256: request.validatorRuntimeSha256,
+      warmupMinimumMilliseconds: request.timing.warmupMinimumMilliseconds,
+      warmupMilliseconds: request.timing.warmupMinimumMilliseconds,
+      targetSampleMilliseconds: request.timing.targetSampleMilliseconds,
+      minimumSampleMilliseconds: request.timing.minimumSampleMilliseconds,
+      actualElapsedMilliseconds: request.timing.targetSampleMilliseconds,
+      singlePassExceededTarget: false,
+      passes: 1,
+      corpusSetupEntries: 1,
+      operations: 1,
+      seconds: 1,
+      throughput,
+      memory: { start: memoryPoint, end: memoryPoint, peak: memoryPoint }
+    };
+  };
+  const base = {
+    phase: "setup",
+    draft: "draft6",
+    formatProfile: null,
+    validator,
+    round: 1,
+    eligibilityThresholdPercent: threshold,
+    checkpointRoot
+  };
+
+  try {
+    const initialCalls = [];
+    await runBenchmarkSample({
+      ...base,
+      mode: "full",
+      reuseCheckpoints: true,
+      sampleExecutor: executor(1, initialCalls)
+    });
+    assert.equal(initialCalls.length, 1);
+
+    const cleanFullCalls = [];
+    const cleanFull = await runBenchmarkSample({
+      ...base,
+      mode: "full",
+      sampleExecutor: executor(2, cleanFullCalls)
+    });
+    assert.equal(cleanFullCalls.length, 1);
+    assert.equal(cleanFull.skipped, false);
+    assert.equal(cleanFull.sample.throughput, 2);
+
+    const selectiveCalls = [];
+    const selective = await runBenchmarkSample({
+      ...base,
+      mode: "full",
+      reuseCheckpoints: true,
+      sampleExecutor: executor(3, selectiveCalls)
+    });
+    assert.equal(selectiveCalls.length, 0);
+    assert.equal(selective.skipped, true);
+    assert.equal(selective.sample.throughput, 2);
+
+    const quickCalls = [];
+    await runBenchmarkSample({
+      ...base,
+      mode: "quick",
+      sampleExecutor: executor(4, quickCalls)
+    });
+    const quickResumed = await runBenchmarkSample({
+      ...base,
+      mode: "quick",
+      sampleExecutor: executor(5, quickCalls)
+    });
+    assert.equal(quickCalls.length, 1);
+    assert.equal(quickResumed.skipped, true);
+    assert.equal(quickResumed.sample.throughput, 4);
+  } finally {
+    await rm(checkpointRoot, { recursive: true, force: true });
+  }
 });
 
 test("validator runtime fingerprints isolate adapter, package, and resource bytes", async () => {
@@ -5171,7 +5351,7 @@ function reportSampleFixture(phase) {
     }
   }
   return {
-    benchmarkVersion: 14,
+    benchmarkVersion: 16,
     benchmarkMode: "full",
     phase,
     draft,
@@ -5187,6 +5367,12 @@ function reportSampleFixture(phase) {
       validators: getRoundOrder({ draft, phase, round: index + 1 })
       })
     ),
+    sampleAcquisition: {
+      runStartedAt: "2026-08-04T20:00:00.000Z",
+      measuredSamples: samples.length,
+      resumedSamples: 0,
+      publishedSamples: samples.length
+    },
     samples
   };
 }
@@ -5279,6 +5465,44 @@ test("report validation rejects missing, stale, incomplete, bad checksum, and ve
   );
 });
 
+test("Full publication rejects resumed samples and requires every published sample to be measured", () => {
+  const result = reportSampleFixture("setup");
+  result.sampleAcquisition = {
+    runStartedAt: "2026-08-04T20:00:00.000Z",
+    measuredSamples: result.samples.length - 1,
+    resumedSamples: 1,
+    publishedSamples: result.samples.length
+  };
+  const intersection = {
+    draft: "draft6",
+    formatProfile: null,
+    hash: "a".repeat(64),
+    emptyReason: null,
+    performanceEligibility: performanceEligibilityPolicy,
+    setupChecksum: "fixture",
+    setupEntries: 10,
+    execution: {}
+  };
+  const participants = getSetupParticipants("draft6");
+  const installedVersions = new Map(
+    participants.map(({ id }) => [id, "1.0.0"])
+  );
+
+  assert.throws(
+    () =>
+      validateSampleSet({
+        phase: "setup",
+        result,
+        intersection,
+        installedVersions,
+        participants,
+        publicationRunStartedAt: result.sampleAcquisition.runStartedAt,
+        requireCurrentRunSamples: true
+      }),
+    /Full publication.*measured.*current run|resumed samples/
+  );
+});
+
 test("report statistics calculate six-round center, dispersion and operation time", () => {
   const summary = summarizeThroughputs(
     [10, 20, 30, 40, 50, 60].map((throughput, index) => ({
@@ -5314,6 +5538,43 @@ test("metadata week uses the last complete UTC Monday through Sunday", () => {
     start: "2026-07-20",
     end: "2026-07-26"
   });
+});
+
+test("benchmark dependencies derive names from adapters and exact versions from package.json", async () => {
+  const packageJson = JSON.parse(
+    await readFile(new URL("../package.json", import.meta.url), "utf8")
+  );
+
+  assert.deepEqual(
+    Object.keys(packageJson.dependencies).sort(),
+    benchmarkPackageNames
+  );
+  assert.doesNotThrow(() => validateBenchmarkPackage(packageJson));
+  assert.throws(
+    () =>
+      validateBenchmarkPackage({
+        ...packageJson,
+        dependencies: {
+          ...packageJson.dependencies,
+          "schema-shield": "^1.4.0"
+        }
+      }),
+    /exact version/
+  );
+  const missing = structuredClone(packageJson);
+  delete missing.dependencies["schema-shield"];
+  assert.throws(
+    () => validateBenchmarkPackage(missing),
+    /declared adapter packages/
+  );
+  assert.throws(
+    () =>
+      validateBenchmarkPackage({
+        ...packageJson,
+        dependencies: { ...packageJson.dependencies, undeclared: "1.0.0" }
+      }),
+    /declared adapter packages/
+  );
 });
 
 test("metadata snapshot rejects incomplete fields and package lock mismatches", () => {
@@ -5919,7 +6180,7 @@ test("AJV adapters preserve retrieval aliases that differ from resource $id", as
   }
 });
 
-test("Redocly AJV returns a stable recursive-reference result for pristine inputs", async () => {
+test("Redocly AJV preserves repeated-call instability from its published API", async () => {
   const schema = {
     definitions: {
       item: {
@@ -5957,10 +6218,97 @@ test("Redocly AJV returns a stable recursive-reference result for pristine input
 
   assert.deepEqual(
     [validate(data), validate(data), validate(data)],
-    [false, false, false]
+    [false, true, true]
   );
   assert.equal(adapter.reportOptions.fast.allErrors, false);
+  assert.equal(Object.hasOwn(adapter.reportOptions.fast, "code"), false);
+  assert.equal(Object.hasOwn(adapter.reportOptions, "provider-workaround"), false);
   assert.equal(canonicalJson(data), before);
+});
+
+test("Execution rejects Redocly AJV instability before accepting a sample", async () => {
+  const schemaId = "draft4:redocly-instability.json#/groups/0";
+  const schema = {
+    definitions: {
+      item: {
+        type: "array",
+        additionalItems: false,
+        items: [
+          { $ref: "#/definitions/sub-item" },
+          { $ref: "#/definitions/sub-item" }
+        ]
+      },
+      "sub-item": { type: "object", required: ["foo"] }
+    },
+    type: "array",
+    additionalItems: false,
+    items: [
+      { $ref: "#/definitions/item" },
+      { $ref: "#/definitions/item" },
+      { $ref: "#/definitions/item" }
+    ]
+  };
+  const unstable = [
+    [{ foo: null }, { foo: null }, { foo: null }],
+    [{ foo: null }, { foo: null }],
+    [{ foo: null }, { foo: null }]
+  ];
+  const before = canonicalJson(unstable);
+  const cases = [
+    {
+      id: `${schemaId}/tests/0`,
+      schemaId,
+      draft: "draft4",
+      expected: true,
+      data: []
+    },
+    {
+      id: `${schemaId}/tests/1`,
+      schemaId,
+      draft: "draft4",
+      expected: false,
+      data: unstable
+    }
+  ];
+
+  await assert.rejects(
+    () =>
+      runExecutionSample({
+        request: {
+          phase: "execution",
+          validator: "redocly-ajv",
+          draft: "draft4",
+          formatProfile: "base",
+          round: 1,
+          deadline: Date.now() + 60_000
+        },
+        setupEntries: [
+          {
+            setupKey: "draft4:redocly-instability",
+            draft: "draft4",
+            representativeSchemaId: schemaId,
+            memberSchemaIds: [schemaId]
+          }
+        ],
+        cases,
+        caseIds: cases.map(({ id }) => id),
+        schemas: [{ id: schemaId, draft: "draft4", schema }],
+        remotes: new Map(),
+        resourceRegistry: { resourcesFor: () => [] },
+        createAdapter: getAdapterFactory("redocly-ajv"),
+        timing: {
+          warmupMinimumMilliseconds: 0,
+          targetSampleMilliseconds: 0,
+          minimumSampleMilliseconds: 0
+        }
+      }),
+    (error) =>
+      error.code === "EXECUTION_RESULT_INSTABILITY" &&
+      error.caseId === cases[1].id &&
+      error.expected === false &&
+      error.observed === true
+  );
+  assert.equal(canonicalJson(unstable), before);
 });
 
 test("z-schema isolates repeated detached remote references without mutating input", async () => {
@@ -6161,14 +6509,14 @@ test("Hyperjump resolves different-id, URN, and cross-draft retrieval aliases", 
   }
 });
 
-test("SchemaShield attempts modern drafts without global rejection", async () => {
+test("SchemaShield declares modern draft support", async () => {
   for (const draft of ["draft2019-09", "draft2020-12"]) {
     const { adapter, validate } = await prepareAdapter(
       "schema-shield",
       { draft, formatProfile: "base", resources: [] },
       { type: "integer" }
     );
-    assert.equal(adapter.supportClaim, "experimental-observed");
+    assert.equal(adapter.supportClaim, "declared");
     assert.equal(validate(1), true);
   }
 });
@@ -6449,7 +6797,7 @@ test("async setup timing includes resolution and execution excludes setup", asyn
     setupEntries: executionFixtureEntries(),
     schemas: [{ id: cases[0].schemaId, draft: "draft6", schema: {} }],
     remotes: new Map(),
-    createAdapter: () => ({
+    prepareAdapter: prepareSetupFixture(() => ({
       version: "1.0.0",
       setupMode: "async",
       async setup() {
@@ -6459,7 +6807,7 @@ test("async setup timing includes resolution and execution excludes setup", asyn
         return () => true;
       },
       validate: (target, data) => target(data)
-    }),
+    })),
     now: () => {
       events.push("setup-clock");
       setupClock += 5;

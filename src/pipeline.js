@@ -10,7 +10,8 @@ import {
 import { adapterRegistry } from "./adapter-registry.js";
 import {
   assertConfinedCachePath,
-  createBenchmarkCohortIdentity
+  createBenchmarkCohortIdentity,
+  shouldReuseSampleCheckpoints
 } from "./benchmark.js";
 import {
   assertCompatibleDiagnosticBaseline,
@@ -299,7 +300,7 @@ export async function assertCompleteDiagnosticBaseline({
       environment.cohortIdentity.rounds < 1 ||
       index === null ||
       typeof index !== "object" ||
-      index.resultsVersion !== 14
+      index.resultsVersion !== 15
     ) {
       throw new Error("baseline index or hash inventory is absent");
     }
@@ -405,7 +406,7 @@ export async function assertCompleteDiagnosticBaseline({
             : observedRounds.length === 0;
           if (
             result.benchmarkMode !== mode ||
-            result.benchmarkVersion !== 14 ||
+            result.benchmarkVersion !== 16 ||
             result.phase !== phase ||
             result.draft !== draft ||
             result.formatProfile !== formatProfile ||
@@ -517,6 +518,11 @@ export async function runPipeline({
     eligibilityThresholdPercent
   ).percent;
   const commands = pipelineCommandsForBench(bench);
+  const reusePerformanceCheckpoints = shouldReuseSampleCheckpoints({
+    mode,
+    validator,
+    bench
+  });
   const started = Date.now();
   const runContext = { startedAt: new Date(started).toISOString() };
   writeProgress({
@@ -525,7 +531,8 @@ export async function runPipeline({
     controllerDeadlineMilliseconds,
     eligibilityThresholdPercent: normalizedEligibilityThreshold,
     validator,
-    bench
+    bench,
+    reusePerformanceCheckpoints
   });
   const runRoot = path.join(
     benchmarksRoot,

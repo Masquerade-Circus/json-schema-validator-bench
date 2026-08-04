@@ -19,7 +19,7 @@ import { adapterRegistry, rotateRoundOrder } from "../src/adapter-registry.js";
 import { createSetupEntries, mergeSetupEntries } from "../src/intersection.js";
 import { isPreparedSchema } from "../src/schema-profile.js";
 
-test("Quick and Full share one performance contract except for rounds", () => {
+test("Quick and Full share timing and corpus contracts but differ in rounds and checkpoint reuse", () => {
   const contract = createBenchmarkContract("full");
   const quickContract = createBenchmarkContract("quick");
   const {
@@ -49,14 +49,18 @@ test("Quick and Full share one performance contract except for rounds", () => {
   assert.equal(fullConfiguration.coldExecutionMinimumSampleMilliseconds, 175);
   const {
     rounds: fullContractRounds,
+    sampleReusePolicy: fullSampleReusePolicy,
     ...fullMethodology
   } = contract;
   const {
     rounds: quickContractRounds,
+    sampleReusePolicy: quickSampleReusePolicy,
     ...quickMethodology
   } = quickContract;
   assert.equal(fullContractRounds, 6);
   assert.equal(quickContractRounds, 1);
+  assert.equal(fullSampleReusePolicy, "current-run-only");
+  assert.equal(quickSampleReusePolicy, "compatible-checkpoints");
   assert.deepEqual(quickMethodology, fullMethodology);
   assert.equal(Object.hasOwn(contract, "benchmarkMode"), false);
   assert.equal(Object.hasOwn(quickContract, "benchmarkMode"), false);
@@ -76,8 +80,8 @@ test("Quick and Full share one performance contract except for rounds", () => {
       "cold-execution"
     ]);
   }
-  assert.equal(sampleContractVersion, 26);
-  assert.equal(sampleCacheIdentityVersion, 19);
+  assert.equal(sampleContractVersion, 28);
+  assert.equal(sampleCacheIdentityVersion, 21);
 });
 
 test("createSetupEntries uses effective draft format semantics", () => {
@@ -251,12 +255,12 @@ test("one draft-scoped Setup sample executes each entry with its effective confi
       }
     ],
     resourceRegistry: { resourcesFor: () => [] },
-    createAdapter({ formatProfile }) {
+    prepareAdapter({ formatProfile }) {
       observedProfiles.push(formatProfile);
       return {
         version: "1.0.0",
-        setupMode: "sync",
-        setup: (schema) => schema
+        execute: (schema) => schema,
+        complete() {}
       };
     },
     timing: {

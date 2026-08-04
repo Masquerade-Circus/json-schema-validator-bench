@@ -4,17 +4,17 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":false,"allErrors":false,"messages":false,"code":{"process":"isolate-visited-references-per-root-validation"}},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":false,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"provider-workaround":{"id":"isolate-visited-references-per-root-validation","scope":"generated-validator"},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/2019.js"}}} | 1870af988749742506e700b011a78e6570d11e8091418691382a00a0b8d11ce0 |
-| format-assertion | {"formatProfile":"format-assertion","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false,"code":{"process":"isolate-visited-references-per-root-validation"}},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"provider-workaround":{"id":"isolate-visited-references-per-root-validation","scope":"generated-validator"},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/2019.js"}}} | 833c77e1b092afddbf5a8196d44dac0bf27814d9db1ff233ab2fd7516d6966f3 |
+| base | {"formatProfile":"base","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":false,"allErrors":false,"messages":false},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":false,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/2019.js"}}} | e4a189f2d61f9dcfa73ed39a31e8afd9b6b41f2f6b93bb53191d555b87de2eb9 |
+| format-assertion | {"formatProfile":"format-assertion","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/2019.js"}}} | 01287da24ead7fcc71280f9106f5dcaab0a639312fec450a2301680019665198 |
 
 ## Counts
 
 | Profile | Status | Cases | Percentage |
 | --- | --- | ---: | ---: |
-| base | PASS | 1386 | 97.81% |
+| base | PASS | 1359 | 95.91% |
 | base | WRONG | 12 | 0.85% |
 | base | COMPILE | 19 | 1.34% |
-| base | RUNTIME | 0 | 0.00% |
+| base | RUNTIME | 27 | 1.91% |
 | base | UNSUPPORTED | 0 | 0.00% |
 | format-assertion | PASS | 565 | 86.26% |
 | format-assertion | WRONG | 90 | 13.74% |
@@ -26,12 +26,16 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
+| draft2019-09:defs.json#/groups/0/tests/1 | invalid definition schema | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:enum.json#/groups/14/tests/0 | string is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
 | draft2019-09:enum.json#/groups/14/tests/1 | number is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
 | draft2019-09:enum.json#/groups/14/tests/2 | null is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
 | draft2019-09:enum.json#/groups/14/tests/3 | object is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
 | draft2019-09:enum.json#/groups/14/tests/4 | array is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
 | draft2019-09:enum.json#/groups/14/tests/5 | boolean is invalid | false |  | COMPILE | FAST_SETUP_ERROR: enum must have non-empty array |
+| draft2019-09:items.json#/groups/5/tests/2 | too many sub-items | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:items.json#/groups/5/tests/3 | wrong item | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:items.json#/groups/5/tests/4 | wrong sub-item | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:optional/cross-draft.json#/groups/0/tests/0 | first item not a string is invalid | false |  | COMPILE | FAST_SETUP_ERROR: no schema with key or ref "https://json-schema.org/draft/2020-12/schema" |
 | draft2019-09:optional/cross-draft.json#/groups/0/tests/1 | first item is a string is valid | true |  | COMPILE | FAST_SETUP_ERROR: no schema with key or ref "https://json-schema.org/draft/2020-12/schema" |
 | draft2019-09:optional/cross-draft.json#/groups/1/tests/0 | missing bar is valid | true | false | WRONG | {"keyword":"dependentRequired","instancePath":"","schemaPath":"http://localhost:1234/draft7/ignore-dependentRequired.json/dependentRequired","message":"must have property bar when property foo is present"} |
@@ -130,8 +134,20 @@
 | draft2019-09:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json" resolves to more than one schema |
 | draft2019-09:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/draft2019-09/unknownKeyword/my_identifier.json" resolves to more than one schema |
 | draft2019-09:properties.json#/groups/5/tests/3 | __proto__ not valid | false | true | WRONG |  |
+| draft2019-09:recursiveRef.json#/groups/0/tests/3 | recursive mismatch | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/1/tests/2 | integer does not match as a property value | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/1/tests/4 | two levels, no match | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/3/tests/2 | integer does not match as a property value | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/3/tests/4 | two levels, integer does not match as a property value | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/4/tests/2 | integer does not match as a property value | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/4/tests/4 | two levels, integer does not match as a property value | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:recursiveRef.json#/groups/5/tests/1 | leaf node matches: recursion uses the inner schema | true | false | WRONG | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be boolean"} |
 | draft2019-09:recursiveRef.json#/groups/5/tests/2 | leaf node does not match: recursion uses the inner schema | false | true | WRONG |  |
+| draft2019-09:recursiveRef.json#/groups/7/tests/1 | recurse to integerNode - floats are not allowed | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/8/tests/1 | integer node | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:ref.json#/groups/0/tests/3 | recursive mismatch | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:ref.json#/groups/6/tests/1 | remote ref invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:ref.json#/groups/11/tests/1 | invalid tree | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:ref.json#/groups/15/tests/0 | invalid on inner field | false |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
 | draft2019-09:ref.json#/groups/15/tests/1 | invalid on outer field | false |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
 | draft2019-09:ref.json#/groups/15/tests/2 | valid on both fields | true |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
@@ -140,11 +156,22 @@
 | draft2019-09:ref.json#/groups/16/tests/2 | valid on both fields | true |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
 | draft2019-09:ref.json#/groups/28/tests/0 | a string is valid | true |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
 | draft2019-09:ref.json#/groups/28/tests/1 | a non-string is invalid | false |  | COMPILE | FAST_SETUP_ERROR: Maximum call stack size exceeded |
+| draft2019-09:refRemote.json#/groups/5/tests/1 | string is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:refRemote.json#/groups/6/tests/1 | string is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:refRemote.json#/groups/7/tests/2 | object is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:refRemote.json#/groups/8/tests/0 | invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:refRemote.json#/groups/10/tests/0 | number is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:unevaluatedItems.json#/groups/9/tests/1 | with no additional items | true | false | WRONG | {"keyword":"type","instancePath":"/true","schemaPath":"#/unevaluatedItems/type","message":"must be boolean"} |
 | draft2019-09:unevaluatedItems.json#/groups/9/tests/2 | with invalid additional item | false | true | WRONG |  |
+| draft2019-09:unevaluatedItems.json#/groups/19/tests/1 | with unevaluated items | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:unevaluatedItems.json#/groups/24/tests/0 | valid in case if is evaluated | true | false | WRONG | {"keyword":"unevaluatedItems","instancePath":"","schemaPath":"#/unevaluatedItems","message":"must NOT have more than 0 items"} |
 | draft2019-09:unevaluatedProperties.json#/groups/15/tests/0 | when if is true and has no unevaluated properties | true | false | WRONG | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:unevaluatedProperties.json#/groups/15/tests/3 | when if is false and has unevaluated properties | false | true | WRONG |  |
+| draft2019-09:unevaluatedProperties.json#/groups/21/tests/1 | with unevaluated properties | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:unevaluatedProperties.json#/groups/33/tests/4 | Unevaluated on 2nd level is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:unevaluatedProperties.json#/groups/33/tests/6 | Unevaluated on 3rd level is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:unevaluatedProperties.json#/groups/35/tests/0 | Empty is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:unevaluatedProperties.json#/groups/35/tests/1 | a is valid | true | true | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from true to false on repeated validation 2 of the same object |
 | draft2019-09:unevaluatedProperties.json#/groups/39/tests/0 | valid in case if is evaluated | true | false | WRONG | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:vocabulary.json#/groups/0/tests/2 | no validation: invalid number, but it still validates | true | false | WRONG | {"keyword":"minimum","instancePath":"/numberProperty","schemaPath":"#/properties/numberProperty/minimum","message":"must be >= 10"} |
 
@@ -249,7 +276,7 @@
 | draft2019-09:contains.json#/groups/4/tests/3 | matches neither items nor contains | PASS | {"keyword":"multipleOf","instancePath":"/0","schemaPath":"#/items/multipleOf","message":"must be multiple of 2"} |
 | draft2019-09:contains.json#/groups/5/tests/1 | empty array is invalid | PASS | {"keyword":"contains","instancePath":"","schemaPath":"#/contains","message":"must contain at least 1 valid item(s)"} |
 | draft2019-09:default.json#/groups/2/tests/1 | an explicit property value is checked against maximum (failing) | PASS | {"keyword":"maximum","instancePath":"/alpha","schemaPath":"#/properties/alpha/maximum","message":"must be <= 3"} |
-| draft2019-09:defs.json#/groups/0/tests/1 | invalid definition schema | PASS | {"keyword":"enum","instancePath":"/$defs/foo/type","schemaPath":"#/$defs/simpleTypes/enum","message":"must be equal to one of the allowed values"} |
+| draft2019-09:defs.json#/groups/0/tests/1 | invalid definition schema | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:dependentRequired.json#/groups/0/tests/3 | missing dependency | PASS | {"keyword":"dependentRequired","instancePath":"","schemaPath":"#/dependentRequired","message":"must have property foo when property bar is present"} |
 | draft2019-09:dependentRequired.json#/groups/2/tests/3 | missing dependency | PASS | {"keyword":"dependentRequired","instancePath":"","schemaPath":"#/dependentRequired","message":"must have properties foo, bar when property quux is present"} |
 | draft2019-09:dependentRequired.json#/groups/2/tests/4 | missing other dependency | PASS | {"keyword":"dependentRequired","instancePath":"","schemaPath":"#/dependentRequired","message":"must have properties foo, bar when property quux is present"} |
@@ -315,9 +342,9 @@
 | draft2019-09:items.json#/groups/3/tests/0 | any non-empty array is invalid | PASS | {"keyword":"false schema","instancePath":"/0","schemaPath":"#/items/false schema","message":"boolean schema is false"} |
 | draft2019-09:items.json#/groups/4/tests/1 | array with two items is invalid | PASS | {"keyword":"false schema","instancePath":"/1","schemaPath":"#/items/1/false schema","message":"boolean schema is false"} |
 | draft2019-09:items.json#/groups/5/tests/1 | too many items | PASS | {"keyword":"additionalItems","instancePath":"","schemaPath":"#/additionalItems","message":"must NOT have more than 3 items"} |
-| draft2019-09:items.json#/groups/5/tests/2 | too many sub-items | PASS | {"keyword":"additionalItems","instancePath":"/0","schemaPath":"#/additionalItems","message":"must NOT have more than 2 items"} |
-| draft2019-09:items.json#/groups/5/tests/3 | wrong item | PASS | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","message":"must be array"} |
-| draft2019-09:items.json#/groups/5/tests/4 | wrong sub-item | PASS | {"keyword":"required","instancePath":"/0/0","schemaPath":"#/$defs/sub-item/required","message":"must have required property 'foo'"} |
+| draft2019-09:items.json#/groups/5/tests/2 | too many sub-items | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:items.json#/groups/5/tests/3 | wrong item | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:items.json#/groups/5/tests/4 | wrong sub-item | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:items.json#/groups/6/tests/1 | nested array with invalid type | PASS | {"keyword":"type","instancePath":"/0/0/0/0","schemaPath":"#/items/items/items/items/type","message":"must be number"} |
 | draft2019-09:items.json#/groups/6/tests/2 | not deep enough | PASS | {"keyword":"type","instancePath":"/0/0/0","schemaPath":"#/items/items/items/type","message":"must be array"} |
 | draft2019-09:maxContains.json#/groups/1/tests/0 | empty data | PASS | {"keyword":"contains","instancePath":"","schemaPath":"#/contains","message":"must contain at least 1 and no more than 1 valid item(s)"} |
@@ -748,21 +775,21 @@
 | draft2019-09:propertyNames.json#/groups/4/tests/1 | object with any other property is invalid | PASS | {"keyword":"const","instancePath":"","schemaPath":"#/propertyNames/const","message":"must be equal to constant"} |
 | draft2019-09:propertyNames.json#/groups/5/tests/2 | object with any other property is invalid | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/propertyNames/enum","message":"must be equal to one of the allowed values"} |
 | draft2019-09:recursiveRef.json#/groups/0/tests/2 | mismatch | PASS | {"keyword":"additionalProperties","instancePath":"","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
-| draft2019-09:recursiveRef.json#/groups/0/tests/3 | recursive mismatch | PASS | {"keyword":"additionalProperties","instancePath":"/foo","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
-| draft2019-09:recursiveRef.json#/groups/1/tests/2 | integer does not match as a property value | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be integer"} |
-| draft2019-09:recursiveRef.json#/groups/1/tests/4 | two levels, no match | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be integer"} |
-| draft2019-09:recursiveRef.json#/groups/3/tests/2 | integer does not match as a property value | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be integer"} |
-| draft2019-09:recursiveRef.json#/groups/3/tests/4 | two levels, integer does not match as a property value | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be integer"} |
-| draft2019-09:recursiveRef.json#/groups/4/tests/2 | integer does not match as a property value | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be integer"} |
-| draft2019-09:recursiveRef.json#/groups/4/tests/4 | two levels, integer does not match as a property value | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be integer"} |
+| draft2019-09:recursiveRef.json#/groups/0/tests/3 | recursive mismatch | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/1/tests/2 | integer does not match as a property value | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/1/tests/4 | two levels, no match | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/3/tests/2 | integer does not match as a property value | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/3/tests/4 | two levels, integer does not match as a property value | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/4/tests/2 | integer does not match as a property value | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/4/tests/4 | two levels, integer does not match as a property value | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:recursiveRef.json#/groups/5/tests/0 | leaf node does not match; no recursion | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be boolean"} |
 | draft2019-09:recursiveRef.json#/groups/5/tests/1 | leaf node matches: recursion uses the inner schema | WRONG | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be boolean"} |
 | draft2019-09:recursiveRef.json#/groups/6/tests/0 | leaf node does not match; no recursion | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be boolean"} |
 | draft2019-09:recursiveRef.json#/groups/6/tests/2 | leaf node does not match: recursion only uses inner schema | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/type","message":"must be boolean"} |
-| draft2019-09:recursiveRef.json#/groups/7/tests/1 | recurse to integerNode - floats are not allowed | PASS | {"keyword":"type","instancePath":"/november","schemaPath":"#/type","message":"must be object,integer"} |
-| draft2019-09:recursiveRef.json#/groups/8/tests/1 | integer node | PASS | {"keyword":"type","instancePath":"/november","schemaPath":"#/type","message":"must be object,integer"} |
+| draft2019-09:recursiveRef.json#/groups/7/tests/1 | recurse to integerNode - floats are not allowed | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:recursiveRef.json#/groups/8/tests/1 | integer node | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:ref.json#/groups/0/tests/2 | mismatch | PASS | {"keyword":"additionalProperties","instancePath":"","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
-| draft2019-09:ref.json#/groups/0/tests/3 | recursive mismatch | PASS | {"keyword":"additionalProperties","instancePath":"/foo","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
+| draft2019-09:ref.json#/groups/0/tests/3 | recursive mismatch | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:ref.json#/groups/1/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/properties/foo/type","message":"must be integer"} |
 | draft2019-09:ref.json#/groups/2/tests/1 | mismatch array | PASS | {"keyword":"type","instancePath":"/1","schemaPath":"#/items/0/type","message":"must be integer"} |
 | draft2019-09:ref.json#/groups/3/tests/0 | slash invalid | PASS | {"keyword":"type","instancePath":"/slash","schemaPath":"#/$defs/slash~1field/type","message":"must be integer"} |
@@ -771,11 +798,11 @@
 | draft2019-09:ref.json#/groups/4/tests/1 | nested ref invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/$defs/c/type","message":"must be integer"} |
 | draft2019-09:ref.json#/groups/5/tests/1 | ref valid, maxItems invalid | PASS | {"keyword":"maxItems","instancePath":"/foo","schemaPath":"#/properties/foo/maxItems","message":"must NOT have more than 2 items"} |
 | draft2019-09:ref.json#/groups/5/tests/2 | ref invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"#/$defs/reffed/type","message":"must be array"} |
-| draft2019-09:ref.json#/groups/6/tests/1 | remote ref invalid | PASS | {"keyword":"minimum","instancePath":"/minLength","schemaPath":"#/$defs/nonNegativeIntegerDefault0/minimum","message":"must be >= 0"} |
+| draft2019-09:ref.json#/groups/6/tests/1 | remote ref invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:ref.json#/groups/7/tests/1 | property named $ref invalid | PASS | {"keyword":"type","instancePath":"/$ref","schemaPath":"#/properties/%24ref/type","message":"must be string"} |
 | draft2019-09:ref.json#/groups/8/tests/1 | property named $ref invalid | PASS | {"keyword":"type","instancePath":"/$ref","schemaPath":"#/$defs/is-string/type","message":"must be string"} |
 | draft2019-09:ref.json#/groups/10/tests/0 | any value is invalid | PASS | {"keyword":"false schema","instancePath":"","schemaPath":"#/$defs/bool/false schema","message":"boolean schema is false"} |
-| draft2019-09:ref.json#/groups/11/tests/1 | invalid tree | PASS | {"keyword":"type","instancePath":"/nodes/0/subtree/nodes/0/value","schemaPath":"#/properties/value/type","message":"must be number"} |
+| draft2019-09:ref.json#/groups/11/tests/1 | invalid tree | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:ref.json#/groups/12/tests/1 | object with strings is invalid | PASS | {"keyword":"type","instancePath":"/foo\"bar","schemaPath":"#/$defs/foo%22bar/type","message":"must be number"} |
 | draft2019-09:ref.json#/groups/13/tests/0 | referenced subschema doesn't see annotations from properties | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/$defs/A/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:ref.json#/groups/14/tests/0 | do not evaluate the $ref inside the enum, matching any string | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/enum","message":"must be equal to one of the allowed values"} |
@@ -812,12 +839,12 @@
 | draft2019-09:refRemote.json#/groups/2/tests/1 | remote anchor invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://localhost:1234/draft2019-09/locationIndependentIdentifier.json#foo/type","message":"must be integer"} |
 | draft2019-09:refRemote.json#/groups/3/tests/1 | ref within ref invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://localhost:1234/draft2019-09/subSchemas.json#/$defs/refToInteger/type","message":"must be integer"} |
 | draft2019-09:refRemote.json#/groups/4/tests/1 | base URI change ref invalid | PASS | {"keyword":"type","instancePath":"/0/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft2019-09:refRemote.json#/groups/5/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"/list/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft2019-09:refRemote.json#/groups/6/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"/list/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft2019-09:refRemote.json#/groups/7/tests/2 | object is invalid | PASS | {"keyword":"type","instancePath":"/name","schemaPath":"#/anyOf/0/type","message":"must be null"} |
-| draft2019-09:refRemote.json#/groups/8/tests/0 | invalid | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/$defs/inner/properties/bar/type","message":"must be string"} |
+| draft2019-09:refRemote.json#/groups/5/tests/1 | string is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:refRemote.json#/groups/6/tests/1 | string is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:refRemote.json#/groups/7/tests/2 | object is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:refRemote.json#/groups/8/tests/0 | invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:refRemote.json#/groups/9/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#foo/type","message":"must be integer"} |
-| draft2019-09:refRemote.json#/groups/10/tests/0 | number is invalid | PASS | {"keyword":"type","instancePath":"/name/foo","schemaPath":"string.json/type","message":"must be string"} |
+| draft2019-09:refRemote.json#/groups/10/tests/0 | number is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:refRemote.json#/groups/11/tests/0 | number is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/$defs/bar/type","message":"must be string"} |
 | draft2019-09:refRemote.json#/groups/12/tests/0 | number is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/$defs/bar/type","message":"must be string"} |
 | draft2019-09:refRemote.json#/groups/13/tests/0 | number is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://localhost:1234/draft2019-09/the-nested-id.json/type","message":"must be string"} |
@@ -903,7 +930,7 @@
 | draft2019-09:unevaluatedItems.json#/groups/16/tests/1 | with unevaluated items | PASS | {"keyword":"unevaluatedItems","instancePath":"","schemaPath":"#/unevaluatedItems","message":"must NOT have more than 0 items"} |
 | draft2019-09:unevaluatedItems.json#/groups/17/tests/1 | with unevaluated items | PASS | {"keyword":"unevaluatedItems","instancePath":"","schemaPath":"#/unevaluatedItems","message":"must NOT have more than 2 items"} |
 | draft2019-09:unevaluatedItems.json#/groups/18/tests/1 | with unevaluated items | PASS | {"keyword":"unevaluatedItems","instancePath":"","schemaPath":"#/unevaluatedItems","message":"must NOT have more than 2 items"} |
-| draft2019-09:unevaluatedItems.json#/groups/19/tests/1 | with unevaluated items | PASS | {"keyword":"unevaluatedItems","instancePath":"/1","schemaPath":"#/items/1/unevaluatedItems","message":"must NOT have more than 3 items"} |
+| draft2019-09:unevaluatedItems.json#/groups/19/tests/1 | with unevaluated items | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:unevaluatedItems.json#/groups/20/tests/0 | always fails | PASS | {"keyword":"unevaluatedItems","instancePath":"","schemaPath":"#/allOf/1/unevaluatedItems","message":"must NOT have more than 0 items"} |
 | draft2019-09:unevaluatedItems.json#/groups/21/tests/1 | uncle keyword evaluation is not significant | PASS | {"keyword":"unevaluatedItems","instancePath":"/foo","schemaPath":"#/properties/foo/unevaluatedItems","message":"must NOT have more than 1 items"} |
 | draft2019-09:unevaluatedItems.json#/groups/24/tests/0 | valid in case if is evaluated | WRONG | {"keyword":"unevaluatedItems","instancePath":"","schemaPath":"#/unevaluatedItems","message":"must NOT have more than 0 items"} |
@@ -930,7 +957,7 @@
 | draft2019-09:unevaluatedProperties.json#/groups/18/tests/1 | with unevaluated properties | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:unevaluatedProperties.json#/groups/19/tests/1 | with unevaluated properties | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:unevaluatedProperties.json#/groups/20/tests/1 | with unevaluated properties | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
-| draft2019-09:unevaluatedProperties.json#/groups/21/tests/1 | with unevaluated properties | PASS | {"keyword":"unevaluatedProperties","instancePath":"/branches","schemaPath":"#/properties/branches/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
+| draft2019-09:unevaluatedProperties.json#/groups/21/tests/1 | with unevaluated properties | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:unevaluatedProperties.json#/groups/22/tests/0 | always fails | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/allOf/1/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:unevaluatedProperties.json#/groups/23/tests/0 | always fails | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/allOf/0/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:unevaluatedProperties.json#/groups/26/tests/0 | with no nested unevaluated properties | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/allOf/0/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
@@ -945,13 +972,14 @@
 | draft2019-09:unevaluatedProperties.json#/groups/32/tests/0 | base case: both properties present | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/anyOf/0/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:unevaluatedProperties.json#/groups/32/tests/1 | in place applicator siblings, bar is missing | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/anyOf/0/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
 | draft2019-09:unevaluatedProperties.json#/groups/33/tests/2 | Unevaluated on 1st level is invalid | PASS | {"keyword":"unevaluatedProperties","instancePath":"","schemaPath":"#/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
-| draft2019-09:unevaluatedProperties.json#/groups/33/tests/4 | Unevaluated on 2nd level is invalid | PASS | {"keyword":"unevaluatedProperties","instancePath":"/x","schemaPath":"#/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
-| draft2019-09:unevaluatedProperties.json#/groups/33/tests/6 | Unevaluated on 3rd level is invalid | PASS | {"keyword":"unevaluatedProperties","instancePath":"/x/x","schemaPath":"#/unevaluatedProperties","message":"must NOT have unevaluated properties"} |
+| draft2019-09:unevaluatedProperties.json#/groups/33/tests/4 | Unevaluated on 2nd level is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:unevaluatedProperties.json#/groups/33/tests/6 | Unevaluated on 3rd level is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft2019-09:unevaluatedProperties.json#/groups/34/tests/0 | Empty is invalid (no x or y) | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/$defs/two/required","message":"must have required property 'x'"} |
 | draft2019-09:unevaluatedProperties.json#/groups/34/tests/1 | a and b are invalid (no x or y) | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/$defs/two/required","message":"must have required property 'x'"} |
 | draft2019-09:unevaluatedProperties.json#/groups/34/tests/2 | x and y are invalid | PASS | {"keyword":"oneOf","instancePath":"","schemaPath":"#/allOf/2/oneOf","message":"must match exactly one schema in oneOf"} |
 | draft2019-09:unevaluatedProperties.json#/groups/34/tests/7 | a and b and x and y are invalid | PASS | {"keyword":"oneOf","instancePath":"","schemaPath":"#/allOf/2/oneOf","message":"must match exactly one schema in oneOf"} |
-| draft2019-09:unevaluatedProperties.json#/groups/35/tests/0 | Empty is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/$defs/two/oneOf/0/required","message":"must have required property 'c'"} |
+| draft2019-09:unevaluatedProperties.json#/groups/35/tests/0 | Empty is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft2019-09:unevaluatedProperties.json#/groups/35/tests/1 | a is valid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from true to false on repeated validation 2 of the same object |
 | draft2019-09:unevaluatedProperties.json#/groups/35/tests/5 | a + b is invalid | PASS | {"keyword":"oneOf","instancePath":"","schemaPath":"#/oneOf","message":"must match exactly one schema in oneOf"} |
 | draft2019-09:unevaluatedProperties.json#/groups/35/tests/6 | a + c is invalid | PASS | {"keyword":"oneOf","instancePath":"","schemaPath":"#/oneOf","message":"must match exactly one schema in oneOf"} |
 | draft2019-09:unevaluatedProperties.json#/groups/35/tests/7 | a + d is invalid | PASS | {"keyword":"oneOf","instancePath":"","schemaPath":"#/oneOf","message":"must match exactly one schema in oneOf"} |

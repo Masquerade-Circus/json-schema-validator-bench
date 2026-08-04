@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto";
-
 import { addUriSchemePlugin } from "@hyperjump/browser";
 import "@hyperjump/json-schema/formats";
 import * as Draft4 from "@hyperjump/json-schema/draft-04";
@@ -79,9 +77,7 @@ function createImplementation({ draft, formatProfile, resources }) {
       const uri =
         typeof id === "string" && /^https?:/.test(id)
           ? id.split("#")[0]
-          : `https://benchmark.invalid/hyperjump/${createHash("sha256")
-              .update(JSON.stringify(schema))
-              .digest("hex")}`;
+          : "https://benchmark.invalid/hyperjump/root-schema";
       if (api.hasSchema(uri)) {
         api.unregisterSchema(uri);
       }
@@ -102,6 +98,7 @@ export const adapter = defineAdapter(
   {
     id: "hyperjump",
     packageName: "@hyperjump/json-schema",
+    additionalPackages: ["@hyperjump/browser"],
     displayName: "Hyperjump",
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
     unsupported: [],

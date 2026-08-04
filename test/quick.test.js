@@ -8,7 +8,8 @@ import {
   createBenchmarkContractHash,
   performancePhases,
   sampleCacheIdentityVersion,
-  sampleCheckpointPath
+  sampleCheckpointPath,
+  shouldReuseSampleCheckpoints
 } from "../src/benchmark.js";
 import * as benchmarkApi from "../src/benchmark.js";
 import * as cliApi from "../src/cli.js";
@@ -859,7 +860,7 @@ test("mutation document inventory hashes and coordinated publication include eve
       assert.equal(reportApi.hashMutationDocument(content), entry.sha256);
     }
     const index = reportApi.createResultsIndex("full", manifest);
-    assert.equal(index.resultsVersion, 14);
+    assert.equal(index.resultsVersion, 15);
     assert.deepEqual(index.performancePhases, [
       "setup",
       "execution",
@@ -1674,6 +1675,25 @@ test("Quick and Full checkpoints cannot overlap", () => {
   assert.ok(full.includes(`${path.sep}full${path.sep}`));
 });
 
+test("only a complete Full disables compatible sample checkpoint reuse", () => {
+  assert.equal(
+    shouldReuseSampleCheckpoints({ mode: "full", validator: null, bench: null }),
+    false
+  );
+  assert.equal(
+    shouldReuseSampleCheckpoints({ mode: "quick", validator: null, bench: null }),
+    true
+  );
+  assert.equal(
+    shouldReuseSampleCheckpoints({ mode: "full", validator: "ajv", bench: null }),
+    true
+  );
+  assert.equal(
+    shouldReuseSampleCheckpoints({ mode: "full", validator: null, bench: "setup" }),
+    true
+  );
+});
+
 test("last-run metadata selects observed sample peaks and does not relabel report time as total run time", () => {
   const metadata = deriveLastRunMetadata({
     mode: "quick",
@@ -1796,7 +1816,8 @@ test("pipeline preserves stage order, propagates mode and stops on failure", asy
     controllerDeadlineMilliseconds: 60 * 60 * 1000,
     eligibilityThresholdPercent: "99.95",
     validator: null,
-    bench: null
+    bench: null,
+    reusePerformanceCheckpoints: true
   });
 
   const failed = [];
@@ -1936,7 +1957,7 @@ test("All Drafts normalizes five Setup scopes and ten execution scopes", () => {
     .schemasafe;
 
   const summary = createGlobalPerformanceSummary(scopes);
-  assert.equal(summary.globalSummaryVersion, 15);
+  assert.equal(summary.globalSummaryVersion, 16);
   const setup = summary.phases.setup.included.find(
     ({ id }) => id === "schema-shield"
   );

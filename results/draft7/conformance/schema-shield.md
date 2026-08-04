@@ -1,11 +1,11 @@
-# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) draft7
+# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) draft7
 
 ## Report options
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","defaultDialect":"http://json-schema.org/draft-07/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | a9adf2b049e2061a7e502289ba1179e3ce501adfcceeaf632372fc93f44a71ba |
-| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"http://json-schema.org/draft-07/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 4a7f2dd8a16bd57348a90058079dba25a8efa9b0f2b4a74a0e5bca102097314d |
+| base | {"formatProfile":"base","defaultDialect":"http://json-schema.org/draft-07/schema#","fast":{"failFast":true,"format":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"format":true,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 03b36eadec424053c7d5731d13b0096759ad2ea215ae77f75fef59a97694ff99 |
+| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"http://json-schema.org/draft-07/schema#","fast":{"failFast":true,"format":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"format":true,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | a6411a9509bca5e90c2d1dd2d82c1043edafb03967445af0ef859eef06e10f72 |
 
 ## Counts
 

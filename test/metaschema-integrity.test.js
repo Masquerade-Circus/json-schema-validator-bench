@@ -16,10 +16,10 @@ test("SchemaShield built-in metaschemas match the locked package manifest", asyn
   );
   const locked = packageLock.packages["node_modules/schema-shield"];
 
-  assert.equal(installed.version, "1.3.0");
+  assert.equal(installed.version, "1.4.0");
   assert.equal(installed.version, locked.version);
   assert.equal(installed.license, "Apache-2.0");
-  assert.equal(manifest.resources.length, 18);
+  assert.equal(manifest.resources.length, 19);
 
   for (const entry of manifest.resources) {
     const source = await readFile(

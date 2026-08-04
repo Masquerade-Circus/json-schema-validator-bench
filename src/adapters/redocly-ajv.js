@@ -44,31 +44,6 @@ const constructors = {
   }
 };
 
-function isolateVisitedReferences(source) {
-  const declaration = "const visitedNodesForRef = new WeakMap();";
-  const declarationIndex = source.indexOf(declaration);
-  const functionStart = source.indexOf("return function ");
-  const bodyStart = source.indexOf("){", functionStart) + 1;
-  const bodyEnd = source.lastIndexOf("}");
-  if (
-    declarationIndex < 0 ||
-    functionStart < 0 ||
-    bodyStart <= functionStart ||
-    bodyEnd <= bodyStart
-  ) {
-    throw new Error("Redocly AJV generated an unsupported validation function");
-  }
-  const prefix = source
-    .slice(0, bodyStart + 1)
-    .replace(
-      declaration,
-      "let visitedNodesForRef = new WeakMap();let validationDepth = 0;"
-    );
-  const body = source.slice(bodyStart + 1, bodyEnd);
-  const suffix = source.slice(bodyEnd + 1);
-  return `${prefix}const rootValidation = validationDepth++ === 0;try {${body}} finally {validationDepth--;if (rootValidation) visitedNodesForRef = new WeakMap();}}${suffix}`;
-}
-
 function createImplementation({ draft, formatProfile, resources }) {
   const constructor = constructors[draft];
   const { Constructor } = constructor;
@@ -88,14 +63,7 @@ function createImplementation({ draft, formatProfile, resources }) {
   const fastOptions = {
     ...baseOptions,
     allErrors: false,
-    messages: false,
-    code: { process: isolateVisitedReferences }
-  };
-  const fastReportOptions = {
-    ...baseOptions,
-    allErrors: false,
-    messages: false,
-    code: { process: "isolate-visited-references-per-root-validation" }
+    messages: false
   };
   const detailedOptions = { ...baseOptions, allErrors: true, messages: true };
   function createContext(options) {
@@ -137,13 +105,9 @@ function createImplementation({ draft, formatProfile, resources }) {
   return {
     reportOptions: {
       formatProfile,
-      fast: fastReportOptions,
+      fast: fastOptions,
       detailed: detailedOptions,
       formats: { mode: "full", names: commonFormats, keywords: false },
-      "provider-workaround": {
-        id: "isolate-visited-references-per-root-validation",
-        scope: "generated-validator"
-      },
       implementation: {
         core: { packageName: "@redocly/ajv", version: redoclyVersion },
         constructor: {
@@ -182,6 +146,7 @@ export const adapter = defineAdapter(
   {
     id: "redocly-ajv",
     packageName: "@redocly/ajv",
+    additionalPackages: ["ajv-formats"],
     displayName: "Redocly AJV",
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
     unsupported: [],

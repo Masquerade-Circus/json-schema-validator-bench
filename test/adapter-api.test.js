@@ -71,6 +71,10 @@ function fixtureCases(expectedValues = [false]) {
 test("adapter declarations reject malformed opaque metadata", () => {
   for (const invalid of [
     { ...declaration, implementation: null },
+    { ...declaration, additionalPackages: "ajv-formats" },
+    { ...declaration, additionalPackages: [""] },
+    { ...declaration, additionalPackages: [declaration.packageName] },
+    { ...declaration, additionalPackages: ["fixture", "fixture"] },
     {
       ...declaration,
       implementation: {
@@ -85,7 +89,7 @@ test("adapter declarations reject malformed opaque metadata", () => {
   ]) {
     assert.throws(
       () => defineAdapter(invalid, () => ({ validate: () => true })),
-      /implementation metadata|support claims/
+      /additionalPackages|implementation metadata|support claims/
     );
   }
 });
@@ -144,6 +148,49 @@ test("Cold execution preparation rejects invalid config before provider creation
   assert.equal(factoryCalls, 0);
   assert.equal(operation.complete(operation.execute({}, null)), true);
   assert.equal(factoryCalls, 1);
+});
+
+test("Setup preparation normalizes config before provider creation", () => {
+  let received = null;
+  const definition = defineAdapter(declaration, (config) => {
+    received = config;
+    return {
+      reportOptions: { stable: true },
+      setup: (schema) => schema,
+      validate: () => true
+    };
+  });
+  const resource = {
+    uri: "https://example.test/resource.json#fragment",
+    aliases: [
+      "https://example.test/resource.json",
+      "https://example.test/resource.json#other"
+    ],
+    schema: { type: "integer" }
+  };
+
+  assert.throws(
+    () => definition.prepareSetup({ draft: "draft6" }),
+    /unsupported draft/
+  );
+  assert.equal(received, null);
+
+  const operation = definition.prepareSetup({
+    draft: "draft7",
+    formatProfile: "base",
+    resources: [resource],
+    unknownFormats: ["zeta", "alpha", "zeta"]
+  });
+  assert.equal(received, null);
+  operation.execute({ type: "integer" });
+  operation.complete();
+  assert.equal(received.draft, "draft7");
+  assert.equal(received.formatProfile, "base");
+  assert.deepEqual(received.unknownFormats, ["alpha", "zeta"]);
+  assert.equal(received.resources[0].canonicalUri, resource.uri);
+  assert.deepEqual(received.resources[0].aliases, [
+    "https://example.test/resource.json"
+  ]);
 });
 
 test("adapter wrapper preserves synchronous and asynchronous setup contracts", async () => {
@@ -673,14 +720,11 @@ test("fast reusable validation profiles stop after the first provider error", as
     );
     assert.equal(runtime.reportOptions.fast.allErrors, false);
     assert.equal(runtime.reportOptions.detailed.allErrors, true);
+    assert.equal(Object.hasOwn(runtime.reportOptions.fast, "code"), false);
     assert.equal(
-      runtime.reportOptions.fast.code.process,
-      "isolate-visited-references-per-root-validation"
+      Object.hasOwn(runtime.reportOptions, "provider-workaround"),
+      false
     );
-    assert.deepEqual(runtime.reportOptions["provider-workaround"], {
-      id: "isolate-visited-references-per-root-validation",
-      scope: "generated-validator"
-    });
     assert.deepEqual(
       [runtime.validate(target, {}), runtime.validate(target, {})],
       [false, false]
@@ -864,6 +908,44 @@ test("SchemaShield preloads each draft metaschema for the 20 official setup case
   }
 });
 
+test("SchemaShield uses the public format mode and built-in 2020-12 format assertion metaschema", async () => {
+  assert.equal(schemaShield.supportClaims["draft2019-09"], "declared");
+  assert.equal(schemaShield.supportClaims["draft2020-12"], "declared");
+  const cases = [
+    { draft: "draft7", formatProfile: "base", expected: false },
+    { draft: "draft2019-09", formatProfile: "base", expected: true },
+    {
+      draft: "draft2020-12",
+      formatProfile: "format-assertion",
+      expected: false
+    }
+  ];
+
+  for (const fixture of cases) {
+    const runtime = createRegisteredAdapter("schema-shield", {
+      draft: fixture.draft,
+      formatProfile: fixture.formatProfile,
+      resources: [],
+      unknownFormats: []
+    });
+    const target = await runtime.setup({ type: "string", format: "email" });
+
+    assert.equal(runtime.reportOptions.fast.format, !fixture.expected);
+    assert.equal(runtime.validate(target, "not-an-email"), fixture.expected);
+  }
+
+  const assertionRuntime = createRegisteredAdapter("schema-shield", {
+    draft: "draft2020-12",
+    formatProfile: "format-assertion",
+    resources: [],
+    unknownFormats: []
+  });
+  const assertionTarget = await assertionRuntime.setup({
+    $ref: "https://json-schema.org/draft/2020-12/meta/format-assertion"
+  });
+  assert.equal(assertionRuntime.validate(assertionTarget, { type: "string" }), true);
+});
+
 test("SchemaShield built-in metaschema unions package and suite aliases", async () => {
   const definition = getRegisteredAdapter("schema-shield");
   const snapshot = draft6MetaschemaFixture;
@@ -1033,6 +1115,20 @@ test("z-schema setup uses one reserved root URI without serializing the schema",
   assert.equal(second.schema, first.schema);
 });
 
+test("Hyperjump setup uses one private root URI without schema hashing", () => {
+  const source = readFileSync(
+    new URL("../src/adapters/hyperjump.js", import.meta.url),
+    "utf8"
+  );
+
+  assert.equal(source.includes('from "node:crypto"'), false);
+  assert.equal(source.includes("JSON.stringify(schema)"), false);
+  assert.match(
+    source,
+    /https:\/\/benchmark\.invalid\/hyperjump\/root-schema/
+  );
+});
+
 test("migrated adapters keep representative conformance booleans", async () => {
   const cases = fixtureCases([true, false]).map((testCase, index) => ({
     ...testCase,
@@ -1077,4 +1173,53 @@ test("Redocly AJV fast and detailed profiles preserve conformance booleans", asy
   });
 
   assert.deepEqual(records.map(({ status }) => status), ["PASS", "PASS"]);
+});
+
+test("Redocly AJV conformance records repeated-call instability on the same object", async () => {
+  const testCase = {
+    ...fixtureCases([false])[0],
+    data: [
+      [{ foo: null }, { foo: null }, { foo: null }],
+      [{ foo: null }, { foo: null }],
+      [{ foo: null }, { foo: null }]
+    ]
+  };
+  const records = await classifySchemaCases({
+    adapter: createRegisteredAdapter("redocly-ajv", {
+      draft: "draft4",
+      formatProfile: "base",
+      resources: [],
+      unknownFormats: []
+    }),
+    schema: {
+      definitions: {
+        item: {
+          type: "array",
+          additionalItems: false,
+          items: [
+            { $ref: "#/definitions/sub-item" },
+            { $ref: "#/definitions/sub-item" }
+          ]
+        },
+        "sub-item": { type: "object", required: ["foo"] }
+      },
+      type: "array",
+      additionalItems: false,
+      items: [
+        { $ref: "#/definitions/item" },
+        { $ref: "#/definitions/item" },
+        { $ref: "#/definitions/item" }
+      ]
+    },
+    schemaMetadata: {
+      id: testCase.schemaId,
+      draft: "draft4",
+      formatProfile: "base"
+    },
+    cases: [testCase]
+  });
+
+  assert.equal(records[0].status, "RUNTIME");
+  assert.equal(records[0].errorCode, "PROVIDER_RESULT_INSTABILITY");
+  assert.match(records[0].error, /changed from false to true/);
 });

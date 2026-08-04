@@ -2,7 +2,7 @@
   "snapshotVersion": 1,
   "start": "2026-07-27",
   "end": "2026-08-02",
-  "retrievedAt": "2026-08-04T03:17:09.810Z",
+  "retrievedAt": "2026-08-04T18:04:08.000Z",
   "packages": {
     "@cfworker/json-schema": {
       "version": "4.1.1",
@@ -23,6 +23,18 @@
       "weeklyDownloads": 4851948,
       "downloadsResponseSha256": "f4ae84bfd5d824140ed42eb5fe68c727e571557b014c2f3dec987d40d3a2eb03",
       "registryResponseSha256": "6ae5beaa85ad0ba5bc70d015bdd8bf75a1ebcee6631bcbddaf367cdf6cefcaf2"
+    },
+    "@hyperjump/browser": {
+      "version": "1.4.0",
+      "license": "MIT",
+      "engines": {
+        "node": ">=18.0.0"
+      },
+      "integrity": "sha512-AbtynPyALR2wkN3ngYIiMEc21cZhP170zb5y3YIje4kTZ0J515GDgxeCK8D+PjyMhER7idU2Q3d0Zk0z/W1QLQ==",
+      "tarball": "https://registry.npmjs.org/@hyperjump/browser/-/browser-1.4.0.tgz",
+      "weeklyDownloads": 143030,
+      "downloadsResponseSha256": "4682c02b001ca5753111ad3dee45f3e9251e2e02127fabef966c6856f43a9096",
+      "registryResponseSha256": "fd01bb643795d609f128e92a3ec3ff5b877aec56dd1601473e66a7f9cefcca83"
     },
     "@hyperjump/json-schema": {
       "version": "1.17.7",
@@ -107,16 +119,16 @@
       "registryResponseSha256": "73a54f080038c51a71e2088eb3292a431455d47e88d7c4fff32e7652e4e840dd"
     },
     "schema-shield": {
-      "version": "1.3.0",
+      "version": "1.4.0",
       "license": "Apache-2.0",
       "engines": {
         "node": ">=18"
       },
-      "integrity": "sha512-45usqrnri0JyToBf9Gq8jEu9f4qbXm4mgD272PIhvUHAj9D9Gfpn5NDiULdzz7UgnwmyQmcPBf1XP3+x+E9OxA==",
-      "tarball": "https://registry.npmjs.org/schema-shield/-/schema-shield-1.3.0.tgz",
+      "integrity": "sha512-RjTgtCboVVobqXL903mj2peiSMZFAznB9q4cNTpA83R79bA8h+yMmPLwsRPUOeVilTagcOz/FpR+yclEu9lsDw==",
+      "tarball": "https://registry.npmjs.org/schema-shield/-/schema-shield-1.4.0.tgz",
       "weeklyDownloads": 279,
       "downloadsResponseSha256": "45a69bb8398efc765a1eeb0dfe297b0b8640f6f44adffc8348dbd5c695b4d86a",
-      "registryResponseSha256": "44633aea34787989e7fb857544b1df2b2b7d454cd6f811b33cab496dcfe744c5"
+      "registryResponseSha256": "b31394a0141a82df13d3b14e2d1c0ac89c64ead9cfbac28096cd771682ba3aa4"
     },
     "z-schema": {
       "version": "12.4.0",

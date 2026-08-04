@@ -2,107 +2,107 @@
 
 ## Setup ranking
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) — Setup score 100%
+Leader: [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) — Setup score 100%
 
 | Validator | Setup ops/s | Score | Errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 2,441 | 100% | [0](errors/setup/schema-shield-COMPILE.md) | 0 | 182.5 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 2,183 | 89.4% | [6](errors/setup/hyperjump-COMPILE.md) | 0 | 187.8 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 1,839 | 75.4% | [0](errors/setup/z-schema-COMPILE.md) | 0 | 184.4 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 118 | 4.8% | [0](errors/setup/ajv-COMPILE.md) | 0 | 272.2 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 114 | 4.7% | [0](errors/setup/redocly-ajv-COMPILE.md) | 0 | 282.1 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 4,763 | 100% | [6](errors/setup/hyperjump-COMPILE.md) | 0 | 193.9 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 4,468 | 93.8% | [0](errors/setup/schema-shield-COMPILE.md) | 0 | 188.0 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 2,801 | 58.8% | [0](errors/setup/z-schema-COMPILE.md) | 0 | 184.6 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 168 | 3.5% | [0](errors/setup/ajv-COMPILE.md) | 0 | 204.1 MiB |
 
 Excluded from this ranking:
 
 - [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1): PASS_THRESHOLD_NOT_MET(format-assertion 201/206 < 98%).
+- [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): PASS_THRESHOLD_NOT_MET(base 702/718 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%).
 - [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%).
 
 ## Execution consolidation
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) — Balanced score 88.7%
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — Balanced score 88.7%
 
 | Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 1,263,808 | 8,898,854 | 78.7% | 100% | 88.7% | [0](errors/execution/base/schema-shield-RUNTIME.md) | [0](errors/execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 182.8 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 1,605,222 | 2,862,994 | 100% | 32.2% | 56.7% | [0](errors/execution/base/ajv-RUNTIME.md) | [0](errors/execution/format-assertion/ajv-RUNTIME.md) | 0 | 262.9 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 1,195,030 | 2,303,353 | 74.4% | 25.9% | 43.9% | [0](errors/execution/base/redocly-ajv-RUNTIME.md) | [0](errors/execution/format-assertion/redocly-ajv-RUNTIME.md) | 0 | 268.2 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 283,154 | 1,195,071 | 17.6% | 13.4% | 15.4% | [0](errors/execution/base/hyperjump-RUNTIME.md) | [0](errors/execution/format-assertion/hyperjump-RUNTIME.md) | 0 | 183.9 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 56,859 | 56,640 | 3.5% | 0.6% | 1.5% | [0](errors/execution/base/z-schema-RUNTIME.md) | [0](errors/execution/format-assertion/z-schema-RUNTIME.md) | 0 | 183.8 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 2,287,125 | 12,115,861 | 78.7% | 100% | 88.7% | [0](errors/execution/base/schema-shield-RUNTIME.md) | [0](errors/execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 181.5 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 2,906,646 | 3,619,388 | 100% | 29.9% | 54.7% | [0](errors/execution/base/ajv-RUNTIME.md) | [0](errors/execution/format-assertion/ajv-RUNTIME.md) | 0 | 264.8 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 415,956 | 1,705,780 | 14.3% | 14.1% | 14.2% | [0](errors/execution/base/hyperjump-RUNTIME.md) | [0](errors/execution/format-assertion/hyperjump-RUNTIME.md) | 0 | 187.6 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 76,676 | 86,557 | 2.6% | 0.7% | 1.4% | [0](errors/execution/base/z-schema-RUNTIME.md) | [0](errors/execution/format-assertion/z-schema-RUNTIME.md) | 0 | 187.7 MiB |
 
 Excluded from this ranking:
 
 - [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1): PASS_THRESHOLD_NOT_MET(format-assertion 201/206 < 98%).
+- [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): PASS_THRESHOLD_NOT_MET(base 702/718 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%).
 - [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%).
 
 ## Cold execution consolidation
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) — Balanced score 100%
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — Balanced score 100%
 
 | Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 4,423 | 6,893 | 100% | 100% | 100% | [0](errors/cold-execution/base/schema-shield-RUNTIME.md) | [0](errors/cold-execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 187.0 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 2,546 | 2,894 | 57.6% | 42.0% | 49.2% | [0](errors/cold-execution/base/z-schema-RUNTIME.md) | [0](errors/cold-execution/format-assertion/z-schema-RUNTIME.md) | 0 | 182.5 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 151 | 151 | 3.4% | 2.2% | 2.7% | [0](errors/cold-execution/base/ajv-RUNTIME.md) | [0](errors/cold-execution/format-assertion/ajv-RUNTIME.md) | 0 | 314.3 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 127 | 128 | 2.9% | 1.9% | 2.3% | [0](errors/cold-execution/base/redocly-ajv-RUNTIME.md) | [0](errors/cold-execution/format-assertion/redocly-ajv-RUNTIME.md) | 0 | 293.6 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 5,542 | 10,632 | 100% | 100% | 100% | [0](errors/cold-execution/base/schema-shield-RUNTIME.md) | [0](errors/cold-execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 185.7 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,544 | 4,593 | 64.0% | 43.2% | 52.6% | [0](errors/cold-execution/base/z-schema-RUNTIME.md) | [0](errors/cold-execution/format-assertion/z-schema-RUNTIME.md) | 0 | 186.4 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 208 | 223 | 3.8% | 2.1% | 2.8% | [0](errors/cold-execution/base/ajv-RUNTIME.md) | [0](errors/cold-execution/format-assertion/ajv-RUNTIME.md) | 0 | 314.8 MiB |
 
 Excluded from this ranking:
 
 - [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1): PASS_THRESHOLD_NOT_MET(format-assertion 201/206 < 98%).
 - [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7): PHASE_UNAVAILABLE.
+- [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): PASS_THRESHOLD_NOT_MET(base 702/718 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%).
 - [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%).
 
-Setup eligible roster: 5/9. Draft intersection: 907 represented cases and 183 deduplicated effective operations. Roster SHA-256: `09e3a45b0fd3b8ead7b3f5a940d9236b97d6df40c34ab217add257429616b3d4`.
+Setup eligible roster: 4/9. Draft intersection: 907 represented cases and 183 deduplicated effective operations. Roster SHA-256: `6b08a2f321b928e8f256852e6d2d26f9cdb290c31b3cb44f2f225dc251a73524`.
 
 # Profile: base
 
-Execution eligible roster: 5/9. Intersection: 703 cases and 182 setup entries. Roster SHA-256: `09e3a45b0fd3b8ead7b3f5a940d9236b97d6df40c34ab217add257429616b3d4`.
+Execution eligible roster: 4/9. Intersection: 703 cases and 182 setup entries. Roster SHA-256: `6b08a2f321b928e8f256852e6d2d26f9cdb290c31b3cb44f2f225dc251a73524`.
 
-Cold execution eligible roster: 4/9. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: `72be4390de4cd2a1ee4ec88d34bf6d3818982fe4ce72101448f052142d6d45e5`.
+Cold execution eligible roster: 3/9. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: `d64f3ff48f144328253e36e39c0774e28bfb01fcfd5031e3ce0035528e3da139`.
 
 ## Execution ranking
 
-Leader: [ajv](https://www.npmjs.com/package/ajv) (8.20.0) — 1,605,222 ops/s (100%)
+Leader: [ajv](https://www.npmjs.com/package/ajv) (8.20.0) — 2,906,646 ops/s (100%)
 
 Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.
 
 | Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 1,605,222 | 1,497,547 | 12.7% | 34.2% | 572,495 to 2,080,247 | 100% | 0 | 262.9 MiB |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 1,263,808 | 1,215,703 | 9.7% | 27.9% | 569,965 to 1,517,268 | 78.7% | 0 | 182.8 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 1,195,030 | 1,278,168 | 2.6% | 12.1% | 1,138,581 to 1,476,731 | 74.4% | 0 | 268.2 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 283,154 | 291,608 | 9.5% | 13.5% | 249,756 to 356,835 | 17.6% | 0 | 183.9 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 56,859 | 59,281 | 10.3% | 21.0% | 41,704 to 78,667 | 3.5% | 0 | 183.8 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 2,906,646 | 3,203,690 | 13.8% | 25.0% | 2,378,799 to 4,323,796 | 100% | 0 | 264.8 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 2,287,125 | 2,245,929 | 6.1% | 8.2% | 2,020,417 to 2,431,042 | 78.7% | 0 | 181.5 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 415,956 | 423,145 | 4.2% | 7.8% | 393,436 to 480,305 | 14.3% | 0 | 187.6 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 76,676 | 77,221 | 1.6% | 2.5% | 75,400 to 80,371 | 2.6% | 0 | 187.7 MiB |
 
 Excluded from this ranking:
 
 - [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1): PASS_THRESHOLD_NOT_MET(format-assertion 201/206 < 98%).
+- [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): PASS_THRESHOLD_NOT_MET(base 702/718 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%).
 - [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%).
 
 ## Cold execution ranking
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) — 4,423 ops/s (100%)
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 5,542 ops/s (100%)
 
 Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.
 
 | Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 4,423 | 4,003 | 2.2% | 23.5% | 2,128 to 4,551 | 100% | 0 | 187.0 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 2,546 | 2,466 | 7.7% | 11.9% | 2,044 to 2,786 | 57.6% | 0 | 181.6 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 151 | 145 | 2.2% | 9.4% | 122 to 155 | 3.4% | 0 | 314.3 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 127 | 126 | 5.0% | 6.0% | 115 to 134 | 2.9% | 0 | 293.6 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 5,542 | 5,182 | 14.2% | 25.2% | 3,520 to 6,354 | 100% | 0 | 185.7 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,544 | 3,190 | 5.7% | 22.6% | 2,099 to 3,784 | 64.0% | 0 | 186.4 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 208 | 208 | 4.8% | 6.1% | 189 to 223 | 3.8% | 0 | 314.8 MiB |
 
 Excluded from this ranking:
 
 - [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1): PASS_THRESHOLD_NOT_MET(format-assertion 201/206 < 98%).
 - [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7): PHASE_UNAVAILABLE.
+- [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): PASS_THRESHOLD_NOT_MET(base 702/718 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%).
 - [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%).
@@ -116,8 +116,8 @@ The conformance table treats higher PASS counts and lower WRONG, COMPILE, RUNTIM
 | draft4 | [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1) | 706 | 8 | 0 | 4 | 0 |
 | draft4 | [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 712 | 6 | 0 | 0 | 0 |
 | draft4 | [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 706 | 6 | 6 | 0 | 0 |
-| draft4 | [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 712 | 6 | 0 | 0 | 0 |
-| draft4 | [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 717 | 1 | 0 | 0 | 0 |
+| draft4 | [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 702 | 6 | 0 | 10 | 0 |
+| draft4 | [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 717 | 1 | 0 | 0 | 0 |
 | draft4 | [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2) | 710 | 2 | 0 | 6 | 0 |
 | draft4 | [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | 708 | 2 | 0 | 8 | 0 |
 | draft4 | [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0) | 713 | 1 | 4 | 0 | 0 |
@@ -125,48 +125,48 @@ The conformance table treats higher PASS counts and lower WRONG, COMPILE, RUNTIM
 
 # Profile: format-assertion
 
-Execution eligible roster: 5/9. Intersection: 204 cases and 7 setup entries. Roster SHA-256: `09e3a45b0fd3b8ead7b3f5a940d9236b97d6df40c34ab217add257429616b3d4`.
+Execution eligible roster: 4/9. Intersection: 204 cases and 7 setup entries. Roster SHA-256: `6b08a2f321b928e8f256852e6d2d26f9cdb290c31b3cb44f2f225dc251a73524`.
 
-Cold execution eligible roster: 4/9. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: `72be4390de4cd2a1ee4ec88d34bf6d3818982fe4ce72101448f052142d6d45e5`.
+Cold execution eligible roster: 3/9. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: `d64f3ff48f144328253e36e39c0774e28bfb01fcfd5031e3ce0035528e3da139`.
 
 ## Execution ranking
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) — 8,898,854 ops/s (100%)
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 12,115,861 ops/s (100%)
 
 Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.
 
 | Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 8,898,854 | 8,633,984 | 9.5% | 14.4% | 6,914,528 to 10,375,057 | 100% | 0 | 177.2 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 2,862,994 | 2,700,907 | 7.5% | 16.1% | 2,097,983 to 3,095,608 | 32.2% | 0 | 176.3 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 2,303,353 | 2,270,173 | 8.2% | 12.1% | 1,840,259 to 2,608,736 | 25.9% | 0 | 174.7 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 1,195,071 | 1,181,349 | 8.1% | 13.2% | 911,843 to 1,331,696 | 13.4% | 0 | 178.0 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 56,640 | 57,643 | 5.5% | 7.5% | 53,408 to 63,566 | 0.6% | 0 | 178.0 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 12,115,861 | 12,097,070 | 0.5% | 1.5% | 11,770,686 to 12,330,999 | 100% | 0 | 178.0 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 3,619,388 | 3,611,983 | 1.4% | 1.8% | 3,510,865 to 3,691,315 | 29.9% | 0 | 177.7 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 1,705,780 | 1,723,975 | 2.3% | 3.9% | 1,667,279 to 1,843,293 | 14.1% | 0 | 182.4 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 86,557 | 87,220 | 3.3% | 4.1% | 83,565 to 92,323 | 0.7% | 0 | 181.4 MiB |
 
 Excluded from this ranking:
 
 - [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1): PASS_THRESHOLD_NOT_MET(format-assertion 201/206 < 98%).
+- [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): PASS_THRESHOLD_NOT_MET(base 702/718 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%).
 - [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%).
 
 ## Cold execution ranking
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) — 6,893 ops/s (100%)
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 10,632 ops/s (100%)
 
 Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.
 
 | Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 6,893 | 6,580 | 5.3% | 12.2% | 5,488 to 7,486 | 100% | 0 | 184.4 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 2,894 | 2,791 | 4.2% | 9.8% | 2,345 to 3,019 | 42.0% | 0 | 182.5 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 151 | 151 | 1.7% | 2.4% | 145 to 154 | 2.2% | 0 | 198.5 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 128 | 128 | 3.3% | 5.1% | 121 to 138 | 1.9% | 0 | 270.8 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 10,632 | 10,349 | 5.6% | 9.8% | 8,602 to 11,402 | 100% | 0 | 185.5 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 4,593 | 4,277 | 1.0% | 12.4% | 3,506 to 4,661 | 43.2% | 0 | 182.9 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 223 | 223 | 2.3% | 2.7% | 215 to 231 | 2.1% | 0 | 200.4 MiB |
 
 Excluded from this ranking:
 
 - [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1): PASS_THRESHOLD_NOT_MET(format-assertion 201/206 < 98%).
 - [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7): PHASE_UNAVAILABLE.
+- [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): PASS_THRESHOLD_NOT_MET(base 702/718 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%).
 - [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%).
@@ -181,7 +181,7 @@ The conformance table treats higher PASS counts and lower WRONG, COMPILE, RUNTIM
 | draft4 | [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 204 | 2 | 0 | 0 | 0 |
 | draft4 | [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 206 | 0 | 0 | 0 | 0 |
 | draft4 | [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 204 | 2 | 0 | 0 | 0 |
-| draft4 | [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 206 | 0 | 0 | 0 | 0 |
+| draft4 | [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 206 | 0 | 0 | 0 | 0 |
 | draft4 | [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2) | 117 | 89 | 0 | 0 | 0 |
 | draft4 | [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | 183 | 23 | 0 | 0 | 0 |
 | draft4 | [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0) | 196 | 3 | 7 | 0 | 0 |
@@ -189,7 +189,7 @@ The conformance table treats higher PASS counts and lower WRONG, COMPILE, RUNTIM
 
 ## npm snapshot
 
-Period: 2026-07-27 through 2026-08-02. Retrieved at 2026-08-04T03:17:09.810Z.
+Period: 2026-07-27 through 2026-08-02. Retrieved at 2026-08-04T18:04:08.000Z.
 
 Each row binds observed adapter behavior to the pinned package version. Weekly downloads show npm adoption volume for the snapshot period. `module-global-unavailable` means Cold execution is N/A because a fresh adapter wrapper cannot isolate provider state.
 
@@ -201,7 +201,7 @@ Each row binds observed adapter behavior to the pinned package version. Weekly d
 | [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2) | reusable-sync | fresh-instance | not-observed | 532,097 |
 | [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | validate-only | fresh-instance | not-observed | 6,186,992 |
 | [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | reusable-sync | fresh-instance | observed | 8,304,494 |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | reusable-sync | fresh-instance | not-observed | 279 |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | reusable-sync | fresh-instance | not-observed | 279 |
 | [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0) | reusable-sync | fresh-instance | observed | 4,851,948 |
 | [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | reusable-sync | fresh-instance | not-observed | 3,261,931 |
 

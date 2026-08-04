@@ -171,10 +171,7 @@
           "strict": false,
           "validateFormats": true,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -206,10 +203,6 @@
             "relative-json-pointer"
           ],
           "keywords": false
-        },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
         },
         "implementation": {
           "core": {
@@ -233,10 +226,7 @@
           "strict": false,
           "validateFormats": true,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -269,10 +259,6 @@
           ],
           "keywords": false
         },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
-        },
         "implementation": {
           "core": {
             "packageName": "@redocly/ajv",
@@ -287,23 +273,25 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "5b177e0ddd65d2f63aeba3bf14f212f1b96c1d388d70254f36c6828f7c0692db",
-      "format-assertion": "3141515e83a898cacfdb79e4ecc141541a5cc60c0b033daa7cb719a10ac860ff"
+      "base": "fd5d2de14d206b4d9dc7cdcd252ef3add8324ff378833822a69088d103ecafee",
+      "format-assertion": "2b073c77922d4bd5e0438da349dbc3c94fa1fe6e2203e39aceb9d4dfd6275b1b"
     }
   },
   "draft4/schema-shield": {
-    "version": "1.3.0",
+    "version": "1.4.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
         "defaultDialect": "http://json-schema.org/draft-04/schema#",
         "fast": {
           "failFast": true,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
@@ -319,11 +307,13 @@
         "defaultDialect": "http://json-schema.org/draft-04/schema#",
         "fast": {
           "failFast": true,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
@@ -336,8 +326,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "6fb8bd3d53a4be38e5ab431362349b6613bcf5cfb0b1ec5d67931b2e4034679d",
-      "format-assertion": "55164ed001a39874723e32f19f478d954999bc9e354433ca5d63cd6c6eecb35a"
+      "base": "6f649feb56623651b00f8c88040c7d0e03118d9445171c35b7c48b9b7703f8d2",
+      "format-assertion": "60a246532325ea31401aa1d288a5442490642ec5a2c9bd40ce22dc6774462299"
     }
   },
   "draft4/json-schema-library": {
@@ -639,10 +629,7 @@
           "strict": false,
           "validateFormats": true,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -674,10 +661,6 @@
             "relative-json-pointer"
           ],
           "keywords": false
-        },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
         },
         "implementation": {
           "core": {
@@ -701,10 +684,7 @@
           "strict": false,
           "validateFormats": true,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -737,10 +717,6 @@
           ],
           "keywords": false
         },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
-        },
         "implementation": {
           "core": {
             "packageName": "@redocly/ajv",
@@ -755,23 +731,25 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "c2a02f237778936cdd1861aa20e9e545fed96d61502236dd4a5706fac3f2149e",
-      "format-assertion": "aa549d212e26405b1807e5912b42254f66e54f9ea7f4cade5c73fbffef211981"
+      "base": "5a606b6fe0f574b46c6ac6365316a913465751751d7bd07c193cc2af779bc413",
+      "format-assertion": "82a91ee132191bb3e1f442b7474fb5c2017317c6931a8c29c7055187de738868"
     }
   },
   "draft6/schema-shield": {
-    "version": "1.3.0",
+    "version": "1.4.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
         "defaultDialect": "http://json-schema.org/draft-06/schema#",
         "fast": {
           "failFast": true,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
@@ -787,11 +765,13 @@
         "defaultDialect": "http://json-schema.org/draft-06/schema#",
         "fast": {
           "failFast": true,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
@@ -804,8 +784,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "02df0a888b6ac7e95564857d8e1f2634ed6d12ca283e821ba9b95a75d3e39c7c",
-      "format-assertion": "7e88ece8574cdd6424de6984c0ad665e06c7aa9b9ae8fd3fa5b5326d87c338b0"
+      "base": "f57d007517dccb83e3c0734810a2f69db384621525d455700588d9ebc2b75401",
+      "format-assertion": "2d9a179b89b7b42eaea10fbf5ab5d8919e97b30663b93a021b9ec7958bf7895a"
     }
   },
   "draft6/djv": {
@@ -1143,10 +1123,7 @@
           "strict": false,
           "validateFormats": true,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -1178,10 +1155,6 @@
             "relative-json-pointer"
           ],
           "keywords": false
-        },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
         },
         "implementation": {
           "core": {
@@ -1205,10 +1178,7 @@
           "strict": false,
           "validateFormats": true,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -1241,10 +1211,6 @@
           ],
           "keywords": false
         },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
-        },
         "implementation": {
           "core": {
             "packageName": "@redocly/ajv",
@@ -1259,23 +1225,25 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "c2a02f237778936cdd1861aa20e9e545fed96d61502236dd4a5706fac3f2149e",
-      "format-assertion": "aa549d212e26405b1807e5912b42254f66e54f9ea7f4cade5c73fbffef211981"
+      "base": "5a606b6fe0f574b46c6ac6365316a913465751751d7bd07c193cc2af779bc413",
+      "format-assertion": "82a91ee132191bb3e1f442b7474fb5c2017317c6931a8c29c7055187de738868"
     }
   },
   "draft7/schema-shield": {
-    "version": "1.3.0",
+    "version": "1.4.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
         "defaultDialect": "http://json-schema.org/draft-07/schema#",
         "fast": {
           "failFast": true,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
@@ -1291,11 +1259,13 @@
         "defaultDialect": "http://json-schema.org/draft-07/schema#",
         "fast": {
           "failFast": true,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
@@ -1308,8 +1278,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "a9adf2b049e2061a7e502289ba1179e3ce501adfcceeaf632372fc93f44a71ba",
-      "format-assertion": "4a7f2dd8a16bd57348a90058079dba25a8efa9b0f2b4a74a0e5bca102097314d"
+      "base": "03b36eadec424053c7d5731d13b0096759ad2ea215ae77f75fef59a97694ff99",
+      "format-assertion": "a6411a9509bca5e90c2d1dd2d82c1043edafb03967445af0ef859eef06e10f72"
     }
   },
   "draft7/json-schema-library": {
@@ -1630,10 +1600,7 @@
           "strict": false,
           "validateFormats": false,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -1666,10 +1633,6 @@
           ],
           "keywords": false
         },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
-        },
         "implementation": {
           "core": {
             "packageName": "@redocly/ajv",
@@ -1692,10 +1655,7 @@
           "strict": false,
           "validateFormats": true,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -1728,10 +1688,6 @@
           ],
           "keywords": false
         },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
-        },
         "implementation": {
           "core": {
             "packageName": "@redocly/ajv",
@@ -1746,23 +1702,25 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "1870af988749742506e700b011a78e6570d11e8091418691382a00a0b8d11ce0",
-      "format-assertion": "833c77e1b092afddbf5a8196d44dac0bf27814d9db1ff233ab2fd7516d6966f3"
+      "base": "e4a189f2d61f9dcfa73ed39a31e8afd9b6b41f2f6b93bb53191d555b87de2eb9",
+      "format-assertion": "01287da24ead7fcc71280f9106f5dcaab0a639312fec450a2301680019665198"
     }
   },
   "draft2019-09/schema-shield": {
-    "version": "1.3.0",
+    "version": "1.4.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
         "defaultDialect": "https://json-schema.org/draft/2019-09/schema",
         "fast": {
           "failFast": true,
+          "format": false,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": false,
           "useDefaults": false,
           "immutable": false
         },
@@ -1778,11 +1736,13 @@
         "defaultDialect": "https://json-schema.org/draft/2019-09/schema",
         "fast": {
           "failFast": true,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
@@ -1795,8 +1755,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "b9d844e6144fedf81c1bee975e77bec3237f6939fbf1ecbb7aa5e03537fee9bd",
-      "format-assertion": "93b451543a42d0714e352f36770e76d4a7f7bf7d1db019abab142e66ebc11f2f"
+      "base": "f65099cbfa1b7da67e15ba56da1582ad1ea04b16e401714e2ee6564b371a6d1d",
+      "format-assertion": "c7ae4dc73faba6d13b3c5d276d7e51fbcf8cb4582701ab55dbb986ccac437e05"
     }
   },
   "draft2019-09/json-schema-library": {
@@ -2100,10 +2060,7 @@
           "strict": false,
           "validateFormats": false,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -2136,10 +2093,6 @@
           ],
           "keywords": false
         },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
-        },
         "implementation": {
           "core": {
             "packageName": "@redocly/ajv",
@@ -2162,10 +2115,7 @@
           "strict": false,
           "validateFormats": true,
           "allErrors": false,
-          "messages": false,
-          "code": {
-            "process": "isolate-visited-references-per-root-validation"
-          }
+          "messages": false
         },
         "detailed": {
           "ownProperties": true,
@@ -2198,10 +2148,6 @@
           ],
           "keywords": false
         },
-        "provider-workaround": {
-          "id": "isolate-visited-references-per-root-validation",
-          "scope": "generated-validator"
-        },
         "implementation": {
           "core": {
             "packageName": "@redocly/ajv",
@@ -2216,23 +2162,25 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "f427d8dfacf7dc5afc6de0bb314411ff2fa23672ec1e2fd7041aff23d759bf1c",
-      "format-assertion": "4a5344a56b497a10b0d3c67ac165e07c35b5c0806784d8b77742cc2fc22b5f71"
+      "base": "4e07aded74a929b75d99d23a9bfd2c9738e936dbe43197971b60490a1d6292d1",
+      "format-assertion": "7fdb2e56b1a7b25615c1a6a8fada4e01af4ecf46e9b57ad195f360a3a47633f5"
     }
   },
   "draft2020-12/schema-shield": {
-    "version": "1.3.0",
+    "version": "1.4.0",
     "reportOptions": {
       "base": {
         "formatProfile": "base",
         "defaultDialect": "https://json-schema.org/draft/2020-12/schema",
         "fast": {
           "failFast": true,
+          "format": false,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": false,
           "useDefaults": false,
           "immutable": false
         },
@@ -2248,11 +2196,13 @@
         "defaultDialect": "https://json-schema.org/draft/2020-12/schema",
         "fast": {
           "failFast": true,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
         "detailed": {
           "failFast": false,
+          "format": true,
           "useDefaults": false,
           "immutable": false
         },
@@ -2265,8 +2215,8 @@
       }
     },
     "reportOptionsSha256": {
-      "base": "67f96046c2d4c0abd7f1a7d90d1f779f87c2a3b9f925a14477049ada358e9609",
-      "format-assertion": "6915d62dc4e519d2bdbf79b279a4ed965f6964e812e047993785a19c00441ef7"
+      "base": "6e165f353ef67ad11f6a9471325584627793098e0b2b0d20429b1faf88c74124",
+      "format-assertion": "e97e7b5b57eeac11d97b7ea5eae2c1e9997920f233d86275ae3382cc2f9b1acc"
     }
   },
   "draft2020-12/json-schema-library": {

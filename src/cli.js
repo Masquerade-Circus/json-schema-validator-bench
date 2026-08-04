@@ -22,6 +22,7 @@ import {
   validators as validatorMatrix
 } from "./matrix.js";
 import {
+  benchmarkPackageNames,
   getAdapterFactory,
   getBenchmarkAdapterMetadata,
   getRegisteredAdapter
@@ -32,7 +33,11 @@ import {
   writeConformanceReports
 } from "./report.js";
 import { generateIntersection } from "./intersection.js";
-import { runBenchmarkPhase, runBenchmarkSample } from "./benchmark.js";
+import {
+  runBenchmarkPhase,
+  runBenchmarkSample,
+  shouldReuseSampleCheckpoints
+} from "./benchmark.js";
 import { runExecutionSample } from "./worker.js";
 import { eligibilityThresholdFromEnvironment } from "./eligibility.js";
 import {
@@ -60,28 +65,33 @@ const lockFields = [
   "testsRoot",
   "tree"
 ];
-const exactDependencies = Object.freeze({
-  "@cfworker/json-schema": "4.1.1",
-  "@exodus/schemasafe": "1.3.0",
-  "@hyperjump/json-schema": "1.17.7",
-  "@redocly/ajv": "8.18.3",
-  ajv: "8.20.0",
-  "ajv-draft-04": "1.0.0",
-  "ajv-formats": "3.0.1",
-  djv: "2.1.4",
-  "json-schema-library": "11.6.2",
-  jsonschema: "1.5.0",
-  "schema-shield": "1.3.0",
-  "z-schema": "12.4.0"
-});
 export function validateBenchmarkPackage(packageJson) {
   if (packageJson?.engines?.node !== ">=22") {
     throw new Error("benchmark package Node engine must equal >=22");
   }
+  const dependencies = packageJson.dependencies;
   if (
-    canonicalJson(packageJson.dependencies) !== canonicalJson(exactDependencies)
+    dependencies === null ||
+    typeof dependencies !== "object" ||
+    Array.isArray(dependencies)
   ) {
-    throw new Error("benchmark package dependencies differ from the exact contract");
+    throw new Error("benchmark package dependencies must be an object");
+  }
+  const dependencyNames = Object.keys(dependencies).sort();
+  if (canonicalJson(dependencyNames) !== canonicalJson(benchmarkPackageNames)) {
+    throw new Error(
+      "benchmark package dependencies must match declared adapter packages"
+    );
+  }
+  for (const [name, version] of Object.entries(dependencies)) {
+    if (
+      typeof version !== "string" ||
+      !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(
+        version
+      )
+    ) {
+      throw new Error(`benchmark dependency ${name} must use an exact version`);
+    }
   }
   if (packageJson.private !== true || packageJson.type !== "module") {
     throw new Error("benchmark package must remain private ESM");
@@ -166,6 +176,12 @@ export function validateMetadataSnapshot(snapshot, packageMetadata) {
 }
 
 async function installedPackageMetadata(packageJson, packageLock) {
+  if (
+    canonicalJson(packageLock.packages?.[""]?.dependencies) !==
+    canonicalJson(packageJson.dependencies)
+  ) {
+    throw new Error("package lock root dependencies differ from package.json");
+  }
   const metadata = new Map();
   for (const [name, version] of Object.entries(packageJson.dependencies)) {
     const installedPath = path.join(
@@ -503,6 +519,13 @@ async function main() {
     throw new Error("selected bench must be setup, execution, or cold");
   }
   const selectedPhase = selectedBench === "cold" ? "cold-execution" : selectedBench;
+  const reuseCheckpoints = shouldReuseSampleCheckpoints({
+    mode,
+    validator: diagnosticValidator,
+    bench: selectedBench
+  });
+  const measurementRunStartedAt =
+    process.env.BENCHMARK_PIPELINE_STARTED_AT ?? null;
   if (command === "preflight") {
     process.stdout.write(`${JSON.stringify(await validatePipelinePreflight())}\n`);
     return;
@@ -765,7 +788,9 @@ async function main() {
     const result = await runBenchmarkPhase(command, {
       mode,
       eligibilityThresholdPercent,
-      validator: diagnosticValidator
+      validator: diagnosticValidator,
+      reuseCheckpoints,
+      measurementRunStartedAt
     });
     process.stdout.write(
       `${JSON.stringify({
@@ -775,6 +800,7 @@ async function main() {
           (total, scope) => total + scope.samples.length,
           0
         ),
+        sampleAcquisition: result.sampleAcquisition,
         durationMilliseconds: result.durationMilliseconds
       })}\n`
     );
@@ -826,7 +852,9 @@ async function main() {
     const result = await runBenchmarkPhase("execution", {
       mode,
       eligibilityThresholdPercent,
-      validator: diagnosticValidator
+      validator: diagnosticValidator,
+      reuseCheckpoints,
+      measurementRunStartedAt
     });
     process.stdout.write(
       `${JSON.stringify({
@@ -836,6 +864,7 @@ async function main() {
           (total, scope) => total + scope.samples.length,
           0
         ),
+        sampleAcquisition: result.sampleAcquisition,
         durationMilliseconds: result.durationMilliseconds
       })}\n`
     );

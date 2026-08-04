@@ -63,6 +63,17 @@ export const adapterRegistry = createAdapterRegistry([
   hyperjump
 ]);
 
+export const benchmarkPackageNames = Object.freeze(
+  [
+    ...new Set(
+      adapterRegistry.flatMap(({ packageName, additionalPackages }) => [
+        packageName,
+        ...additionalPackages
+      ])
+    )
+  ].sort()
+);
+
 const adaptersById = new Map(
   adapterRegistry.map((definition) => [definition.id, definition])
 );
@@ -98,6 +109,15 @@ export function getAdapterFactory(id) {
       };
     }
     return Object.freeze(Object.defineProperties({}, descriptors));
+  };
+}
+
+export function getSetupAdapterFactory(id) {
+  const definition = getRegisteredAdapter(id);
+  const installed = packageMetadata(definition.packageName);
+  return (config) => {
+    const operation = definition.prepareSetup(config);
+    return Object.freeze({ version: installed.version, ...operation });
   };
 }
 
@@ -207,7 +227,15 @@ export function rotateRoundOrder(participants, round) {
 }
 
 export const registryMetadata = Object.freeze(
-  adapterRegistry.map(({ id, packageName, displayName, drafts, unsupported }) =>
-    Object.freeze({ id, packageName, displayName, drafts, unsupported })
+  adapterRegistry.map(
+    ({ id, packageName, additionalPackages, displayName, drafts, unsupported }) =>
+      Object.freeze({
+        id,
+        packageName,
+        additionalPackages,
+        displayName,
+        drafts,
+        unsupported
+      })
   )
 );

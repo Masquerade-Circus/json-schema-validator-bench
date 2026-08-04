@@ -4,17 +4,17 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false,"code":{"process":"isolate-visited-references-per-root-validation"}},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"provider-workaround":{"id":"isolate-visited-references-per-root-validation","scope":"generated-validator"},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/draft4.js"}}} | 5b177e0ddd65d2f63aeba3bf14f212f1b96c1d388d70254f36c6828f7c0692db |
-| format-assertion | {"formatProfile":"format-assertion","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false,"code":{"process":"isolate-visited-references-per-root-validation"}},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"provider-workaround":{"id":"isolate-visited-references-per-root-validation","scope":"generated-validator"},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/draft4.js"}}} | 3141515e83a898cacfdb79e4ecc141541a5cc60c0b033daa7cb719a10ac860ff |
+| base | {"formatProfile":"base","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/draft4.js"}}} | fd5d2de14d206b4d9dc7cdcd252ef3add8324ff378833822a69088d103ecafee |
+| format-assertion | {"formatProfile":"format-assertion","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv/dist/draft4.js"}}} | 2b073c77922d4bd5e0438da349dbc3c94fa1fe6e2203e39aceb9d4dfd6275b1b |
 
 ## Counts
 
 | Profile | Status | Cases | Percentage |
 | --- | --- | ---: | ---: |
-| base | PASS | 712 | 99.16% |
+| base | PASS | 702 | 97.77% |
 | base | WRONG | 6 | 0.84% |
 | base | COMPILE | 0 | 0.00% |
-| base | RUNTIME | 0 | 0.00% |
+| base | RUNTIME | 10 | 1.39% |
 | base | UNSUPPORTED | 0 | 0.00% |
 | format-assertion | PASS | 204 | 99.03% |
 | format-assertion | WRONG | 2 | 0.97% |
@@ -26,14 +26,24 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
+| draft4:definitions.json#/groups/0/tests/1 | invalid definition schema | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:items.json#/groups/2/tests/2 | too many sub-items | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:items.json#/groups/2/tests/3 | wrong item | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:items.json#/groups/2/tests/4 | wrong sub-item | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft4:optional/float-overflow.json#/groups/0/tests/0 | valid if optional overflow handling is implemented | true | false | WRONG | {"keyword":"multipleOf","instancePath":"","schemaPath":"#/multipleOf","message":"must be multiple of 0.5"} |
 | draft4:optional/format/hostname.json#/groups/0/tests/26 | trailing dot | false | true | WRONG |  |
 | draft4:optional/format/uri.json#/groups/0/tests/43 | non-numeric port is invalid | false | true | WRONG |  |
 | draft4:optional/zeroTerminatedFloats.json#/groups/0/tests/0 | a float is not an integer even without fractional part | false | true | WRONG |  |
 | draft4:properties.json#/groups/4/tests/3 | __proto__ not valid | false | true | WRONG |  |
+| draft4:ref.json#/groups/0/tests/3 | recursive mismatch | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft4:ref.json#/groups/5/tests/1 | ref valid, maxItems ignored | true | false | WRONG | {"keyword":"maxItems","instancePath":"/foo","schemaPath":"#/properties/foo/maxItems","message":"must NOT have more than 2 items"} |
 | draft4:ref.json#/groups/6/tests/0 | $ref resolves to /definitions/base_foo, data does not validate | false | true | WRONG |  |
 | draft4:ref.json#/groups/6/tests/1 | $ref resolves to /definitions/base_foo, data validates | true | false | WRONG | {"keyword":"type","instancePath":"","schemaPath":"foo.json/type","message":"must be string"} |
+| draft4:ref.json#/groups/7/tests/1 | remote ref invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:ref.json#/groups/10/tests/1 | invalid tree | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:refRemote.json#/groups/4/tests/1 | string is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:refRemote.json#/groups/5/tests/1 | string is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:refRemote.json#/groups/6/tests/2 | object is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 
 ## Detailed errors for invalid results
 
@@ -73,7 +83,7 @@
 | draft4:anyOf.json#/groups/2/tests/3 | neither anyOf valid (complex) | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/anyOf/0/properties/bar/type","message":"must be integer"} |
 | draft4:anyOf.json#/groups/4/tests/1 | anything non-null is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#/anyOf/0/anyOf/0/type","message":"must be null"} |
 | draft4:default.json#/groups/2/tests/1 | an explicit property value is checked against maximum (failing) | PASS | {"keyword":"maximum","instancePath":"/alpha","schemaPath":"#/properties/alpha/maximum","message":"must be <= 3"} |
-| draft4:definitions.json#/groups/0/tests/1 | invalid definition schema | PASS | {"keyword":"enum","instancePath":"/definitions/foo/type","schemaPath":"#/definitions/simpleTypes/enum","message":"must be equal to one of the allowed values"} |
+| draft4:definitions.json#/groups/0/tests/1 | invalid definition schema | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft4:dependencies.json#/groups/0/tests/3 | missing dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","message":"must have property foo when property bar is present"} |
 | draft4:dependencies.json#/groups/1/tests/3 | missing dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","message":"must have properties foo, bar when property quux is present"} |
 | draft4:dependencies.json#/groups/1/tests/4 | missing other dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","message":"must have properties foo, bar when property quux is present"} |
@@ -116,9 +126,9 @@
 | draft4:items.json#/groups/0/tests/1 | wrong type of items | PASS | {"keyword":"type","instancePath":"/1","schemaPath":"#/items/type","message":"must be integer"} |
 | draft4:items.json#/groups/1/tests/1 | wrong types | PASS | {"keyword":"type","instancePath":"/0","schemaPath":"#/items/0/type","message":"must be integer"} |
 | draft4:items.json#/groups/2/tests/1 | too many items | PASS | {"keyword":"additionalItems","instancePath":"","schemaPath":"#/additionalItems","message":"must NOT have more than 3 items"} |
-| draft4:items.json#/groups/2/tests/2 | too many sub-items | PASS | {"keyword":"additionalItems","instancePath":"/0","schemaPath":"#/additionalItems","message":"must NOT have more than 2 items"} |
-| draft4:items.json#/groups/2/tests/3 | wrong item | PASS | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","message":"must be array"} |
-| draft4:items.json#/groups/2/tests/4 | wrong sub-item | PASS | {"keyword":"required","instancePath":"/0/0","schemaPath":"#/definitions/sub-item/required","message":"must have required property 'foo'"} |
+| draft4:items.json#/groups/2/tests/2 | too many sub-items | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:items.json#/groups/2/tests/3 | wrong item | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:items.json#/groups/2/tests/4 | wrong sub-item | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft4:items.json#/groups/3/tests/1 | nested array with invalid type | PASS | {"keyword":"type","instancePath":"/0/0/0/0","schemaPath":"#/items/items/items/items/type","message":"must be number"} |
 | draft4:items.json#/groups/3/tests/2 | not deep enough | PASS | {"keyword":"type","instancePath":"/0/0/0","schemaPath":"#/items/items/items/type","message":"must be array"} |
 | draft4:maximum.json#/groups/0/tests/2 | above the maximum is invalid | PASS | {"keyword":"maximum","instancePath":"","schemaPath":"#/maximum","message":"must be <= 3"} |
@@ -347,7 +357,7 @@
 | draft4:properties.json#/groups/4/tests/4 | toString not valid | PASS | {"keyword":"type","instancePath":"/toString/length","schemaPath":"#/properties/toString/properties/length/type","message":"must be string"} |
 | draft4:properties.json#/groups/4/tests/5 | constructor not valid | PASS | {"keyword":"type","instancePath":"/constructor","schemaPath":"#/properties/constructor/type","message":"must be number"} |
 | draft4:ref.json#/groups/0/tests/2 | mismatch | PASS | {"keyword":"additionalProperties","instancePath":"","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
-| draft4:ref.json#/groups/0/tests/3 | recursive mismatch | PASS | {"keyword":"additionalProperties","instancePath":"/foo","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
+| draft4:ref.json#/groups/0/tests/3 | recursive mismatch | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft4:ref.json#/groups/1/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/properties/foo/type","message":"must be integer"} |
 | draft4:ref.json#/groups/2/tests/1 | mismatch array | PASS | {"keyword":"type","instancePath":"/1","schemaPath":"#/items/0/type","message":"must be integer"} |
 | draft4:ref.json#/groups/3/tests/0 | slash invalid | PASS | {"keyword":"type","instancePath":"/slash","schemaPath":"#/definitions/slash~1field/type","message":"must be integer"} |
@@ -357,10 +367,10 @@
 | draft4:ref.json#/groups/5/tests/1 | ref valid, maxItems ignored | WRONG | {"keyword":"maxItems","instancePath":"/foo","schemaPath":"#/properties/foo/maxItems","message":"must NOT have more than 2 items"} |
 | draft4:ref.json#/groups/5/tests/2 | ref invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"#/definitions/reffed/type","message":"must be array"} |
 | draft4:ref.json#/groups/6/tests/1 | $ref resolves to /definitions/base_foo, data validates | WRONG | {"keyword":"type","instancePath":"","schemaPath":"foo.json/type","message":"must be string"} |
-| draft4:ref.json#/groups/7/tests/1 | remote ref invalid | PASS | {"keyword":"minimum","instancePath":"/minLength","schemaPath":"#/definitions/positiveInteger/minimum","message":"must be >= 0"} |
+| draft4:ref.json#/groups/7/tests/1 | remote ref invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft4:ref.json#/groups/8/tests/1 | property named $ref invalid | PASS | {"keyword":"type","instancePath":"/$ref","schemaPath":"#/properties/%24ref/type","message":"must be string"} |
 | draft4:ref.json#/groups/9/tests/1 | property named $ref invalid | PASS | {"keyword":"type","instancePath":"/$ref","schemaPath":"#/definitions/is-string/type","message":"must be string"} |
-| draft4:ref.json#/groups/10/tests/1 | invalid tree | PASS | {"keyword":"type","instancePath":"/nodes/0/subtree/nodes/0/value","schemaPath":"#/properties/value/type","message":"must be number"} |
+| draft4:ref.json#/groups/10/tests/1 | invalid tree | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft4:ref.json#/groups/11/tests/1 | object with strings is invalid | PASS | {"keyword":"type","instancePath":"/foo\"bar","schemaPath":"#/definitions/foo%22bar/type","message":"must be number"} |
 | draft4:ref.json#/groups/12/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"","schemaPath":"#foo/type","message":"must be integer"} |
 | draft4:ref.json#/groups/13/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://localhost:1234/nested.json#foo/type","message":"must be integer"} |
@@ -373,9 +383,9 @@
 | draft4:refRemote.json#/groups/1/tests/1 | remote fragment invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://localhost:1234/draft4/subSchemas.json#/definitions/integer/type","message":"must be integer"} |
 | draft4:refRemote.json#/groups/2/tests/1 | ref within ref invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://localhost:1234/draft4/subSchemas.json#/definitions/refToInteger/type","message":"must be integer"} |
 | draft4:refRemote.json#/groups/3/tests/1 | base URI change ref invalid | PASS | {"keyword":"type","instancePath":"/0/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft4:refRemote.json#/groups/4/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"/list/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft4:refRemote.json#/groups/5/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"/list/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft4:refRemote.json#/groups/6/tests/2 | object is invalid | PASS | {"keyword":"type","instancePath":"/name","schemaPath":"#/anyOf/0/type","message":"must be null"} |
+| draft4:refRemote.json#/groups/4/tests/1 | string is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:refRemote.json#/groups/5/tests/1 | string is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft4:refRemote.json#/groups/6/tests/2 | object is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft4:refRemote.json#/groups/7/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#foo/type","message":"must be integer"} |
 | draft4:required.json#/groups/0/tests/1 | non-present required property is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property 'foo'"} |
 | draft4:required.json#/groups/2/tests/1 | object with some properties missing is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property 'foo\\bar'"} |

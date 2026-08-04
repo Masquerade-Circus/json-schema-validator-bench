@@ -17,10 +17,7 @@
         "strict": false,
         "validateFormats": true,
         "allErrors": false,
-        "messages": false,
-        "code": {
-          "process": "isolate-visited-references-per-root-validation"
-        }
+        "messages": false
       },
       "detailed": {
         "ownProperties": true,
@@ -52,10 +49,6 @@
           "relative-json-pointer"
         ],
         "keywords": false
-      },
-      "provider-workaround": {
-        "id": "isolate-visited-references-per-root-validation",
-        "scope": "generated-validator"
       },
       "implementation": {
         "core": {
@@ -79,10 +72,7 @@
         "strict": false,
         "validateFormats": true,
         "allErrors": false,
-        "messages": false,
-        "code": {
-          "process": "isolate-visited-references-per-root-validation"
-        }
+        "messages": false
       },
       "detailed": {
         "ownProperties": true,
@@ -115,10 +105,6 @@
         ],
         "keywords": false
       },
-      "provider-workaround": {
-        "id": "isolate-visited-references-per-root-validation",
-        "scope": "generated-validator"
-      },
       "implementation": {
         "core": {
           "packageName": "@redocly/ajv",
@@ -133,8 +119,8 @@
     }
   },
   "reportOptionsSha256": {
-    "base": "c2a02f237778936cdd1861aa20e9e545fed96d61502236dd4a5706fac3f2149e",
-    "format-assertion": "aa549d212e26405b1807e5912b42254f66e54f9ea7f4cade5c73fbffef211981"
+    "base": "5a606b6fe0f574b46c6ac6365316a913465751751d7bd07c193cc2af779bc413",
+    "format-assertion": "82a91ee132191bb3e1f442b7474fb5c2017317c6931a8c29c7055187de738868"
   },
   "suite": {
     "commit": "0c7b65dc16dd8eaa7bd83e21099c76610c3b246a",
@@ -142,18 +128,18 @@
     "manifestSha256": "c371a52592ffb38be90d604af21a5dae2619d1f353e86be852825247a88b328d"
   },
   "counts": {
-    "PASS": 1208,
+    "PASS": 1194,
     "WRONG": 7,
     "COMPILE": 3,
-    "RUNTIME": 0,
+    "RUNTIME": 14,
     "UNSUPPORTED": 0
   },
   "countsByFormatProfile": {
     "base": {
-      "PASS": 937,
+      "PASS": 923,
       "WRONG": 5,
       "COMPILE": 3,
-      "RUNTIME": 0,
+      "RUNTIME": 14,
       "UNSUPPORTED": 0
     },
     "format-assertion": {
@@ -4545,9 +4531,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"enum\",\"instancePath\":\"/definitions/foo/type\",\"schemaPath\":\"#/definitions/simpleTypes/enum\",\"message\":\"must be equal to one of the allowed values\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -8505,9 +8491,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"additionalItems\",\"instancePath\":\"/0\",\"schemaPath\":\"#/additionalItems\",\"message\":\"must NOT have more than 2 items\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -8529,9 +8515,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/0\",\"schemaPath\":\"#/type\",\"message\":\"must be array\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -8553,9 +8539,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"required\",\"instancePath\":\"/0/0\",\"schemaPath\":\"#/definitions/sub-item/required\",\"message\":\"must have required property 'foo'\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -23241,9 +23227,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"additionalProperties\",\"instancePath\":\"/foo\",\"schemaPath\":\"#/additionalProperties\",\"message\":\"must NOT have additional properties\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -23697,9 +23683,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"minimum\",\"instancePath\":\"/minLength\",\"schemaPath\":\"#/definitions/nonNegativeInteger/minimum\",\"message\":\"must be >= 0\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -23889,9 +23875,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/nodes/0/subtree/nodes/0/value\",\"schemaPath\":\"#/properties/value/type\",\"message\":\"must be number\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -24201,9 +24187,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/bar\",\"schemaPath\":\"#/definitions/inner/properties/bar/type\",\"message\":\"must be string\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -24273,9 +24259,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/bar\",\"schemaPath\":\"#/definitions/inner/properties/bar/type\",\"message\":\"must be string\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -25065,9 +25051,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/list/0\",\"schemaPath\":\"folderInteger.json/type\",\"message\":\"must be integer\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -25113,9 +25099,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/list/0\",\"schemaPath\":\"folderInteger.json/type\",\"message\":\"must be integer\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -25185,9 +25171,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/name\",\"schemaPath\":\"#/anyOf/0/type\",\"message\":\"must be null\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -25209,9 +25195,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/bar\",\"schemaPath\":\"#/definitions/inner/properties/bar/type\",\"message\":\"must be string\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",
@@ -25305,9 +25291,9 @@
       "formatProfile": "base",
       "expected": false,
       "observed": false,
-      "status": "PASS",
-      "errorCode": null,
-      "error": "{\"keyword\":\"type\",\"instancePath\":\"/name/foo\",\"schemaPath\":\"string.json/type\",\"message\":\"must be string\"}",
+      "status": "RUNTIME",
+      "errorCode": "PROVIDER_RESULT_INSTABILITY",
+      "error": "Redocly AJV changed from false to true on repeated validation 2 of the same object",
       "detailErrorCode": null,
       "detailError": null,
       "version": "8.18.3",

@@ -4,17 +4,17 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false,"code":{"process":"isolate-visited-references-per-root-validation"}},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"provider-workaround":{"id":"isolate-visited-references-per-root-validation","scope":"generated-validator"},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv"}}} | c2a02f237778936cdd1861aa20e9e545fed96d61502236dd4a5706fac3f2149e |
-| format-assertion | {"formatProfile":"format-assertion","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false,"code":{"process":"isolate-visited-references-per-root-validation"}},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"provider-workaround":{"id":"isolate-visited-references-per-root-validation","scope":"generated-validator"},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv"}}} | aa549d212e26405b1807e5912b42254f66e54f9ea7f4cade5c73fbffef211981 |
+| base | {"formatProfile":"base","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv"}}} | 5a606b6fe0f574b46c6ac6365316a913465751751d7bd07c193cc2af779bc413 |
+| format-assertion | {"formatProfile":"format-assertion","fast":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":false,"messages":false},"detailed":{"ownProperties":true,"coerceTypes":false,"useDefaults":false,"removeAdditional":false,"strict":false,"validateFormats":true,"allErrors":true,"messages":true},"formats":{"mode":"full","names":["date","time","date-time","duration","email","hostname","ipv4","ipv6","uuid","uri","uri-reference","uri-template","regex","json-pointer","relative-json-pointer"],"keywords":false},"implementation":{"core":{"packageName":"@redocly/ajv","version":"8.18.3"},"constructor":{"packageName":"@redocly/ajv","version":"8.18.3","entrypoint":"@redocly/ajv"}}} | 82a91ee132191bb3e1f442b7474fb5c2017317c6931a8c29c7055187de738868 |
 
 ## Counts
 
 | Profile | Status | Cases | Percentage |
 | --- | --- | ---: | ---: |
-| base | PASS | 1031 | 98.66% |
+| base | PASS | 1017 | 97.32% |
 | base | WRONG | 9 | 0.86% |
 | base | COMPILE | 5 | 0.48% |
-| base | RUNTIME | 0 | 0.00% |
+| base | RUNTIME | 14 | 1.34% |
 | base | UNSUPPORTED | 0 | 0.00% |
 | format-assertion | PASS | 500 | 85.18% |
 | format-assertion | WRONG | 87 | 14.82% |
@@ -26,6 +26,10 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
+| draft7:definitions.json#/groups/0/tests/1 | invalid definition schema | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:items.json#/groups/5/tests/2 | too many sub-items | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:items.json#/groups/5/tests/3 | wrong item | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:items.json#/groups/5/tests/4 | wrong sub-item | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:optional/content.json#/groups/0/tests/1 | an invalid JSON document | false | true | WRONG |  |
 | draft7:optional/content.json#/groups/1/tests/1 | an invalid base64 string (% is not a valid character) | false | true | WRONG |  |
 | draft7:optional/content.json#/groups/2/tests/1 | a validly-encoded invalid JSON document | false | true | WRONG |  |
@@ -124,9 +128,19 @@
 | draft7:optional/unknownKeyword.json#/groups/0/tests/1 | type matches non-schema in first anyOf | false |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
 | draft7:optional/unknownKeyword.json#/groups/0/tests/2 | type matches non-schema in third anyOf | false |  | COMPILE | FAST_SETUP_ERROR: reference "https://localhost:1234/unknownKeyword/my_identifier.json" resolves to more than one schema |
 | draft7:properties.json#/groups/5/tests/3 | __proto__ not valid | false | true | WRONG |  |
+| draft7:ref.json#/groups/0/tests/3 | recursive mismatch | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:ref.json#/groups/5/tests/1 | ref valid, maxItems ignored | true | false | WRONG | {"keyword":"maxItems","instancePath":"/foo","schemaPath":"#/properties/foo/maxItems","message":"must NOT have more than 2 items"} |
 | draft7:ref.json#/groups/6/tests/0 | $ref resolves to /definitions/base_foo, data does not validate | false | true | WRONG |  |
 | draft7:ref.json#/groups/6/tests/1 | $ref resolves to /definitions/base_foo, data validates | true | false | WRONG | {"keyword":"type","instancePath":"","schemaPath":"foo.json/type","message":"must be string"} |
+| draft7:ref.json#/groups/7/tests/1 | remote ref invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:ref.json#/groups/12/tests/1 | invalid tree | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:ref.json#/groups/18/tests/1 | invalid on outer field | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:ref.json#/groups/19/tests/1 | invalid on outer field | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:refRemote.json#/groups/4/tests/1 | string is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:refRemote.json#/groups/5/tests/1 | string is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:refRemote.json#/groups/6/tests/2 | object is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:refRemote.json#/groups/7/tests/0 | invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:refRemote.json#/groups/9/tests/0 | number is invalid | false | false | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 
 ## Detailed errors for invalid results
 
@@ -221,7 +235,7 @@
 | draft7:contains.json#/groups/4/tests/3 | matches neither items nor contains | PASS | {"keyword":"multipleOf","instancePath":"/0","schemaPath":"#/items/multipleOf","message":"must be multiple of 2"} |
 | draft7:contains.json#/groups/5/tests/1 | empty array is invalid | PASS | {"keyword":"contains","instancePath":"","schemaPath":"#/contains","message":"must contain at least 1 valid item(s)"} |
 | draft7:default.json#/groups/2/tests/1 | an explicit property value is checked against maximum (failing) | PASS | {"keyword":"maximum","instancePath":"/alpha","schemaPath":"#/properties/alpha/maximum","message":"must be <= 3"} |
-| draft7:definitions.json#/groups/0/tests/1 | invalid definition schema | PASS | {"keyword":"enum","instancePath":"/definitions/foo/type","schemaPath":"#/definitions/simpleTypes/enum","message":"must be equal to one of the allowed values"} |
+| draft7:definitions.json#/groups/0/tests/1 | invalid definition schema | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:dependencies.json#/groups/0/tests/3 | missing dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","message":"must have property foo when property bar is present"} |
 | draft7:dependencies.json#/groups/2/tests/3 | missing dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","message":"must have properties foo, bar when property quux is present"} |
 | draft7:dependencies.json#/groups/2/tests/4 | missing other dependency | PASS | {"keyword":"dependencies","instancePath":"","schemaPath":"#/dependencies","message":"must have properties foo, bar when property quux is present"} |
@@ -280,9 +294,9 @@
 | draft7:items.json#/groups/3/tests/0 | any non-empty array is invalid | PASS | {"keyword":"false schema","instancePath":"/0","schemaPath":"#/items/false schema","message":"boolean schema is false"} |
 | draft7:items.json#/groups/4/tests/1 | array with two items is invalid | PASS | {"keyword":"false schema","instancePath":"/1","schemaPath":"#/items/1/false schema","message":"boolean schema is false"} |
 | draft7:items.json#/groups/5/tests/1 | too many items | PASS | {"keyword":"additionalItems","instancePath":"","schemaPath":"#/additionalItems","message":"must NOT have more than 3 items"} |
-| draft7:items.json#/groups/5/tests/2 | too many sub-items | PASS | {"keyword":"additionalItems","instancePath":"/0","schemaPath":"#/additionalItems","message":"must NOT have more than 2 items"} |
-| draft7:items.json#/groups/5/tests/3 | wrong item | PASS | {"keyword":"type","instancePath":"/0","schemaPath":"#/type","message":"must be array"} |
-| draft7:items.json#/groups/5/tests/4 | wrong sub-item | PASS | {"keyword":"required","instancePath":"/0/0","schemaPath":"#/definitions/sub-item/required","message":"must have required property 'foo'"} |
+| draft7:items.json#/groups/5/tests/2 | too many sub-items | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:items.json#/groups/5/tests/3 | wrong item | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:items.json#/groups/5/tests/4 | wrong sub-item | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:items.json#/groups/6/tests/1 | nested array with invalid type | PASS | {"keyword":"type","instancePath":"/0/0/0/0","schemaPath":"#/items/items/items/items/type","message":"must be number"} |
 | draft7:items.json#/groups/6/tests/2 | not deep enough | PASS | {"keyword":"type","instancePath":"/0/0/0","schemaPath":"#/items/items/items/type","message":"must be array"} |
 | draft7:maximum.json#/groups/0/tests/2 | above the maximum is invalid | PASS | {"keyword":"maximum","instancePath":"","schemaPath":"#/maximum","message":"must be <= 3"} |
@@ -645,7 +659,7 @@
 | draft7:propertyNames.json#/groups/4/tests/1 | object with any other property is invalid | PASS | {"keyword":"const","instancePath":"","schemaPath":"#/propertyNames/const","message":"must be equal to constant"} |
 | draft7:propertyNames.json#/groups/5/tests/2 | object with any other property is invalid | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/propertyNames/enum","message":"must be equal to one of the allowed values"} |
 | draft7:ref.json#/groups/0/tests/2 | mismatch | PASS | {"keyword":"additionalProperties","instancePath":"","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
-| draft7:ref.json#/groups/0/tests/3 | recursive mismatch | PASS | {"keyword":"additionalProperties","instancePath":"/foo","schemaPath":"#/additionalProperties","message":"must NOT have additional properties"} |
+| draft7:ref.json#/groups/0/tests/3 | recursive mismatch | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:ref.json#/groups/1/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/properties/foo/type","message":"must be integer"} |
 | draft7:ref.json#/groups/2/tests/1 | mismatch array | PASS | {"keyword":"type","instancePath":"/1","schemaPath":"#/items/0/type","message":"must be integer"} |
 | draft7:ref.json#/groups/3/tests/0 | slash invalid | PASS | {"keyword":"type","instancePath":"/slash","schemaPath":"#/definitions/slash~1field/type","message":"must be integer"} |
@@ -655,11 +669,11 @@
 | draft7:ref.json#/groups/5/tests/1 | ref valid, maxItems ignored | WRONG | {"keyword":"maxItems","instancePath":"/foo","schemaPath":"#/properties/foo/maxItems","message":"must NOT have more than 2 items"} |
 | draft7:ref.json#/groups/5/tests/2 | ref invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"#/definitions/reffed/type","message":"must be array"} |
 | draft7:ref.json#/groups/6/tests/1 | $ref resolves to /definitions/base_foo, data validates | WRONG | {"keyword":"type","instancePath":"","schemaPath":"foo.json/type","message":"must be string"} |
-| draft7:ref.json#/groups/7/tests/1 | remote ref invalid | PASS | {"keyword":"minimum","instancePath":"/minLength","schemaPath":"#/definitions/nonNegativeInteger/minimum","message":"must be >= 0"} |
+| draft7:ref.json#/groups/7/tests/1 | remote ref invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:ref.json#/groups/8/tests/1 | property named $ref invalid | PASS | {"keyword":"type","instancePath":"/$ref","schemaPath":"#/properties/%24ref/type","message":"must be string"} |
 | draft7:ref.json#/groups/9/tests/1 | property named $ref invalid | PASS | {"keyword":"type","instancePath":"/$ref","schemaPath":"#/definitions/is-string/type","message":"must be string"} |
 | draft7:ref.json#/groups/11/tests/0 | any value is invalid | PASS | {"keyword":"false schema","instancePath":"","schemaPath":"#/definitions/bool/false schema","message":"boolean schema is false"} |
-| draft7:ref.json#/groups/12/tests/1 | invalid tree | PASS | {"keyword":"type","instancePath":"/nodes/0/subtree/nodes/0/value","schemaPath":"#/properties/value/type","message":"must be number"} |
+| draft7:ref.json#/groups/12/tests/1 | invalid tree | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:ref.json#/groups/13/tests/1 | object with strings is invalid | PASS | {"keyword":"type","instancePath":"/foo\"bar","schemaPath":"#/definitions/foo%22bar/type","message":"must be number"} |
 | draft7:ref.json#/groups/14/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"","schemaPath":"#foo/type","message":"must be integer"} |
 | draft7:ref.json#/groups/15/tests/1 | mismatch | PASS | {"keyword":"type","instancePath":"","schemaPath":"https://example.com/schema-with-anchor#foo/type","message":"must be integer"} |
@@ -667,9 +681,9 @@
 | draft7:ref.json#/groups/17/tests/0 | do not evaluate the $ref inside the enum, matching any string | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/enum","message":"must be equal to one of the allowed values"} |
 | draft7:ref.json#/groups/17/tests/1 | do not evaluate the $ref inside the enum, definition exact match | PASS | {"keyword":"enum","instancePath":"","schemaPath":"#/enum","message":"must be equal to one of the allowed values"} |
 | draft7:ref.json#/groups/18/tests/0 | invalid on inner field | PASS | {"keyword":"type","instancePath":"/foo/bar","schemaPath":"#/definitions/inner/properties/bar/type","message":"must be string"} |
-| draft7:ref.json#/groups/18/tests/1 | invalid on outer field | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/definitions/inner/properties/bar/type","message":"must be string"} |
+| draft7:ref.json#/groups/18/tests/1 | invalid on outer field | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:ref.json#/groups/19/tests/0 | invalid on inner field | PASS | {"keyword":"type","instancePath":"/foo/bar","schemaPath":"#/definitions/inner/properties/bar/type","message":"must be string"} |
-| draft7:ref.json#/groups/19/tests/1 | invalid on outer field | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/definitions/inner/properties/bar/type","message":"must be string"} |
+| draft7:ref.json#/groups/19/tests/1 | invalid on outer field | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:ref.json#/groups/20/tests/1 | non-number is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://example.com/b/d.json/type","message":"must be number"} |
 | draft7:ref.json#/groups/21/tests/1 | invalid under the URN IDed schema | PASS | {"keyword":"minimum","instancePath":"/foo","schemaPath":"#/minimum","message":"must be >= 30"} |
 | draft7:ref.json#/groups/22/tests/1 | a non-string is invalid | PASS | {"keyword":"type","instancePath":"/foo","schemaPath":"#/definitions/bar/type","message":"must be string"} |
@@ -689,12 +703,12 @@
 | draft7:refRemote.json#/groups/1/tests/1 | remote fragment invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://localhost:1234/draft7/subSchemas.json#/definitions/integer/type","message":"must be integer"} |
 | draft7:refRemote.json#/groups/2/tests/1 | ref within ref invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"http://localhost:1234/draft7/subSchemas.json#/definitions/refToInteger/type","message":"must be integer"} |
 | draft7:refRemote.json#/groups/3/tests/1 | base URI change ref invalid | PASS | {"keyword":"type","instancePath":"/0/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft7:refRemote.json#/groups/4/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"/list/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft7:refRemote.json#/groups/5/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"/list/0","schemaPath":"folderInteger.json/type","message":"must be integer"} |
-| draft7:refRemote.json#/groups/6/tests/2 | object is invalid | PASS | {"keyword":"type","instancePath":"/name","schemaPath":"#/anyOf/0/type","message":"must be null"} |
-| draft7:refRemote.json#/groups/7/tests/0 | invalid | PASS | {"keyword":"type","instancePath":"/bar","schemaPath":"#/definitions/inner/properties/bar/type","message":"must be string"} |
+| draft7:refRemote.json#/groups/4/tests/1 | string is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:refRemote.json#/groups/5/tests/1 | string is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:refRemote.json#/groups/6/tests/2 | object is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
+| draft7:refRemote.json#/groups/7/tests/0 | invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:refRemote.json#/groups/8/tests/1 | string is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#foo/type","message":"must be integer"} |
-| draft7:refRemote.json#/groups/9/tests/0 | number is invalid | PASS | {"keyword":"type","instancePath":"/name/foo","schemaPath":"string.json/type","message":"must be string"} |
+| draft7:refRemote.json#/groups/9/tests/0 | number is invalid | RUNTIME | PROVIDER_RESULT_INSTABILITY: Redocly AJV changed from false to true on repeated validation 2 of the same object |
 | draft7:refRemote.json#/groups/10/tests/1 | non-number is invalid | PASS | {"keyword":"type","instancePath":"","schemaPath":"#detached/type","message":"must be integer"} |
 | draft7:required.json#/groups/0/tests/1 | non-present required property is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property 'foo'"} |
 | draft7:required.json#/groups/3/tests/1 | object with some properties missing is invalid | PASS | {"keyword":"required","instancePath":"","schemaPath":"#/required","message":"must have required property 'foo\\bar'"} |

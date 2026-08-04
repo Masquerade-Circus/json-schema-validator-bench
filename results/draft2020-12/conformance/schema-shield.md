@@ -1,11 +1,11 @@
-# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) draft2020-12
+# Conformance: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) draft2020-12
 
 ## Report options
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","defaultDialect":"https://json-schema.org/draft/2020-12/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 67f96046c2d4c0abd7f1a7d90d1f779f87c2a3b9f925a14477049ada358e9609 |
-| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"https://json-schema.org/draft/2020-12/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 6915d62dc4e519d2bdbf79b279a4ed965f6964e812e047993785a19c00441ef7 |
+| base | {"formatProfile":"base","defaultDialect":"https://json-schema.org/draft/2020-12/schema","fast":{"failFast":true,"format":false,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"format":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 6e165f353ef67ad11f6a9471325584627793098e0b2b0d20429b1faf88c74124 |
+| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"https://json-schema.org/draft/2020-12/schema","fast":{"failFast":true,"format":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"format":true,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | e97e7b5b57eeac11d97b7ea5eae2c1e9997920f233d86275ae3382cc2f9b1acc |
 
 ## Counts
 
@@ -16,9 +16,9 @@
 | base | COMPILE | 0 | 0.00% |
 | base | RUNTIME | 0 | 0.00% |
 | base | UNSUPPORTED | 0 | 0.00% |
-| format-assertion | PASS | 663 | 99.40% |
+| format-assertion | PASS | 667 | 100.00% |
 | format-assertion | WRONG | 0 | 0.00% |
-| format-assertion | COMPILE | 4 | 0.60% |
+| format-assertion | COMPILE | 0 | 0.00% |
 | format-assertion | RUNTIME | 0 | 0.00% |
 | format-assertion | UNSUPPORTED | 0 | 0.00% |
 
@@ -26,10 +26,8 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/0 | format-assertion: false: valid string | true |  | COMPILE | REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | false |  | COMPILE | REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/0 | format-assertion: true: valid string | true |  | COMPILE | REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | false |  | COMPILE | REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion |
+
+Every reported case has PASS status.
 
 ## Detailed errors for invalid results
 
@@ -362,10 +360,8 @@
 | draft2020-12:optional/ecmascript-regex.json#/groups/18/tests/1 | ascii non-digits | PASS | {"name":"Error","message":"Additional properties are not allowed","keyword":"patternProperties","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Additional properties are not allowed","keyword":"patternProperties","item":"-%#","schemaPath":"#/patternProperties","instancePath":"#/-%#","data":"spending the year dead for tax reasons"}} |
 | draft2020-12:optional/ecmascript-regex.json#/groups/18/tests/2 | non-ascii digits (BENGALI DIGIT FOUR, BENGALI DIGIT TWO) | PASS | {"name":"Error","message":"Additional properties are not allowed","keyword":"patternProperties","code":null,"schemaPath":"#/patternProperties","instancePath":"#/-%#","tree":{"message":"Additional properties are not allowed","keyword":"patternProperties","item":"৪২","schemaPath":"#/patternProperties","instancePath":"#/৪২","data":"khajit has wares if you have coin"}} |
 | draft2020-12:optional/ecmascript-regex.json#/groups/19/tests/1 | ascii non-digits | PASS | {"name":"Error","message":"Additional properties are not allowed","keyword":"patternProperties","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Additional properties are not allowed","keyword":"patternProperties","item":"-%#","schemaPath":"#/patternProperties","instancePath":"#/-%#","data":"spending the year dead for tax reasons"}} |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/0 | format-assertion: false: valid string | COMPILE | REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion |
-| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | COMPILE | REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/0 | format-assertion: true: valid string | COMPILE | REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion |
-| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | COMPILE | REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion |
+| draft2020-12:optional/format-assertion.json#/groups/0/tests/1 | format-assertion: false: invalid string | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"not-an-ipv4"}} |
+| draft2020-12:optional/format-assertion.json#/groups/1/tests/1 | format-assertion: true: invalid string | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"not-an-ipv4"}} |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/12 | an invalid date-time past leap second, UTC | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"1998-12-31T23:59:61Z"}} |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/13 | an invalid date-time with leap second on a wrong minute, UTC | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"#/format","instancePath":"#","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"1998-12-31T23:58:60Z"}} |
 | draft2020-12:optional/format/date-time.json#/groups/0/tests/14 | an invalid date-time with leap second on a wrong hour, UTC | PASS | {"name":"Error","message":"Value does not match the format","keyword":"format","code":null,"schemaPath":"#/format","instancePath":"#","tree":{"message":"Value does not match the format","keyword":"format","schemaPath":"#/format","instancePath":"#","data":"1998-12-31T22:59:60Z"}} |

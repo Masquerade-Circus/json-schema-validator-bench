@@ -327,12 +327,59 @@ export function validateInstalledVersions(expected, actual) {
   }
 }
 
+export function validateSampleAcquisition({
+  result,
+  publicationRunStartedAt = null,
+  requireCurrentRunSamples = false
+}) {
+  const acquisition = result?.sampleAcquisition;
+  if (
+    acquisition === null ||
+    typeof acquisition !== "object" ||
+    Array.isArray(acquisition) ||
+    !Array.isArray(result.samples) ||
+    !Number.isFinite(Date.parse(acquisition.runStartedAt))
+  ) {
+    throw new Error("sample acquisition metadata is invalid");
+  }
+  for (const field of [
+    "measuredSamples",
+    "resumedSamples",
+    "publishedSamples"
+  ]) {
+    if (!Number.isInteger(acquisition[field]) || acquisition[field] < 0) {
+      throw new Error(`sample acquisition ${field} is invalid`);
+    }
+  }
+  if (
+    acquisition.publishedSamples !== result.samples.length ||
+    acquisition.measuredSamples + acquisition.resumedSamples >
+      acquisition.publishedSamples
+  ) {
+    throw new Error("sample acquisition counts do not match published samples");
+  }
+  if (
+    requireCurrentRunSamples &&
+    (publicationRunStartedAt === null ||
+      acquisition.runStartedAt !== publicationRunStartedAt ||
+      acquisition.resumedSamples !== 0 ||
+      acquisition.measuredSamples !== acquisition.publishedSamples)
+  ) {
+    throw new Error(
+      "Full publication requires every published sample to be measured in the current run with zero resumed samples"
+    );
+  }
+  return acquisition;
+}
+
 export function validateSampleSet({
   phase,
   result,
   intersection,
   installedVersions,
   participants,
+  publicationRunStartedAt = null,
+  requireCurrentRunSamples = false,
   mode = result?.benchmarkMode ?? "full",
   benchmarkContractHash = createBenchmarkContractHash({
     mode,
@@ -347,13 +394,18 @@ export function validateSampleSet({
     throw new Error(`${phase} result declares another phase`);
   }
   if (
-    result.benchmarkVersion !== 14 ||
+    result.benchmarkVersion !== 16 ||
     result.benchmarkMode !== mode ||
     result.draft !== intersection.draft ||
     result.formatProfile !== intersection.formatProfile
   ) {
     throw new Error(`${phase} result scope metadata is invalid`);
   }
+  validateSampleAcquisition({
+    result,
+    publicationRunStartedAt,
+    requireCurrentRunSamples
+  });
   if (
     canonicalJson(result.performanceEligibility) !==
     canonicalJson(intersection.performanceEligibility)
@@ -1204,8 +1256,8 @@ export function summarizePhase(result, mode, intersection = null) {
     }
   }
   return {
-    benchmarkVersion: 14,
-    summaryVersion: 10,
+    benchmarkVersion: 16,
+    summaryVersion: 11,
     phase: result.phase,
     draft: result.draft,
     formatProfile: result.formatProfile,
@@ -1225,6 +1277,7 @@ export function summarizePhase(result, mode, intersection = null) {
     mutationCountFormula:
       "count distinct (validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)",
     peakRssFormula: "max(sample.memory.peak.rss across valid rounds)",
+    sampleAcquisition: result.sampleAcquisition,
     ranking: { status: rankingStatus, competitorCount },
     eligibility: intersection?.eligibility ?? null,
     mutations,
@@ -1871,7 +1924,7 @@ export function createGlobalPerformanceSummary(
     phases[phase] = createRanking();
   }
   return {
-    globalSummaryVersion: 15,
+    globalSummaryVersion: 16,
     drafts: draftIds,
     requiredCoverageByPhase: {
       setup: `${draftIds.length}/${draftIds.length}`,
@@ -2872,6 +2925,13 @@ function humanDuration(value) {
 function renderLastRun(environment) {
   const run = environment.lastRun;
   const cpuModels = environment.cpu.models.join(", ");
+  const acquisition = environment.sampleAcquisition ?? {
+    measuredSamples: "N/A",
+    resumedSamples: "N/A",
+    retainedSamples: "N/A",
+    publishedSamples: "N/A",
+    allSamplesMeasuredInCurrentRun: false
+  };
   return [
     "## Last run",
     "",
@@ -2888,6 +2948,8 @@ function renderLastRun(environment) {
     `- **CPU:** ${cpuModels} (${environment.cpu.count} logical cores)`,
     `- **System memory total:** ${humanBytes(environment.totalMemoryBytes)}`,
     `- **Peak benchmark RSS:** ${humanBytes(run.peakBenchmarkRssBytes)}`,
+    `- **Performance samples:** ${acquisition.measuredSamples} measured, ${acquisition.resumedSamples} resumed, ${acquisition.retainedSamples} retained, ${acquisition.publishedSamples} published`,
+    `- **Single-run sample window:** ${acquisition.allSamplesMeasuredInCurrentRun ? "Yes" : "No"}`,
     `- **JSON Schema Test Suite commit:** \`${environment.suite.commit}\``,
     `- **Eligibility threshold:** ${environment.performanceEligibility.thresholdPercent}%`,
     `- **Benchmark contract hash:** \`${environment.benchmarkContractSha256}\``,
@@ -2933,12 +2995,18 @@ export function renderBenchmarkReadme({
     "",
     "## Root commands",
     "",
-    "Use Quick for diagnostic change checks. Use Full for canonical publication results. Run Full before publishing.",
+    "Use Quick for diagnostic change checks. Use Full for canonical publication results. A complete Full ignores existing performance checkpoints and measures every published sample in its current execution window.",
     "",
     "Run the harness:",
     "",
     "```bash",
     "npm test",
+    "```",
+    "",
+    "`package.json` is the source of truth for exact direct dependency versions. Adapter declarations define the required package inventory through `packageName` and `additionalPackages`. After changing a pin, update `package-lock.json`, then regenerate the derived npm metadata snapshot:",
+    "",
+    "```bash",
+    "npm run metadata:sync",
     "```",
     "",
     "Run Quick:",
@@ -3061,11 +3129,11 @@ export function renderBenchmarkReadme({
     "",
     "### Setup",
     "",
-    "We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `setup()`. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. We prepare neutral disposable copies before the clock starts. The runner validates, normalizes and hashes `reportOptions` after the provider clock stops. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.",
+    "We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `setup()`. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. Before the clock starts, the runner prepares disposable schema and resource copies, validates the draft and profile, normalizes resources, deduplicates aliases and sorts unknown formats. The runner validates, normalizes and hashes `reportOptions` after the provider clock stops. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.",
     "",
     "### Execution",
     "",
-    "Before the Execution clock starts, reusable adapters prepare their callable and `validate-only` adapters prepare their adapter context, profiled schema and correctness-check data. During each measured complete-corpus pass, reusable adapters call the prepared callable, while `validate-only` adapters call the vendor API through their prepared adapter context. Each worker and round owns one isolated mutable measurement set. Any boolean result change or memory-budget violation fails the sample.",
+    "Before the Execution clock starts, reusable adapters prepare their callable and `validate-only` adapters prepare their adapter context, profiled schema and correctness-check data. Redocly AJV receives repeated stability checks on each same pristine object because its published validator can retain reference-visit state between calls. During each measured complete-corpus pass, reusable adapters call the prepared callable, while `validate-only` adapters call the vendor API through their prepared adapter context. Each worker and round owns one isolated mutable measurement set. Any boolean result change, checksum change or memory-budget violation fails the sample.",
     "",
     "### Cold execution",
     "",
@@ -3075,7 +3143,7 @@ export function renderBenchmarkReadme({
     "",
     "Quick uses the same complete common performance corpus, 100 ms warmup, 250 ms target, 175 ms normal minimum, phases, scopes, isolation, eligibility, scoring, preparation and sample contract as Full. Quick records one deterministic round, so it provides neither complete antithetic pairs nor multi-round dispersion. Quick is diagnostic and does not define the canonical publication.",
     "",
-    "Full runs complete conformance and the complete common performance corpus under the canonical contract. Each phase warms complete corpus passes for at least 100 ms, then measures complete passes toward a 250 ms target with a normal minimum of 175 ms. A pass that exceeds the target remains valid because the runner never truncates a corpus pass. Each active validator receives six isolated samples in three antithetic pairs. The pair rotations use deterministic offsets 0, floor(n / 3), and floor(2n / 3) for the eligible roster size n, so every participant has the same mean position. Reports use their median for ranking and scoring and publish the arithmetic mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum and all six rates. Compatible before-and-after analysis may pair the same rounds, but the runner makes no automatic significance claim. Run Full only for the final publication, after tests and Quick are stable.",
+    "Full runs complete conformance and the complete common performance corpus under the canonical contract. A complete Full invoked without selectors never reads or reuses performance sample checkpoints: it measures every Setup, Execution and Cold execution sample within the current pipeline window. Each phase warms complete corpus passes for at least 100 ms, then measures complete passes toward a 250 ms target with a normal minimum of 175 ms. A pass that exceeds the target remains valid because the runner never truncates a corpus pass. Each active validator receives six isolated samples in three antithetic pairs. The pair rotations use deterministic offsets 0, floor(n / 3), and floor(2n / 3) for the eligible roster size n, so every participant has the same mean position. Reports use their median for ranking and scoring and publish the arithmetic mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum and all six rates. Compatible before-and-after analysis may pair the same rounds, but the runner makes no automatic significance claim. Run Full only for the final publication, after tests and Quick are stable.",
     "",
     quick
       ? "Higher ops/s is better. Each scope reports its observed Quick pass as its median. We calculate the scoped relative Score as `median / bestMedian * 100`, which is a normalized relative performance index. The best scoped median scores exactly 100%, and rows sort by median ops/s descending with validator ID for deterministic ties."
@@ -3109,7 +3177,7 @@ export function renderBenchmarkReadme({
     "",
     "### Reproducibility",
     "",
-    "We pin the npm dependency graph, npm metadata snapshot, and JSON Schema Test Suite commit and tree. We keep the suite checkout and resumable checkpoints under `.cache/`, and we record package, corpus, intersection and sample hashes in the generated artifacts.",
+    "We pin the npm dependency graph, npm metadata snapshot, and JSON Schema Test Suite commit and tree. We keep the suite checkout and diagnostic checkpoints under `.cache/`, and we record package, corpus, intersection and sample hashes in the generated artifacts. Quick, validator refreshes and phase refreshes may resume compatible samples with explicit acquisition counts. A complete Full overwrites compatible checkpoints only after measuring replacement samples and publishes zero resumed samples.",
     "",
     "On a clean clone, we use `npm ci` for exact dependencies and `npm test` for the local suite. `npm run benchmark` prepares the pinned suite checkout and runs Full. The `--quick` flag uses the same suite and performance contract with one round instead of six. Only `npm run metadata:sync` refreshes npm metadata. We stage and validate Quick diagnostics or the Full publication contract before a coordinated transactional publication of `README.md` and `results/`. The transaction rolls back failures before both paths commit. Because the public layout has two root paths, concurrent readers can observe the rename window.",
     "",
@@ -3175,7 +3243,7 @@ export function createResultsIndex(
     throw new Error("results index mode must be quick or full");
   }
   return {
-    resultsVersion: 14,
+    resultsVersion: 15,
     benchmarkMode: mode,
     eligibilityThresholdPercent: parseEligibilityThresholdPercent(
       eligibilityThresholdPercent
@@ -3261,6 +3329,7 @@ export async function generateFinalReport({
   );
   const resultsRoot = getResultsRoot();
   const reportStarted = Date.now();
+  const pipelineStartedAt = process.env.BENCHMARK_PIPELINE_STARTED_AT ?? null;
   let previousEnvironment = null;
   let previousIndex = null;
   try {
@@ -3275,6 +3344,10 @@ export async function generateFinalReport({
       throw error;
     }
   }
+  const publicationRunStartedAt =
+    pipelineStartedAt ?? previousEnvironment?.sampleAcquisition?.runStartedAt ?? null;
+  const requireCurrentRunSamples =
+    mode === "full" && validator === null && bench === null;
   const benchmarkContractHash = createBenchmarkContractHash({
     mode,
     memoryBudget: memoryBudgetFromEnvironment(),
@@ -3411,6 +3484,8 @@ export async function generateFinalReport({
       installedVersions: installedValidators,
       participants: setupParticipants,
       benchmarkContractHash,
+      publicationRunStartedAt,
+      requireCurrentRunSamples,
       mode
     });
     scopes.set(`${draft}/setup`, {
@@ -3495,6 +3570,8 @@ export async function generateFinalReport({
           installedVersions: installedValidators,
           participants,
           benchmarkContractHash,
+          publicationRunStartedAt,
+          requireCurrentRunSamples,
           mode
         });
         phaseData[phase] = { artifacts, performanceCorpus };
@@ -3561,7 +3638,6 @@ export async function generateFinalReport({
     suiteLockSha256: sha256(suiteLockRaw)
   });
   const reportEnded = Date.now();
-  const pipelineStartedAt = process.env.BENCHMARK_PIPELINE_STARTED_AT ?? null;
   const preserveRunEnvironment = pipelineStartedAt === null && previousEnvironment !== null;
   const cpuModels = preserveRunEnvironment
     ? previousEnvironment.cpu.models
@@ -3574,6 +3650,73 @@ export async function generateFinalReport({
     reportEndedAt: new Date(reportEnded).toISOString()
   });
   const sampleRuntimeProvenance = createSampleRuntimeProvenance(sampleResults);
+  const publishedSamples = sampleResults.reduce(
+    (total, result) => total + result.samples.length,
+    0
+  );
+  const currentRunResults = sampleResults.filter(
+    (result) => result.sampleAcquisition.runStartedAt === publicationRunStartedAt
+  );
+  const measuredSamples = currentRunResults.reduce(
+    (total, result) => total + result.sampleAcquisition.measuredSamples,
+    0
+  );
+  const resumedSamples = currentRunResults.reduce(
+    (total, result) => total + result.sampleAcquisition.resumedSamples,
+    0
+  );
+  const byPhase = Object.fromEntries(
+    ["setup", "execution", "cold-execution"].map((phase) => {
+      const phaseResults = sampleResults.filter((result) => result.phase === phase);
+      const phasePublished = phaseResults.reduce(
+        (total, result) => total + result.samples.length,
+        0
+      );
+      const currentPhaseResults = phaseResults.filter(
+        (result) => result.sampleAcquisition.runStartedAt === publicationRunStartedAt
+      );
+      const phaseMeasured = currentPhaseResults.reduce(
+        (total, result) => total + result.sampleAcquisition.measuredSamples,
+        0
+      );
+      const phaseResumed = currentPhaseResults.reduce(
+        (total, result) => total + result.sampleAcquisition.resumedSamples,
+        0
+      );
+      return [
+        phase,
+        {
+          measuredSamples: phaseMeasured,
+          resumedSamples: phaseResumed,
+          retainedSamples: phasePublished - phaseMeasured - phaseResumed,
+          publishedSamples: phasePublished
+        }
+      ];
+    })
+  );
+  const sampleAcquisition = {
+    policy: requireCurrentRunSamples
+      ? "current-run-only"
+      : "compatible-checkpoints",
+    runStartedAt: publicationRunStartedAt,
+    measuredSamples,
+    resumedSamples,
+    retainedSamples: publishedSamples - measuredSamples - resumedSamples,
+    publishedSamples,
+    byPhase,
+    allSamplesMeasuredInCurrentRun:
+      publicationRunStartedAt !== null &&
+      measuredSamples === publishedSamples &&
+      resumedSamples === 0
+  };
+  if (
+    requireCurrentRunSamples &&
+    sampleAcquisition.allSamplesMeasuredInCurrentRun !== true
+  ) {
+    throw new Error(
+      "Full publication requires all samples to be measured in one current run"
+    );
+  }
   const environment = {
     startedAt: new Date(reportStarted).toISOString(),
     endedAt: new Date(reportEnded).toISOString(),
@@ -3616,6 +3759,7 @@ export async function generateFinalReport({
       [...scopes].map(([key, scope]) => [key, scope.performanceCorpora])
     ),
     sampleRuntimeProvenance,
+    sampleAcquisition,
     benchmarkMode: mode,
     publicationWarning: diagnostic === null
       ? mode === "quick" ? "Run the full benchmark before publication." : null
@@ -3632,7 +3776,7 @@ export async function generateFinalReport({
     eligibilityThresholdPercent
   );
   globalSummary.publication = diagnostic === null
-    ? { diagnostic: false, benchmarkMode: mode }
+    ? { diagnostic: false, benchmarkMode: mode, sampleAcquisition }
     : {
         diagnostic: true,
         benchmarkMode: mode,

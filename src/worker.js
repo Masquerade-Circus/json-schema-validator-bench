@@ -7,6 +7,7 @@ import {
   getSetupRegistryParticipants,
   getColdExecutionRegistryParticipants,
   getAdapterFactory,
+  getSetupAdapterFactory,
   getColdExecutionAdapterFactory,
   getRegisteredAdapter
 } from "./adapter-registry.js";
@@ -202,7 +203,7 @@ export async function runSetupSample({
   schemas,
   remotes,
   resourceRegistry = null,
-  createAdapter,
+  prepareAdapter,
   now = () => performance.now(),
   yieldAfterPass = () => new Promise((resolve) => setImmediate(resolve)),
   memoryUsage = () => process.memoryUsage(),
@@ -276,37 +277,26 @@ export async function runSetupSample({
         request.draft,
         formatProfile
       );
+      markPreparedSchema(disposableSchema, request.draft, formatProfile);
+      const operation = prepareAdapter({
+        draft: request.draft,
+        formatProfile,
+        resources,
+        unknownFormats
+      });
       const start = now();
-      const adapter = createAdapter(
-        {
-          draft: request.draft,
-          formatProfile,
-          resources,
-          unknownFormats: [...unknownFormats].sort()
-        },
-        { deferReportOptions: true }
-      );
-      if (typeof adapter.setup !== "function") {
-        throw new Error(`${request.validator} does not expose setup`);
-      }
-      if (adapter.setupMode === "async") {
-        await adapter.setup(disposableSchema);
-      } else {
-        const target = adapter.setup(disposableSchema);
-        if (
-          target !== null &&
-          (typeof target === "object" || typeof target === "function") &&
-          typeof target.then === "function"
-        ) {
-          throw new Error(
-            `${request.validator} returned a Promise from synchronous setup`
-          );
-        }
+      const operationResult = operation.execute(disposableSchema);
+      if (
+        operationResult !== null &&
+        (typeof operationResult === "object" ||
+          typeof operationResult === "function") &&
+        typeof operationResult.then === "function"
+      ) {
+        await operationResult;
       }
       elapsed += now() - start;
-      adapterMetadata ??= adapter;
-      void adapter.reportOptions;
-      void adapter.reportOptionsSha256;
+      adapterMetadata ??= operation;
+      operation.complete();
     }
     return elapsed;
   }
@@ -774,33 +764,53 @@ export async function runExecutionSample({
     0
   );
   let verificationCases = cloneExecutionCases(canonicalCases);
+  const verificationRepetitions =
+    request.validator === "redocly-ajv" ? 3 : 1;
   for (const testCase of verificationCases) {
-    let observed;
-    try {
-      observed = Boolean(
-        validatorsBySchemaId.get(testCase.schemaId)(testCase.data)
-      );
-    } catch (error) {
-      const validationError = executionError("EXECUTION_VALIDATION_FAILED", request, {
-        moment: "verification",
-        caseId: testCase.id,
-        schemaId: testCase.schemaId
-      });
-      validationError.cause = error;
-      throw validationError;
-    }
-    if (observed !== testCase.expected) {
-      throw executionError(
-        "PREVIOUS_RESULT_MISMATCH",
-        request,
-        mismatchDiagnostic({
-          moment: "verification",
+    let firstObserved = null;
+    for (let repetition = 1; repetition <= verificationRepetitions; repetition += 1) {
+      let observed;
+      try {
+        observed = Boolean(
+          validatorsBySchemaId.get(testCase.schemaId)(testCase.data)
+        );
+      } catch (error) {
+        const validationError = executionError("EXECUTION_VALIDATION_FAILED", request, {
+          moment: `verification ${repetition}`,
           caseId: testCase.id,
-          schemaId: testCase.schemaId,
-          expected: testCase.expected,
-          observed
-        })
-      );
+          schemaId: testCase.schemaId
+        });
+        validationError.cause = error;
+        throw validationError;
+      }
+      if (repetition === 1) {
+        firstObserved = observed;
+      } else if (observed !== firstObserved) {
+        throw executionError(
+          "EXECUTION_RESULT_INSTABILITY",
+          request,
+          mismatchDiagnostic({
+            moment: `stability verification ${repetition}`,
+            caseId: testCase.id,
+            schemaId: testCase.schemaId,
+            expected: firstObserved,
+            observed
+          })
+        );
+      }
+      if (observed !== testCase.expected) {
+        throw executionError(
+          "PREVIOUS_RESULT_MISMATCH",
+          request,
+          mismatchDiagnostic({
+            moment: `verification ${repetition}`,
+            caseId: testCase.id,
+            schemaId: testCase.schemaId,
+            expected: testCase.expected,
+            observed
+          })
+        );
+      }
     }
   }
   verificationCases = null;
@@ -1006,7 +1016,7 @@ export async function executeWorkerRequest(
           schemas,
           remotes: artifacts.suite.remotes,
           resourceRegistry: artifacts.suite.resourceRegistry,
-          createAdapter: getAdapterFactory(request.validator),
+          prepareAdapter: getSetupAdapterFactory(request.validator),
           memoryBudget: request.memoryBudget,
           timing: request.timing
         })

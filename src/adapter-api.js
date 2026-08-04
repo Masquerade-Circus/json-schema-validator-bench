@@ -216,6 +216,7 @@ export function defineAdapter(declaration, factory) {
   ];
   const allowedDeclarationFields = [
     ...requiredDeclarationFields,
+    "additionalPackages",
     "implementation",
     "supportClaims"
   ];
@@ -278,9 +279,20 @@ export function defineAdapter(declaration, factory) {
       ])
     )
   );
+  const packageName = nonEmptyString(declaration.packageName, "packageName");
+  const additionalPackages = Object.hasOwn(declaration, "additionalPackages")
+    ? uniqueKnownStrings(declaration.additionalPackages, "additionalPackages")
+    : Object.freeze([]);
+  for (const additionalPackage of additionalPackages) {
+    nonEmptyString(additionalPackage, "additionalPackages entry");
+  }
+  if (additionalPackages.includes(packageName)) {
+    throw new Error("adapter additionalPackages must not repeat packageName");
+  }
   const metadata = Object.freeze({
     id: nonEmptyString(declaration.id, "id"),
-    packageName: nonEmptyString(declaration.packageName, "packageName"),
+    packageName,
+    additionalPackages,
     displayName: nonEmptyString(declaration.displayName, "displayName"),
     drafts,
     unsupported: uniqueKnownStrings(
@@ -294,6 +306,37 @@ export function defineAdapter(declaration, factory) {
 
   return Object.freeze({
     ...metadata,
+    prepareSetup(config) {
+      const normalizedConfig = normalizeConfig(config, metadata.drafts);
+      let implementation = null;
+      let returnedPromise = false;
+      return Object.freeze({
+        execute(schema) {
+          implementation = factory(normalizedConfig);
+          if (typeof implementation.setup !== "function") {
+            throw new Error("adapter does not expose setup");
+          }
+          const target = implementation.setup(schema);
+          returnedPromise =
+            target !== null &&
+            (typeof target === "object" || typeof target === "function") &&
+            typeof target.then === "function";
+          return target;
+        },
+        complete() {
+          assertAdapterImplementation(implementation);
+          if (
+            returnedPromise &&
+            implementation.setup.constructor.name !== "AsyncFunction"
+          ) {
+            throw new Error(
+              "adapter setup must be declared async when it returns a Promise"
+            );
+          }
+          normalizeReportOptions(implementation.reportOptions);
+        }
+      });
+    },
     prepareColdExecution(config) {
       const normalizedConfig = normalizeConfig(config, metadata.drafts);
       let implementation = null;

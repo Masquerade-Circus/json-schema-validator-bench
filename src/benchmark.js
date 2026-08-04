@@ -44,8 +44,8 @@ import { reconcileDiagnosticPhaseResult } from "./diagnostic.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const workerPath = path.join(benchmarksRoot, "src", "worker.js");
-export const sampleContractVersion = 26;
-export const sampleCacheIdentityVersion = 19;
+export const sampleContractVersion = 28;
+export const sampleCacheIdentityVersion = 21;
 const sampleCheckpointNamespace = `granular-samples-v${sampleCacheIdentityVersion}`;
 const checkpointEnvelopeVersion = 1;
 const hashPattern = /^[a-f0-9]{64}$/;
@@ -139,6 +139,15 @@ export function getBenchmarkMode(mode = "full") {
   return config;
 }
 
+export function shouldReuseSampleCheckpoints({
+  mode,
+  validator = null,
+  bench = null
+}) {
+  getBenchmarkMode(mode);
+  return mode === "quick" || validator !== null || bench !== null;
+}
+
 export function controllerDeadlineMillisecondsFromEnvironment(
   mode = "full",
   environment = process.env
@@ -169,6 +178,8 @@ export function createBenchmarkContract(
   );
   return Object.freeze({
   sampleContractVersion,
+  sampleReusePolicy:
+    mode === "full" ? "current-run-only" : "compatible-checkpoints",
   drafts: draftIds,
   formatProfiles,
   participantsByDraft: Object.fromEntries(
@@ -1580,6 +1591,7 @@ export async function publishSampleCheckpoint({
   benchmarkContractHash,
   checkpointRoot,
   cacheContext,
+  replaceExisting = false,
   mode = request.benchmarkMode ?? "full"
 }) {
   const effectiveContractHash =
@@ -1602,16 +1614,18 @@ export async function publishSampleCheckpoint({
     sampleIdentityHash: sampleIdentity.hash,
     mode
   });
-  const existing = await readSampleCheckpoint({
-    request,
-    intersectionHash,
-    benchmarkContractHash: effectiveContractHash,
-    checkpointRoot,
-    cacheContext,
-    mode
-  });
-  if (existing !== null) {
-    return { sample: existing, skipped: true };
+  if (!replaceExisting) {
+    const existing = await readSampleCheckpoint({
+      request,
+      intersectionHash,
+      benchmarkContractHash: effectiveContractHash,
+      checkpointRoot,
+      cacheContext,
+      mode
+    });
+    if (existing !== null) {
+      return { sample: existing, skipped: true };
+    }
   }
   const checkpoint = sampleCheckpointPath(request, {
     checkpointRoot,
@@ -1661,9 +1675,13 @@ export async function runBenchmarkSample({
   memoryBudget = memoryBudgetFromEnvironment(),
   checkpointRoot,
   mode = "full",
+  reuseCheckpoints = mode !== "full",
   eligibilityThresholdPercent = defaultEligibilityThresholdPercent,
   sampleExecutor = spawnWorker
 }) {
+  if (typeof reuseCheckpoints !== "boolean") {
+    throw new Error("sample checkpoint reuse policy must be boolean");
+  }
   const config = getBenchmarkMode(mode);
   const normalizedEligibilityThreshold = parseEligibilityThresholdPercent(
     eligibilityThresholdPercent
@@ -1708,16 +1726,18 @@ export async function runBenchmarkSample({
     mode,
     sampleIdentityHash: sampleIdentity.hash
   });
-  const existing = await readSampleCheckpoint({
-    request: identity,
-    intersectionHash,
-    benchmarkContractHash,
-    checkpointRoot: effectiveCheckpointRoot,
-    cacheContext,
-    mode
-  });
-  if (existing !== null) {
-    return { sample: existing, skipped: true };
+  if (reuseCheckpoints) {
+    const existing = await readSampleCheckpoint({
+      request: identity,
+      intersectionHash,
+      benchmarkContractHash,
+      checkpointRoot: effectiveCheckpointRoot,
+      cacheContext,
+      mode
+    });
+    if (existing !== null) {
+      return { sample: existing, skipped: true };
+    }
   }
   const pendingRoot = path.join(benchmarksRoot, ".cache", "pending-samples");
   await prepareConfinedCacheDirectory(pendingRoot);
@@ -1752,6 +1772,7 @@ export async function runBenchmarkSample({
     benchmarkContractHash,
     checkpointRoot: effectiveCheckpointRoot,
     cacheContext,
+    replaceExisting: !reuseCheckpoints,
     mode
   });
   if (sampleExecutor === spawnWorker) {
@@ -1796,6 +1817,8 @@ export async function runBenchmarkPhase(
     mode = "full",
     eligibilityThresholdPercent = defaultEligibilityThresholdPercent,
     validator = null,
+    reuseCheckpoints = mode !== "full",
+    measurementRunStartedAt = null,
     sampleExecutor = spawnWorker
   } = {}
 ) {
@@ -1804,6 +1827,11 @@ export async function runBenchmarkPhase(
   }
   const config = getBenchmarkMode(mode);
   const started = Date.now();
+  const effectiveRunStartedAt = measurementRunStartedAt ??
+    new Date(started).toISOString();
+  if (!Number.isFinite(Date.parse(effectiveRunStartedAt))) {
+    throw new Error("measurement run start must be ISO-8601");
+  }
   const controllerDeadline =
     started + controllerDeadlineMillisecondsFromEnvironment(mode);
   const scopes = [];
@@ -1820,6 +1848,8 @@ export async function runBenchmarkPhase(
       });
       const participants = intersection.participants.map(({ id }) => id);
       const samples = [];
+      let measuredSamples = 0;
+      let resumedSamples = 0;
       const participantOrderByRound = [];
       if (intersection.emptyReason === null) {
         for (let round = 1; round <= config.rounds; round += 1) {
@@ -1849,6 +1879,7 @@ export async function runBenchmarkPhase(
             const { sample, skipped } = await runBenchmarkSample({
               ...identity,
               mode,
+              reuseCheckpoints,
               eligibilityThresholdPercent,
               sampleExecutor
             });
@@ -1864,8 +1895,14 @@ export async function runBenchmarkPhase(
               );
             }
             if (skipped) {
+              resumedSamples += 1;
               process.stderr.write(
                 `${JSON.stringify({ event: "sample-resumed", ...identity })}\n`
+              );
+            } else {
+              measuredSamples += 1;
+              process.stderr.write(
+                `${JSON.stringify({ event: "sample-measured", ...identity })}\n`
               );
             }
             samples.push(sample);
@@ -1891,6 +1928,12 @@ export async function runBenchmarkPhase(
           startedAt: new Date(scopeStarted).toISOString(),
           endedAt: new Date(scopeEnded).toISOString()
         });
+        result.sampleAcquisition = {
+          runStartedAt: effectiveRunStartedAt,
+          measuredSamples,
+          resumedSamples,
+          publishedSamples: result.samples.length
+        };
         if (
           canonicalJson(result.participants) !== canonicalJson(participants) ||
           result.benchmarkMode !== mode ||
@@ -1907,7 +1950,7 @@ export async function runBenchmarkPhase(
         continue;
       }
       const result = {
-        benchmarkVersion: 14,
+        benchmarkVersion: 16,
         phase,
         draft,
         formatProfile,
@@ -1922,6 +1965,12 @@ export async function runBenchmarkPhase(
         emptyReason: intersection.emptyReason,
         participants,
         participantOrderByRound,
+        sampleAcquisition: {
+          runStartedAt: effectiveRunStartedAt,
+          measuredSamples,
+          resumedSamples,
+          publishedSamples: samples.length
+        },
         samples
       };
       await writePhaseResults({ phase, draft, formatProfile, result });
@@ -1930,11 +1979,26 @@ export async function runBenchmarkPhase(
   }
 
   return {
-    benchmarkVersion: 14,
+    benchmarkVersion: 16,
     phase,
     startedAt: new Date(started).toISOString(),
     endedAt: new Date().toISOString(),
     durationMilliseconds: Date.now() - started,
+    sampleAcquisition: {
+      runStartedAt: effectiveRunStartedAt,
+      measuredSamples: scopes.reduce(
+        (total, scope) => total + scope.sampleAcquisition.measuredSamples,
+        0
+      ),
+      resumedSamples: scopes.reduce(
+        (total, scope) => total + scope.sampleAcquisition.resumedSamples,
+        0
+      ),
+      publishedSamples: scopes.reduce(
+        (total, scope) => total + scope.samples.length,
+        0
+      )
+    },
     scopes
   };
 }

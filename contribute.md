@@ -66,7 +66,7 @@ Run Full before publishing benchmark results:
 npm run benchmark
 ```
 
-Full executes complete conformance and complete common-intersection performance samples. It replaces Quick artifacts with the publication contract.
+Full executes complete conformance and complete common-intersection performance samples. It ignores existing performance checkpoints, measures every sample in the current pipeline execution, and replaces Quick artifacts with the publication contract. A publishable Full reports equal measured and published sample counts with zero resumed samples.
 
 Refresh npm package metadata only when dependency metadata or download counts must change:
 
@@ -310,13 +310,13 @@ The bridge is a new schema object. It preserves `resource.schema`, avoids duplic
 
 ### 1. Pin the dependency and metadata
 
-Add the validator to `dependencies` in `package.json` with an exact version. Update `package-lock.json` with that exact dependency. Keep package resolution, integrity, and transitive dependencies in the lockfile.
+Add the validator to `dependencies` in `package.json` with an exact version. `package.json` is the source of truth for direct dependency versions. Update `package-lock.json` with that exact dependency and keep its root dependency inventory equal to `package.json`. Keep package resolution, integrity, and transitive dependencies in the lockfile.
 
 ```bash
 npm install --save-exact tiny-json-validator@2.4.1
 ```
 
-Run metadata sync when the package is new to the benchmark or its pinned version changed. Review the resulting `npm-snapshot-lock.json` and `results/npm-snapshot.json` metadata before publication.
+Run metadata sync when the package is new to the benchmark or its pinned version changed. `npm-snapshot-lock.json` and `results/npm-snapshot.json` are generated artifacts rather than independent version sources. Review the resulting metadata before publication.
 
 ### 2. Create the adapter
 
@@ -326,6 +326,7 @@ The declaration fields are:
 
 - `id`: stable benchmark ID.
 - `packageName`: exact npm package name.
+- `additionalPackages`: optional exact npm package names imported directly by this adapter in addition to `packageName`. The registry unions these declarations to derive the required `package.json` dependency inventory.
 - `displayName`: human-readable report name.
 - `drafts`: drafts for which the adapter makes a support claim. Use only `draft4`, `draft6`, `draft7`, `draft2019-09`, and `draft2020-12`.
 - `unsupported`: known capabilities the validator cannot process. The current declarative capability is `ADAPTER_CAPABILITIES.EXTERNAL_SCHEMA_RESOURCES`.
@@ -489,7 +490,7 @@ The adapter factory belongs to conformance setup, measured Setup and measured Co
 - Cold execution prepares disposable schema, data and resource copies, analyzes capabilities and normalizes the common adapter configuration before the operation clock. The timed interval creates the provider context through the opaque adapter, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Module imports, process startup, common contract checks, result comparison, checksum, diagnostics and telemetry remain outside the clock. Hyperjump is `N/A` because its module-global state cannot satisfy this fresh-isolation contract.
 - `getError` runs during conformance after `validate` returns `false`. Setup, Execution and Cold execution throughput measure their phase contracts.
 
-Quick and Full use the complete common corpus and the same timing, phases, scopes, isolation, eligibility, scoring, preparation and sample contract. Every sample warms complete passes for at least 100 ms, targets 250 ms of measured work, and requires a normal minimum of 175 ms. Full records six isolated samples per participant and scope in three antithetic order pairs with deterministic offsets `0`, `floor(n / 3)`, and `floor(2n / 3)` for roster size `n`. Quick records only the deterministic first round, so it provides neither complete antithetic pairs nor multi-round dispersion. Full reports rank by the six-round median and publish the mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum, and all six rates. These diagnostics do not establish statistical significance.
+Quick and Full use the complete common corpus and the same timing, phases, scopes, isolation, eligibility, scoring, preparation and sample contract. Every sample warms complete passes for at least 100 ms, targets 250 ms of measured work, and requires a normal minimum of 175 ms. Full records six isolated samples per participant and scope in three antithetic order pairs with deterministic offsets `0`, `floor(n / 3)`, and `floor(2n / 3)` for roster size `n`. A complete Full measures all six rounds from zero inside one pipeline window and does not read prior performance samples. Quick records only the deterministic first round and may resume compatible checkpoints, so it provides neither complete antithetic pairs nor multi-round dispersion. Full reports rank by the six-round median and publish the mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum, and all six rates. These diagnostics do not establish statistical significance.
 
 Keep vendor construction and registrations in the factory, reusable preparation in `setup()`, and data validation in `validate()`. Setup measures the factory and `setup()` as one fresh operation. Cold execution measures that fresh lifecycle plus one validation for every case. Moving setup into `validate()` inflates execution cost and breaks the phase contract.
 
@@ -539,7 +540,7 @@ Use this sequence for a reproducible validator change:
 8. Run complete Quick when the environment, benchmark contract, suite, locks, threshold, rounds, roster, eligibility or common `PASS` corpus changes, or when no compatible Quick publication exists.
 9. Run `npm run benchmark` only after tests and Quick are stable. Full runs complete conformance and the complete performance corpus under the canonical contract. Use it only for final publication.
 
-Quick and Full stage and validate canonical `README.md` and `results/` artifacts before a coordinated transactional publication after every prior pipeline stage passes. The transaction uses separate renames for the two public root paths and rolls back failures before both paths commit. Concurrent readers can observe the rename window. `.cache/` contains the pinned suite checkout, resumable checkpoints, staging directories, and local transaction data. The versioned locks recreate the cache. Publish the generated artifacts and keep `.cache/` and `node_modules/` local.
+Quick and Full stage and validate canonical `README.md` and `results/` artifacts before a coordinated transactional publication after every prior pipeline stage passes. The transaction uses separate renames for the two public root paths and rolls back failures before both paths commit. Concurrent readers can observe the rename window. `.cache/` contains the pinned suite checkout, diagnostic checkpoints, staging directories, and local transaction data. Quick and selective validator or phase refreshes may resume compatible checkpoints. A complete Full ignores their samples and replaces each checkpoint only after a fresh measurement. The versioned locks recreate the cache. Publish the generated artifacts and keep `.cache/` and `node_modules/` local.
 
 Canonical results come from a controlled Linux host. CI runs `npm test` and artifact-integrity checks. Record the environment and benchmark contract hash for every published run.
 
