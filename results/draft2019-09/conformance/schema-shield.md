@@ -4,16 +4,16 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","defaultDialect":"https://json-schema.org/draft/2019-09/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in","resources":"registered"} | d7e222bd1eae525f825bbf1085daabca4bfcd91383001f8f2170505b1eb4026a |
-| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"https://json-schema.org/draft/2019-09/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in","resources":"registered"} | 7329f2fda34eb1fdd1ead4078a508a4814b19706d6280956a24a649ea046669c |
+| base | {"formatProfile":"base","defaultDialect":"https://json-schema.org/draft/2019-09/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | b9d844e6144fedf81c1bee975e77bec3237f6939fbf1ecbb7aa5e03537fee9bd |
+| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"https://json-schema.org/draft/2019-09/schema","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 93b451543a42d0714e352f36770e76d4a7f7bf7d1db019abab142e66ebc11f2f |
 
 ## Counts
 
 | Profile | Status | Cases | Percentage |
 | --- | --- | ---: | ---: |
-| base | PASS | 1412 | 99.65% |
+| base | PASS | 1417 | 100.00% |
 | base | WRONG | 0 | 0.00% |
-| base | COMPILE | 5 | 0.35% |
+| base | COMPILE | 0 | 0.00% |
 | base | RUNTIME | 0 | 0.00% |
 | base | UNSUPPORTED | 0 | 0.00% |
 | format-assertion | PASS | 655 | 100.00% |
@@ -26,11 +26,8 @@
 
 | Case ID | Description | Expected | Observed | Status | Error |
 | --- | --- | --- | --- | --- | --- |
-| draft2019-09:vocabulary.json#/groups/0/tests/0 | applicator vocabulary still works | false |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json |
-| draft2019-09:vocabulary.json#/groups/0/tests/1 | no validation: valid number | true |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json |
-| draft2019-09:vocabulary.json#/groups/0/tests/2 | no validation: invalid number, but it still validates | true |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json |
-| draft2019-09:vocabulary.json#/groups/1/tests/0 | string value | false |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-optional-vocabulary.json |
-| draft2019-09:vocabulary.json#/groups/1/tests/1 | number value | true |  | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-optional-vocabulary.json |
+
+Every reported case has PASS status.
 
 ## Detailed errors for invalid results
 
@@ -957,8 +954,5 @@
 | draft2019-09:uniqueItems.json#/groups/2/tests/3 | [true, true] from items array is not valid | PASS | {"name":"Error","message":"Array items are not unique","keyword":"uniqueItems","code":null,"schemaPath":"#/uniqueItems","instancePath":"#","tree":{"message":"Array items are not unique","keyword":"uniqueItems","schemaPath":"#/uniqueItems","instancePath":"#","data":true}} |
 | draft2019-09:uniqueItems.json#/groups/2/tests/4 | extra items are invalid even if unique | PASS | {"name":"Error","message":"Array is too long","keyword":"additionalItems","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Array is too long","keyword":"additionalItems","schemaPath":"#/additionalItems","instancePath":"#","data":[false,true,null]}} |
 | draft2019-09:uniqueItems.json#/groups/5/tests/4 | extra items are invalid even if unique | PASS | {"name":"Error","message":"Array is too long","keyword":"additionalItems","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Array is too long","keyword":"additionalItems","schemaPath":"#/additionalItems","instancePath":"#","data":[false,true,null]}} |
-| draft2019-09:vocabulary.json#/groups/0/tests/0 | applicator vocabulary still works | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json |
-| draft2019-09:vocabulary.json#/groups/0/tests/1 | no validation: valid number | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json |
-| draft2019-09:vocabulary.json#/groups/0/tests/2 | no validation: invalid number, but it still validates | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json |
-| draft2019-09:vocabulary.json#/groups/1/tests/0 | string value | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-optional-vocabulary.json |
-| draft2019-09:vocabulary.json#/groups/1/tests/1 | number value | COMPILE | UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-optional-vocabulary.json |
+| draft2019-09:vocabulary.json#/groups/0/tests/0 | applicator vocabulary still works | PASS | {"name":"Error","message":"Property is invalid","keyword":"properties","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Property is invalid","keyword":"properties","item":"badProperty","schemaPath":"#/properties/badProperty","instancePath":"#/badProperty","data":"this property should not exist","cause":{"message":"Value is not valid","keyword":"oneOf","schemaPath":"#/properties/badProperty/oneOf","instancePath":"#/badProperty","data":"this property should not exist"}}} |
+| draft2019-09:vocabulary.json#/groups/1/tests/0 | string value | PASS | {"name":"Error","message":"Invalid type","keyword":"type","code":null,"schemaPath":"","instancePath":"","tree":{"message":"Invalid type","keyword":"type","schemaPath":"#/type","instancePath":"#","data":"foobar"}} |

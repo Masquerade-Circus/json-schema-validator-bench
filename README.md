@@ -71,16 +71,16 @@ npm run benchmark
 ## Last run
 
 - **Mode:** Full
-- **Completed (UTC):** 2026-08-04T04:16:59.500Z
-- **Total duration:** 29 min 44.278 s
+- **Completed (UTC):** 2026-08-04T06:25:37.923Z
+- **Total duration:** 38 min 43.866 s
 - **Node.js version:** v24.18.0
 - **OS/platform:** linux 6.8.0-136-generic (x64)
 - **CPU:** AMD Ryzen 7 7840HS w/ Radeon 780M Graphics (12 logical cores)
 - **System memory total:** 13.5 GiB
-- **Peak benchmark RSS:** 440.4 MiB
+- **Peak benchmark RSS:** 438.7 MiB
 - **JSON Schema Test Suite commit:** `0c7b65dc16dd8eaa7bd83e21099c76610c3b246a`
 - **Eligibility threshold:** 98%
-- **Benchmark contract hash:** `1488d1a9e9168255d8ef7ccb5baedde27e36fefc2d59a4844f37c09e2e84caea`
+- **Benchmark contract hash:** `519cea078654283cc978ea7259c1a2223c3ce47be5234f319abf5c8d1ce337d6`
 
 ## Total conformance
 
@@ -91,13 +91,13 @@ xychart horizontal
     title "Total conformance (Higher is better)"
     x-axis ["SchemaShield (1.3.0)", "z-schema (12.4.0)", "Hyperjump (1.17.7)", "Redocly AJV (8.18.3)", "AJV (8.20.0)", "schemasafe (1.3.0)", "json-schema-library (11.6.2)", "@cfworker/json-schema (4.1.1)", "jsonschema (1.5.0)", "djv (2.1.4)"]
     y-axis "PASS (%)" 0 --> 100
-    bar [99.812, 99.774, 98.595, 94.956, 94.931, 92.434, 90.527, 79.46, 43.187, 12.848]
+    bar [99.937, 99.774, 98.595, 94.956, 94.931, 92.434, 90.527, 79.46, 44.291, 12.848]
     line [98, 98, 98, 98, 98, 98, 98, 98, 98, 98]
 ```
 
 | Validator | Draft 4 Base | Draft 4 Formats | Draft 6 Base | Draft 6 Formats | Draft 7 Base | Draft 7 Formats | Draft 2019-09 Base | Draft 2019-09 Formats | Draft 2020-12 Base | Draft 2020-12 Formats | Total |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 99.86% | 100.00% | 100.00% | 100.00% | 100.00% | 100.00% | 99.65% | 100.00% | 99.66% | 99.40% | 99.81% |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 99.86% | 100.00% | 100.00% | 100.00% | 100.00% | 100.00% | 100.00% | 100.00% | 100.00% | 99.40% | 99.94% |
 | [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 99.72% | 100.00% | 99.89% | 100.00% | 99.90% | 100.00% | 99.51% | 100.00% | 99.52% | 100.00% | 99.77% |
 | [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 98.33% | 100.00% | 98.52% | 100.00% | 98.28% | 98.98% | 98.24% | 99.08% | 98.28% | 99.10% | 98.59% |
 | [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 99.16% | 99.03% | 99.15% | 99.27% | 98.66% | 85.18% | 97.81% | 86.26% | 95.74% | 85.01% | 94.96% |
@@ -105,7 +105,7 @@ xychart horizontal
 | [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0) | 99.30% | 95.15% | 99.58% | 96.34% | 96.94% | 71.72% | 99.08% | 74.05% | 99.04% | 73.16% | 92.43% |
 | [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2) | 98.89% | 56.80% | 99.26% | 65.57% | 98.95% | 70.02% | 99.58% | 72.82% | 99.59% | 73.01% | 90.53% |
 | [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1) | 98.33% | 97.57% | N/A | N/A | 98.28% | 82.62% | 98.59% | 83.82% | 96.91% | 83.36% | 79.46% |
-| [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | 95.68% | 88.83% | 94.39% | 90.84% | 93.21% | 78.02% | N/A | N/A | N/A | N/A | 43.19% |
+| [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | 98.61% | 88.83% | 97.57% | 90.84% | 96.75% | 78.02% | N/A | N/A | N/A | N/A | 44.29% |
 | [djv](https://www.npmjs.com/package/djv) (2.1.4) | N/A | N/A | 85.40% | 79.49% | N/A | N/A | N/A | N/A | N/A | N/A | 12.85% |
 
 The line marks the exact 98% draft eligibility threshold. Total uses PASS over all canonical cases. Draft eligibility uses the exact Base and Formats fractions for that draft.
@@ -123,49 +123,49 @@ xychart horizontal
     title "Draft-06 setup (Higher is better)"
     x-axis ["SchemaShield (1.3.0)", "Hyperjump (1.17.7)", "z-schema (12.4.0)", "AJV (8.20.0)", "Redocly AJV (8.18.3)"]
     y-axis "Setup score" 0 --> 100
-    bar [100, 81, 73, 3, 2]
+    bar [100, 79, 74, 3, 2]
 ```
 
 | Validator | Setup ops/s | Score | Errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 3,204 | 100% | [0](results/draft6/errors/setup/schema-shield-COMPILE.md) | 0 | 208.7 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 2,605 | 81.3% | [6](results/draft6/errors/setup/hyperjump-COMPILE.md) | 0 | 219.4 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 2,325 | 72.6% | [0](results/draft6/errors/setup/z-schema-COMPILE.md) | 0 | 184.9 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 85 | 2.7% | [3](results/draft6/errors/setup/ajv-COMPILE.md) | 0 | 327.5 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 74 | 2.3% | [3](results/draft6/errors/setup/redocly-ajv-COMPILE.md) | 0 | 307.8 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 2,530 | 100% | [0](results/draft6/errors/setup/schema-shield-COMPILE.md) | 0 | 187.6 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 2,002 | 79.2% | [6](results/draft6/errors/setup/hyperjump-COMPILE.md) | 0 | 221.0 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 1,875 | 74.1% | [0](results/draft6/errors/setup/z-schema-COMPILE.md) | 0 | 182.1 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 70 | 2.8% | [3](results/draft6/errors/setup/ajv-COMPILE.md) | 0 | 295.3 MiB |
+| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 62 | 2.5% | [3](results/draft6/errors/setup/redocly-ajv-COMPILE.md) | 0 | 322.8 MiB |
 
 Excluded from this ranking:
 
 - [djv](https://www.npmjs.com/package/djv) (2.1.4): PASS_THRESHOLD_NOT_MET(base 807/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 217/273 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 179/273 < 98%).
-- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(base 892/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%).
+- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(base 922/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 263/273 < 98%).
 
 ### Draft 6 execution
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) — Balanced score 96.6%
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) — Balanced score 96.5%
 
 ```mermaid
 xychart horizontal
     title "Draft-06 execution (Higher is better)"
     x-axis ["SchemaShield (1.3.0)", "AJV (8.20.0)", "Redocly AJV (8.18.3)", "Hyperjump (1.17.7)", "z-schema (12.4.0)"]
     y-axis "Balanced score" 0 --> 100
-    bar [97, 56, 51, 15, 1]
+    bar [97, 59, 44, 16, 2]
 ```
 
 | Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 2,584,224 | 15,385,854 | 93.3% | 100% | 96.6% | [0](results/draft6/errors/execution/base/schema-shield-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 189.9 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 2,770,133 | 4,861,689 | 100% | 31.6% | 56.2% | [0](results/draft6/errors/execution/base/ajv-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/ajv-RUNTIME.md) | 0 | 300.3 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 2,595,918 | 4,220,412 | 93.7% | 27.4% | 50.7% | [0](results/draft6/errors/execution/base/redocly-ajv-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/redocly-ajv-RUNTIME.md) | 0 | 317.7 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 495,130 | 2,057,895 | 17.9% | 13.4% | 15.5% | [0](results/draft6/errors/execution/base/hyperjump-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/hyperjump-RUNTIME.md) | 0 | 190.1 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 75,787 | 113,214 | 2.7% | 0.7% | 1.4% | [0](results/draft6/errors/execution/base/z-schema-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/z-schema-RUNTIME.md) | 0 | 186.5 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 1,611,820 | 9,472,719 | 93.2% | 100% | 96.5% | [0](results/draft6/errors/execution/base/schema-shield-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 187.2 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 1,729,971 | 3,326,393 | 100% | 35.1% | 59.3% | [0](results/draft6/errors/execution/base/ajv-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/ajv-RUNTIME.md) | 0 | 297.0 MiB |
+| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 1,094,940 | 2,886,678 | 63.3% | 30.5% | 43.9% | [0](results/draft6/errors/execution/base/redocly-ajv-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/redocly-ajv-RUNTIME.md) | 0 | 316.9 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 316,710 | 1,357,501 | 18.3% | 14.3% | 16.2% | [0](results/draft6/errors/execution/base/hyperjump-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/hyperjump-RUNTIME.md) | 0 | 189.0 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 61,253 | 73,175 | 3.5% | 0.8% | 1.7% | [0](results/draft6/errors/execution/base/z-schema-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/z-schema-RUNTIME.md) | 0 | 186.1 MiB |
 
 Excluded from this ranking:
 
 - [djv](https://www.npmjs.com/package/djv) (2.1.4): PASS_THRESHOLD_NOT_MET(base 807/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 217/273 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 179/273 < 98%).
-- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(base 892/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%).
+- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(base 922/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 263/273 < 98%).
 
 ### Draft 6 Cold execution
@@ -177,22 +177,22 @@ xychart horizontal
     title "Draft-06 Cold execution (Higher is better)"
     x-axis ["SchemaShield (1.3.0)", "z-schema (12.4.0)", "AJV (8.20.0)", "Redocly AJV (8.18.3)"]
     y-axis "Balanced score" 0 --> 100
-    bar [100, 41, 1, 1]
+    bar [100, 50, 1, 1]
 ```
 
 | Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 7,473 | 11,435 | 100% | 100% | 100% | [0](results/draft6/errors/cold-execution/base/schema-shield-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 191.7 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,623 | 4,057 | 48.5% | 35.5% | 41.5% | [0](results/draft6/errors/cold-execution/base/z-schema-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/z-schema-RUNTIME.md) | 0 | 185.2 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 105 | 101 | 1.4% | 0.9% | 1.1% | [0](results/draft6/errors/cold-execution/base/ajv-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/ajv-RUNTIME.md) | 0 | 419.5 MiB |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 98 | 97 | 1.3% | 0.9% | 1.1% | [0](results/draft6/errors/cold-execution/base/redocly-ajv-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/redocly-ajv-RUNTIME.md) | 0 | 440.4 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 4,505 | 6,599 | 100% | 100% | 100% | [0](results/draft6/errors/cold-execution/base/schema-shield-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 189.5 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 2,511 | 2,906 | 55.8% | 44.0% | 49.6% | [0](results/draft6/errors/cold-execution/base/z-schema-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/z-schema-RUNTIME.md) | 0 | 185.9 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 78 | 74 | 1.7% | 1.1% | 1.4% | [0](results/draft6/errors/cold-execution/base/ajv-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/ajv-RUNTIME.md) | 0 | 415.4 MiB |
+| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | 70 | 70 | 1.6% | 1.1% | 1.3% | [0](results/draft6/errors/cold-execution/base/redocly-ajv-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/redocly-ajv-RUNTIME.md) | 0 | 438.7 MiB |
 
 Excluded from this ranking:
 
 - [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7): PHASE_UNAVAILABLE.
 - [djv](https://www.npmjs.com/package/djv) (2.1.4): PASS_THRESHOLD_NOT_MET(base 807/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 217/273 < 98%).
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): PASS_THRESHOLD_NOT_MET(format-assertion 179/273 < 98%).
-- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(base 892/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%).
+- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): PASS_THRESHOLD_NOT_MET(base 922/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%).
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): PASS_THRESHOLD_NOT_MET(format-assertion 263/273 < 98%).
 
 ## All drafts results
@@ -206,14 +206,14 @@ xychart horizontal
     title "All Drafts Setup Setup score (Higher is better)"
     x-axis ["SchemaShield (1.3.0)", "Hyperjump (1.17.7)", "z-schema (12.4.0)"]
     y-axis "Setup score" 0 --> 100
-    bar [100, 71.11, 63.643]
+    bar [100, 72.557, 62.821]
 ```
 
 | Validator | Setup ops/s index | Setup score | Errors | Peak RSS |
 | --- | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 14,706 | 100% | [14](results/global-errors/setup/setup/schema-shield-COMPILE.md) | 259.7 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 10,781 | 71.1% | [26](results/global-errors/setup/setup/hyperjump-COMPILE.md) | 275.3 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 9,742 | 63.6% | [12](results/global-errors/setup/setup/z-schema-COMPILE.md) | 195.3 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 11,893 | 100% | [4](results/global-errors/setup/setup/schema-shield-COMPILE.md) | 250.3 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 8,803 | 72.6% | [26](results/global-errors/setup/setup/hyperjump-COMPILE.md) | 267.1 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 7,668 | 62.8% | [12](results/global-errors/setup/setup/z-schema-COMPILE.md) | 197.1 MiB |
 
 Excluded from this ranking:
 
@@ -222,7 +222,7 @@ Excluded from this ranking:
 - [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): coverage 2/5. Reason: draft7/setup: PASS_THRESHOLD_NOT_MET(format-assertion 500/587 < 98%). draft2019-09/setup: PASS_THRESHOLD_NOT_MET(base 1386/1417 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 565/655 < 98%). draft2020-12/setup: PASS_THRESHOLD_NOT_MET(base 1395/1457 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 567/667 < 98%).
 - [djv](https://www.npmjs.com/package/djv) (2.1.4): coverage 0/5. Reason: draft4/setup: DRAFT_UNSUPPORTED. draft6/setup: PASS_THRESHOLD_NOT_MET(base 807/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 217/273 < 98%). draft7/setup: DRAFT_UNSUPPORTED. draft2019-09/setup: DRAFT_UNSUPPORTED. draft2020-12/setup: DRAFT_UNSUPPORTED.
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): coverage 0/5. Reason: draft4/setup: PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%). draft6/setup: PASS_THRESHOLD_NOT_MET(format-assertion 179/273 < 98%). draft7/setup: PASS_THRESHOLD_NOT_MET(format-assertion 411/587 < 98%). draft2019-09/setup: PASS_THRESHOLD_NOT_MET(format-assertion 477/655 < 98%). draft2020-12/setup: PASS_THRESHOLD_NOT_MET(format-assertion 487/667 < 98%).
-- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): coverage 0/5. Reason: draft4/setup: PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(base 687/718 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft6/setup: PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(base 892/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft7/setup: PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(base 974/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft2019-09/setup: DRAFT_UNSUPPORTED. draft2020-12/setup: DRAFT_UNSUPPORTED.
+- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): coverage 0/5. Reason: draft4/setup: PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft6/setup: PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(base 922/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft7/setup: PHASE_UNAVAILABLE, PASS_THRESHOLD_NOT_MET(base 1011/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft2019-09/setup: DRAFT_UNSUPPORTED. draft2020-12/setup: DRAFT_UNSUPPORTED.
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): coverage 0/5. Reason: draft4/setup: PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%). draft6/setup: PASS_THRESHOLD_NOT_MET(format-assertion 263/273 < 98%). draft7/setup: PASS_THRESHOLD_NOT_MET(base 1013/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 421/587 < 98%). draft2019-09/setup: PASS_THRESHOLD_NOT_MET(format-assertion 485/655 < 98%). draft2020-12/setup: PASS_THRESHOLD_NOT_MET(format-assertion 488/667 < 98%).
 
 ### All Drafts Execution
@@ -234,14 +234,14 @@ xychart horizontal
     title "All Drafts Execution Balanced score (Higher is better)"
     x-axis ["SchemaShield (1.3.0)", "Hyperjump (1.17.7)", "z-schema (12.4.0)"]
     y-axis "Balanced score" 0 --> 100
-    bar [100, 9.865, 1.809]
+    bar [100, 10.331, 2.015]
 ```
 
 | Validator | Base ops/s | Formats ops/s | Average ops/s | Base score | Formats score | Balanced score |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 9,056,933 | 67,065,857 | 38,061,395 | 100% | 100% | 100% |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 1,918,070 | 4,466,320 | 3,192,195 | 22.5% | 4.3% | 9.9% |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 379,978 | 478,771 | 429,374 | 4.6% | 0.7% | 1.8% |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 5,115,786 | 44,777,159 | 24,946,472 | 100% | 100% | 100% |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 1,145,990 | 3,076,967 | 2,111,478 | 24.7% | 4.3% | 10.3% |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 261,831 | 313,641 | 287,736 | 5.8% | 0.7% | 2.0% |
 
 Excluded from this ranking:
 
@@ -250,7 +250,7 @@ Excluded from this ranking:
 - [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): coverage 4/10. Reason: draft7/base: PASS_THRESHOLD_NOT_MET(format-assertion 500/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 500/587 < 98%). draft2019-09/base: PASS_THRESHOLD_NOT_MET(base 1386/1417 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 565/655 < 98%). draft2019-09/format-assertion: PASS_THRESHOLD_NOT_MET(base 1386/1417 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 565/655 < 98%). draft2020-12/base: PASS_THRESHOLD_NOT_MET(base 1395/1457 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 567/667 < 98%). draft2020-12/format-assertion: PASS_THRESHOLD_NOT_MET(base 1395/1457 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 567/667 < 98%).
 - [djv](https://www.npmjs.com/package/djv) (2.1.4): coverage 0/10. Reason: draft4/base: DRAFT_UNSUPPORTED. draft4/format-assertion: DRAFT_UNSUPPORTED. draft6/base: PASS_THRESHOLD_NOT_MET(base 807/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 217/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(base 807/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 217/273 < 98%). draft7/base: DRAFT_UNSUPPORTED. draft7/format-assertion: DRAFT_UNSUPPORTED. draft2019-09/base: DRAFT_UNSUPPORTED. draft2019-09/format-assertion: DRAFT_UNSUPPORTED. draft2020-12/base: DRAFT_UNSUPPORTED. draft2020-12/format-assertion: DRAFT_UNSUPPORTED.
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): coverage 0/10. Reason: draft4/base: PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%). draft4/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%). draft6/base: PASS_THRESHOLD_NOT_MET(format-assertion 179/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 179/273 < 98%). draft7/base: PASS_THRESHOLD_NOT_MET(format-assertion 411/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 411/587 < 98%). draft2019-09/base: PASS_THRESHOLD_NOT_MET(format-assertion 477/655 < 98%). draft2019-09/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 477/655 < 98%). draft2020-12/base: PASS_THRESHOLD_NOT_MET(format-assertion 487/667 < 98%). draft2020-12/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 487/667 < 98%).
-- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): coverage 0/10. Reason: draft4/base: PASS_THRESHOLD_NOT_MET(base 687/718 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft4/format-assertion: PASS_THRESHOLD_NOT_MET(base 687/718 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft6/base: PASS_THRESHOLD_NOT_MET(base 892/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(base 892/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft7/base: PASS_THRESHOLD_NOT_MET(base 974/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(base 974/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft2019-09/base: DRAFT_UNSUPPORTED. draft2019-09/format-assertion: DRAFT_UNSUPPORTED. draft2020-12/base: DRAFT_UNSUPPORTED. draft2020-12/format-assertion: DRAFT_UNSUPPORTED.
+- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): coverage 0/10. Reason: draft4/base: PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft4/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft6/base: PASS_THRESHOLD_NOT_MET(base 922/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(base 922/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft7/base: PASS_THRESHOLD_NOT_MET(base 1011/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(base 1011/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft2019-09/base: DRAFT_UNSUPPORTED. draft2019-09/format-assertion: DRAFT_UNSUPPORTED. draft2020-12/base: DRAFT_UNSUPPORTED. draft2020-12/format-assertion: DRAFT_UNSUPPORTED.
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): coverage 0/10. Reason: draft4/base: PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%). draft4/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%). draft6/base: PASS_THRESHOLD_NOT_MET(format-assertion 263/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 263/273 < 98%). draft7/base: PASS_THRESHOLD_NOT_MET(base 1013/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 421/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(base 1013/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 421/587 < 98%). draft2019-09/base: PASS_THRESHOLD_NOT_MET(format-assertion 485/655 < 98%). draft2019-09/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 485/655 < 98%). draft2020-12/base: PASS_THRESHOLD_NOT_MET(format-assertion 488/667 < 98%). draft2020-12/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 488/667 < 98%).
 
 ### All Drafts Cold execution
@@ -262,13 +262,13 @@ xychart horizontal
     title "All Drafts Cold execution Balanced score (Higher is better)"
     x-axis ["SchemaShield (1.3.0)", "z-schema (12.4.0)"]
     y-axis "Balanced score" 0 --> 100
-    bar [100, 36.091]
+    bar [100, 40.94]
 ```
 
 | Validator | Base ops/s | Formats ops/s | Average ops/s | Base score | Formats score | Balanced score |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 31,766 | 54,558 | 43,162 | 100% | 100% | 100% |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 14,579 | 16,481 | 15,530 | 45.0% | 28.9% | 36.1% |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.3.0) | 19,236 | 32,977 | 26,106 | 100% | 100% | 100% |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 10,033 | 11,382 | 10,707 | 50.9% | 32.9% | 40.9% |
 
 Excluded from this ranking:
 
@@ -278,7 +278,7 @@ Excluded from this ranking:
 - [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3): coverage 4/10. Reason: draft7/base: PASS_THRESHOLD_NOT_MET(format-assertion 500/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 500/587 < 98%). draft2019-09/base: PASS_THRESHOLD_NOT_MET(base 1386/1417 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 565/655 < 98%). draft2019-09/format-assertion: PASS_THRESHOLD_NOT_MET(base 1386/1417 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 565/655 < 98%). draft2020-12/base: PASS_THRESHOLD_NOT_MET(base 1395/1457 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 567/667 < 98%). draft2020-12/format-assertion: PASS_THRESHOLD_NOT_MET(base 1395/1457 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 567/667 < 98%).
 - [djv](https://www.npmjs.com/package/djv) (2.1.4): coverage 0/10. Reason: draft4/base: DRAFT_UNSUPPORTED. draft4/format-assertion: DRAFT_UNSUPPORTED. draft6/base: PASS_THRESHOLD_NOT_MET(base 807/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 217/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(base 807/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 217/273 < 98%). draft7/base: DRAFT_UNSUPPORTED. draft7/format-assertion: DRAFT_UNSUPPORTED. draft2019-09/base: DRAFT_UNSUPPORTED. draft2019-09/format-assertion: DRAFT_UNSUPPORTED. draft2020-12/base: DRAFT_UNSUPPORTED. draft2020-12/format-assertion: DRAFT_UNSUPPORTED.
 - [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2): coverage 0/10. Reason: draft4/base: PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%). draft4/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 117/206 < 98%). draft6/base: PASS_THRESHOLD_NOT_MET(format-assertion 179/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 179/273 < 98%). draft7/base: PASS_THRESHOLD_NOT_MET(format-assertion 411/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 411/587 < 98%). draft2019-09/base: PASS_THRESHOLD_NOT_MET(format-assertion 477/655 < 98%). draft2019-09/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 477/655 < 98%). draft2020-12/base: PASS_THRESHOLD_NOT_MET(format-assertion 487/667 < 98%). draft2020-12/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 487/667 < 98%).
-- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): coverage 0/10. Reason: draft4/base: PASS_THRESHOLD_NOT_MET(base 687/718 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft4/format-assertion: PASS_THRESHOLD_NOT_MET(base 687/718 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft6/base: PASS_THRESHOLD_NOT_MET(base 892/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(base 892/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft7/base: PASS_THRESHOLD_NOT_MET(base 974/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(base 974/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft2019-09/base: DRAFT_UNSUPPORTED. draft2019-09/format-assertion: DRAFT_UNSUPPORTED. draft2020-12/base: DRAFT_UNSUPPORTED. draft2020-12/format-assertion: DRAFT_UNSUPPORTED.
+- [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0): coverage 0/10. Reason: draft4/base: PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft4/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 183/206 < 98%). draft6/base: PASS_THRESHOLD_NOT_MET(base 922/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(base 922/945 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 248/273 < 98%). draft7/base: PASS_THRESHOLD_NOT_MET(base 1011/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(base 1011/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 458/587 < 98%). draft2019-09/base: DRAFT_UNSUPPORTED. draft2019-09/format-assertion: DRAFT_UNSUPPORTED. draft2020-12/base: DRAFT_UNSUPPORTED. draft2020-12/format-assertion: DRAFT_UNSUPPORTED.
 - [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0): coverage 0/10. Reason: draft4/base: PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%). draft4/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 196/206 < 98%). draft6/base: PASS_THRESHOLD_NOT_MET(format-assertion 263/273 < 98%). draft6/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 263/273 < 98%). draft7/base: PASS_THRESHOLD_NOT_MET(base 1013/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 421/587 < 98%). draft7/format-assertion: PASS_THRESHOLD_NOT_MET(base 1013/1045 < 98%), PASS_THRESHOLD_NOT_MET(format-assertion 421/587 < 98%). draft2019-09/base: PASS_THRESHOLD_NOT_MET(format-assertion 485/655 < 98%). draft2019-09/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 485/655 < 98%). draft2020-12/base: PASS_THRESHOLD_NOT_MET(format-assertion 488/667 < 98%). draft2020-12/format-assertion: PASS_THRESHOLD_NOT_MET(format-assertion 488/667 < 98%).
 
 ## How to read these results
@@ -384,7 +384,7 @@ Each performance sample records the validator runtime hash that produced it. A p
 
 ### Setup
 
-We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `setup()`. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. We prepare neutral disposable copies before the clock starts. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.
+We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `setup()`. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. We prepare neutral disposable copies before the clock starts. The runner validates, normalizes and hashes `reportOptions` after the provider clock stops. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.
 
 ### Execution
 

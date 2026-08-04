@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto";
-
 import ZSchema from "z-schema";
 
 import { defineAdapter } from "../adapter-api.js";
@@ -41,9 +39,7 @@ function createImplementation({ draft, formatProfile, resources }) {
           instance.setRemoteReference(alias, resource.schema, { version });
         }
       }
-      const uri = `https://benchmark.invalid/z-schema/${createHash("sha256")
-        .update(JSON.stringify(schema))
-        .digest("hex")}`;
+      const uri = "https://benchmark.invalid/z-schema/root-schema";
       instance.setRemoteReference(
         uri,
         typeof schema === "boolean" ? { allOf: [schema] } : schema

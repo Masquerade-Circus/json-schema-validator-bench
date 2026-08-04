@@ -3118,6 +3118,75 @@ test("setup worker times fresh adapter setup but keeps neutral preparation outsi
   }
 });
 
+test("setup worker validates and hashes report options after the provider clock", async () => {
+  const events = [];
+  const definition = defineAdapter(
+    {
+      id: "report-options-fixture",
+      packageName: "report-options-fixture",
+      displayName: "Report options fixture",
+      drafts: ["draft6"],
+      unsupported: []
+    },
+    () => {
+      events.push("factory");
+      return {
+        get reportOptions() {
+          events.push("report-options");
+          return { stable: true };
+        },
+        setup(schema) {
+          events.push("setup");
+          return schema;
+        },
+        validate: () => true
+      };
+    }
+  );
+  let clock = 0;
+
+  await runSetupSample({
+    request: {
+      phase: "setup",
+      validator: "report-options-fixture",
+      draft: "draft6",
+      formatProfile: "base",
+      round: 1,
+      deadline: Date.now() + 60_000
+    },
+    setupEntries: [
+      {
+        setupKey: "draft6:report-options",
+        draft: "draft6",
+        representativeSchemaId: "schema"
+      }
+    ],
+    schemas: [{ id: "schema", draft: "draft6", schema: { type: "string" } }],
+    remotes: new Map(),
+    createAdapter(config, options) {
+      return definition.create(config, options);
+    },
+    now() {
+      events.push(clock === 0 ? "clock-start" : "clock-stop");
+      clock += 1;
+      return clock;
+    },
+    timing: {
+      warmupMinimumMilliseconds: 0,
+      targetSampleMilliseconds: 0,
+      minimumSampleMilliseconds: 0
+    }
+  });
+
+  assert.deepEqual(events, [
+    "clock-start",
+    "factory",
+    "setup",
+    "clock-stop",
+    "report-options"
+  ]);
+});
+
 test("setup worker gives every operation disposable schemas and resources", async () => {
   const schemaId = "draft6:mutating-schema";
   const schema = {
@@ -5102,7 +5171,7 @@ function reportSampleFixture(phase) {
     }
   }
   return {
-    benchmarkVersion: 13,
+    benchmarkVersion: 14,
     benchmarkMode: "full",
     phase,
     draft,

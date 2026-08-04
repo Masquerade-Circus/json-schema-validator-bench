@@ -4,8 +4,8 @@
 
 | Profile | Options | SHA-256 |
 | --- | --- | --- |
-| base | {"formatProfile":"base","defaultDialect":"http://json-schema.org/draft-06/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in","resources":"registered"} | e80c6c024e818963fc895b359af622ed8ba828e29ae9da167d64b92cfb2adce6 |
-| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"http://json-schema.org/draft-06/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in","resources":"registered"} | 6efa2edd8f10dd5703309c0b0a588713d51669384f38dea80e1a51471a2a9c15 |
+| base | {"formatProfile":"base","defaultDialect":"http://json-schema.org/draft-06/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 02df0a888b6ac7e95564857d8e1f2634ed6d12ca283e821ba9b95a75d3e39c7c |
+| format-assertion | {"formatProfile":"format-assertion","defaultDialect":"http://json-schema.org/draft-06/schema#","fast":{"failFast":true,"useDefaults":false,"immutable":false},"detailed":{"failFast":false,"useDefaults":false,"immutable":false},"compile":{"validateSchema":true},"formats":"built-in; unknown formats ignored","metaschemas":"built-in-and-referenced-external","resources":"registered"} | 7e88ece8574cdd6424de6984c0ad665e06c7aa9b9ae8fd3fa5b5326d87c338b0 |
 
 ## Counts
 

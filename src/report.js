@@ -347,7 +347,7 @@ export function validateSampleSet({
     throw new Error(`${phase} result declares another phase`);
   }
   if (
-    result.benchmarkVersion !== 13 ||
+    result.benchmarkVersion !== 14 ||
     result.benchmarkMode !== mode ||
     result.draft !== intersection.draft ||
     result.formatProfile !== intersection.formatProfile
@@ -1204,7 +1204,7 @@ export function summarizePhase(result, mode, intersection = null) {
     }
   }
   return {
-    benchmarkVersion: 13,
+    benchmarkVersion: 14,
     summaryVersion: 10,
     phase: result.phase,
     draft: result.draft,
@@ -3061,7 +3061,7 @@ export function renderBenchmarkReadme({
     "",
     "### Setup",
     "",
-    "We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `setup()`. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. We prepare neutral disposable copies before the clock starts. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.",
+    "We measure one complete fresh construction per Setup operation: adapter factory and context creation, vendor construction, format and metaschema registration, resource registration, and `setup()`. Each draft unions the effective operations represented by Base and Formats, then deduplicates them by transformed schema, transitive resource closure and effective adapter configuration. A profile label alone does not create another operation. We prepare neutral disposable copies before the clock starts. The runner validates, normalizes and hashes `reportOptions` after the provider clock stops. Primitive schemas, including `true` and `false`, enter each fresh adapter directly. Setup `N/A` identifies a validate-only API or unavailable setup measurement.",
     "",
     "### Execution",
     "",

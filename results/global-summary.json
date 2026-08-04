@@ -67,19 +67,19 @@
       "competitorCount": 3,
       "referencesByDraft": {
         "draft4": {
-          "setupMedian": 3578.1649883024716
+          "setupMedian": 2441.0838336929855
         },
         "draft6": {
-          "setupMedian": 3203.6739481100026
+          "setupMedian": 2529.587838017748
         },
         "draft7": {
-          "setupMedian": 3082.06155218041
+          "setupMedian": 2891.5625921498595
         },
         "draft2019-09": {
-          "setupMedian": 2466.4557582370644
+          "setupMedian": 2149.4355265904433
         },
         "draft2020-12": {
-          "setupMedian": 2375.4726207925996
+          "setupMedian": 1881.2850153604927
         }
       },
       "included": [
@@ -89,19 +89,19 @@
           "version": "1.3.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 3578.1649883024716
+              "setupMedian": 2441.0838336929855
             },
             "draft6": {
-              "setupMedian": 3203.6739481100026
+              "setupMedian": 2529.587838017748
             },
             "draft7": {
-              "setupMedian": 3082.06155218041
+              "setupMedian": 2891.5625921498595
             },
             "draft2019-09": {
-              "setupMedian": 2466.4557582370644
+              "setupMedian": 2149.4355265904433
             },
             "draft2020-12": {
-              "setupMedian": 2375.4726207925996
+              "setupMedian": 1881.2850153604927
             }
           },
           "scopeStates": {
@@ -128,7 +128,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 272359424,
+          "peakRssBytes": 262492160,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -138,59 +138,19 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 14705.82886762255,
+          "setupOpsPerSecond": 11892.954805811529,
           "setupScore": 100,
           "errors": {
             "setup": {
-              "count": 14,
+              "count": 4,
               "records": [
-                {
-                  "draft": "draft2019-09",
-                  "profile": "base",
-                  "caseId": "draft2019-09:vocabulary.json#/groups/0/tests/0",
-                  "description": "applicator vocabulary still works",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json"
-                },
-                {
-                  "draft": "draft2019-09",
-                  "profile": "base",
-                  "caseId": "draft2019-09:vocabulary.json#/groups/0/tests/1",
-                  "description": "no validation: valid number",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json"
-                },
-                {
-                  "draft": "draft2019-09",
-                  "profile": "base",
-                  "caseId": "draft2019-09:vocabulary.json#/groups/0/tests/2",
-                  "description": "no validation: invalid number, but it still validates",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json"
-                },
-                {
-                  "draft": "draft2019-09",
-                  "profile": "base",
-                  "caseId": "draft2019-09:vocabulary.json#/groups/1/tests/0",
-                  "description": "string value",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-optional-vocabulary.json"
-                },
-                {
-                  "draft": "draft2019-09",
-                  "profile": "base",
-                  "caseId": "draft2019-09:vocabulary.json#/groups/1/tests/1",
-                  "description": "number value",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-optional-vocabulary.json"
-                },
                 {
                   "draft": "draft2020-12",
                   "profile": "format-assertion",
                   "caseId": "draft2020-12:optional/format-assertion.json#/groups/0/tests/0",
                   "description": "format-assertion: false: valid string",
                   "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-false.json"
+                  "message": "REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion"
                 },
                 {
                   "draft": "draft2020-12",
@@ -198,7 +158,7 @@
                   "caseId": "draft2020-12:optional/format-assertion.json#/groups/0/tests/1",
                   "description": "format-assertion: false: invalid string",
                   "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-false.json"
+                  "message": "REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion"
                 },
                 {
                   "draft": "draft2020-12",
@@ -206,7 +166,7 @@
                   "caseId": "draft2020-12:optional/format-assertion.json#/groups/1/tests/0",
                   "description": "format-assertion: true: valid string",
                   "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-true.json"
+                  "message": "REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion"
                 },
                 {
                   "draft": "draft2020-12",
@@ -214,47 +174,7 @@
                   "caseId": "draft2020-12:optional/format-assertion.json#/groups/1/tests/1",
                   "description": "format-assertion: true: invalid string",
                   "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/format-assertion-true.json"
-                },
-                {
-                  "draft": "draft2020-12",
-                  "profile": "base",
-                  "caseId": "draft2020-12:vocabulary.json#/groups/0/tests/0",
-                  "description": "applicator vocabulary still works",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json"
-                },
-                {
-                  "draft": "draft2020-12",
-                  "profile": "base",
-                  "caseId": "draft2020-12:vocabulary.json#/groups/0/tests/1",
-                  "description": "no validation: valid number",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json"
-                },
-                {
-                  "draft": "draft2020-12",
-                  "profile": "base",
-                  "caseId": "draft2020-12:vocabulary.json#/groups/0/tests/2",
-                  "description": "no validation: invalid number, but it still validates",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-no-validation.json"
-                },
-                {
-                  "draft": "draft2020-12",
-                  "profile": "base",
-                  "caseId": "draft2020-12:vocabulary.json#/groups/1/tests/0",
-                  "description": "string value",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-optional-vocabulary.json"
-                },
-                {
-                  "draft": "draft2020-12",
-                  "profile": "base",
-                  "caseId": "draft2020-12:vocabulary.json#/groups/1/tests/1",
-                  "description": "number value",
-                  "status": "COMPILE",
-                  "message": "UNKNOWN_METASCHEMA: Unknown metaschema: http://localhost:1234/draft2020-12/metaschema-optional-vocabulary.json"
+                  "message": "REFERENCE_NOT_FOUND: Reference not found: https://json-schema.org/draft/2020-12/meta/format-assertion"
                 }
               ]
             }
@@ -266,19 +186,19 @@
           "version": "1.17.7",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 2859.228037029764
+              "setupMedian": 2183.1390486915298
             },
             "draft6": {
-              "setupMedian": 2604.552936804117
+              "setupMedian": 2002.2303897560419
             },
             "draft7": {
-              "setupMedian": 2407.4181785123737
+              "setupMedian": 2101.958172796866
             },
             "draft2019-09": {
-              "setupMedian": 1584.6869250633176
+              "setupMedian": 1301.0825893021388
             },
             "draft2020-12": {
-              "setupMedian": 1324.8394381384228
+              "setupMedian": 1214.5716704582737
             }
           },
           "scopeStates": {
@@ -305,7 +225,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 288714752,
+          "peakRssBytes": 280039424,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -315,8 +235,8 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 10780.725515547994,
-          "setupScore": 71.11044238977264,
+          "setupOpsPerSecond": 8802.98187100485,
+          "setupScore": 72.55722935383547,
           "errors": {
             "setup": {
               "count": 26,
@@ -539,19 +459,19 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 2560.274230875333
+              "setupMedian": 1839.3610589462492
             },
             "draft6": {
-              "setupMedian": 2325.189801285689
+              "setupMedian": 1875.2422774037511
             },
             "draft7": {
-              "setupMedian": 2365.5568838178033
+              "setupMedian": 1820.9780444431449
             },
             "draft2019-09": {
-              "setupMedian": 1371.8523908650275
+              "setupMedian": 1176.1128638506107
             },
             "draft2020-12": {
-              "setupMedian": 1118.7933759602297
+              "setupMedian": 956.3018662521845
             }
           },
           "scopeStates": {
@@ -578,7 +498,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 204791808,
+          "peakRssBytes": 206643200,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -588,8 +508,8 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 9741.666682804082,
-          "setupScore": 63.64326398020393,
+          "setupOpsPerSecond": 7667.99611089594,
+          "setupScore": 62.8211384000561,
           "errors": {
             "setup": {
               "count": 12,
@@ -40164,10 +40084,10 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 151.6663208616813
+              "setupMedian": 117.7610965653968
             },
             "draft6": {
-              "setupMedian": 85.45313550186518
+              "setupMedian": 70.01513399471183
             },
             "draft7": {
               "setupMedian": null
@@ -40261,7 +40181,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 343384064,
+          "peakRssBytes": 309649408,
           "coverage": "2/5",
           "requiredScopes": [
             "draft4/setup",
@@ -40349,10 +40269,10 @@
           "version": "8.18.3",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 144.38305924447675
+              "setupMedian": 113.79225929714579
             },
             "draft6": {
-              "setupMedian": 74.04105744094198
+              "setupMedian": 62.026709081953605
             },
             "draft7": {
               "setupMedian": null
@@ -40446,7 +40366,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 322785280,
+          "peakRssBytes": 338530304,
           "coverage": "2/5",
           "requiredScopes": [
             "draft4/setup",
@@ -40910,17 +40830,6 @@
                 },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
                   "pass": 183,
                   "total": 206,
@@ -40941,7 +40850,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -40971,7 +40880,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -41009,7 +40918,7 @@
               ]
             }
           },
-          "mutationCount": 6,
+          "mutationCount": 12,
           "mutationRecords": [
             {
               "validator": "jsonschema",
@@ -41025,6 +40934,60 @@
               "moment": "fast validation",
               "difference": {
                 "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft4",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft4:properties.json#/groups/4/tests/3",
+              "caseId": "draft4:properties.json#/groups/4/tests/3",
+              "schemaId": "draft4:properties.json#/groups/4",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft4",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft4:properties.json#/groups/4/tests/4",
+              "caseId": "draft4:properties.json#/groups/4/tests/4",
+              "schemaId": "draft4:properties.json#/groups/4",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
                 "kind": "added",
                 "before": null,
                 "after": {
@@ -41098,6 +41061,60 @@
               "formatProfile": "base",
               "phase": "conformance",
               "scope": "case",
+              "subjectId": "draft6:properties.json#/groups/5/tests/3",
+              "caseId": "draft6:properties.json#/groups/5/tests/3",
+              "schemaId": "draft6:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft6",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft6:properties.json#/groups/5/tests/4",
+              "caseId": "draft6:properties.json#/groups/5/tests/4",
+              "schemaId": "draft6:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft6",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
               "subjectId": "draft6:properties.json#/groups/5/tests/5",
               "caseId": "draft6:properties.json#/groups/5/tests/5",
               "schemaId": "draft6:properties.json#/groups/5",
@@ -41133,6 +41150,60 @@
               "moment": "fast validation",
               "difference": {
                 "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft7",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft7:properties.json#/groups/5/tests/3",
+              "caseId": "draft7:properties.json#/groups/5/tests/3",
+              "schemaId": "draft7:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft7",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft7:properties.json#/groups/5/tests/4",
+              "caseId": "draft7:properties.json#/groups/5/tests/4",
+              "schemaId": "draft7:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
                 "kind": "added",
                 "before": null,
                 "after": {
@@ -41192,17 +41263,6 @@
                 },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
                   "pass": 183,
                   "total": 206,
@@ -41223,7 +41283,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -41253,7 +41313,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -41531,24 +41591,24 @@
       "competitorCount": 3,
       "referencesByDraft": {
         "draft4": {
-          "baseMedian": 1789818.3566615705,
-          "formatsMedian": 12398176.521911707
+          "baseMedian": 1263807.8587059397,
+          "formatsMedian": 8898854.398903117
         },
         "draft6": {
-          "baseMedian": 2584224.2736169007,
-          "formatsMedian": 15385854.422988629
+          "baseMedian": 1611820.4545796828,
+          "formatsMedian": 9472718.560431158
         },
         "draft7": {
-          "baseMedian": 2809552.984150623,
-          "formatsMedian": 13366902.254058003
+          "baseMedian": 1351208.775154172,
+          "formatsMedian": 8971003.209471557
         },
         "draft2019-09": {
-          "baseMedian": 994235.5753380246,
-          "formatsMedian": 13055262.867660439
+          "baseMedian": 461927.66376797046,
+          "formatsMedian": 9176741.706419181
         },
         "draft2020-12": {
-          "baseMedian": 879101.9830044452,
-          "formatsMedian": 12859661.027137186
+          "baseMedian": 427020.7895287984,
+          "formatsMedian": 8257841.014264679
         }
       },
       "included": [
@@ -41558,24 +41618,24 @@
           "version": "1.3.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 1789818.3566615705,
-              "formatsMedian": 12398176.521911707
+              "baseMedian": 1263807.8587059397,
+              "formatsMedian": 8898854.398903117
             },
             "draft6": {
-              "baseMedian": 2584224.2736169007,
-              "formatsMedian": 15385854.422988629
+              "baseMedian": 1611820.4545796828,
+              "formatsMedian": 9472718.560431158
             },
             "draft7": {
-              "baseMedian": 2809552.984150623,
-              "formatsMedian": 13366902.254058003
+              "baseMedian": 1351208.775154172,
+              "formatsMedian": 8971003.209471557
             },
             "draft2019-09": {
-              "baseMedian": 994235.5753380246,
-              "formatsMedian": 13055262.867660439
+              "baseMedian": 461927.66376797046,
+              "formatsMedian": 9176741.706419181
             },
             "draft2020-12": {
-              "baseMedian": 879101.9830044452,
-              "formatsMedian": 12859661.027137186
+              "baseMedian": 427020.7895287984,
+              "formatsMedian": 8257841.014264679
             }
           },
           "scopeStates": {
@@ -41622,7 +41682,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 226582528,
+          "peakRssBytes": 210636800,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41637,9 +41697,9 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 9056933.172771564,
-          "formatsOpsPerSecond": 67065857.09375596,
-          "averageOpsPerSecond": 38061395.13326376,
+          "baseOpsPerSecond": 5115785.541736563,
+          "formatsOpsPerSecond": 44777158.889489695,
+          "averageOpsPerSecond": 24946472.21561313,
           "baseScore": 100,
           "formatsScore": 100,
           "balancedScore": 100,
@@ -41660,24 +41720,24 @@
           "version": "1.17.7",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 412292.88195504854,
-              "formatsMedian": 1594737.2457268974
+              "baseMedian": 283154.46545644186,
+              "formatsMedian": 1195071.2630542237
             },
             "draft6": {
-              "baseMedian": 495130.29738929326,
-              "formatsMedian": 2057895.3525710872
+              "baseMedian": 316709.5105198771,
+              "formatsMedian": 1357501.0282251418
             },
             "draft7": {
-              "baseMedian": 509375.9780678601,
-              "formatsMedian": 253869.08385836225
+              "baseMedian": 245226.79737988557,
+              "formatsMedian": 168476.6984556605
             },
             "draft2019-09": {
-              "baseMedian": 266939.84879259166,
-              "formatsMedian": 284959.0943190974
+              "baseMedian": 151465.65730117453,
+              "formatsMedian": 180208.5327875021
             },
             "draft2020-12": {
-              "baseMedian": 234330.50415090722,
-              "formatsMedian": 274859.41395111755
+              "baseMedian": 149433.53028933908,
+              "formatsMedian": 175709.08879102705
             }
           },
           "scopeStates": {
@@ -41724,7 +41784,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 278974464,
+          "peakRssBytes": 280268800,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41739,12 +41799,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 1918069.510355701,
-          "formatsOpsPerSecond": 4466320.190426562,
-          "averageOpsPerSecond": 3192194.8503911314,
-          "baseScore": 22.468817577311395,
-          "formatsScore": 4.331297411093413,
-          "balancedScore": 9.865045940234593,
+          "baseOpsPerSecond": 1145989.9609467182,
+          "formatsOpsPerSecond": 3076966.6113135554,
+          "averageOpsPerSecond": 2111478.286130137,
+          "baseScore": 24.686203391976214,
+          "formatsScore": 4.32322385473811,
+          "balancedScore": 10.330730051022938,
           "errors": {
             "base": {
               "count": 0,
@@ -41762,24 +41822,24 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 74293.76105114416,
-              "formatsMedian": 76828.13396799742
+              "baseMedian": 56858.68468738163,
+              "formatsMedian": 56640.28015185008
             },
             "draft6": {
-              "baseMedian": 75787.35956486396,
-              "formatsMedian": 113213.70032020708
+              "baseMedian": 61253.39681001444,
+              "formatsMedian": 73175.35479464833
             },
             "draft7": {
-              "baseMedian": 101350.43595405546,
-              "formatsMedian": 100488.15333040424
+              "baseMedian": 62064.24576854696,
+              "formatsMedian": 62356.81856106323
             },
             "draft2019-09": {
-              "baseMedian": 67216.09311593114,
-              "formatsMedian": 93169.88770745171
+              "baseMedian": 41951.97955927769,
+              "formatsMedian": 63136.63053386679
             },
             "draft2020-12": {
-              "baseMedian": 61329.88559256459,
-              "formatsMedian": 95071.57391268198
+              "baseMedian": 39703.18242684386,
+              "formatsMedian": 58331.78226535218
             }
           },
           "scopeStates": {
@@ -41826,7 +41886,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 284798976,
+          "peakRssBytes": 281313280,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41841,12 +41901,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 379977.5352785593,
-          "formatsOpsPerSecond": 478771.44923874247,
-          "averageOpsPerSecond": 429374.4922586509,
-          "baseScore": 4.605142183894244,
-          "formatsScore": 0.7103412065027873,
-          "balancedScore": 1.8086520547148681,
+          "baseOpsPerSecond": 261831.4892520646,
+          "formatsOpsPerSecond": 313640.8663067806,
+          "averageOpsPerSecond": 287736.1777794226,
+          "baseScore": 5.8119332356969995,
+          "formatsScore": 0.698346901615038,
+          "balancedScore": 2.0146328617250506,
           "errors": {
             "base": {
               "count": 0,
@@ -81504,12 +81564,12 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 2384174.805285519,
-              "formatsMedian": 3324981.973891532
+              "baseMedian": 1605221.9249084229,
+              "formatsMedian": 2862993.8309699288
             },
             "draft6": {
-              "baseMedian": 2770132.631366988,
-              "formatsMedian": 4861689.236816145
+              "baseMedian": 1729970.893386582,
+              "formatsMedian": 3326392.5677345106
             },
             "draft7": {
               "baseMedian": null,
@@ -81684,7 +81744,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 314904576,
+          "peakRssBytes": 311418880,
           "coverage": "4/10",
           "requiredScopes": [
             "draft4/base",
@@ -81847,12 +81907,12 @@
           "version": "8.18.3",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 2116765.862749218,
-              "formatsMedian": 2903664.7495969525
+              "baseMedian": 1195029.9539084234,
+              "formatsMedian": 2303353.10036646
             },
             "draft6": {
-              "baseMedian": 2595917.706991014,
-              "formatsMedian": 4220411.632702818
+              "baseMedian": 1094940.0882663867,
+              "formatsMedian": 2886678.237841236
             },
             "draft7": {
               "baseMedian": null,
@@ -82027,7 +82087,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 333139968,
+          "peakRssBytes": 332263424,
           "coverage": "4/10",
           "requiredScopes": [
             "draft4/base",
@@ -82866,17 +82926,6 @@
               "reasons": [
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
                   "pass": 183,
                   "total": 206,
@@ -82891,17 +82940,6 @@
             "draft4/format-assertion": {
               "eligible": false,
               "reasons": [
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -82921,7 +82959,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82948,7 +82986,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -82975,7 +83013,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -83002,7 +83040,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -83056,7 +83094,7 @@
               ]
             }
           },
-          "mutationCount": 6,
+          "mutationCount": 12,
           "mutationRecords": [
             {
               "validator": "jsonschema",
@@ -83072,6 +83110,60 @@
               "moment": "fast validation",
               "difference": {
                 "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft4",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft4:properties.json#/groups/4/tests/3",
+              "caseId": "draft4:properties.json#/groups/4/tests/3",
+              "schemaId": "draft4:properties.json#/groups/4",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft4",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft4:properties.json#/groups/4/tests/4",
+              "caseId": "draft4:properties.json#/groups/4/tests/4",
+              "schemaId": "draft4:properties.json#/groups/4",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
                 "kind": "added",
                 "before": null,
                 "after": {
@@ -83145,6 +83237,60 @@
               "formatProfile": "base",
               "phase": "conformance",
               "scope": "case",
+              "subjectId": "draft6:properties.json#/groups/5/tests/3",
+              "caseId": "draft6:properties.json#/groups/5/tests/3",
+              "schemaId": "draft6:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft6",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft6:properties.json#/groups/5/tests/4",
+              "caseId": "draft6:properties.json#/groups/5/tests/4",
+              "schemaId": "draft6:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft6",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
               "subjectId": "draft6:properties.json#/groups/5/tests/5",
               "caseId": "draft6:properties.json#/groups/5/tests/5",
               "schemaId": "draft6:properties.json#/groups/5",
@@ -83180,6 +83326,60 @@
               "moment": "fast validation",
               "difference": {
                 "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft7",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft7:properties.json#/groups/5/tests/3",
+              "caseId": "draft7:properties.json#/groups/5/tests/3",
+              "schemaId": "draft7:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft7",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft7:properties.json#/groups/5/tests/4",
+              "caseId": "draft7:properties.json#/groups/5/tests/4",
+              "schemaId": "draft7:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
                 "kind": "added",
                 "before": null,
                 "after": {
@@ -83241,17 +83441,6 @@
               "reasons": [
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
                   "pass": 183,
                   "total": 206,
@@ -83266,17 +83455,6 @@
             {
               "scope": "draft4/format-assertion",
               "reasons": [
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -83296,7 +83474,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -83323,7 +83501,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -83350,7 +83528,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -83377,7 +83555,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -83863,24 +84041,24 @@
       "competitorCount": 2,
       "referencesByDraft": {
         "draft4": {
-          "baseMedian": 6766.755845035635,
-          "formatsMedian": 10511.347821924192
+          "baseMedian": 4423.345396381221,
+          "formatsMedian": 6892.800719763203
         },
         "draft6": {
-          "baseMedian": 7473.055209191734,
-          "formatsMedian": 11435.487045223552
+          "baseMedian": 4504.72100141478,
+          "formatsMedian": 6599.014154875995
         },
         "draft7": {
-          "baseMedian": 7967.374496994719,
-          "formatsMedian": 11862.076014229246
+          "baseMedian": 4779.699154532258,
+          "formatsMedian": 6707.462671526588
         },
         "draft2019-09": {
-          "baseMedian": 4966.510602827189,
-          "formatsMedian": 10506.317914983298
+          "baseMedian": 2723.336100965603,
+          "formatsMedian": 6350.7745828447305
         },
         "draft2020-12": {
-          "baseMedian": 4592.679917739245,
-          "formatsMedian": 10242.346014163422
+          "baseMedian": 2804.4586618360872,
+          "formatsMedian": 6427.2242452256905
         }
       },
       "included": [
@@ -83890,24 +84068,24 @@
           "version": "1.3.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 6766.755845035635,
-              "formatsMedian": 10511.347821924192
+              "baseMedian": 4423.345396381221,
+              "formatsMedian": 6892.800719763203
             },
             "draft6": {
-              "baseMedian": 7473.055209191734,
-              "formatsMedian": 11435.487045223552
+              "baseMedian": 4504.72100141478,
+              "formatsMedian": 6599.014154875995
             },
             "draft7": {
-              "baseMedian": 7967.374496994719,
-              "formatsMedian": 11862.076014229246
+              "baseMedian": 4779.699154532258,
+              "formatsMedian": 6707.462671526588
             },
             "draft2019-09": {
-              "baseMedian": 4966.510602827189,
-              "formatsMedian": 10506.317914983298
+              "baseMedian": 2723.336100965603,
+              "formatsMedian": 6350.7745828447305
             },
             "draft2020-12": {
-              "baseMedian": 4592.679917739245,
-              "formatsMedian": 10242.346014163422
+              "baseMedian": 2804.4586618360872,
+              "formatsMedian": 6427.2242452256905
             }
           },
           "scopeStates": {
@@ -83954,7 +84132,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 284999680,
+          "peakRssBytes": 289857536,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -83969,9 +84147,9 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 31766.376071788523,
-          "formatsOpsPerSecond": 54557.57481052371,
-          "averageOpsPerSecond": 43161.975441156115,
+          "baseOpsPerSecond": 19235.56031512995,
+          "formatsOpsPerSecond": 32977.27637423621,
+          "averageOpsPerSecond": 26106.41834468308,
           "baseScore": 100,
           "formatsScore": 100,
           "balancedScore": 100,
@@ -83992,24 +84170,24 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 3522.0306635952247,
-              "formatsMedian": 3817.260944239291
+              "baseMedian": 2545.7262929449244,
+              "formatsMedian": 2893.5477179300437
             },
             "draft6": {
-              "baseMedian": 3623.2743525637416,
-              "formatsMedian": 4056.777141860661
+              "baseMedian": 2511.4749111871242,
+              "formatsMedian": 2906.4317864867326
             },
             "draft7": {
-              "baseMedian": 3525.040998179256,
-              "formatsMedian": 4232.670286584231
+              "baseMedian": 2443.0191377596393,
+              "formatsMedian": 2609.075558610921
             },
             "draft2019-09": {
-              "baseMedian": 2145.14181502868,
-              "formatsMedian": 2397.367302447349
+              "baseMedian": 1374.4754531300482,
+              "formatsMedian": 1603.2220086839202
             },
             "draft2020-12": {
-              "baseMedian": 1763.4915960194976,
-              "formatsMedian": 1976.948170960819
+              "baseMedian": 1158.5601381512624,
+              "formatsMedian": 1369.315327177364
             }
           },
           "scopeStates": {
@@ -84056,7 +84234,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 211382272,
+          "peakRssBytes": 210472960,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -84071,12 +84249,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 14578.9794253864,
-          "formatsOpsPerSecond": 16481.02384609235,
-          "averageOpsPerSecond": 15530.001635739376,
-          "baseScore": 45.031383574821085,
-          "formatsScore": 28.92482289742396,
-          "balancedScore": 36.09050837446968,
+          "baseOpsPerSecond": 10033.255933172999,
+          "formatsOpsPerSecond": 11381.592398888983,
+          "averageOpsPerSecond": 10707.42416603099,
+          "baseScore": 50.90854426492033,
+          "formatsScore": 32.92291460516768,
+          "balancedScore": 40.93968313882475,
           "errors": {
             "base": {
               "count": 0,
@@ -123734,12 +123912,12 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 218.25543535330164,
-              "formatsMedian": 220.96213724484744
+              "baseMedian": 151.21638713510634,
+              "formatsMedian": 151.35016433188588
             },
             "draft6": {
-              "baseMedian": 105.24509819715291,
-              "formatsMedian": 101.31162688228528
+              "baseMedian": 77.75268807208491,
+              "formatsMedian": 74.40195239061136
             },
             "draft7": {
               "baseMedian": null,
@@ -123914,7 +124092,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 439836672,
+          "peakRssBytes": 435585024,
           "coverage": "4/10",
           "requiredScopes": [
             "draft4/base",
@@ -124284,12 +124462,12 @@
           "version": "8.18.3",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 189.4610923184414,
-              "formatsMedian": 189.4643309396426
+              "baseMedian": 126.75125142271698,
+              "formatsMedian": 127.58184441107718
             },
             "draft6": {
-              "baseMedian": 98.24014641045494,
-              "formatsMedian": 97.36632873822496
+              "baseMedian": 70.37807781832558,
+              "formatsMedian": 70.03503788944388
             },
             "draft7": {
               "baseMedian": null,
@@ -124464,7 +124642,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 461840384,
+          "peakRssBytes": 460058624,
           "coverage": "4/10",
           "requiredScopes": [
             "draft4/base",
@@ -125303,17 +125481,6 @@
               "reasons": [
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
                   "pass": 183,
                   "total": 206,
@@ -125328,17 +125495,6 @@
             "draft4/format-assertion": {
               "eligible": false,
               "reasons": [
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -125358,7 +125514,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -125385,7 +125541,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -125412,7 +125568,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -125439,7 +125595,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -125493,7 +125649,7 @@
               ]
             }
           },
-          "mutationCount": 6,
+          "mutationCount": 12,
           "mutationRecords": [
             {
               "validator": "jsonschema",
@@ -125509,6 +125665,60 @@
               "moment": "fast validation",
               "difference": {
                 "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft4",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft4:properties.json#/groups/4/tests/3",
+              "caseId": "draft4:properties.json#/groups/4/tests/3",
+              "schemaId": "draft4:properties.json#/groups/4",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft4",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft4:properties.json#/groups/4/tests/4",
+              "caseId": "draft4:properties.json#/groups/4/tests/4",
+              "schemaId": "draft4:properties.json#/groups/4",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
                 "kind": "added",
                 "before": null,
                 "after": {
@@ -125582,6 +125792,60 @@
               "formatProfile": "base",
               "phase": "conformance",
               "scope": "case",
+              "subjectId": "draft6:properties.json#/groups/5/tests/3",
+              "caseId": "draft6:properties.json#/groups/5/tests/3",
+              "schemaId": "draft6:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft6",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft6:properties.json#/groups/5/tests/4",
+              "caseId": "draft6:properties.json#/groups/5/tests/4",
+              "schemaId": "draft6:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft6",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
               "subjectId": "draft6:properties.json#/groups/5/tests/5",
               "caseId": "draft6:properties.json#/groups/5/tests/5",
               "schemaId": "draft6:properties.json#/groups/5",
@@ -125617,6 +125881,60 @@
               "moment": "fast validation",
               "difference": {
                 "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft7",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft7:properties.json#/groups/5/tests/3",
+              "caseId": "draft7:properties.json#/groups/5/tests/3",
+              "schemaId": "draft7:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.toString",
+                "kind": "added",
+                "before": null,
+                "after": {
+                  "descriptorType": "data",
+                  "configurable": true,
+                  "enumerable": true,
+                  "writable": true,
+                  "value": {
+                    "type": "undefined"
+                  }
+                }
+              }
+            },
+            {
+              "validator": "jsonschema",
+              "draft": "draft7",
+              "formatProfile": "base",
+              "phase": "conformance",
+              "scope": "case",
+              "subjectId": "draft7:properties.json#/groups/5/tests/4",
+              "caseId": "draft7:properties.json#/groups/5/tests/4",
+              "schemaId": "draft7:properties.json#/groups/5",
+              "mutationTarget": "data",
+              "mutationClass": "validation",
+              "moment": "fast validation",
+              "difference": {
+                "path": "$.constructor",
                 "kind": "added",
                 "before": null,
                 "after": {
@@ -125678,17 +125996,6 @@
               "reasons": [
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
                   "pass": 183,
                   "total": 206,
@@ -125703,17 +126010,6 @@
             {
               "scope": "draft4/format-assertion",
               "reasons": [
-                {
-                  "code": "PASS_THRESHOLD_NOT_MET",
-                  "profile": "base",
-                  "pass": 687,
-                  "total": 718,
-                  "thresholdPercent": "98",
-                  "thresholdFraction": {
-                    "numerator": 49,
-                    "denominator": 50
-                  }
-                },
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "format-assertion",
@@ -125733,7 +126029,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -125760,7 +126056,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 892,
+                  "pass": 922,
                   "total": 945,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -125787,7 +126083,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -125814,7 +126110,7 @@
                 {
                   "code": "PASS_THRESHOLD_NOT_MET",
                   "profile": "base",
-                  "pass": 974,
+                  "pass": 1011,
                   "total": 1045,
                   "thresholdPercent": "98",
                   "thresholdFraction": {
@@ -126371,9 +126667,9 @@
           },
           "draft2019-09": {
             "base": {
-              "pass": 1412,
+              "pass": 1417,
               "total": 1417,
-              "ratio": 0.9964714184897672
+              "ratio": 1
             },
             "format-assertion": {
               "pass": 655,
@@ -126383,9 +126679,9 @@
           },
           "draft2020-12": {
             "base": {
-              "pass": 1452,
+              "pass": 1457,
               "total": 1457,
-              "ratio": 0.9965682910089224
+              "ratio": 1
             },
             "format-assertion": {
               "pass": 663,
@@ -126395,9 +126691,9 @@
           }
         },
         "total": {
-          "pass": 7955,
+          "pass": 7965,
           "denominator": 7970,
-          "ratio": 0.9981179422835633
+          "ratio": 0.9993726474278545
         }
       },
       {
@@ -126903,9 +127199,9 @@
         "cells": {
           "draft4": {
             "base": {
-              "pass": 687,
+              "pass": 708,
               "total": 718,
-              "ratio": 0.9568245125348189
+              "ratio": 0.9860724233983287
             },
             "format-assertion": {
               "pass": 183,
@@ -126915,9 +127211,9 @@
           },
           "draft6": {
             "base": {
-              "pass": 892,
+              "pass": 922,
               "total": 945,
-              "ratio": 0.9439153439153439
+              "ratio": 0.9756613756613757
             },
             "format-assertion": {
               "pass": 248,
@@ -126927,9 +127223,9 @@
           },
           "draft7": {
             "base": {
-              "pass": 974,
+              "pass": 1011,
               "total": 1045,
-              "ratio": 0.9320574162679426
+              "ratio": 0.9674641148325359
             },
             "format-assertion": {
               "pass": 458,
@@ -126947,9 +127243,9 @@
           }
         },
         "total": {
-          "pass": 3442,
+          "pass": 3530,
           "denominator": 7970,
-          "ratio": 0.43186951066499374
+          "ratio": 0.44291091593475534
         }
       },
       {

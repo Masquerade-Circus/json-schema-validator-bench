@@ -53,6 +53,10 @@
         ],
         "keywords": false
       },
+      "provider-workaround": {
+        "id": "isolate-visited-references-per-root-validation",
+        "scope": "generated-validator"
+      },
       "implementation": {
         "core": {
           "packageName": "@redocly/ajv",
@@ -111,6 +115,10 @@
         ],
         "keywords": false
       },
+      "provider-workaround": {
+        "id": "isolate-visited-references-per-root-validation",
+        "scope": "generated-validator"
+      },
       "implementation": {
         "core": {
           "packageName": "@redocly/ajv",
@@ -125,8 +133,8 @@
     }
   },
   "reportOptionsSha256": {
-    "base": "cf2a9dba785576100f2cb50e8c382820d47e0622be0c4c308487ea13b0a53f0b",
-    "format-assertion": "85be232d5d24fd1d68fa60ba2da674a8abe7a02481e7062efc4c41928d92340a"
+    "base": "c2a02f237778936cdd1861aa20e9e545fed96d61502236dd4a5706fac3f2149e",
+    "format-assertion": "aa549d212e26405b1807e5912b42254f66e54f9ea7f4cade5c73fbffef211981"
   },
   "suite": {
     "commit": "0c7b65dc16dd8eaa7bd83e21099c76610c3b246a",

@@ -652,12 +652,12 @@ test("migrated adapters preserve resources, profiles, and input", async () => {
   }
 });
 
-test("fast validation profiles stop after the first provider error", async () => {
+test("fast reusable validation profiles stop after the first provider error", async () => {
   const schema = {
     type: "object",
     required: ["first", "second"]
   };
-  for (const id of ["redocly-ajv", "jsonschema"]) {
+  for (const id of ["redocly-ajv"]) {
     const runtime = createRegisteredAdapter(id, {
       draft: "draft7",
       formatProfile: "base",
@@ -671,21 +671,40 @@ test("fast validation profiles stop after the first provider error", async () =>
     const detail = JSON.parse(
       await runtime.getError({ schema, target, testCase: { id }, data: {} })
     );
-    if (id === "redocly-ajv") {
-      assert.equal(runtime.reportOptions.fast.allErrors, false);
-      assert.equal(runtime.reportOptions.detailed.allErrors, true);
-      assert.equal(
-        runtime.reportOptions.fast.code.process,
-        "isolate-visited-references-per-root-validation"
-      );
-      assert.deepEqual(
-        [runtime.validate(target, {}), runtime.validate(target, {})],
-        [false, false]
-      );
-    } else {
-      assert.equal(runtime.reportOptions.throwFirst, true);
-      assert.equal(typeof detail.message, "string");
-    }
+    assert.equal(runtime.reportOptions.fast.allErrors, false);
+    assert.equal(runtime.reportOptions.detailed.allErrors, true);
+    assert.equal(
+      runtime.reportOptions.fast.code.process,
+      "isolate-visited-references-per-root-validation"
+    );
+    assert.deepEqual(runtime.reportOptions["provider-workaround"], {
+      id: "isolate-visited-references-per-root-validation",
+      scope: "generated-validator"
+    });
+    assert.deepEqual(
+      [runtime.validate(target, {}), runtime.validate(target, {})],
+      [false, false]
+    );
+    assert.equal(typeof detail.message, "string");
+  }
+});
+
+test("jsonschema evaluates complete combinators without throwFirst", () => {
+  const runtime = createRegisteredAdapter("jsonschema", {
+    draft: "draft7",
+    formatProfile: "base",
+    resources: [],
+    unknownFormats: []
+  });
+  const cases = [
+    [{ anyOf: [{ type: "string" }, { type: "integer" }] }, 1],
+    [{ oneOf: [{ type: "string" }, { type: "integer" }] }, 1],
+    [{ not: { type: "string" } }, 1]
+  ];
+
+  assert.equal(Object.hasOwn(runtime.reportOptions, "throwFirst"), false);
+  for (const [schema, data] of cases) {
+    assert.equal(runtime.validate(schema, data), true);
   }
 });
 
@@ -734,7 +753,10 @@ test("SchemaShield registers aliases, transitive and boolean resources in fast a
     unknownFormats: []
   });
   assert.equal(runtime.reportOptions.resources, "registered");
-  assert.equal(runtime.reportOptions.metaschemas, "built-in");
+  assert.equal(
+    runtime.reportOptions.metaschemas,
+    "built-in-and-referenced-external"
+  );
   assert.equal(runtime.reportOptions.formats, "built-in; unknown formats ignored");
   assert.deepEqual(runtime.reportOptions.compile, { validateSchema: true });
   const schema = {
@@ -878,22 +900,137 @@ test("SchemaShield built-in metaschema unions package and suite aliases", async 
 test("SchemaShield built-in metaschema rejects a real schema conflict", () => {
   const definition = getRegisteredAdapter("schema-shield");
   const snapshot = draft6MetaschemaFixture;
+  const runtime = definition.create({
+    draft: "draft6",
+    formatProfile: "base",
+    resources: [
+      {
+        canonicalUri: snapshot.uri,
+        aliases: snapshot.aliases,
+        schema: { $id: snapshot.schema.$id.slice(0, -1), type: "string" }
+      }
+    ],
+    unknownFormats: []
+  });
   assert.throws(
-    () =>
-      definition.create({
-        draft: "draft6",
-        formatProfile: "base",
-        resources: [
-          {
-            canonicalUri: snapshot.uri,
-            aliases: snapshot.aliases,
-            schema: { $id: snapshot.schema.$id.slice(0, -1), type: "string" }
-          }
-        ],
-        unknownFormats: []
-      }),
+    () => runtime.setup({ type: "string" }),
     (error) => error?.code === "BUILTIN_SCHEMA_ID_COLLISION"
   );
+});
+
+test("SchemaShield registers only referenced external dialects as metaschemas in dependency order", async () => {
+  const draft7 = "http://json-schema.org/draft-07/schema#";
+  const firstMetaUri = "https://schemas.example.test/meta/first";
+  const secondMetaUri = "https://schemas.example.test/meta/second";
+  const vocabularyUri = "https://schemas.example.test/vocabulary/core";
+  const ordinaryUri = "https://schemas.example.test/ordinary";
+  const resources = [
+    {
+      canonicalUri: secondMetaUri,
+      aliases: [secondMetaUri],
+      schema: {
+        $id: secondMetaUri,
+        $schema: firstMetaUri,
+        allOf: [{ $ref: draft7 }]
+      }
+    },
+    {
+      canonicalUri: ordinaryUri,
+      aliases: [ordinaryUri],
+      schema: {
+        $id: ordinaryUri,
+        $schema: draft7,
+        type: 1
+      }
+    },
+    {
+      canonicalUri: firstMetaUri,
+      aliases: [firstMetaUri],
+      schema: {
+        $id: firstMetaUri,
+        $schema: draft7,
+        allOf: [{ $ref: draft7 }, { $ref: vocabularyUri }]
+      }
+    },
+    {
+      canonicalUri: vocabularyUri,
+      aliases: [vocabularyUri],
+      schema: {
+        $id: vocabularyUri,
+        $schema: draft7,
+        type: ["object", "boolean"]
+      }
+    }
+  ];
+  const runtime = createRegisteredAdapter("schema-shield", {
+    draft: "draft7",
+    formatProfile: "base",
+    resources,
+    unknownFormats: []
+  });
+
+  const target = await runtime.setup({
+    $id: "https://schemas.example.test/root/schema",
+    $schema: "../meta/second",
+    type: "string"
+  });
+  assert.equal(runtime.validate(target, "valid"), true);
+  assert.equal(runtime.validate(target, 1), false);
+  assert.equal(runtime.reportOptions.metaschemas, "built-in-and-referenced-external");
+});
+
+test("SchemaShield classifies dialect references from nested schema resources", () => {
+  const draft7 = "http://json-schema.org/draft-07/schema#";
+  const metaUri = "https://schemas.example.test/nested/meta";
+  const runtime = createRegisteredAdapter("schema-shield", {
+    draft: "draft7",
+    formatProfile: "base",
+    resources: [
+      {
+        canonicalUri: "https://schemas.example.test/source",
+        aliases: ["https://schemas.example.test/source"],
+        schema: {
+          $id: "https://schemas.example.test/source",
+          $defs: {
+            nested: {
+              $id: "child",
+              $schema: "nested/meta",
+              type: "string"
+            }
+          }
+        }
+      },
+      {
+        canonicalUri: metaUri,
+        aliases: [metaUri],
+        schema: {
+          $id: metaUri,
+          $schema: draft7,
+          type: 1
+        }
+      }
+    ],
+    unknownFormats: []
+  });
+
+  assert.throws(
+    () => runtime.setup({ type: "string" }),
+    (error) => error?.code === "INVALID_SCHEMA"
+  );
+});
+
+test("z-schema setup uses one reserved root URI without serializing the schema", async () => {
+  const runtime = createRegisteredAdapter("z-schema", {
+    draft: "draft7",
+    formatProfile: "base",
+    resources: [],
+    unknownFormats: []
+  });
+  const first = await runtime.setup({ type: "integer" });
+  const second = await runtime.setup({ properties: { value: { type: "string" } } });
+
+  assert.equal(first.schema, "https://benchmark.invalid/z-schema/root-schema");
+  assert.equal(second.schema, first.schema);
 });
 
 test("migrated adapters keep representative conformance booleans", async () => {

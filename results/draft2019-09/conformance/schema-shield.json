@@ -26,7 +26,7 @@
         "validateSchema": true
       },
       "formats": "built-in; unknown formats ignored",
-      "metaschemas": "built-in",
+      "metaschemas": "built-in-and-referenced-external",
       "resources": "registered"
     },
     "format-assertion": {
@@ -46,13 +46,13 @@
         "validateSchema": true
       },
       "formats": "built-in; unknown formats ignored",
-      "metaschemas": "built-in",
+      "metaschemas": "built-in-and-referenced-external",
       "resources": "registered"
     }
   },
   "reportOptionsSha256": {
-    "base": "d7e222bd1eae525f825bbf1085daabca4bfcd91383001f8f2170505b1eb4026a",
-    "format-assertion": "7329f2fda34eb1fdd1ead4078a508a4814b19706d6280956a24a649ea046669c"
+    "base": "b9d844e6144fedf81c1bee975e77bec3237f6939fbf1ecbb7aa5e03537fee9bd",
+    "format-assertion": "93b451543a42d0714e352f36770e76d4a7f7bf7d1db019abab142e66ebc11f2f"
   },
   "suite": {
     "commit": "0c7b65dc16dd8eaa7bd83e21099c76610c3b246a",
@@ -60,17 +60,17 @@
     "manifestSha256": "c371a52592ffb38be90d604af21a5dae2619d1f353e86be852825247a88b328d"
   },
   "counts": {
-    "PASS": 2067,
+    "PASS": 2072,
     "WRONG": 0,
-    "COMPILE": 5,
+    "COMPILE": 0,
     "RUNTIME": 0,
     "UNSUPPORTED": 0
   },
   "countsByFormatProfile": {
     "base": {
-      "PASS": 1412,
+      "PASS": 1417,
       "WRONG": 0,
-      "COMPILE": 5,
+      "COMPILE": 0,
       "RUNTIME": 0,
       "UNSUPPORTED": 0
     },
@@ -49702,10 +49702,10 @@
       "description": "applicator vocabulary still works",
       "formatProfile": "base",
       "expected": false,
-      "observed": null,
-      "status": "COMPILE",
-      "errorCode": "UNKNOWN_METASCHEMA",
-      "error": "Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json",
+      "observed": false,
+      "status": "PASS",
+      "errorCode": null,
+      "error": "{\"name\":\"Error\",\"message\":\"Property is invalid\",\"keyword\":\"properties\",\"code\":null,\"schemaPath\":\"\",\"instancePath\":\"\",\"tree\":{\"message\":\"Property is invalid\",\"keyword\":\"properties\",\"item\":\"badProperty\",\"schemaPath\":\"#/properties/badProperty\",\"instancePath\":\"#/badProperty\",\"data\":\"this property should not exist\",\"cause\":{\"message\":\"Value is not valid\",\"keyword\":\"oneOf\",\"schemaPath\":\"#/properties/badProperty/oneOf\",\"instancePath\":\"#/badProperty\",\"data\":\"this property should not exist\"}}}",
       "detailErrorCode": null,
       "detailError": null,
       "version": "1.3.0",
@@ -49726,10 +49726,10 @@
       "description": "no validation: valid number",
       "formatProfile": "base",
       "expected": true,
-      "observed": null,
-      "status": "COMPILE",
-      "errorCode": "UNKNOWN_METASCHEMA",
-      "error": "Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json",
+      "observed": true,
+      "status": "PASS",
+      "errorCode": null,
+      "error": null,
       "detailErrorCode": null,
       "detailError": null,
       "version": "1.3.0",
@@ -49750,10 +49750,10 @@
       "description": "no validation: invalid number, but it still validates",
       "formatProfile": "base",
       "expected": true,
-      "observed": null,
-      "status": "COMPILE",
-      "errorCode": "UNKNOWN_METASCHEMA",
-      "error": "Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-no-validation.json",
+      "observed": true,
+      "status": "PASS",
+      "errorCode": null,
+      "error": null,
       "detailErrorCode": null,
       "detailError": null,
       "version": "1.3.0",
@@ -49774,10 +49774,10 @@
       "description": "string value",
       "formatProfile": "base",
       "expected": false,
-      "observed": null,
-      "status": "COMPILE",
-      "errorCode": "UNKNOWN_METASCHEMA",
-      "error": "Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-optional-vocabulary.json",
+      "observed": false,
+      "status": "PASS",
+      "errorCode": null,
+      "error": "{\"name\":\"Error\",\"message\":\"Invalid type\",\"keyword\":\"type\",\"code\":null,\"schemaPath\":\"\",\"instancePath\":\"\",\"tree\":{\"message\":\"Invalid type\",\"keyword\":\"type\",\"schemaPath\":\"#/type\",\"instancePath\":\"#\",\"data\":\"foobar\"}}",
       "detailErrorCode": null,
       "detailError": null,
       "version": "1.3.0",
@@ -49798,10 +49798,10 @@
       "description": "number value",
       "formatProfile": "base",
       "expected": true,
-      "observed": null,
-      "status": "COMPILE",
-      "errorCode": "UNKNOWN_METASCHEMA",
-      "error": "Unknown metaschema: http://localhost:1234/draft2019-09/metaschema-optional-vocabulary.json",
+      "observed": true,
+      "status": "PASS",
+      "errorCode": null,
+      "error": null,
       "detailErrorCode": null,
       "detailError": null,
       "version": "1.3.0",

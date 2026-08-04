@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 13,
+  "benchmarkVersion": 14,
   "summaryVersion": 10,
   "phase": "cold-execution",
   "draft": "draft7",
@@ -261,16 +261,16 @@
         {
           "id": "jsonschema",
           "counts": {
-            "PASS": 974,
-            "WRONG": 43,
+            "PASS": 1011,
+            "WRONG": 6,
             "COMPILE": 0,
             "RUNTIME": 28,
             "UNSUPPORTED": 0
           },
           "countsByProfile": {
             "base": {
-              "PASS": 974,
-              "WRONG": 43,
+              "PASS": 1011,
+              "WRONG": 6,
               "COMPILE": 0,
               "RUNTIME": 28,
               "UNSUPPORTED": 0
@@ -287,7 +287,7 @@
             {
               "code": "PASS_THRESHOLD_NOT_MET",
               "profile": "base",
-              "pass": 974,
+              "pass": 1011,
               "total": 1045,
               "thresholdPercent": "98",
               "thresholdFraction": {
@@ -8532,7 +8532,7 @@
         "records": []
       },
       "jsonschema": {
-        "count": 2,
+        "count": 4,
         "records": [
           {
             "validator": "jsonschema",
@@ -8548,6 +8548,60 @@
             "moment": "fast validation",
             "difference": {
               "path": "$.toString",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": true,
+                "enumerable": true,
+                "writable": true,
+                "value": {
+                  "type": "undefined"
+                }
+              }
+            }
+          },
+          {
+            "validator": "jsonschema",
+            "draft": "draft7",
+            "formatProfile": "base",
+            "phase": "conformance",
+            "scope": "case",
+            "subjectId": "draft7:properties.json#/groups/5/tests/3",
+            "caseId": "draft7:properties.json#/groups/5/tests/3",
+            "schemaId": "draft7:properties.json#/groups/5",
+            "mutationTarget": "data",
+            "mutationClass": "validation",
+            "moment": "fast validation",
+            "difference": {
+              "path": "$.toString",
+              "kind": "added",
+              "before": null,
+              "after": {
+                "descriptorType": "data",
+                "configurable": true,
+                "enumerable": true,
+                "writable": true,
+                "value": {
+                  "type": "undefined"
+                }
+              }
+            }
+          },
+          {
+            "validator": "jsonschema",
+            "draft": "draft7",
+            "formatProfile": "base",
+            "phase": "conformance",
+            "scope": "case",
+            "subjectId": "draft7:properties.json#/groups/5/tests/4",
+            "caseId": "draft7:properties.json#/groups/5/tests/4",
+            "schemaId": "draft7:properties.json#/groups/5",
+            "mutationTarget": "data",
+            "mutationClass": "validation",
+            "moment": "fast validation",
+            "difference": {
+              "path": "$.constructor",
               "kind": "added",
               "before": null,
               "after": {
@@ -8603,47 +8657,47 @@
   "validators": {
     "schema-shield": {
       "roundThroughputs": [
-        7632.6732149373165,
-        7983.78151375498,
-        8045.6727254766665,
-        7475.543266131796,
-        7950.967480234459,
-        8056.206952104009
+        4724.206236119282,
+        4474.862488900839,
+        4966.39843754458,
+        5091.456097019105,
+        4645.510835300187,
+        4835.192072945235
       ],
-      "median": 7967.374496994719,
-      "mean": 7857.474192106539,
-      "medianAbsoluteDeviation": 83.56534179561868,
-      "relativeMedianAbsoluteDeviation": 0.010488441559655491,
-      "sampleStandardDeviation": 243.31651971784146,
-      "coefficientOfVariation": 0.03096625121114268,
-      "minimum": 7475.543266131796,
-      "maximum": 8056.206952104009,
-      "nanosecondsPerOperation": 125511.86094957609,
+      "median": 4779.699154532258,
+      "mean": 4789.6043613048705,
+      "medianAbsoluteDeviation": 160.44380112219642,
+      "relativeMedianAbsoluteDeviation": 0.033567761470940836,
+      "sampleStandardDeviation": 222.9579155169878,
+      "coefficientOfVariation": 0.046550382599084984,
+      "minimum": 4474.862488900839,
+      "maximum": 5091.456097019105,
+      "nanosecondsPerOperation": 209218.18877486655,
       "mutationCount": 0,
-      "peakRssBytes": 203563008,
+      "peakRssBytes": 207683584,
       "scoreRelativeToBest": 100
     },
     "z-schema": {
       "roundThroughputs": [
-        3529.250550258833,
-        3552.7646222450403,
-        3366.8798296121595,
-        3461.1524328728774,
-        3547.292662069012,
-        3520.831446099679
+        2475.4907446997095,
+        2504.7435920975404,
+        2040.7120091112706,
+        2259.860046997197,
+        2410.5475308195687,
+        2603.6770224246006
       ],
-      "median": 3525.040998179256,
-      "mean": 3496.3619238596,
-      "medianAbsoluteDeviation": 24.987643977770176,
-      "relativeMedianAbsoluteDeviation": 0.007088610881597327,
-      "sampleStandardDeviation": 71.35957501421628,
-      "coefficientOfVariation": 0.020409664836826484,
-      "minimum": 3366.8798296121595,
-      "maximum": 3552.7646222450403,
-      "nanosecondsPerOperation": 283684.64381450234,
+      "median": 2443.0191377596393,
+      "mean": 2382.505157691648,
+      "medianAbsoluteDeviation": 111.1911695014312,
+      "relativeMedianAbsoluteDeviation": 0.04551383482136723,
+      "sampleStandardDeviation": 202.56174479455714,
+      "coefficientOfVariation": 0.08502048532428544,
+      "minimum": 2040.7120091112706,
+      "maximum": 2603.6770224246006,
+      "nanosecondsPerOperation": 409329.5809860278,
       "mutationCount": 0,
-      "peakRssBytes": 202235904,
-      "scoreRelativeToBest": 44.24344556050297
+      "peakRssBytes": 206266368,
+      "scoreRelativeToBest": 51.1124039144408
     }
   }
 }

@@ -330,11 +330,21 @@ export function defineAdapter(declaration, factory) {
         }
       });
     },
-    create(config) {
+    create(config, { deferReportOptions = false } = {}) {
+      if (typeof deferReportOptions !== "boolean") {
+        throw new Error("adapter deferReportOptions must be boolean");
+      }
       const normalizedConfig = normalizeConfig(config, metadata.drafts);
       const implementation = factory(normalizedConfig);
       assertAdapterImplementation(implementation);
-      const reporting = normalizeReportOptions(implementation.reportOptions);
+      let reporting = null;
+      function getReporting() {
+        reporting ??= normalizeReportOptions(implementation.reportOptions);
+        return reporting;
+      }
+      if (!deferReportOptions) {
+        getReporting();
+      }
       let lastValidation = null;
       let lastTarget = null;
       const preparedObjects = new WeakMap();
@@ -367,7 +377,6 @@ export function defineAdapter(declaration, factory) {
       const runtime = {
         ...metadata,
         config: normalizedConfig,
-        ...reporting,
         validate(target, data) {
           lastValidation = null;
           lastTarget = typeof implementation.setup === "function"
@@ -381,6 +390,20 @@ export function defineAdapter(declaration, factory) {
           return result;
         }
       };
+      Object.defineProperties(runtime, {
+        reportOptions: {
+          enumerable: true,
+          get() {
+            return getReporting().reportOptions;
+          }
+        },
+        reportOptionsSha256: {
+          enumerable: true,
+          get() {
+            return getReporting().reportOptionsSha256;
+          }
+        }
+      });
       if (typeof implementation.setup === "function") {
         const setupIsAsync = implementation.setup.constructor.name === "AsyncFunction";
         runtime.setupMode = setupIsAsync ? "async" : "sync";

@@ -14,12 +14,11 @@ function createImplementation({ formatProfile, resources }) {
   }
   let lastResult = null;
   return {
-    reportOptions: { formatProfile, nestedErrors: false, throwFirst: true },
+    reportOptions: { formatProfile, nestedErrors: false },
     validate(schema, data) {
       try {
         lastResult = instance.validate(data, schema, {
-          nestedErrors: false,
-          throwFirst: true
+          nestedErrors: false
         });
         return lastResult.valid;
       } catch (error) {

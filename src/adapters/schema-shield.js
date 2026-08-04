@@ -33,6 +33,29 @@ const builtinMetaschemaByResourceUri = new Map([
   ...builtinMetaschemaUris.map((uri) => [resourceUri(uri), uri]),
   ...builtinMetaschemaAliases
 ]);
+const singleSchemaKeywords = [
+  "additionalItems",
+  "additionalProperties",
+  "contains",
+  "contentSchema",
+  "else",
+  "if",
+  "items",
+  "not",
+  "propertyNames",
+  "unevaluatedItems",
+  "unevaluatedProperties",
+  "then"
+];
+const schemaArrayKeywords = ["allOf", "anyOf", "oneOf", "prefixItems"];
+const schemaMapKeywords = [
+  "$defs",
+  "definitions",
+  "dependentSchemas",
+  "dependencies",
+  "patternProperties",
+  "properties"
+];
 
 function resourceUri(value) {
   if (typeof value !== "string" || value.length === 0) {
@@ -45,6 +68,86 @@ function resourceUri(value) {
   } catch {
     return null;
   }
+}
+
+function resolveUri(value, base = null) {
+  if (typeof value !== "string" || value.length === 0) {
+    return null;
+  }
+  try {
+    return new URL(value, base ?? undefined).href;
+  } catch {
+    return null;
+  }
+}
+
+function resolveResourceUri(value, base = null) {
+  const resolved = resolveUri(value, base);
+  return resolved === null ? null : resourceUri(resolved);
+}
+
+function visitSchemas(schema, visit, baseUri = null) {
+  if (typeof schema === "boolean" || schema === null || typeof schema !== "object") {
+    return;
+  }
+  const identifier =
+    typeof schema.$id === "string"
+      ? schema.$id
+      : typeof schema.id === "string"
+        ? schema.id
+        : null;
+  const currentBase =
+    identifier === null ? baseUri : resolveResourceUri(identifier, baseUri) ?? baseUri;
+  visit(schema, currentBase);
+  for (const keyword of singleSchemaKeywords) {
+    const child = schema[keyword];
+    if (keyword === "items" && Array.isArray(child)) {
+      for (const item of child) {
+        visitSchemas(item, visit, currentBase);
+      }
+    } else {
+      visitSchemas(child, visit, currentBase);
+    }
+  }
+  for (const keyword of schemaArrayKeywords) {
+    if (Array.isArray(schema[keyword])) {
+      for (const child of schema[keyword]) {
+        visitSchemas(child, visit, currentBase);
+      }
+    }
+  }
+  for (const keyword of schemaMapKeywords) {
+    const children = schema[keyword];
+    if (children !== null && typeof children === "object" && !Array.isArray(children)) {
+      for (const child of Object.values(children)) {
+        if (keyword !== "dependencies" || !Array.isArray(child)) {
+          visitSchemas(child, visit, currentBase);
+        }
+      }
+    }
+  }
+}
+
+function resourceBase(resource) {
+  return (
+    resolveResourceUri(resource.canonicalUri) ??
+    resource.aliases.map((alias) => resolveResourceUri(alias)).find((uri) => uri !== null) ??
+    resolveResourceUri(resource.schema?.$id) ??
+    resolveResourceUri(resource.schema?.id)
+  );
+}
+
+function normalizeDialect(schema, baseUri, fallbackDialect) {
+  if (schema === null || typeof schema !== "object" || Array.isArray(schema)) {
+    return schema;
+  }
+  if (typeof schema.$schema !== "string") {
+    return { ...schema, $schema: fallbackDialect };
+  }
+  const resolvedDialect = resolveUri(schema.$schema, baseUri);
+  return resolvedDialect === null || resolvedDialect === schema.$schema
+    ? schema
+    : { ...schema, $schema: resolvedDialect };
 }
 
 function createImplementation({ draft, formatProfile, resources }) {
@@ -62,12 +165,73 @@ function createImplementation({ draft, formatProfile, resources }) {
     immutable: false
   };
   const compileOptions = { validateSchema: true };
-  function createInstance(options) {
+  function createInstance(options, rootSchema) {
     const instance = new SchemaShield(options);
     for (const [alias, builtinUri] of builtinMetaschemaAliases) {
       instance.addSchema({ $ref: builtinUri }, { uri: alias });
     }
+    const identityOwners = new Map();
     for (const resource of resources) {
+      const baseUri = resourceBase(resource);
+      const identities = [resource.canonicalUri, ...resource.aliases];
+      const builtinUri = [
+        ...identities,
+        resource.schema?.$id,
+        resource.schema?.id
+      ]
+        .map(resourceUri)
+        .map((uri) => builtinMetaschemaByResourceUri.get(uri))
+        .find((uri) => typeof uri === "string");
+      if (typeof builtinUri === "string") {
+        continue;
+      }
+      visitSchemas(
+        resource.schema,
+        (_schema, nestedBase) => {
+          identities.push(nestedBase);
+        },
+        baseUri
+      );
+      for (const identity of identities) {
+        const normalized = resolveResourceUri(identity, baseUri);
+        if (normalized !== null) {
+          identityOwners.set(normalized, resource);
+        }
+      }
+    }
+    const metaschemas = new Set();
+    const dependencies = new Map(
+      resources.map((resource) => [resource, new Set()])
+    );
+    const sources = [
+      { schema: rootSchema, baseUri: resolveResourceUri(rootSchema?.$id) },
+      ...resources.map((resource) => ({
+        schema: resource.schema,
+        baseUri: resourceBase(resource),
+        resource
+      }))
+    ];
+    for (const source of sources) {
+      visitSchemas(
+        source.schema,
+        (schema, baseUri) => {
+          const targetUri = resolveResourceUri(
+            schema.$schema,
+            baseUri ?? source.baseUri
+          );
+          const target = targetUri === null ? null : identityOwners.get(targetUri);
+          if (target !== null && target !== undefined) {
+            metaschemas.add(target);
+            if (source.resource !== undefined) {
+              dependencies.get(source.resource).add(target);
+            }
+          }
+        },
+        source.baseUri
+      );
+    }
+
+    function registerResource(resource, metaschema) {
       const identities = [
         resource.canonicalUri,
         ...resource.aliases,
@@ -98,27 +262,58 @@ function createImplementation({ draft, formatProfile, resources }) {
             { uri: aliases[0], aliases: aliases.slice(1) }
           );
         }
-        continue;
+        return;
       }
-      const schema =
-        resource.schema !== null &&
-        typeof resource.schema === "object" &&
-        !Array.isArray(resource.schema) &&
-        typeof resource.schema.$schema !== "string"
-          ? { ...resource.schema, $schema: resource.dialect ?? dialect }
-          : resource.schema;
-      instance.addSchema(schema, {
+      const schema = normalizeDialect(
+        resource.schema,
+        resourceBase(resource),
+        resource.dialect ?? dialect
+      );
+      const registration = {
         uri: resource.canonicalUri,
         aliases: resource.aliases.filter(
           (alias) => alias !== resource.canonicalUri
         )
-      });
+      };
+      if (metaschema) {
+        instance.addMetaSchema(schema, registration);
+      } else {
+        instance.addSchema(schema, registration);
+      }
+    }
+
+    for (const resource of resources) {
+      if (!metaschemas.has(resource)) {
+        registerResource(resource, false);
+      }
+    }
+    const registeredMetaschemas = new Set();
+    const registeringMetaschemas = new Set();
+    function registerMetaschema(resource) {
+      if (registeredMetaschemas.has(resource)) {
+        return;
+      }
+      if (registeringMetaschemas.has(resource)) {
+        throw new Error("external metaschema dependency cycle");
+      }
+      registeringMetaschemas.add(resource);
+      for (const dependency of dependencies.get(resource)) {
+        if (metaschemas.has(dependency)) {
+          registerMetaschema(dependency);
+        }
+      }
+      registerResource(resource, true);
+      registeringMetaschemas.delete(resource);
+      registeredMetaschemas.add(resource);
+    }
+    for (const resource of resources) {
+      if (metaschemas.has(resource)) {
+        registerMetaschema(resource);
+      }
     }
     return instance;
   }
 
-  const fast = createInstance(fastOptions);
-  let detailed = null;
   return {
     reportOptions: {
       formatProfile,
@@ -127,17 +322,12 @@ function createImplementation({ draft, formatProfile, resources }) {
       detailed: detailedOptions,
       compile: compileOptions,
       formats: "built-in; unknown formats ignored",
-      metaschemas: "built-in",
+      metaschemas: "built-in-and-referenced-external",
       resources: "registered"
     },
     setup(schema) {
-      const prepared =
-        schema !== null &&
-        typeof schema === "object" &&
-        !Array.isArray(schema) &&
-        typeof schema.$schema !== "string"
-          ? { ...schema, $schema: dialect }
-          : schema;
+      const prepared = normalizeDialect(schema, resolveResourceUri(schema?.$id), dialect);
+      const fast = createInstance(fastOptions, prepared);
       return {
         schema: prepared,
         validate: fast.compile(prepared, compileOptions),
@@ -148,10 +338,10 @@ function createImplementation({ draft, formatProfile, resources }) {
       return target.validate(data).valid;
     },
     getError({ target, data }) {
-      if (detailed === null) {
-        detailed = createInstance(detailedOptions);
-      }
-      target.detailed ??= detailed.compile(target.schema, compileOptions);
+      target.detailed ??= createInstance(detailedOptions, target.schema).compile(
+        target.schema,
+        compileOptions
+      );
       const result = target.detailed(data);
       if (result.valid) {
         return null;

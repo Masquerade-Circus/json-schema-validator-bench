@@ -26,7 +26,7 @@
         "validateSchema": true
       },
       "formats": "built-in; unknown formats ignored",
-      "metaschemas": "built-in",
+      "metaschemas": "built-in-and-referenced-external",
       "resources": "registered"
     },
     "format-assertion": {
@@ -46,13 +46,13 @@
         "validateSchema": true
       },
       "formats": "built-in; unknown formats ignored",
-      "metaschemas": "built-in",
+      "metaschemas": "built-in-and-referenced-external",
       "resources": "registered"
     }
   },
   "reportOptionsSha256": {
-    "base": "fc2868b422d9ee65505bf877cf442ad01b691648840fe8f26094b451566d2483",
-    "format-assertion": "7237a4fdd3b60228c020a370447e6741fb04a6ddcec83b5bbb8940d2399f1ea2"
+    "base": "a9adf2b049e2061a7e502289ba1179e3ce501adfcceeaf632372fc93f44a71ba",
+    "format-assertion": "4a7f2dd8a16bd57348a90058079dba25a8efa9b0f2b4a74a0e5bca102097314d"
   },
   "suite": {
     "commit": "0c7b65dc16dd8eaa7bd83e21099c76610c3b246a",

@@ -82,12 +82,23 @@ export function createRegisteredAdapter(id, config) {
 export function getAdapterFactory(id) {
   const definition = getRegisteredAdapter(id);
   const installed = packageMetadata(definition.packageName);
-  return (config) => ({
-    ...definition.create(config),
-    name: definition.id,
-    ...installed,
-    supportClaim: definition.supportClaims[config.draft]
-  });
+  return (config, options) => {
+    const runtime = definition.create(config, options);
+    const descriptors = Object.getOwnPropertyDescriptors(runtime);
+    for (const [key, value] of Object.entries({
+      name: definition.id,
+      ...installed,
+      supportClaim: definition.supportClaims[config.draft]
+    })) {
+      descriptors[key] = {
+        enumerable: true,
+        configurable: false,
+        writable: false,
+        value
+      };
+    }
+    return Object.freeze(Object.defineProperties({}, descriptors));
+  };
 }
 
 export function getColdExecutionAdapterFactory(id) {

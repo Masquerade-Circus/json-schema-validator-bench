@@ -140,6 +140,10 @@ function createImplementation({ draft, formatProfile, resources }) {
       fast: fastReportOptions,
       detailed: detailedOptions,
       formats: { mode: "full", names: commonFormats, keywords: false },
+      "provider-workaround": {
+        id: "isolate-visited-references-per-root-validation",
+        scope: "generated-validator"
+      },
       implementation: {
         core: { packageName: "@redocly/ajv", version: redoclyVersion },
         constructor: {

@@ -76,8 +76,8 @@ test("Quick and Full share one performance contract except for rounds", () => {
       "cold-execution"
     ]);
   }
-  assert.equal(sampleContractVersion > 15, true);
-  assert.equal(sampleCacheIdentityVersion > 9, true);
+  assert.equal(sampleContractVersion, 26);
+  assert.equal(sampleCacheIdentityVersion, 19);
 });
 
 test("createSetupEntries uses effective draft format semantics", () => {

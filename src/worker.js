@@ -277,13 +277,15 @@ export async function runSetupSample({
         formatProfile
       );
       const start = now();
-      const adapter = createAdapter({
-        draft: request.draft,
-        formatProfile,
-        resources,
-        unknownFormats: [...unknownFormats].sort()
-      });
-      adapterMetadata ??= adapter;
+      const adapter = createAdapter(
+        {
+          draft: request.draft,
+          formatProfile,
+          resources,
+          unknownFormats: [...unknownFormats].sort()
+        },
+        { deferReportOptions: true }
+      );
       if (typeof adapter.setup !== "function") {
         throw new Error(`${request.validator} does not expose setup`);
       }
@@ -302,6 +304,9 @@ export async function runSetupSample({
         }
       }
       elapsed += now() - start;
+      adapterMetadata ??= adapter;
+      void adapter.reportOptions;
+      void adapter.reportOptionsSha256;
     }
     return elapsed;
   }
