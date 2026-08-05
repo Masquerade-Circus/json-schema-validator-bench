@@ -1,5 +1,5 @@
 {
-  "benchmarkVersion": 16,
+  "benchmarkVersion": 18,
   "summaryVersion": 11,
   "phase": "cold-execution",
   "draft": "draft7",
@@ -21,7 +21,7 @@
       "format-assertion"
     ]
   },
-  "intersectionSha256": "8c7473d1fc7e6a5f5ed51f804a6ed913a776ed195cfc2760c17b81893ad727f8",
+  "intersectionSha256": "a1792e44e2923f06aee11d72548dc6e0c77346c2e96dbdbdf28f455c3b7fb522",
   "primaryUnit": "operations per second",
   "units": {
     "throughput": "operations per second",
@@ -33,7 +33,7 @@
   "mutationCountFormula": "count distinct (validator, draft, scope, subjectId, mutationTarget, mutationClass, difference)",
   "peakRssFormula": "max(sample.memory.peak.rss across valid rounds)",
   "sampleAcquisition": {
-    "runStartedAt": "2026-08-04T20:06:38.877Z",
+    "runStartedAt": "2026-08-05T06:45:47.931Z",
     "measuredSamples": 12,
     "resumedSamples": 0,
     "publishedSamples": 12
@@ -8674,47 +8674,47 @@
   "validators": {
     "schema-shield": {
       "roundThroughputs": [
-        7504.218022835255,
-        7631.554847721597,
-        7258.592055904954,
-        7549.321174115091,
-        7442.0462676078105,
-        7158.075840924127
+        7037.244288474806,
+        7213.223555025926,
+        7214.851448281825,
+        6746.164725388295,
+        6621.4790467513385,
+        6928.479276147029
       ],
-      "median": 7473.1321452215325,
-      "mean": 7423.968034851473,
-      "medianAbsoluteDeviation": 117.30586569681145,
-      "relativeMedianAbsoluteDeviation": 0.015697014774697798,
-      "sampleStandardDeviation": 180.89801031289778,
-      "coefficientOfVariation": 0.024366755010754422,
-      "minimum": 7158.075840924127,
-      "maximum": 7631.554847721597,
-      "nanosecondsPerOperation": 133812.7013637006,
+      "median": 6982.861782310918,
+      "mean": 6960.240390011538,
+      "medianAbsoluteDeviation": 231.1757193429571,
+      "relativeMedianAbsoluteDeviation": 0.033106157124371934,
+      "sampleStandardDeviation": 243.45565484416494,
+      "coefficientOfVariation": 0.03497805265369022,
+      "minimum": 6621.4790467513385,
+      "maximum": 7214.851448281825,
+      "nanosecondsPerOperation": 143207.76082568523,
       "mutationCount": 0,
-      "peakRssBytes": 208416768,
+      "peakRssBytes": 310312960,
       "scoreRelativeToBest": 100
     },
     "z-schema": {
       "roundThroughputs": [
-        3690.657436535109,
-        3591.487666468428,
-        3491.856237027648,
-        3819.2200154756397,
-        3390.715851048363,
-        3585.089292211867
+        2923.6195160116126,
+        3423.987502052125,
+        3522.6791483872607,
+        3575.09528219644,
+        3538.3379338787026,
+        3177.3216173960377
       ],
-      "median": 3588.288479340147,
-      "mean": 3594.837749794509,
-      "medianAbsoluteDeviation": 99.40059975373038,
-      "relativeMedianAbsoluteDeviation": 0.02770139589557449,
-      "sampleStandardDeviation": 149.60348292889398,
-      "coefficientOfVariation": 0.04161619893344164,
-      "minimum": 3390.715851048363,
-      "maximum": 3819.2200154756397,
-      "nanosecondsPerOperation": 278684.39389909105,
+      "median": 3473.3333252196926,
+      "mean": 3360.17349998703,
+      "medianAbsoluteDeviation": 83.38328281787881,
+      "relativeMedianAbsoluteDeviation": 0.02400670336257022,
+      "sampleStandardDeviation": 257.8481888574871,
+      "coefficientOfVariation": 0.0767365699594031,
+      "minimum": 2923.6195160116126,
+      "maximum": 3575.09528219644,
+      "nanosecondsPerOperation": 287907.87015431316,
       "mutationCount": 0,
-      "peakRssBytes": 203096064,
-      "scoreRelativeToBest": 48.01585746927504
+      "peakRssBytes": 300343296,
+      "scoreRelativeToBest": 49.740828810594365
     }
   }
 }

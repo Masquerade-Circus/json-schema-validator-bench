@@ -80,8 +80,8 @@ test("Quick and Full share timing and corpus contracts but differ in rounds and 
       "cold-execution"
     ]);
   }
-  assert.equal(sampleContractVersion, 28);
-  assert.equal(sampleCacheIdentityVersion, 21);
+  assert.equal(sampleContractVersion, 30);
+  assert.equal(sampleCacheIdentityVersion, 22);
 });
 
 test("createSetupEntries uses effective draft format semantics", () => {
@@ -340,7 +340,7 @@ test("eligible subsets rotate after roster filtering", () => {
   assert.deepEqual(rotateRoundOrder(eligible, 3), ["beta", "gamma", "alpha"]);
 });
 
-test("Cold execution excludes providers with module-global state", () => {
+test("Cold execution excludes scopes with observed cross-instance interference", () => {
   assert.equal(
     getColdExecutionParticipants("draft6").some(({ id }) => id === "hyperjump"),
     false

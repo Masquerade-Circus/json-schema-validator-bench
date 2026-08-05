@@ -82,22 +82,27 @@ SchemaShield provides its official metaschemas inside the locked npm package. Th
 
 Each adapter has two parts:
 
-1. A declaration names the validator, npm package, supported drafts, and statically unsupported capabilities.
+1. A declaration names the validator, npm package, supported drafts, and statically unsupported capabilities. It cannot declare implementation behavior.
 2. A factory closure owns vendor state, options, resources, setup, validation, and optional error extraction for one benchmark configuration.
 
 `src/adapter-registry.js` imports the ten opaque adapter modules and provides the participant source. Each adapter imports its own provider, draft entrypoints, plugins and metaschemas, then exports its declaration and factory through the common API. Setup eligibility derives from the presence of `setup()`.
 
-The generated Participants table uses these labels:
+Before Conformance, the pipeline runs the public API route and each isolation control in clean instrumented Node processes and writes `results/implementation-evidence.json`. A-A and B-B detect self-instability. A-B-A and B-A-B detect cross-instance interference in both orders. Each process and phase publishes its own capability events, readiness marker, PID and control identity. One unavailable, contradictory or missing required process makes the scope inconclusive. Declared or statically inferred values never control eligibility or publication.
+
+The generated Participants table uses these observed labels:
 
 - `reusable-sync`: prepares a reusable callable synchronously.
 - `reusable-async`: resolves asynchronous setup before exposing a reusable callable.
 - `validate-only`: validates through the adapter without a separate reusable setup target.
-- `fresh-instance`: each fresh adapter creates isolated provider state.
-- `module-global-unavailable`: module-global provider state cannot satisfy the fresh-isolation contract, so Cold execution is `N/A`.
-- `observed`: the exercised adapter route uses dynamic code generation.
-- `not-observed`: the exercised adapter route did not use dynamic code generation.
+- `interference-not-observed`: both self-controls stayed stable and neither cross-order control changed the first instance.
+- `interference-observed`: a cross-order control changed the first instance while both self-controls stayed stable, so Cold execution is `N/A`.
+- `self-instability-observed`: A-A or B-B changed without a cross-provider claim, so Cold execution fails closed for that scope.
+- `inconclusive`: a canary failed or a control threw, so Cold execution fails closed for that scope.
+- `observed`: at least one dependency mechanism successfully generated dynamic code on the exercised route.
+- `not-observed`: every required mechanism and phase was ready and no dependency mechanism succeeded.
+- `limited`: every required process and phase confirmed readiness, but transparent instrumentation has a known observation limit. It cannot replace unavailable or missing readiness.
 
-Dynamic code describes the adapter route exercised at the pinned package version. It does not classify every path available in that package.
+Dynamic code describes only the instrumented import, setup, validation and isolation phases at the pinned package version. Evidence keeps attempted, succeeded and failed generation separate where each outcome is observable for eval, Function, AsyncFunction, GeneratorFunction, AsyncGeneratorFunction, `node:vm`, WebAssembly, workers, inline Node subprocesses, `data:` imports and controlled-child propagation. Worker and fork `execArgv` values preserve caller flags while forcing one preload. Spawn, execFile and shell exec routes cover their sync and async forms. Inspector observation leaves the global eval binding intact, which preserves lexical direct eval. That transparent strategy cannot distinguish direct from indirect eval or prove completion of an eval body. Loader hooks observe a data URL request while inspector confirms parsed scripts, but they cannot confirm every parse or evaluation failure. Eval and data imports carry explicit capability limits. Event records contain outcomes, provenance and attribution, never generated source text.
 
 The harness detects schema capabilities before it creates an adapter. A declaration can mark a detected capability as unsupported, which produces `UNSUPPORTED` records and skips vendor invocation. Conformance records every case. Performance then applies the objective qualification gate once per draft before it derives the common `PASS` intersections for Base and Formats.
 
@@ -105,7 +110,7 @@ The harness detects schema capabilities before it creates an adapter. A declarat
 
 The runner owns benchmark policy. It discovers the suite, assigns the draft and format profile, detects capabilities, computes the local resource closure, detects unknown format names, applies the schema profile on a clone, qualifies the atomic draft roster, intersects Setup with reusable `setup()`, chooses each phase's common conformance intersection, creates fresh factory contexts at the required boundary and controls the operation timers. Adapters consume those decisions and the neutral corpus supplied by the runner.
 
-The qualification gate requires Base and Formats to reach the configured percentage in the same draft. The CLI preserves the normalized decimal text and converts it to a reduced fraction. Eligibility compares `PASS * threshold denominator >= total * threshold numerator` with integers, so displayed rounding preserves the result. `WRONG`, `COMPILE`, `RUNTIME`, and `UNSUPPORTED` all count as non-PASS. The exact profile fractions determine eligibility. Execution uses the eligible draft roster. Setup uses the same roster intersected with participants that expose reusable `setup()`. Cold execution also requires fresh adapter state that the wrapper can isolate. Eligibility depends exclusively on the exact Base and Formats `PASS` fractions for the atomic draft roster.
+The qualification gate requires Base and Formats to reach the configured percentage in the same draft. The CLI preserves the normalized decimal text and converts it to a reduced fraction. Eligibility compares `PASS * threshold denominator >= total * threshold numerator` with integers, so displayed rounding preserves the result. `WRONG`, `COMPILE`, `RUNTIME`, and `UNSUPPORTED` all count as non-PASS. The exact profile fractions determine eligibility. Execution uses the eligible draft roster. Setup uses the same roster intersected with participants that expose reusable `setup()`. Cold execution also requires current, compatible and conclusive API, isolation and dynamic-code readiness evidence with no reproduced interference or self-instability. Missing, stale, incompatible or inconclusive evidence fails closed. A known `limited` capability remains visible and does not block Cold after every required process and phase confirms readiness.
 
 The global conformance table shows one percentage cell per draft and profile. Its Total divides PASS by all 7,970 canonical cases across the five drafts and both profiles. Unsupported drafts and scopes contribute zero PASS while their cases remain in the denominator. Rows sort by Total descending and use validator ID as the stable tie-breaker. The accompanying Mermaid chart keeps the same order and marks the configured threshold as a reference line. The atomic Base and Formats fractions for each draft control eligibility.
 
@@ -330,7 +335,6 @@ The declaration fields are:
 - `displayName`: human-readable report name.
 - `drafts`: drafts for which the adapter makes a support claim. Use only `draft4`, `draft6`, `draft7`, `draft2019-09`, and `draft2020-12`.
 - `unsupported`: known capabilities the validator cannot process. The current declarative capability is `ADAPTER_CAPABILITIES.EXTERNAL_SCHEMA_RESOURCES`.
-- `implementation`: public API, isolation and dynamic-code labels for generated participant metadata.
 - `supportClaims`: optional per-draft claim labels. Omitted drafts use `declared`.
 
 The factory receives normalized `draft`, `formatProfile`, `resources`, and `unknownFormats` values. It must return:
@@ -405,12 +409,7 @@ export const adapter = defineAdapter(
     packageName: "tiny-json-validator",
     displayName: "Tiny JSON Validator",
     drafts: ["draft7", "draft2019-09", "draft2020-12"],
-    unsupported: [],
-    implementation: {
-      api: "reusable-sync",
-      isolation: "fresh-instance",
-      dynamicCode: "not-observed"
-    }
+    unsupported: []
   },
   createImplementation
 );
@@ -465,12 +464,7 @@ export const adapter = defineAdapter(
     packageName: "direct-json-validator",
     displayName: "Direct JSON Validator",
     drafts: ["draft6", "draft7"],
-    unsupported: [],
-    implementation: {
-      api: "validate-only",
-      isolation: "fresh-instance",
-      dynamicCode: "not-observed"
-    }
+    unsupported: []
   },
   createImplementation
 );
@@ -484,10 +478,10 @@ The fast `validate` path must use the provider's first-error or fail-fast option
 
 The adapter factory belongs to conformance setup, measured Setup and measured Cold execution. Its lifetime differs by stage.
 
-- Conformance first detects statically unsupported capabilities. For a supported schema, it creates one factory context for that schema and profile, calls `setup()` once when available, validates every case in the schema group, and may call `getError` after a false result. Factory, setup, validation and diagnostic behavior all contribute to classification. Throughput timers apply to the performance phases.
+- Conformance first detects statically unsupported capabilities. For a supported schema, it creates one factory context for that schema and profile, calls `setup()` once when available, validates every case three times on the same target and data instance, and may call `getError` after a stable false result. The first throw or boolean divergence records a runtime failure. Factory, setup, validation and diagnostic behavior all contribute to classification. Throughput timers apply to the performance phases.
 - Setup performance forms one draft-scoped union of effective Base and Formats operations. It deduplicates by transformed schema, resource closure and effective adapter configuration before it prepares neutral copies. Primitive schemas, including `true` and `false`, pass directly into each fresh adapter. The timer then covers the adapter factory, provider construction, format and metaschema registration, resource registration, and `setup(schema)`. Post-call yielding, serialization, deadline checks, memory sampling and harness diagnostics remain outside the accumulated Setup duration.
 - Execution performance creates one adapter context for each representative setup entry before warmup and measurement. Reusable adapters prepare a target, while `validate-only` adapters prepare their adapter context and profiled schema. Resource and format registration, validator-to-schema mapping and the correctness precheck all occur outside the execution timer. The measured interval covers repeated complete-corpus passes through the prepared target or prepared `validate-only` context, plus the runner's minimal traversal, checksum, clock, deadline and memory bookkeeping.
-- Cold execution prepares disposable schema, data and resource copies, analyzes capabilities and normalizes the common adapter configuration before the operation clock. The timed interval creates the provider context through the opaque adapter, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Module imports, process startup, common contract checks, result comparison, checksum, diagnostics and telemetry remain outside the clock. Hyperjump is `N/A` because its module-global state cannot satisfy this fresh-isolation contract.
+- Cold execution prepares disposable schema, data and resource copies, analyzes capabilities and normalizes the common adapter configuration before the operation clock. The timed interval creates the provider context through the opaque adapter, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Module imports, process startup, common contract checks, result comparison, checksum, diagnostics and telemetry remain outside the clock. A scope participates only when current compatible isolation evidence is conclusive and neither cross-order control reproduced interference.
 - `getError` runs during conformance after `validate` returns `false`. Setup, Execution and Cold execution throughput measure their phase contracts.
 
 Quick and Full use the complete common corpus and the same timing, phases, scopes, isolation, eligibility, scoring, preparation and sample contract. Every sample warms complete passes for at least 100 ms, targets 250 ms of measured work, and requires a normal minimum of 175 ms. Full records six isolated samples per participant and scope in three antithetic order pairs with deterministic offsets `0`, `floor(n / 3)`, and `floor(2n / 3)` for roster size `n`. A complete Full measures all six rounds from zero inside one pipeline window and does not read prior performance samples. Quick records only the deterministic first round and may resume compatible checkpoints, so it provides neither complete antithetic pairs nor multi-round dispersion. Full reports rank by the six-round median and publish the mean, relative median absolute deviation, sample coefficient of variation, minimum, maximum, and all six rates. These diagnostics do not establish statistical significance.

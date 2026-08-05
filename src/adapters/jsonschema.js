@@ -44,12 +44,7 @@ export const adapter = defineAdapter(
     packageName: "jsonschema",
     displayName: "jsonschema",
     drafts: ["draft4", "draft6", "draft7"],
-    unsupported: [],
-    implementation: {
-      api: "validate-only",
-      isolation: "fresh-instance",
-      dynamicCode: "not-observed"
-    }
+    unsupported: []
   },
   createImplementation
 );

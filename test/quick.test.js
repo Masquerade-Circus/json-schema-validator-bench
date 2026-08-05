@@ -860,7 +860,9 @@ test("mutation document inventory hashes and coordinated publication include eve
       assert.equal(reportApi.hashMutationDocument(content), entry.sha256);
     }
     const index = reportApi.createResultsIndex("full", manifest);
-    assert.equal(index.resultsVersion, 15);
+    assert.equal(index.resultsVersion, 17);
+    assert.equal(index.implementationEvidenceVersion, 3);
+    assert.equal(index.implementationInstrumentationVersion, 4);
     assert.deepEqual(index.performancePhases, [
       "setup",
       "execution",
@@ -1299,16 +1301,19 @@ test("generated participant snapshots are complete and alphabetic while metric t
     "`reusable-sync`",
     "`reusable-async`",
     "`validate-only`",
-    "`fresh-instance`",
-    "`module-global-unavailable`",
+    "`interference-not-observed`",
+    "`interference-observed`",
+    "`self-instability-observed`",
+    "`inconclusive`",
     "`observed`",
-    "`not-observed`"
+    "`not-observed`",
+    "`limited`"
   ]) {
     assert.equal(globalParticipantSection.includes(label), true, label);
   }
   assert.match(
     globalParticipantSection,
-    /Dynamic code describes the route exercised by the adapter at the pinned version, not every path available in the package/
+    /Dynamic code describes only the instrumented adapter import, setup, validation and isolation phases/
   );
   assert.doesNotMatch(markdown, /sort validators by canonical name/i);
   assert.doesNotMatch(globalParticipantSection, /sort|alphabet/i);
@@ -1411,15 +1416,17 @@ test("generated participant snapshots are complete and alphabetic while metric t
   assert.ok(performance.indexOf("[zulu]") < performance.indexOf("[alpha]"));
 
   const downloads = downloadTable(
-    {
-      packages: {
-        alpha: { weeklyDownloads: 1 },
-        zulu: { weeklyDownloads: 2 }
-      }
-    },
-    participants
+    snapshot,
+    validators.toReversed().map((participant) => ({
+      ...participant,
+      version: reportVersions().get(participant.id)
+    }))
   );
-  assert.ok(downloads.indexOf("[alpha]") < downloads.indexOf("[zulu]"));
+  const sortedValidatorIds = validators.map(({ id }) => id).toSorted();
+  assert.ok(
+    downloads.indexOf(`[${sortedValidatorIds[0]}]`) <
+      downloads.indexOf(`[${sortedValidatorIds.at(-1)}]`)
+  );
   assert.doesNotMatch(downloads, /sort|alphabet/i);
 
   const reports = participants.map(({ id }) => ({
@@ -1863,9 +1870,10 @@ test("phase refresh validates a complete baseline before running only the select
   assert.deepEqual(
     events.slice(1).map(({ command }) => command),
     [
-      "preflight",
-      "suite-ensure",
-      "harness",
+    "preflight",
+    "suite-ensure",
+    "implementation-evidence",
+    "harness",
       "smoke",
       "conformance",
       "cold-execution",
@@ -1957,7 +1965,7 @@ test("All Drafts normalizes five Setup scopes and ten execution scopes", () => {
     .schemasafe;
 
   const summary = createGlobalPerformanceSummary(scopes);
-  assert.equal(summary.globalSummaryVersion, 16);
+  assert.equal(summary.globalSummaryVersion, 17);
   const setup = summary.phases.setup.included.find(
     ({ id }) => id === "schema-shield"
   );

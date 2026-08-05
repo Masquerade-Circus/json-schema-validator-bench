@@ -68,28 +68,20 @@ function fixtureCases(expectedValues = [false]) {
   }));
 }
 
-test("adapter declarations reject malformed opaque metadata", () => {
+test("adapter declarations reject manual implementation authority and malformed metadata", () => {
   for (const invalid of [
     { ...declaration, implementation: null },
     { ...declaration, additionalPackages: "ajv-formats" },
     { ...declaration, additionalPackages: [""] },
     { ...declaration, additionalPackages: [declaration.packageName] },
     { ...declaration, additionalPackages: ["fixture", "fixture"] },
-    {
-      ...declaration,
-      implementation: {
-        api: "reusable-sync",
-        isolation: "fresh-instance",
-        dynamicCode: "observed",
-        provider: "leaked"
-      }
-    },
+    { ...declaration, implementation: { api: "reusable-sync" } },
     { ...declaration, supportClaims: null },
     { ...declaration, supportClaims: { draft6: "declared" } }
   ]) {
     assert.throws(
       () => defineAdapter(invalid, () => ({ validate: () => true })),
-      /additionalPackages|implementation metadata|support claims/
+      /additionalPackages|public contract|support claims/
     );
   }
 });
@@ -1175,45 +1167,24 @@ test("Redocly AJV fast and detailed profiles preserve conformance booleans", asy
   assert.deepEqual(records.map(({ status }) => status), ["PASS", "PASS"]);
 });
 
-test("Redocly AJV conformance records repeated-call instability on the same object", async () => {
-  const testCase = {
-    ...fixtureCases([false])[0],
-    data: [
-      [{ foo: null }, { foo: null }, { foo: null }],
-      [{ foo: null }, { foo: null }],
-      [{ foo: null }, { foo: null }]
-    ]
-  };
+test("conformance rejects a generically named unstable adapter after the first divergence", async () => {
+  let calls = 0;
+  const testCase = { ...fixtureCases([false])[0], data: { canary: true } };
   const records = await classifySchemaCases({
-    adapter: createRegisteredAdapter("redocly-ajv", {
-      draft: "draft4",
-      formatProfile: "base",
-      resources: [],
-      unknownFormats: []
-    }),
-    schema: {
-      definitions: {
-        item: {
-          type: "array",
-          additionalItems: false,
-          items: [
-            { $ref: "#/definitions/sub-item" },
-            { $ref: "#/definitions/sub-item" }
-          ]
-        },
-        "sub-item": { type: "object", required: ["foo"] }
-      },
-      type: "array",
-      additionalItems: false,
-      items: [
-        { $ref: "#/definitions/item" },
-        { $ref: "#/definitions/item" },
-        { $ref: "#/definitions/item" }
-      ]
+    adapter: {
+      name: "unstable-fixture",
+      displayName: "Unstable fixture",
+      version: "1.0.0",
+      validate(_schema, data) {
+        assert.strictEqual(data.canary, true);
+        calls += 1;
+        return calls === 1 ? false : true;
+      }
     },
+    schema: {},
     schemaMetadata: {
       id: testCase.schemaId,
-      draft: "draft4",
+      draft: "draft7",
       formatProfile: "base"
     },
     cases: [testCase]
@@ -1222,4 +1193,41 @@ test("Redocly AJV conformance records repeated-call instability on the same obje
   assert.equal(records[0].status, "RUNTIME");
   assert.equal(records[0].errorCode, "PROVIDER_RESULT_INSTABILITY");
   assert.match(records[0].error, /changed from false to true/);
+  assert.equal(calls, 2);
+});
+
+test("conformance performs three uniform checks on the same target and data instance", async () => {
+  const cases = fixtureCases([true, false]).map((testCase, index) => ({
+    ...testCase,
+    data: { valid: index === 0 }
+  }));
+  const calls = new Map();
+  const identities = new Map();
+  const target = {};
+  const records = await classifySchemaCases({
+    adapter: {
+      name: "stable-fixture",
+      displayName: "Stable fixture",
+      version: "1.0.0",
+      setup: () => target,
+      validate(receivedTarget, data) {
+        assert.strictEqual(receivedTarget, target);
+        const key = String(data.valid);
+        calls.set(key, (calls.get(key) ?? 0) + 1);
+        identities.set(key, identities.get(key) ?? data);
+        assert.strictEqual(identities.get(key), data);
+        return data.valid;
+      }
+    },
+    schema: {},
+    schemaMetadata: {
+      id: cases[0].schemaId,
+      draft: "draft7",
+      formatProfile: "base"
+    },
+    cases
+  });
+
+  assert.deepEqual(records.map(({ status }) => status), ["PASS", "PASS"]);
+  assert.deepEqual(Object.fromEntries(calls), { true: 3, false: 3 });
 });

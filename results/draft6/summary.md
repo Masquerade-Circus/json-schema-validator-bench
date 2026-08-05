@@ -6,10 +6,10 @@ Leader: [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.
 
 | Validator | Setup ops/s | Score | Errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 4,194 | 100% | [6](errors/setup/hyperjump-COMPILE.md) | 0 | 188.4 MiB |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 4,004 | 95.5% | [0](errors/setup/schema-shield-COMPILE.md) | 0 | 189.5 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 2,648 | 63.2% | [0](errors/setup/z-schema-COMPILE.md) | 0 | 186.6 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 83 | 2.0% | [3](errors/setup/ajv-COMPILE.md) | 0 | 322.8 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 5,585 | 100% | [6](errors/setup/hyperjump-COMPILE.md) | 0 | 302.6 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 5,344 | 95.7% | [0](errors/setup/schema-shield-COMPILE.md) | 0 | 288.6 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,398 | 60.8% | [0](errors/setup/z-schema-COMPILE.md) | 0 | 287.1 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 109 | 2.0% | [3](errors/setup/ajv-COMPILE.md) | 0 | 440.5 MiB |
 
 Excluded from this ranking:
 
@@ -21,14 +21,14 @@ Excluded from this ranking:
 
 ## Execution consolidation
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — Balanced score 89.6%
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — Balanced score 84.9%
 
 | Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 2,527,458 | 13,544,680 | 80.4% | 100% | 89.6% | [0](errors/execution/base/schema-shield-RUNTIME.md) | [0](errors/execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 191.4 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 3,145,408 | 4,493,543 | 100% | 33.2% | 57.6% | [0](errors/execution/base/ajv-RUNTIME.md) | [0](errors/execution/format-assertion/ajv-RUNTIME.md) | 0 | 301.5 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 397,712 | 1,851,417 | 12.6% | 13.7% | 13.1% | [0](errors/execution/base/hyperjump-RUNTIME.md) | [0](errors/execution/format-assertion/hyperjump-RUNTIME.md) | 0 | 186.9 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 80,333 | 109,295 | 2.6% | 0.8% | 1.4% | [0](errors/execution/base/z-schema-RUNTIME.md) | [0](errors/execution/format-assertion/z-schema-RUNTIME.md) | 0 | 191.0 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 2,946,571 | 14,000,467 | 72.1% | 100% | 84.9% | [0](errors/execution/base/schema-shield-RUNTIME.md) | [0](errors/execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 292.4 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 4,088,308 | 4,453,081 | 100% | 31.8% | 56.4% | [0](errors/execution/base/ajv-RUNTIME.md) | [0](errors/execution/format-assertion/ajv-RUNTIME.md) | 0 | 339.5 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 593,141 | 1,854,397 | 14.5% | 13.2% | 13.9% | [0](errors/execution/base/hyperjump-RUNTIME.md) | [0](errors/execution/format-assertion/hyperjump-RUNTIME.md) | 0 | 313.9 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 94,588 | 103,968 | 2.3% | 0.7% | 1.3% | [0](errors/execution/base/z-schema-RUNTIME.md) | [0](errors/execution/format-assertion/z-schema-RUNTIME.md) | 0 | 310.2 MiB |
 
 Excluded from this ranking:
 
@@ -44,9 +44,9 @@ Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) —
 
 | Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 7,316 | 12,061 | 100% | 100% | 100% | [0](errors/cold-execution/base/schema-shield-RUNTIME.md) | [0](errors/cold-execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 190.9 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,712 | 4,510 | 50.7% | 37.4% | 43.6% | [0](errors/cold-execution/base/z-schema-RUNTIME.md) | [0](errors/cold-execution/format-assertion/z-schema-RUNTIME.md) | 0 | 185.9 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 111 | 119 | 1.5% | 1.0% | 1.2% | [0](errors/cold-execution/base/ajv-RUNTIME.md) | [0](errors/cold-execution/format-assertion/ajv-RUNTIME.md) | 0 | 420.2 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 6,850 | 10,117 | 100% | 100% | 100% | [0](errors/cold-execution/base/schema-shield-RUNTIME.md) | [0](errors/cold-execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 284.8 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,688 | 3,868 | 53.8% | 38.2% | 45.4% | [0](errors/cold-execution/base/z-schema-RUNTIME.md) | [0](errors/cold-execution/format-assertion/z-schema-RUNTIME.md) | 0 | 289.9 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 114 | 115 | 1.7% | 1.1% | 1.4% | [0](errors/cold-execution/base/ajv-RUNTIME.md) | [0](errors/cold-execution/format-assertion/ajv-RUNTIME.md) | 0 | 443.0 MiB |
 
 Excluded from this ranking:
 
@@ -63,20 +63,20 @@ Setup eligible roster: 4/9. Draft intersection: 1198 represented cases and 251 d
 
 Execution eligible roster: 4/9. Intersection: 927 cases and 250 setup entries. Roster SHA-256: `6b08a2f321b928e8f256852e6d2d26f9cdb290c31b3cb44f2f225dc251a73524`.
 
-Cold execution eligible roster: 3/9. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: `d64f3ff48f144328253e36e39c0774e28bfb01fcfd5031e3ce0035528e3da139`.
+Cold execution eligible roster: 3/9. Scopes with absent, stale, incompatible, inconclusive or interference-observed implementation evidence fail closed. Roster SHA-256: `d64f3ff48f144328253e36e39c0774e28bfb01fcfd5031e3ce0035528e3da139`.
 
 ## Execution ranking
 
-Leader: [ajv](https://www.npmjs.com/package/ajv) (8.20.0) — 3,145,408 ops/s (100%)
+Leader: [ajv](https://www.npmjs.com/package/ajv) (8.20.0) — 4,088,308 ops/s (100%)
 
 Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.
 
 | Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 3,145,408 | 3,022,703 | 6.4% | 12.3% | 2,549,453 to 3,499,426 | 100% | 0 | 301.5 MiB |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 2,527,458 | 2,450,835 | 7.1% | 11.5% | 2,046,502 to 2,818,691 | 80.4% | 0 | 191.4 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 397,712 | 395,764 | 5.0% | 8.1% | 344,838 to 431,721 | 12.6% | 0 | 186.9 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 80,333 | 77,783 | 2.9% | 8.3% | 66,055 to 82,868 | 2.6% | 0 | 191.0 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 4,088,308 | 4,043,670 | 3.1% | 6.1% | 3,638,451 to 4,355,196 | 100% | 0 | 339.5 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 2,946,571 | 2,915,575 | 9.0% | 10.9% | 2,498,325 to 3,321,873 | 72.1% | 0 | 278.0 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 593,141 | 592,187 | 3.9% | 6.8% | 527,655 to 642,593 | 14.5% | 0 | 313.9 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 94,588 | 94,976 | 2.7% | 3.4% | 91,426 to 100,069 | 2.3% | 0 | 310.2 MiB |
 
 Excluded from this ranking:
 
@@ -88,15 +88,15 @@ Excluded from this ranking:
 
 ## Cold execution ranking
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 7,316 ops/s (100%)
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 6,850 ops/s (100%)
 
 Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.
 
 | Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 7,316 | 7,294 | 1.9% | 5.2% | 6,661 to 7,818 | 100% | 0 | 190.9 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,712 | 3,785 | 3.7% | 6.1% | 3,535 to 4,128 | 50.7% | 0 | 185.9 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 111 | 113 | 1.6% | 4.4% | 107 to 122 | 1.5% | 0 | 420.2 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 6,850 | 6,832 | 3.1% | 3.4% | 6,501 to 7,094 | 100% | 0 | 284.8 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,688 | 3,592 | 2.8% | 7.1% | 3,143 to 3,853 | 53.8% | 0 | 289.9 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 114 | 113 | 1.6% | 3.1% | 107 to 117 | 1.7% | 0 | 443.0 MiB |
 
 Excluded from this ranking:
 
@@ -127,20 +127,20 @@ The conformance table treats higher PASS counts and lower WRONG, COMPILE, RUNTIM
 
 Execution eligible roster: 4/9. Intersection: 271 cases and 10 setup entries. Roster SHA-256: `6b08a2f321b928e8f256852e6d2d26f9cdb290c31b3cb44f2f225dc251a73524`.
 
-Cold execution eligible roster: 3/9. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: `d64f3ff48f144328253e36e39c0774e28bfb01fcfd5031e3ce0035528e3da139`.
+Cold execution eligible roster: 3/9. Scopes with absent, stale, incompatible, inconclusive or interference-observed implementation evidence fail closed. Roster SHA-256: `d64f3ff48f144328253e36e39c0774e28bfb01fcfd5031e3ce0035528e3da139`.
 
 ## Execution ranking
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 13,544,680 ops/s (100%)
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 14,000,467 ops/s (100%)
 
 Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.
 
 | Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 13,544,680 | 13,535,997 | 1.7% | 3.1% | 12,877,468 to 14,137,888 | 100% | 0 | 180.0 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 4,493,543 | 4,432,358 | 2.6% | 4.4% | 4,190,410 to 4,663,909 | 33.2% | 0 | 181.3 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 1,851,417 | 1,844,976 | 3.3% | 4.8% | 1,734,849 to 1,981,955 | 13.7% | 0 | 184.2 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 109,295 | 108,896 | 1.1% | 2.1% | 105,385 to 112,295 | 0.8% | 0 | 184.1 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 14,000,467 | 13,901,032 | 4.7% | 6.1% | 12,565,818 to 14,858,831 | 100% | 0 | 292.4 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 4,453,081 | 4,346,064 | 2.8% | 6.9% | 3,810,847 to 4,602,611 | 31.8% | 0 | 310.0 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 1,854,397 | 1,849,617 | 3.4% | 5.0% | 1,710,501 to 1,964,681 | 13.2% | 0 | 309.6 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 103,968 | 104,861 | 3.4% | 4.3% | 100,351 to 111,487 | 0.7% | 0 | 287.8 MiB |
 
 Excluded from this ranking:
 
@@ -152,15 +152,15 @@ Excluded from this ranking:
 
 ## Cold execution ranking
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 12,061 ops/s (100%)
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — 10,117 ops/s (100%)
 
 Higher ops/s and a higher score are better. The median is the ranking center. Relative MAD is the primary robust dispersion measure, while mean and sample CV remain diagnostic. The score is each median divided by the best median in this scope, multiplied by 100. Statistical significance and percentage improvement require separate analysis. Rows are sorted by median ops/s descending, with validator ID as the deterministic tie-breaker and N/A last.
 
 | Validator | Median ops/s | Mean ops/s | Relative MAD | Sample CV | Min–max ops/s | Score | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 12,061 | 11,904 | 1.6% | 3.4% | 11,387 to 12,349 | 100% | 0 | 187.1 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 4,510 | 4,374 | 1.9% | 7.1% | 3,810 to 4,612 | 37.4% | 0 | 184.2 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 119 | 119 | 1.1% | 1.5% | 117 to 122 | 1.0% | 0 | 323.2 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 10,117 | 10,091 | 5.2% | 6.2% | 9,309 to 10,768 | 100% | 0 | 278.8 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,868 | 3,996 | 5.6% | 10.3% | 3,647 to 4,633 | 38.2% | 0 | 288.4 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 115 | 115 | 3.5% | 4.6% | 108 to 122 | 1.1% | 0 | 437.9 MiB |
 
 Excluded from this ranking:
 
@@ -191,29 +191,32 @@ The conformance table treats higher PASS counts and lower WRONG, COMPILE, RUNTIM
 
 Period: 2026-07-27 through 2026-08-02. Retrieved at 2026-08-04T18:04:08.000Z.
 
-Each row binds observed adapter behavior to the pinned package version. Weekly downloads show npm adoption volume for the snapshot period. `module-global-unavailable` means Cold execution is N/A because a fresh adapter wrapper cannot isolate provider state.
+Each row binds automatically observed adapter behavior to the pinned package version. Weekly downloads show npm adoption volume for the snapshot period. Cold isolation uses independent clean-process controls A-A, B-B, A-B-A and B-A-B. The controls separate self-instability from cross-instance interference and fail closed when a control throws, cannot establish its canary or lacks complete instrumentation readiness.
 
 | Validator | API | Cold isolation | Dynamic code | Weekly downloads |
 | --- | --- | --- | --- | ---: |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | reusable-sync | fresh-instance | observed | 366,039,890 |
-| [djv](https://www.npmjs.com/package/djv) (2.1.4) | reusable-sync | fresh-instance | observed | 65,678 |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | reusable-async | module-global-unavailable | not-observed | 255,244 |
-| [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2) | reusable-sync | fresh-instance | not-observed | 532,097 |
-| [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | validate-only | fresh-instance | not-observed | 6,186,992 |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | reusable-sync | fresh-instance | observed | 8,304,494 |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | reusable-sync | fresh-instance | not-observed | 279 |
-| [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0) | reusable-sync | fresh-instance | observed | 4,851,948 |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | reusable-sync | fresh-instance | not-observed | 3,261,931 |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | reusable-sync | interference-not-observed | observed | 366,039,890 |
+| [djv](https://www.npmjs.com/package/djv) (2.1.4) | reusable-sync | interference-not-observed | observed | 65,678 |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | reusable-async | interference-observed | limited | 255,244 |
+| [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2) | reusable-sync | interference-not-observed | limited | 532,097 |
+| [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | validate-only | interference-not-observed | limited | 6,186,992 |
+| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | reusable-sync | interference-not-observed | observed | 8,304,494 |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | reusable-sync | interference-not-observed | limited | 279 |
+| [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0) | reusable-sync | interference-not-observed | observed | 4,851,948 |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | reusable-sync | interference-not-observed | limited | 3,261,931 |
 
 - `reusable-sync`: prepares a reusable callable synchronously.
 - `reusable-async`: resolves asynchronous setup before exposing a reusable callable.
 - `validate-only`: exposes validation through the adapter without a separate reusable setup target.
-- `fresh-instance`: each fresh adapter creates isolated provider state.
-- `module-global-unavailable`: module-global provider state cannot satisfy the fresh-isolation contract, so Cold execution is `N/A`.
-- `observed`: the exercised adapter route uses dynamic code generation.
-- `not-observed`: the exercised adapter route did not use dynamic code generation.
+- `interference-not-observed`: both self-controls stayed stable and neither cross-order control changed the first instance.
+- `interference-observed`: A-B-A or B-A-B changed the first instance while A-A and B-B stayed stable, so Cold execution is `N/A`.
+- `self-instability-observed`: A-A or B-B changed without a cross-provider claim, so Cold execution fails closed for that scope.
+- `inconclusive`: a canary failed or a control threw, so Cold execution fails closed for that scope.
+- `observed`: at least one dependency mechanism successfully generated dynamic code on the exercised route.
+- `not-observed`: every required mechanism and phase was ready and no dependency mechanism succeeded.
+- `limited`: every required process and phase confirmed readiness, but transparent instrumentation has a known observation limit. `limited` cannot replace unavailable or missing readiness.
 
-Dynamic code describes the route exercised by the adapter at the pinned version, not every path available in the package.
+Dynamic code describes only the instrumented adapter import, setup, validation and isolation phases at the pinned version. API, A-A, B-B, A-B-A and B-A-B publish independent process identities, PIDs and per-phase readiness. One unavailable, contradictory or missing required process makes the scope inconclusive and Cold fails closed. The evidence separates attempted, succeeded and failed generation where each outcome is observable for eval, Function, AsyncFunction, GeneratorFunction, AsyncGeneratorFunction, node:vm, WebAssembly, workers, inline Node subprocesses, data imports and controlled-child propagation. Worker and fork execArgv values preserve caller flags while forcing one preload. Spawn, execFile and shell exec routes cover their sync and async forms. Inspector observation preserves lexical direct eval semantics, but it cannot transparently distinguish direct from indirect eval or confirm completion of an eval body. Loader hooks observe a data URL request while inspector confirms parsed scripts, but they cannot confirm every parse or evaluation failure. Eval and data imports therefore report capability limits instead of simulated coverage. The event log stores outcomes, provenance and attribution, never generated source text.
 
 ## Limitations
 

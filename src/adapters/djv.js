@@ -36,12 +36,7 @@ export const adapter = defineAdapter(
     packageName: "djv",
     displayName: "djv",
     drafts: ["draft6"],
-    unsupported: [],
-    implementation: {
-      api: "reusable-sync",
-      isolation: "fresh-instance",
-      dynamicCode: "observed"
-    }
+    unsupported: []
   },
   createImplementation
 );

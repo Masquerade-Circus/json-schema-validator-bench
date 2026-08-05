@@ -18,6 +18,11 @@ import {
   createSampleRuntimeProvenance
 } from "./diagnostic.js";
 import { performanceIdentitySha256 } from "./intersection.js";
+import {
+  implementationEvidenceVersion,
+  implementationInstrumentationVersion,
+  loadImplementationEvidenceSync
+} from "./implementation-evidence.js";
 import { canonicalJson, sha256 } from "./suite.js";
 import {
   draftIds,
@@ -31,6 +36,7 @@ const cliPath = path.join(benchmarksRoot, "src", "cli.js");
 export const pipelineCommands = Object.freeze([
   "preflight",
   "suite-ensure",
+  "implementation-evidence",
   "harness",
   "smoke",
   "conformance",
@@ -154,6 +160,7 @@ export function pipelineCommandsForBench(bench = null) {
   return Object.freeze([
     "preflight",
     "suite-ensure",
+    "implementation-evidence",
     "harness",
     "smoke",
     "conformance",
@@ -300,12 +307,41 @@ export async function assertCompleteDiagnosticBaseline({
       environment.cohortIdentity.rounds < 1 ||
       index === null ||
       typeof index !== "object" ||
-      index.resultsVersion !== 15
+      index.resultsVersion !== 17
     ) {
       throw new Error("baseline index or hash inventory is absent");
     }
     const expectedHashes = environment.hashes;
     const sampleResults = [];
+    const implementationEvidenceRaw = await readFile(
+      path.join(resultsRoot, "implementation-evidence.json")
+    );
+    const implementationEvidenceLoad = loadImplementationEvidenceSync({ resultsRoot });
+    if (
+      implementationEvidenceLoad.artifact === null ||
+      index.implementationEvidenceVersion !== implementationEvidenceVersion ||
+      index.implementationInstrumentationVersion !== implementationInstrumentationVersion ||
+      index.implementationEvidence?.path !== "implementation-evidence.json" ||
+      index.implementationEvidence?.sha256 !== sha256(implementationEvidenceRaw) ||
+      implementationEvidenceLoad.artifact.packageLockSha256 !==
+        implementationEvidenceLoad.context.packageLockSha256 ||
+      implementationEvidenceLoad.artifact.probeContractSha256 !==
+        implementationEvidenceLoad.context.probeContractSha256 ||
+      adapterRegistry.some((definition) =>
+        definition.drafts.some((draft) => {
+          const scope = implementationEvidenceLoad.artifact
+            .participants[definition.id]?.scopes?.[draft];
+          return (
+            scope === null ||
+            typeof scope !== "object" ||
+            scope.adapterSourceSha256 !==
+              implementationEvidenceLoad.context.adapterSourceSha256(definition.id)
+          );
+        })
+      )
+    ) {
+      throw new Error("implementation evidence is incomplete, stale, or incompatible");
+    }
     const suiteManifestRaw = await readFile(
       path.join(resultsRoot, "suite-manifest.json")
     );
@@ -406,15 +442,15 @@ export async function assertCompleteDiagnosticBaseline({
             : observedRounds.length === 0;
           if (
             result.benchmarkMode !== mode ||
-            result.benchmarkVersion !== 16 ||
+            result.benchmarkVersion !== 18 ||
             result.phase !== phase ||
             result.draft !== draft ||
             result.formatProfile !== formatProfile ||
             result.intersectionSha256 !== expectedHash ||
             observedHash !== expectedHash ||
             performanceIdentitySha256(intersection) !== expectedHash ||
-            intersection.intersectionVersion !== 12 ||
-            intersection.performanceIdentity?.performanceIdentityVersion !== 8 ||
+            intersection.intersectionVersion !== 13 ||
+            intersection.performanceIdentity?.performanceIdentityVersion !== 9 ||
             observedArtifactHash !== expectedArtifactHash ||
             sha256(intersectionRaw) !== expectedArtifactHash ||
             sha256(sampleRaw) !== expectedSampleHash ||

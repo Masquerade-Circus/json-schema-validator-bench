@@ -1169,7 +1169,7 @@ test("conformance executes adapter despite globally recognized unsupported forma
   assert.deepEqual(records.map(({ status }) => status), ["PASS", "PASS"]);
 });
 
-test("conformance rejects data mutation while isolating schemas and resources", async () => {
+test("conformance rejects unstable data mutation while isolating schemas and resources", async () => {
   const schemaId = "draft7:isolation.json#/groups/0";
   const schema = {
     properties: {
@@ -1282,7 +1282,10 @@ test("conformance rejects data mutation while isolating schemas and resources", 
       draft: "draft7",
       suite
     });
-    assert.deepEqual(report.cases.map(({ status }) => status), ["PASS", "PASS"]);
+    assert.deepEqual(report.cases.map(({ status }) => status), ["RUNTIME", "RUNTIME"]);
+    assert.ok(report.cases.every(
+      ({ errorCode }) => errorCode === "PROVIDER_RESULT_INSTABILITY"
+    ));
     assert.ok(report.mutations.length >= 4);
     assert.ok(report.mutations.every(({ scope, subjectId }) =>
       typeof scope === "string" && typeof subjectId === "string"
@@ -4493,7 +4496,7 @@ test("execution worker completes timed warmup and sustained full-corpus passes",
   assert.equal(Object.hasOwn(sample, "mode"), false);
   assert.equal(sample.memory.observedAt, "complete-pass-boundary");
   assert.equal(events.includes("execution-yield"), false);
-  assert.equal(calls, 22);
+  assert.equal(calls, 26);
   assert.equal(typeof sample.checksum, "number");
 });
 
@@ -4659,12 +4662,16 @@ test("execution worker reuses one isolated mutable measurement set per round", a
 
     assert.equal(sample.warmupPasses, 1);
     assert.equal(sample.passes, 2);
-    assert.notEqual(calls[0], calls[2]);
-    assert.strictEqual(calls[2], calls[4]);
-    assert.strictEqual(calls[4], calls[6]);
-    assert.strictEqual(calls[3], calls[5]);
-    assert.strictEqual(calls[5], calls[7]);
-    identitiesByRound.push(calls[4], calls[5]);
+    assert.strictEqual(calls[0], calls[1]);
+    assert.strictEqual(calls[1], calls[2]);
+    assert.strictEqual(calls[3], calls[4]);
+    assert.strictEqual(calls[4], calls[5]);
+    assert.notEqual(calls[0], calls[6]);
+    assert.strictEqual(calls[6], calls[8]);
+    assert.strictEqual(calls[8], calls[10]);
+    assert.strictEqual(calls[7], calls[9]);
+    assert.strictEqual(calls[9], calls[11]);
+    identitiesByRound.push(calls[8], calls[9]);
     assert.equal(
       canonicalJson({
         schema,
@@ -4857,7 +4864,7 @@ test("execution rejects changed results without mutation tracking", async () => 
           setup: () => (data) => data.value,
           validate(target, data) {
             validations += 1;
-            if (validations > cases.length) {
+            if (validations > cases.length * 3) {
               data.value = !data.value;
             }
             return target(data);
@@ -4931,7 +4938,7 @@ test("execution rejects changed results during warmup and measurement", async ()
             version: "1.0.0",
             setup: () => (data) => {
               calls += 1;
-              return calls <= cases.length
+              return calls <= cases.length * 3
                 ? expected[data.index]
                 : collision[data.index];
             },
@@ -5351,7 +5358,7 @@ function reportSampleFixture(phase) {
     }
   }
   return {
-    benchmarkVersion: 16,
+    benchmarkVersion: 18,
     benchmarkMode: "full",
     phase,
     draft,
@@ -6226,76 +6233,56 @@ test("Redocly AJV preserves repeated-call instability from its published API", a
   assert.equal(canonicalJson(data), before);
 });
 
-test("Execution rejects Redocly AJV instability before accepting a sample", async () => {
-  const schemaId = "draft4:redocly-instability.json#/groups/0";
-  const schema = {
-    definitions: {
-      item: {
-        type: "array",
-        additionalItems: false,
-        items: [
-          { $ref: "#/definitions/sub-item" },
-          { $ref: "#/definitions/sub-item" }
-        ]
-      },
-      "sub-item": { type: "object", required: ["foo"] }
-    },
-    type: "array",
-    additionalItems: false,
-    items: [
-      { $ref: "#/definitions/item" },
-      { $ref: "#/definitions/item" },
-      { $ref: "#/definitions/item" }
-    ]
-  };
-  const unstable = [
-    [{ foo: null }, { foo: null }, { foo: null }],
-    [{ foo: null }, { foo: null }],
-    [{ foo: null }, { foo: null }]
-  ];
-  const before = canonicalJson(unstable);
-  const cases = [
-    {
-      id: `${schemaId}/tests/0`,
-      schemaId,
-      draft: "draft4",
-      expected: true,
-      data: []
-    },
-    {
-      id: `${schemaId}/tests/1`,
-      schemaId,
-      draft: "draft4",
-      expected: false,
-      data: unstable
-    }
-  ];
+test("Execution rejects a generically named unstable adapter before the clock", async () => {
+  const schemaId = "draft7:generic-instability.json#/groups/0";
+  let calls = 0;
+  let clockCalls = 0;
+  const cases = [true, false].map((expected, index) => ({
+    id: `${schemaId}/tests/${index}`,
+    schemaId,
+    draft: "draft7",
+    expected,
+    data: { canary: true, expected }
+  }));
 
   await assert.rejects(
     () =>
       runExecutionSample({
         request: {
           phase: "execution",
-          validator: "redocly-ajv",
-          draft: "draft4",
+          validator: "generic-unstable",
+          draft: "draft7",
           formatProfile: "base",
           round: 1,
           deadline: Date.now() + 60_000
         },
         setupEntries: [
           {
-            setupKey: "draft4:redocly-instability",
-            draft: "draft4",
+            setupKey: "draft7:generic-instability",
+            draft: "draft7",
             representativeSchemaId: schemaId,
             memberSchemaIds: [schemaId]
           }
         ],
         cases,
         caseIds: cases.map(({ id }) => id),
-        schemas: [{ id: schemaId, draft: "draft4", schema }],
+        schemas: [{ id: schemaId, draft: "draft7", schema: {} }],
         remotes: new Map(),
         resourceRegistry: { resourcesFor: () => [] },
-        createAdapter: getAdapterFactory("redocly-ajv"),
+        createAdapter: () => ({
+          name: "generic-unstable",
+          version: "1.0.0",
+          setup: () => ({}),
+          validate(_target, data) {
+            assert.equal(data.canary, true);
+            calls += 1;
+            return calls === 1;
+          }
+        }),
+        now: () => {
+          clockCalls += 1;
+          return clockCalls;
+        },
         timing: {
           warmupMinimumMilliseconds: 0,
           targetSampleMilliseconds: 0,
@@ -6304,11 +6291,70 @@ test("Execution rejects Redocly AJV instability before accepting a sample", asyn
       }),
     (error) =>
       error.code === "EXECUTION_RESULT_INSTABILITY" &&
-      error.caseId === cases[1].id &&
-      error.expected === false &&
-      error.observed === true
+      error.caseId === cases[0].id &&
+      error.expected === true &&
+      error.observed === false
   );
-  assert.equal(canonicalJson(unstable), before);
+  assert.equal(calls, 2);
+  assert.equal(clockCalls, 0);
+});
+
+test("Execution performs three uniform prechecks per case before measured validation", async () => {
+  const schemaId = "draft7:uniform-stability.json#/groups/0";
+  const cases = [true, false].map((expected, index) => ({
+    id: `${schemaId}/tests/${index}`,
+    schemaId,
+    draft: "draft7",
+    expected,
+    data: { expected }
+  }));
+  let calls = 0;
+  let callsAtClockStart = null;
+  let clock = 0;
+  const sample = await runExecutionSample({
+    request: {
+      phase: "execution",
+      validator: "generic-stable",
+      draft: "draft7",
+      formatProfile: "base",
+      round: 1,
+      deadline: Date.now() + 60_000
+    },
+    setupEntries: [{
+      setupKey: "draft7:uniform-stability",
+      draft: "draft7",
+      representativeSchemaId: schemaId,
+      memberSchemaIds: [schemaId]
+    }],
+    cases,
+    caseIds: cases.map(({ id }) => id),
+    schemas: [{ id: schemaId, draft: "draft7", schema: {} }],
+    remotes: new Map(),
+    resourceRegistry: { resourcesFor: () => [] },
+    createAdapter: () => ({
+      name: "generic-stable",
+      version: "1.0.0",
+      setup: () => ({}),
+      validate(_target, data) {
+        calls += 1;
+        return data.expected;
+      }
+    }),
+    now: () => {
+      callsAtClockStart ??= calls;
+      clock += 1;
+      return clock;
+    },
+    timing: {
+      warmupMinimumMilliseconds: 0,
+      targetSampleMilliseconds: 0,
+      minimumSampleMilliseconds: 0
+    }
+  });
+
+  assert.equal(callsAtClockStart, 6);
+  assert.equal(calls, 8);
+  assert.equal(sample.operations, 2);
 });
 
 test("z-schema isolates repeated detached remote references without mutating input", async () => {

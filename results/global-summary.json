@@ -1,5 +1,5 @@
 {
-  "globalSummaryVersion": 16,
+  "globalSummaryVersion": 17,
   "drafts": [
     "draft4",
     "draft6",
@@ -67,19 +67,19 @@
       "competitorCount": 3,
       "referencesByDraft": {
         "draft4": {
-          "setupMedian": 4763.415714259276
+          "setupMedian": 5673.398978746754
         },
         "draft6": {
-          "setupMedian": 4193.684076789261
+          "setupMedian": 5585.440262820719
         },
         "draft7": {
-          "setupMedian": 4051.4082112503424
+          "setupMedian": 4851.913039068029
         },
         "draft2019-09": {
-          "setupMedian": 2688.017871488063
+          "setupMedian": 3854.625411416722
         },
         "draft2020-12": {
-          "setupMedian": 2759.128852460317
+          "setupMedian": 3961.7663669878284
         }
       },
       "included": [
@@ -89,19 +89,19 @@
           "version": "1.4.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 4468.269224096988
+              "setupMedian": 5673.398978746754
             },
             "draft6": {
-              "setupMedian": 4003.986626950602
+              "setupMedian": 5344.319638370755
             },
             "draft7": {
-              "setupMedian": 3802.9429749081883
+              "setupMedian": 4489.249843896272
             },
             "draft2019-09": {
-              "setupMedian": 2688.017871488063
+              "setupMedian": 3854.625411416722
             },
             "draft2020-12": {
-              "setupMedian": 2759.128852460317
+              "setupMedian": 3961.7663669878284
             }
           },
           "scopeStates": {
@@ -128,7 +128,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 276807680,
+          "peakRssBytes": 321761280,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -138,8 +138,8 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 17722.34554990416,
-          "setupScore": 96.588698221302,
+          "setupOpsPerSecond": 23323.36023941833,
+          "setupScore": 97.59310964182812,
           "errors": {
             "setup": {
               "count": 0,
@@ -153,19 +153,19 @@
           "version": "1.17.7",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 4763.415714259276
+              "setupMedian": 5473.571870749807
             },
             "draft6": {
-              "setupMedian": 4193.684076789261
+              "setupMedian": 5585.440262820719
             },
             "draft7": {
-              "setupMedian": 4051.4082112503424
+              "setupMedian": 4851.913039068029
             },
             "draft2019-09": {
-              "setupMedian": 2354.931594407566
+              "setupMedian": 3588.5484404325225
             },
             "draft2020-12": {
-              "setupMedian": 2507.941024543641
+              "setupMedian": 3529.342415378251
             }
           },
           "scopeStates": {
@@ -192,7 +192,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 277856256,
+          "peakRssBytes": 327843840,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -202,8 +202,8 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 17871.380621250086,
-          "setupScore": 95.5472729684678,
+          "setupOpsPerSecond": 23028.816028449328,
+          "setupScore": 95.6387328283729,
           "errors": {
             "setup": {
               "count": 26,
@@ -426,19 +426,19 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 2800.5705667050306
+              "setupMedian": 3507.235917811672
             },
             "draft6": {
-              "setupMedian": 2648.477117724942
+              "setupMedian": 3398.2717629421754
             },
             "draft7": {
-              "setupMedian": 2513.179899939036
+              "setupMedian": 3152.5323816937735
             },
             "draft2019-09": {
-              "setupMedian": 1425.4438247505623
+              "setupMedian": 1906.7744391395495
             },
             "draft2020-12": {
-              "setupMedian": 1322.922669450089
+              "setupMedian": 1581.8033831049734
             }
           },
           "scopeStates": {
@@ -465,7 +465,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 205959168,
+          "peakRssBytes": 319045632,
           "coverage": "5/5",
           "requiredScopes": [
             "draft4/setup",
@@ -475,8 +475,8 @@
             "draft2020-12/setup"
           ],
           "missingScopes": [],
-          "setupOpsPerSecond": 10710.59407856966,
-          "setupScore": 56.692461112316586,
+          "setupOpsPerSecond": 13546.617884692143,
+          "setupScore": 54.54185890736044,
           "errors": {
             "setup": {
               "count": 12,
@@ -40051,10 +40051,10 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "setupMedian": 167.60852502967208
+              "setupMedian": 209.80564724103345
             },
             "draft6": {
-              "setupMedian": 83.13745592537525
+              "setupMedian": 109.26622337166695
             },
             "draft7": {
               "setupMedian": null
@@ -40148,7 +40148,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 338509824,
+          "peakRssBytes": 461860864,
           "coverage": "2/5",
           "requiredScopes": [
             "draft4/setup",
@@ -41636,24 +41636,24 @@
       "competitorCount": 3,
       "referencesByDraft": {
         "draft4": {
-          "baseMedian": 2287124.713147725,
-          "formatsMedian": 12115861.172585597
+          "baseMedian": 2901008.250505496,
+          "formatsMedian": 13415684.096048754
         },
         "draft6": {
-          "baseMedian": 2527457.9490819946,
-          "formatsMedian": 13544680.160296135
+          "baseMedian": 2946570.5860952553,
+          "formatsMedian": 14000467.394915741
         },
         "draft7": {
-          "baseMedian": 2559326.1906560385,
-          "formatsMedian": 12405220.767858364
+          "baseMedian": 2351070.0167775718,
+          "formatsMedian": 11948306.333778262
         },
         "draft2019-09": {
-          "baseMedian": 862681.303033668,
-          "formatsMedian": 11372682.362195924
+          "baseMedian": 994066.8866700977,
+          "formatsMedian": 12599103.745398957
         },
         "draft2020-12": {
-          "baseMedian": 716159.6480311996,
-          "formatsMedian": 10594100.187890925
+          "baseMedian": 894494.3576901818,
+          "formatsMedian": 11121538.76156104
         }
       },
       "included": [
@@ -41663,24 +41663,24 @@
           "version": "1.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 2287124.713147725,
-              "formatsMedian": 12115861.172585597
+              "baseMedian": 2901008.250505496,
+              "formatsMedian": 13415684.096048754
             },
             "draft6": {
-              "baseMedian": 2527457.9490819946,
-              "formatsMedian": 13544680.160296135
+              "baseMedian": 2946570.5860952553,
+              "formatsMedian": 14000467.394915741
             },
             "draft7": {
-              "baseMedian": 2559326.1906560385,
-              "formatsMedian": 12405220.767858364
+              "baseMedian": 2351070.0167775718,
+              "formatsMedian": 11948306.333778262
             },
             "draft2019-09": {
-              "baseMedian": 862681.303033668,
-              "formatsMedian": 11372682.362195924
+              "baseMedian": 994066.8866700977,
+              "formatsMedian": 12599103.745398957
             },
             "draft2020-12": {
-              "baseMedian": 716159.6480311996,
-              "formatsMedian": 10594100.187890925
+              "baseMedian": 894494.3576901818,
+              "formatsMedian": 11121538.76156104
             }
           },
           "scopeStates": {
@@ -41727,7 +41727,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 246493184,
+          "peakRssBytes": 341221376,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41742,9 +41742,9 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 8952749.803950626,
-          "formatsOpsPerSecond": 60032544.650826946,
-          "averageOpsPerSecond": 34492647.227388784,
+          "baseOpsPerSecond": 10087210.097738601,
+          "formatsOpsPerSecond": 63085100.331702754,
+          "averageOpsPerSecond": 36586155.21472068,
           "baseScore": 100,
           "formatsScore": 100,
           "balancedScore": 100,
@@ -41765,24 +41765,24 @@
           "version": "1.17.7",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 415955.9420054989,
-              "formatsMedian": 1705779.5928699616
+              "baseMedian": 576745.4152067623,
+              "formatsMedian": 1853418.9128969698
             },
             "draft6": {
-              "baseMedian": 397711.7035746439,
-              "formatsMedian": 1851417.0559776565
+              "baseMedian": 593140.5413626065,
+              "formatsMedian": 1854396.9286425244
             },
             "draft7": {
-              "baseMedian": 442038.90021391085,
-              "formatsMedian": 236222.2349927352
+              "baseMedian": 486876.17260753596,
+              "formatsMedian": 225955.0082915225
             },
             "draft2019-09": {
-              "baseMedian": 248868.405059168,
-              "formatsMedian": 265990.88062912016
+              "baseMedian": 308443.5672735629,
+              "formatsMedian": 247243.2876684841
             },
             "draft2020-12": {
-              "baseMedian": 212290.77946034263,
-              "formatsMedian": 274322.9791865839
+              "baseMedian": 269319.20387707814,
+              "formatsMedian": 262515.8047273094
             }
           },
           "scopeStates": {
@@ -41829,7 +41829,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 278667264,
+          "peakRssBytes": 334757888,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41844,12 +41844,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 1716865.7303135642,
-          "formatsOpsPerSecond": 4333732.743656058,
-          "averageOpsPerSecond": 3025299.236984811,
-          "baseScore": 21.144795348562965,
-          "formatsScore": 4.669221449272618,
-          "balancedScore": 9.936283610182933,
+          "baseOpsPerSecond": 2234524.9003275456,
+          "formatsOpsPerSecond": 4443529.94222681,
+          "averageOpsPerSecond": 3339027.421277178,
+          "baseScore": 23.865786231850446,
+          "formatsScore": 4.375043723830637,
+          "balancedScore": 10.218309951647624,
           "errors": {
             "base": {
               "count": 0,
@@ -41867,24 +41867,24 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 76675.89914557477,
-              "formatsMedian": 86556.81488259739
+              "baseMedian": 87808.51159830895,
+              "formatsMedian": 85548.5543941631
             },
             "draft6": {
-              "baseMedian": 80333.1795703345,
-              "formatsMedian": 109295.19633461867
+              "baseMedian": 94588.42348781544,
+              "formatsMedian": 103968.0599470495
             },
             "draft7": {
-              "baseMedian": 91782.71993139276,
-              "formatsMedian": 89084.58838476846
+              "baseMedian": 94529.12387828119,
+              "formatsMedian": 89367.60828019085
             },
             "draft2019-09": {
-              "baseMedian": 63907.87440170527,
-              "formatsMedian": 89137.94001966399
+              "baseMedian": 78483.96474817728,
+              "formatsMedian": 82856.99068716832
             },
             "draft2020-12": {
-              "baseMedian": 59012.67747243095,
-              "formatsMedian": 91302.41440117006
+              "baseMedian": 74905.35777801785,
+              "formatsMedian": 89024.30657331046
             }
           },
           "scopeStates": {
@@ -41931,7 +41931,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 286466048,
+          "peakRssBytes": 347795456,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -41946,12 +41946,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 371712.3505214383,
-          "formatsOpsPerSecond": 465376.95402281854,
-          "averageOpsPerSecond": 418544.6522721284,
-          "baseScore": 4.7159691802575585,
-          "formatsScore": 0.7750309570053786,
-          "balancedScore": 1.9118112111249073,
+          "baseOpsPerSecond": 430315.38149060064,
+          "formatsOpsPerSecond": 450765.51988188224,
+          "averageOpsPerSecond": 440540.45068624144,
+          "baseScore": 4.813066838207164,
+          "formatsScore": 0.7146820155591639,
+          "balancedScore": 1.8546731002931132,
           "errors": {
             "base": {
               "count": 0,
@@ -81609,12 +81609,12 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 2906646.421656938,
-              "formatsMedian": 3619388.171370866
+              "baseMedian": 4595101.566499872,
+              "formatsMedian": 3691010.942966886
             },
             "draft6": {
-              "baseMedian": 3145408.3081689123,
-              "formatsMedian": 4493542.965704949
+              "baseMedian": 4088307.5562190237,
+              "formatsMedian": 4453080.952502019
             },
             "draft7": {
               "baseMedian": null,
@@ -81789,7 +81789,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 316145664,
+          "peakRssBytes": 356036608,
           "coverage": "4/10",
           "requiredScopes": [
             "draft4/base",
@@ -84242,24 +84242,24 @@
       "competitorCount": 2,
       "referencesByDraft": {
         "draft4": {
-          "baseMedian": 5541.541578217501,
-          "formatsMedian": 10632.089013218996
+          "baseMedian": 6701.511417169842,
+          "formatsMedian": 10074.531340988491
         },
         "draft6": {
-          "baseMedian": 7315.660989858475,
-          "formatsMedian": 12061.433882513633
+          "baseMedian": 6849.894067068979,
+          "formatsMedian": 10117.267190708735
         },
         "draft7": {
-          "baseMedian": 7473.1321452215325,
-          "formatsMedian": 10640.10018691654
+          "baseMedian": 6982.861782310918,
+          "formatsMedian": 10142.592224878263
         },
         "draft2019-09": {
-          "baseMedian": 4487.457918916096,
-          "formatsMedian": 10021.349679838971
+          "baseMedian": 4887.719003191017,
+          "formatsMedian": 9495.81157222275
         },
         "draft2020-12": {
-          "baseMedian": 4042.7103402875614,
-          "formatsMedian": 7901.6592090646645
+          "baseMedian": 4696.262020728273,
+          "formatsMedian": 7941.113060195093
         }
       },
       "included": [
@@ -84269,24 +84269,24 @@
           "version": "1.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 5541.541578217501,
-              "formatsMedian": 10632.089013218996
+              "baseMedian": 6701.511417169842,
+              "formatsMedian": 10074.531340988491
             },
             "draft6": {
-              "baseMedian": 7315.660989858475,
-              "formatsMedian": 12061.433882513633
+              "baseMedian": 6849.894067068979,
+              "formatsMedian": 10117.267190708735
             },
             "draft7": {
-              "baseMedian": 7473.1321452215325,
-              "formatsMedian": 10640.10018691654
+              "baseMedian": 6982.861782310918,
+              "formatsMedian": 10142.592224878263
             },
             "draft2019-09": {
-              "baseMedian": 4487.457918916096,
-              "formatsMedian": 10021.349679838971
+              "baseMedian": 4887.719003191017,
+              "formatsMedian": 9495.81157222275
             },
             "draft2020-12": {
-              "baseMedian": 4042.7103402875614,
-              "formatsMedian": 7901.6592090646645
+              "baseMedian": 4696.262020728273,
+              "formatsMedian": 7941.113060195093
             }
           },
           "scopeStates": {
@@ -84333,7 +84333,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 292081664,
+          "peakRssBytes": 321388544,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -84348,9 +84348,9 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 28860.502972501166,
-          "formatsOpsPerSecond": 51256.6319715528,
-          "averageOpsPerSecond": 40058.56747202698,
+          "baseOpsPerSecond": 30118.248290469026,
+          "formatsOpsPerSecond": 47771.31538899333,
+          "averageOpsPerSecond": 38944.78183973118,
           "baseScore": 100,
           "formatsScore": 100,
           "balancedScore": 100,
@@ -84371,24 +84371,24 @@
           "version": "12.4.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 3544.391109991844,
-              "formatsMedian": 4592.8573969075605
+              "baseMedian": 3871.396875317025,
+              "formatsMedian": 4034.313391114475
             },
             "draft6": {
-              "baseMedian": 3711.7130270974094,
-              "formatsMedian": 4510.424555334219
+              "baseMedian": 3688.128206387888,
+              "formatsMedian": 3868.166972908671
             },
             "draft7": {
-              "baseMedian": 3588.288479340147,
-              "formatsMedian": 4037.326809732973
+              "baseMedian": 3473.3333252196926,
+              "formatsMedian": 3941.2619290235616
             },
             "draft2019-09": {
-              "baseMedian": 2136.182224702995,
-              "formatsMedian": 2363.7532523770387
+              "baseMedian": 1972.882418001027,
+              "formatsMedian": 2329.1447555269033
             },
             "draft2020-12": {
-              "baseMedian": 1715.7882979239828,
-              "formatsMedian": 1907.6566752579977
+              "baseMedian": 1680.4174453465373,
+              "formatsMedian": 1871.7351819418022
             }
           },
           "scopeStates": {
@@ -84435,7 +84435,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 212570112,
+          "peakRssBytes": 313819136,
           "coverage": "10/10",
           "requiredScopes": [
             "draft4/base",
@@ -84450,12 +84450,12 @@
             "draft2020-12/format-assertion"
           ],
           "missingScopes": [],
-          "baseOpsPerSecond": 14696.363139056377,
-          "formatsOpsPerSecond": 17412.018689609788,
-          "averageOpsPerSecond": 16054.190914333081,
-          "baseScore": 50.07363357460905,
-          "formatsScore": 32.25356872474695,
-          "balancedScore": 40.187726755770214,
+          "baseOpsPerSecond": 14686.15827027217,
+          "formatsOpsPerSecond": 16044.622230515413,
+          "averageOpsPerSecond": 15365.390250393792,
+          "baseScore": 46.7560686752075,
+          "formatsScore": 32.158819968324735,
+          "balancedScore": 38.7765392338283,
           "errors": {
             "base": {
               "count": 0,
@@ -124113,12 +124113,12 @@
           "version": "8.20.0",
           "inputsByDraft": {
             "draft4": {
-              "baseMedian": 208.47744127266878,
-              "formatsMedian": 222.94885012584604
+              "baseMedian": 224.99168794129764,
+              "formatsMedian": 230.43588632541756
             },
             "draft6": {
-              "baseMedian": 111.42921458712948,
-              "formatsMedian": 119.10876036793549
+              "baseMedian": 113.56267306338249,
+              "formatsMedian": 115.04292376931738
             },
             "draft7": {
               "baseMedian": null,
@@ -124293,7 +124293,7 @@
           },
           "mutationCount": 0,
           "mutationRecords": [],
-          "peakRssBytes": 440631296,
+          "peakRssBytes": 466616320,
           "coverage": "4/10",
           "requiredScopes": [
             "draft4/base",
@@ -127652,7 +127652,7 @@
     "benchmarkMode": "full",
     "sampleAcquisition": {
       "policy": "current-run-only",
-      "runStartedAt": "2026-08-04T20:06:38.877Z",
+      "runStartedAt": "2026-08-05T06:45:47.931Z",
       "measuredSamples": 450,
       "resumedSamples": 0,
       "retainedSamples": 0,

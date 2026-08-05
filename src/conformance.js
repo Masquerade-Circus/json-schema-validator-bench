@@ -8,6 +8,7 @@ import {
   semanticDifferenceForKey
 } from "./integrity.js";
 import { prepareSchemaForFormatProfile } from "./schema-profile.js";
+import { checkValidationStability } from "./stability.js";
 
 const statuses = [
   "PASS",
@@ -230,22 +231,19 @@ export async function classifySchemaCases({
     const disposableData = structuredClone(testCase.data);
     const dataTracker = createIntegrityTracker(disposableData);
     try {
-      record.observed = adapter.validate(
+      const stability = checkValidationStability(() => adapter.validate(
         validationTarget,
         disposableData
-      );
+      ));
+      record.observed = stability.stable
+        ? stability.observed
+        : stability.expected;
       record.status =
         record.observed === testCase.expected ? "PASS" : "WRONG";
-      if (adapter.name === "redocly-ajv" || adapter.id === "redocly-ajv") {
-        for (let repetition = 2; repetition <= 3; repetition += 1) {
-          const repeated = adapter.validate(validationTarget, disposableData);
-          if (repeated !== record.observed) {
-            record.status = "RUNTIME";
-            record.errorCode = "PROVIDER_RESULT_INSTABILITY";
-            record.error = `${adapter.displayName ?? adapter.name} changed from ${record.observed} to ${repeated} on repeated validation ${repetition} of the same object`;
-            break;
-          }
-        }
+      if (!stability.stable) {
+        record.status = "RUNTIME";
+        record.errorCode = "PROVIDER_RESULT_INSTABILITY";
+        record.error = `${adapter.displayName ?? adapter.name} changed from ${stability.expected} to ${stability.observed} on repeated validation ${stability.repetition} of the same object`;
       }
     } catch (error) {
       record.status = "RUNTIME";

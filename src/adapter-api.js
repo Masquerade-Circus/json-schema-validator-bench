@@ -217,7 +217,6 @@ export function defineAdapter(declaration, factory) {
   const allowedDeclarationFields = [
     ...requiredDeclarationFields,
     "additionalPackages",
-    "implementation",
     "supportClaims"
   ];
   if (
@@ -227,34 +226,6 @@ export function defineAdapter(declaration, factory) {
     throw new Error("adapter declaration fields differ from the public contract");
   }
   const drafts = uniqueKnownStrings(declaration.drafts, "drafts", ADAPTER_DRAFTS);
-  const implementationMetadata = Object.hasOwn(declaration, "implementation")
-    ? declaration.implementation
-    : {
-        api: "N/A",
-        isolation: "N/A",
-        dynamicCode: "N/A"
-      };
-  if (
-    implementationMetadata === null ||
-    typeof implementationMetadata !== "object" ||
-    Array.isArray(implementationMetadata) ||
-    Object.keys(implementationMetadata).some(
-      (field) => !["api", "isolation", "dynamicCode"].includes(field)
-    )
-  ) {
-    throw new Error("adapter implementation metadata must be an object");
-  }
-  const implementation = Object.freeze({
-    api: nonEmptyString(implementationMetadata.api, "implementation.api"),
-    isolation: nonEmptyString(
-      implementationMetadata.isolation,
-      "implementation.isolation"
-    ),
-    dynamicCode: nonEmptyString(
-      implementationMetadata.dynamicCode,
-      "implementation.dynamicCode"
-    )
-  });
   const declaredSupportClaims = Object.hasOwn(declaration, "supportClaims")
     ? declaration.supportClaims
     : {};
@@ -300,7 +271,6 @@ export function defineAdapter(declaration, factory) {
       "unsupported",
       CAPABILITY_KEYS
     ),
-    implementation,
     supportClaims
   });
 

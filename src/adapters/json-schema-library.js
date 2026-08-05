@@ -83,12 +83,7 @@ export const adapter = defineAdapter(
     packageName: "json-schema-library",
     displayName: "json-schema-library",
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
-    unsupported: [],
-    implementation: {
-      api: "reusable-sync",
-      isolation: "fresh-instance",
-      dynamicCode: "not-observed"
-    }
+    unsupported: []
   },
   createImplementation
 );

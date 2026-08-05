@@ -33,10 +33,13 @@ import {
   sortValidatorIds,
   validators as validatorMatrix
 } from "./matrix.js";
+import { rotateRoundOrder } from "./adapter-registry.js";
 import {
-  participantImplementations,
-  rotateRoundOrder
-} from "./adapter-registry.js";
+  implementationEvidenceVersion,
+  implementationInstrumentationVersion,
+  loadImplementationEvidenceSync,
+  validateImplementationEvidence
+} from "./implementation-evidence.js";
 import { canonicalJson, sha256 } from "./suite.js";
 import { getResultsRoot } from "./paths.js";
 import { derivePerformanceCorpus } from "./performance-corpus.js";
@@ -394,7 +397,7 @@ export function validateSampleSet({
     throw new Error(`${phase} result declares another phase`);
   }
   if (
-    result.benchmarkVersion !== 16 ||
+    result.benchmarkVersion !== 18 ||
     result.benchmarkMode !== mode ||
     result.draft !== intersection.draft ||
     result.formatProfile !== intersection.formatProfile
@@ -1256,7 +1259,7 @@ export function summarizePhase(result, mode, intersection = null) {
     }
   }
   return {
-    benchmarkVersion: 16,
+    benchmarkVersion: 18,
     summaryVersion: 11,
     phase: result.phase,
     draft: result.draft,
@@ -1924,7 +1927,7 @@ export function createGlobalPerformanceSummary(
     phases[phase] = createRanking();
   }
   return {
-    globalSummaryVersion: 16,
+    globalSummaryVersion: 17,
     drafts: draftIds,
     requiredCoverageByPhase: {
       setup: `${draftIds.length}/${draftIds.length}`,
@@ -2591,19 +2594,47 @@ export function performanceTable(
   return lines.join("\n");
 }
 
-export function downloadTable(snapshot, participants) {
+export function downloadTable(snapshot, participants, draft = null) {
+  const { artifact, context, diagnostic } = loadImplementationEvidenceSync();
+  if (artifact === null) {
+    throw new Error(`implementation evidence is unavailable: ${diagnostic}`);
+  }
+  if (
+    artifact.packageLockSha256 !== context.packageLockSha256 ||
+    artifact.probeContractSha256 !== context.probeContractSha256
+  ) {
+    throw new Error("implementation evidence is stale");
+  }
   const ordered = [...participants].sort(compareIds);
   return [
-    "Each row binds observed adapter behavior to the pinned package version. Weekly downloads show npm adoption volume for the snapshot period. `module-global-unavailable` means Cold execution is N/A because a fresh adapter wrapper cannot isolate provider state.",
+    "Each row binds automatically observed adapter behavior to the pinned package version. Weekly downloads show npm adoption volume for the snapshot period. Cold isolation uses independent clean-process controls A-A, B-B, A-B-A and B-A-B. The controls separate self-instability from cross-instance interference and fail closed when a control throws, cannot establish its canary or lacks complete instrumentation readiness.",
     "",
     "| Validator | API | Cold isolation | Dynamic code | Weekly downloads |",
     "| --- | --- | --- | --- | ---: |",
     ...ordered.map(
       (participant) => {
-        const implementation = participantImplementations[participant.id] ?? {
-          api: "N/A",
-          isolation: "N/A",
-          dynamicCode: "N/A"
+        const scopes = artifact.participants[participant.id]?.scopes ?? null;
+        if (
+          scopes === null ||
+          context.adapterSourceSha256(participant.id) !==
+            Object.values(scopes)[0]?.adapterSourceSha256
+        ) {
+          throw new Error(`implementation evidence is stale or absent for ${participant.id}`);
+        }
+        const selectedScopes = draft === null
+          ? Object.values(scopes)
+          : [scopes[draft]].filter((scope) => scope !== null && typeof scope === "object");
+        if (selectedScopes.length === 0) {
+          throw new Error(`implementation evidence is absent for ${participant.id}/${draft}`);
+        }
+        const value = (field) => {
+          const values = [...new Set(selectedScopes.map((scope) => scope[field].value))];
+          return values.length === 1 ? values[0] : "varies-by-draft";
+        };
+        const implementation = {
+          api: value("api"),
+          isolation: value("isolation"),
+          dynamicCode: value("dynamicCode")
         };
         return `| ${participantLink(participant)} | ${implementation.api} | ${implementation.isolation} | ${implementation.dynamicCode} | ${number(snapshot.packages[participant.packageName].weeklyDownloads)} |`;
       }
@@ -2612,12 +2643,15 @@ export function downloadTable(snapshot, participants) {
     "- `reusable-sync`: prepares a reusable callable synchronously.",
     "- `reusable-async`: resolves asynchronous setup before exposing a reusable callable.",
     "- `validate-only`: exposes validation through the adapter without a separate reusable setup target.",
-    "- `fresh-instance`: each fresh adapter creates isolated provider state.",
-    "- `module-global-unavailable`: module-global provider state cannot satisfy the fresh-isolation contract, so Cold execution is `N/A`.",
-    "- `observed`: the exercised adapter route uses dynamic code generation.",
-    "- `not-observed`: the exercised adapter route did not use dynamic code generation.",
+    "- `interference-not-observed`: both self-controls stayed stable and neither cross-order control changed the first instance.",
+    "- `interference-observed`: A-B-A or B-A-B changed the first instance while A-A and B-B stayed stable, so Cold execution is `N/A`.",
+    "- `self-instability-observed`: A-A or B-B changed without a cross-provider claim, so Cold execution fails closed for that scope.",
+    "- `inconclusive`: a canary failed or a control threw, so Cold execution fails closed for that scope.",
+    "- `observed`: at least one dependency mechanism successfully generated dynamic code on the exercised route.",
+    "- `not-observed`: every required mechanism and phase was ready and no dependency mechanism succeeded.",
+    "- `limited`: every required process and phase confirmed readiness, but transparent instrumentation has a known observation limit. `limited` cannot replace unavailable or missing readiness.",
     "",
-    "Dynamic code describes the route exercised by the adapter at the pinned version, not every path available in the package."
+    "Dynamic code describes only the instrumented adapter import, setup, validation and isolation phases at the pinned version. API, A-A, B-B, A-B-A and B-A-B publish independent process identities, PIDs and per-phase readiness. One unavailable, contradictory or missing required process makes the scope inconclusive and Cold fails closed. The evidence separates attempted, succeeded and failed generation where each outcome is observable for eval, Function, AsyncFunction, GeneratorFunction, AsyncGeneratorFunction, node:vm, WebAssembly, workers, inline Node subprocesses, data imports and controlled-child propagation. Worker and fork execArgv values preserve caller flags while forcing one preload. Spawn, execFile and shell exec routes cover their sync and async forms. Inspector observation preserves lexical direct eval semantics, but it cannot transparently distinguish direct from indirect eval or confirm completion of an eval body. Loader hooks observe a data URL request while inspector confirms parsed scripts, but they cannot confirm every parse or evaluation failure. Eval and data imports therefore report capability limits instead of simulated coverage. The event log stores outcomes, provenance and attribution, never generated source text."
   ].join("\n");
 }
 
@@ -2721,7 +2755,7 @@ export function renderDraftSummary({ draft, scopes, reports, snapshot, versions 
       "",
       `Execution eligible roster: ${executionIntersection.eligibility?.roster?.retention ?? "legacy"}. Intersection: ${executionIntersection.counts.total} cases and ${executionIntersection.counts.setupEntries} setup entries. Roster SHA-256: \`${executionIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
       "",
-      `Cold execution eligible roster: ${coldExecutionIntersection.eligibility?.roster?.retention ?? "N/A"}. Hyperjump is N/A because its adapter uses module-global schema state that a fresh wrapper cannot isolate. Roster SHA-256: \`${coldExecutionIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
+      `Cold execution eligible roster: ${coldExecutionIntersection.eligibility?.roster?.retention ?? "N/A"}. Scopes with absent, stale, incompatible, inconclusive or interference-observed implementation evidence fail closed. Roster SHA-256: \`${coldExecutionIntersection.eligibility?.roster?.sha256 ?? "N/A"}\`.`,
       "",
       performanceTable(
         "Execution ranking",
@@ -2746,7 +2780,7 @@ export function renderDraftSummary({ draft, scopes, reports, snapshot, versions 
     "",
     `Period: ${snapshot.start} through ${snapshot.end}. Retrieved at ${snapshot.retrievedAt}.`,
     "",
-    downloadTable(snapshot, participants)
+    downloadTable(snapshot, participants, draft)
   );
   lines.push(
     "",
@@ -3120,12 +3154,13 @@ export function renderBenchmarkReadme({
     "",
     "We measure conformance for every configured validator against every discovered case in Base and Formats. We preserve each `PASS`, `WRONG`, `COMPILE`, `RUNTIME` and `UNSUPPORTED` result in the reports and participant matrix.",
     "",
-    `We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured ${thresholdPercent}% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable \`setup()\`. Cold execution intersects it with adapters that provide fresh isolated state.`,
+    `We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured ${thresholdPercent}% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable \`setup()\`. Cold execution also requires current, compatible and conclusive API, isolation and dynamic-code readiness evidence with no reproduced interference or self-instability. Missing, stale, incompatible or inconclusive evidence fails closed. A known \`limited\` capability remains visible and does not block Cold after every required process and phase confirms readiness.`,
     "",
     "We retain every excluded validator and its exact reasons in diagnostic results. We build each common phase corpus from cases where every validator in that phase roster reports `PASS`. A ranking requires at least two qualified competitors. Smaller rosters publish `INSUFFICIENT_COMPETITORS`; competitive leader, relative score, and chart fields start with two competitors.",
     "",
     "We publish two hashes for each phase intersection. The performance identity hash covers the policy, relevant suite and format configuration, eligible roster, and common corpus. Compatible performance cache entries share this identity. The artifact hash also covers excluded-roster diagnostics, mutations, and all source-report hashes.",
     "Each performance sample records the validator runtime hash that produced it. A partial refresh preserves that hash on omitted baseline samples, while `results/environment.json` publishes the runtime provenance by scope and validator. This prevents an old sample from inheriting the current runtime identity by presentation alone.",
+    "Before each adapter import used for evidence capture, a clean Node process installs instrumentation for function constructors, `node:vm`, WebAssembly, workers, inline Node subprocesses, `data:` imports and propagation into controlled Node children. Inspector events observe eval without replacing the global binding, so direct eval retains lexical semantics. API probing and each A-A, B-B, A-B-A and B-A-B isolation control run in independent clean processes. Every process and phase publishes its own capability events, readiness marker, PID and control identity. `results/implementation-evidence.json` records that provenance, separate attempted, succeeded and failed counts, stable scope identities, capture-run identities, runtime hashes, diagnostics and observed verdicts. Compatible scope captures may be reused; declarations and static inference never control eligibility or publication.",
     "",
     "### Setup",
     "",
@@ -3133,11 +3168,11 @@ export function renderBenchmarkReadme({
     "",
     "### Execution",
     "",
-    "Before the Execution clock starts, reusable adapters prepare their callable and `validate-only` adapters prepare their adapter context, profiled schema and correctness-check data. Redocly AJV receives repeated stability checks on each same pristine object because its published validator can retain reference-visit state between calls. During each measured complete-corpus pass, reusable adapters call the prepared callable, while `validate-only` adapters call the vendor API through their prepared adapter context. Each worker and round owns one isolated mutable measurement set. Any boolean result change, checksum change or memory-budget violation fails the sample.",
+    "Before the Execution clock starts, reusable adapters prepare their callable and `validate-only` adapters prepare their adapter context, profiled schema and correctness-check data. Every adapter receives three rapid stability checks on the same prepared target and the same pristine data object for each case. The first boolean divergence or thrown error fails the sample before timing begins. During each measured complete-corpus pass, reusable adapters call the prepared callable, while `validate-only` adapters call the vendor API through their prepared adapter context. Each worker and round owns one isolated mutable measurement set. Any boolean result change, checksum change or memory-budget violation fails the sample.",
     "",
     "### Cold execution",
     "",
-    "Cold execution measures each case directly. Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile, analyzes schema capabilities and normalizes the common adapter configuration. The timed operation creates the provider context through the fresh opaque adapter, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Common contract checks, result comparison, checksum, diagnostics and telemetry remain outside the clock. Module imports and process startup remain outside this phase. The runner never derives this rate from Setup or Execution and never rewrites `$id` or references. Hyperjump is N/A because its pinned API stores schema and format state in module globals that a fresh adapter wrapper cannot isolate.",
+    "Cold execution measures each case directly. Before the operation clock, the runner clones the schema and data, constructs and clones the resource closure, applies the format profile, analyzes schema capabilities and normalizes the common adapter configuration. The timed operation creates the provider context through the fresh opaque adapter, applies provider-specific configuration and registration, calls `setup()` when available, validates once and ends when validation returns. Common contract checks, result comparison, checksum, diagnostics and telemetry remain outside the clock. Module imports and process startup remain outside this phase. The runner never derives this rate from Setup or Execution and never rewrites `$id` or references. Any scope with observed cross-instance interference is N/A.",
     "",
     "### Timing and scoring",
     "",
@@ -3197,6 +3232,7 @@ export function renderBenchmarkReadme({
     "",
     "- `results/index.json` records the result format, benchmark mode, drafts and profiles.",
     "- `results/environment.json` records the current runtime, hashes, and sample runtime provenance by scope and validator.",
+    "- `results/implementation-evidence.json` records automatically observed API shape, cross-instance interference, dynamic-code routes, diagnostics and provenance for every adapter and draft.",
     "- `results/packages.json` records package versions, tarballs, and integrities.",
     "- `results/validators.json` records validator profiles.",
     "- `results/global-summary.json` records All Drafts rankings for Setup, Execution and Cold execution. Setup contains five draft medians, a summed Setup ops/s index and a five-scope geometric score. The other phases retain Base, Formats, Average and Balanced fields.",
@@ -3237,13 +3273,20 @@ export function createResultsIndex(
   mode,
   mutationManifest = null,
   eligibilityThresholdPercent = defaultEligibilityThresholdPercent,
-  diagnostic = null
+  diagnostic = null,
+  implementationEvidenceSha256 = null
 ) {
   if (mode !== "quick" && mode !== "full") {
     throw new Error("results index mode must be quick or full");
   }
   return {
-    resultsVersion: 15,
+    resultsVersion: 17,
+    implementationEvidenceVersion,
+    implementationInstrumentationVersion,
+    implementationEvidence: {
+      path: "implementation-evidence.json",
+      sha256: implementationEvidenceSha256
+    },
     benchmarkMode: mode,
     eligibilityThresholdPercent: parseEligibilityThresholdPercent(
       eligibilityThresholdPercent
@@ -3328,6 +3371,12 @@ export async function generateFinalReport({
     parseEligibilityThresholdPercent(eligibilityThresholdPercent)
   );
   const resultsRoot = getResultsRoot();
+  const implementationEvidenceRaw = await readFile(
+    path.join(resultsRoot, "implementation-evidence.json"),
+    "utf8"
+  );
+  validateImplementationEvidence(JSON.parse(implementationEvidenceRaw));
+  const implementationEvidenceSha256 = sha256(implementationEvidenceRaw);
   const reportStarted = Date.now();
   const pipelineStartedAt = process.env.BENCHMARK_PIPELINE_STARTED_AT ?? null;
   let previousEnvironment = null;
@@ -3809,7 +3858,8 @@ export async function generateFinalReport({
     mode,
     mutationManifest,
     eligibilityThresholdPercent,
-    diagnostic
+    diagnostic,
+    implementationEvidenceSha256
   );
   const summaryMarkdown = renderRootSummary({ environment });
   const readme = renderBenchmarkReadme({
@@ -3832,6 +3882,11 @@ export async function generateFinalReport({
   await cp(
     path.join(resultsRoot, "suite-manifest.json"),
     path.join(stagedResults, "suite-manifest.json")
+  );
+  await writeFile(
+    path.join(stagedResults, "implementation-evidence.json"),
+    implementationEvidenceRaw,
+    "utf8"
   );
   for (const draft of draftIds) {
     await cp(

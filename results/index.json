@@ -1,5 +1,11 @@
 {
-  "resultsVersion": 15,
+  "resultsVersion": 17,
+  "implementationEvidenceVersion": 3,
+  "implementationInstrumentationVersion": 4,
+  "implementationEvidence": {
+    "path": "implementation-evidence.json",
+    "sha256": "c490557ed3973c0a82435699f2f6fb8afcca1004bc075b1ffdbbd59450b16140"
+  },
   "benchmarkMode": "full",
   "eligibilityThresholdPercent": "98",
   "publicationWarning": null,

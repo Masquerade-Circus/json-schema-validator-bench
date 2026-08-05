@@ -390,12 +390,7 @@ export const adapter = defineAdapter(
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
     unsupported: supportsExternalResources
       ? []
-      : [ADAPTER_CAPABILITIES.EXTERNAL_SCHEMA_RESOURCES],
-    implementation: {
-      api: "reusable-sync",
-      isolation: "fresh-instance",
-      dynamicCode: "not-observed"
-    }
+      : [ADAPTER_CAPABILITIES.EXTERNAL_SCHEMA_RESOURCES]
   },
   createImplementation
 );

@@ -115,10 +115,10 @@ async function diagnosticBaselineFixture(label) {
         ] = {};
         const intersectionPath = `${phaseRoot}/intersections/${phase}.json`;
         const intersection = {
-          intersectionVersion: 12,
-          performanceIdentityVersion: 8,
+          intersectionVersion: 13,
+          performanceIdentityVersion: 9,
           performanceIdentity: {
-            performanceIdentityVersion: 8,
+            performanceIdentityVersion: 9,
             draft,
             formatProfile,
             phase
@@ -129,7 +129,7 @@ async function diagnosticBaselineFixture(label) {
         const intersectionArtifact = sha256(intersectionRaw);
         const samplePath = `${phaseRoot}/${phase}/samples.json`;
         const sampleRaw = `${JSON.stringify({
-          benchmarkVersion: 16,
+          benchmarkVersion: 18,
           benchmarkMode: "full",
           phase,
           draft,
@@ -191,7 +191,7 @@ async function diagnosticBaselineFixture(label) {
     }
   };
   const index = {
-    resultsVersion: 15,
+    resultsVersion: 17,
     benchmarkMode: "full",
     mutationDocuments: {
       manifest: "mutations/index.json",

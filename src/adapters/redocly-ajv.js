@@ -149,12 +149,7 @@ export const adapter = defineAdapter(
     additionalPackages: ["ajv-formats"],
     displayName: "Redocly AJV",
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
-    unsupported: [],
-    implementation: {
-      api: "reusable-sync",
-      isolation: "fresh-instance",
-      dynamicCode: "observed"
-    }
+    unsupported: []
   },
   createImplementation
 );

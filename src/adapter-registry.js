@@ -10,6 +10,10 @@ import { adapter as jsonschema } from "./adapters/jsonschema.js";
 import { adapter as djv } from "./adapters/djv.js";
 import { adapter as zSchema } from "./adapters/z-schema.js";
 import { adapter as hyperjump } from "./adapters/hyperjump.js";
+import {
+  coldEvidenceDecision,
+  loadImplementationEvidenceSync
+} from "./implementation-evidence.js";
 
 function packageMetadata(name) {
   const metadata = JSON.parse(
@@ -146,12 +150,6 @@ export function getBenchmarkAdapterMetadata(id, draft) {
   };
 }
 
-export const participantImplementations = Object.freeze(
-  Object.fromEntries(
-    adapterRegistry.map(({ id, implementation }) => [id, implementation])
-  )
-);
-
 export function getRegistrySupportClaim(id, draft) {
   const definition = getRegisteredAdapter(id);
   if (!definition.drafts.includes(draft)) {
@@ -184,11 +182,19 @@ export function getSetupRegistryParticipants(draft) {
 }
 
 export function getColdExecutionRegistryParticipants(draft) {
+  const { artifact, context } = loadImplementationEvidenceSync();
+  if (artifact === null) {
+    return [];
+  }
   return adapterRegistry.filter(
     (definition) =>
       definition.drafts.includes(draft) &&
-      participantImplementations[definition.id].isolation !==
-        "module-global-unavailable"
+      coldEvidenceDecision(artifact, definition.id, draft, {
+        expectedPackageLockSha256: context.packageLockSha256,
+        expectedProbeContractSha256: context.probeContractSha256,
+        expectedAdapterSourceSha256:
+          context.adapterSourceSha256(definition.id)
+      }).eligible
   );
 }
 

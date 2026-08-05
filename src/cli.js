@@ -45,6 +45,7 @@ import {
   groupIntersectionHashesByScope
 } from "./diagnostic.js";
 import { getResultsRoot } from "./paths.js";
+import { captureImplementationEvidence } from "./implementation-probe.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const suiteLockPath = path.join(benchmarksRoot, "suite-lock.json");
@@ -528,6 +529,17 @@ async function main() {
     process.env.BENCHMARK_PIPELINE_STARTED_AT ?? null;
   if (command === "preflight") {
     process.stdout.write(`${JSON.stringify(await validatePipelinePreflight())}\n`);
+    return;
+  }
+  if (command === "implementation-evidence") {
+    const result = await captureImplementationEvidence();
+    process.stdout.write(
+      `${JSON.stringify({
+        captured: result.captured,
+        reused: result.reused,
+        runIdentitySha256: result.artifact.runIdentitySha256
+      })}\n`
+    );
     return;
   }
   if (command === "metadata-sync") {

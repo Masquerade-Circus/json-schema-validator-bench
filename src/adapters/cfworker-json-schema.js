@@ -49,12 +49,7 @@ export const adapter = defineAdapter(
     packageName: "@cfworker/json-schema",
     displayName: "@cfworker/json-schema",
     drafts: ["draft4", "draft7", "draft2019-09", "draft2020-12"],
-    unsupported: [],
-    implementation: {
-      api: "reusable-sync",
-      isolation: "fresh-instance",
-      dynamicCode: "not-observed"
-    }
+    unsupported: []
   },
   createImplementation
 );

@@ -661,7 +661,7 @@ export function createIntersection({
     representedSchemas: representedSchemaIds.length
   };
   return {
-    intersectionVersion: 12,
+    intersectionVersion: 13,
     formatPolicyVersion: 4,
     draft,
     formatProfile,
@@ -685,7 +685,7 @@ export function createIntersection({
     },
     counts,
     performanceIdentity: {
-      performanceIdentityVersion: 8,
+      performanceIdentityVersion: 9,
       formatPolicyVersion: 4,
       scope: { draft, formatProfile, phase },
       policy: eligibility.policy,

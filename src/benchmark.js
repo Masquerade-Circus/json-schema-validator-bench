@@ -44,8 +44,8 @@ import { reconcileDiagnosticPhaseResult } from "./diagnostic.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const workerPath = path.join(benchmarksRoot, "src", "worker.js");
-export const sampleContractVersion = 28;
-export const sampleCacheIdentityVersion = 21;
+export const sampleContractVersion = 30;
+export const sampleCacheIdentityVersion = 22;
 const sampleCheckpointNamespace = `granular-samples-v${sampleCacheIdentityVersion}`;
 const checkpointEnvelopeVersion = 1;
 const hashPattern = /^[a-f0-9]{64}$/;
@@ -1950,7 +1950,7 @@ export async function runBenchmarkPhase(
         continue;
       }
       const result = {
-        benchmarkVersion: 16,
+        benchmarkVersion: 18,
         phase,
         draft,
         formatProfile,
@@ -1979,7 +1979,7 @@ export async function runBenchmarkPhase(
   }
 
   return {
-    benchmarkVersion: 16,
+    benchmarkVersion: 18,
     phase,
     startedAt: new Date(started).toISOString(),
     endedAt: new Date().toISOString(),

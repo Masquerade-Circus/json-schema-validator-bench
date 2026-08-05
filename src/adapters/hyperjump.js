@@ -101,12 +101,7 @@ export const adapter = defineAdapter(
     additionalPackages: ["@hyperjump/browser"],
     displayName: "Hyperjump",
     drafts: ["draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"],
-    unsupported: [],
-    implementation: {
-      api: "reusable-async",
-      isolation: "module-global-unavailable",
-      dynamicCode: "not-observed"
-    }
+    unsupported: []
   },
   createImplementation
 );

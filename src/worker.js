@@ -33,6 +33,7 @@ import {
   prepareSchemaForFormatProfile
 } from "./schema-profile.js";
 import { parseEligibilityThresholdPercent } from "./eligibility.js";
+import { checkValidationStability } from "./stability.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -764,14 +765,10 @@ export async function runExecutionSample({
     0
   );
   let verificationCases = cloneExecutionCases(canonicalCases);
-  const verificationRepetitions =
-    request.validator === "redocly-ajv" ? 3 : 1;
   for (const testCase of verificationCases) {
-    let firstObserved = null;
-    for (let repetition = 1; repetition <= verificationRepetitions; repetition += 1) {
-      let observed;
+    const stability = checkValidationStability((repetition) => {
       try {
-        observed = Boolean(
+        return Boolean(
           validatorsBySchemaId.get(testCase.schemaId)(testCase.data)
         );
       } catch (error) {
@@ -783,34 +780,32 @@ export async function runExecutionSample({
         validationError.cause = error;
         throw validationError;
       }
-      if (repetition === 1) {
-        firstObserved = observed;
-      } else if (observed !== firstObserved) {
-        throw executionError(
-          "EXECUTION_RESULT_INSTABILITY",
-          request,
-          mismatchDiagnostic({
-            moment: `stability verification ${repetition}`,
-            caseId: testCase.id,
-            schemaId: testCase.schemaId,
-            expected: firstObserved,
-            observed
-          })
-        );
-      }
-      if (observed !== testCase.expected) {
-        throw executionError(
-          "PREVIOUS_RESULT_MISMATCH",
-          request,
-          mismatchDiagnostic({
-            moment: `verification ${repetition}`,
-            caseId: testCase.id,
-            schemaId: testCase.schemaId,
-            expected: testCase.expected,
-            observed
-          })
-        );
-      }
+    });
+    if (!stability.stable) {
+      throw executionError(
+        "EXECUTION_RESULT_INSTABILITY",
+        request,
+        mismatchDiagnostic({
+          moment: `stability verification ${stability.repetition}`,
+          caseId: testCase.id,
+          schemaId: testCase.schemaId,
+          expected: stability.expected,
+          observed: stability.observed
+        })
+      );
+    }
+    if (stability.observed !== testCase.expected) {
+      throw executionError(
+        "PREVIOUS_RESULT_MISMATCH",
+        request,
+        mismatchDiagnostic({
+          moment: "stability verification",
+          caseId: testCase.id,
+          schemaId: testCase.schemaId,
+          expected: testCase.expected,
+          observed: stability.observed
+        })
+      );
     }
   }
   verificationCases = null;
