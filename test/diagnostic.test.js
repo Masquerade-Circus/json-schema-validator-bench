@@ -23,6 +23,7 @@ import { draftIds, formatProfiles, getParticipants } from "../src/matrix.js";
 import { sha256 } from "../src/suite.js";
 import {
   benchmarkTitle,
+  createPublishedEvidenceReferences,
   createResultsIndex,
   summarizePhase
 } from "../src/report.js";
@@ -191,7 +192,7 @@ async function diagnosticBaselineFixture(label) {
     }
   };
   const index = {
-    resultsVersion: 17,
+    resultsVersion: 19,
     benchmarkMode: "full",
     mutationDocuments: {
       manifest: "mutations/index.json",
@@ -711,11 +712,21 @@ test("diagnostic metadata traces chained refreshes and a full run clears it", ()
       ]
     }
   );
-  const diagnosticIndex = createResultsIndex("quick", null, "98", {
-    validator: "ajv",
-    bench: "execution",
-    refreshes: [{ validator: "ajv", bench: "execution" }]
+  const evidence = createPublishedEvidenceReferences({
+    sourceEvidenceSha256: "a".repeat(64),
+    implementationEvidenceSha256: "b".repeat(64)
   });
+  const diagnosticIndex = createResultsIndex(
+    "quick",
+    null,
+    "98",
+    {
+      validator: "ajv",
+      bench: "execution",
+      refreshes: [{ validator: "ajv", bench: "execution" }]
+    },
+    evidence
+  );
   assert.equal(diagnosticIndex.benchmarkMode, "quick");
   assert.deepEqual(diagnosticIndex.diagnostic, {
     diagnostic: true,
@@ -723,7 +734,7 @@ test("diagnostic metadata traces chained refreshes and a full run clears it", ()
     refreshes: [{ validator: "ajv", bench: "execution" }]
   });
   assert.match(diagnosticIndex.publicationWarning, /full Quick benchmark/i);
-  assert.equal(createResultsIndex("full").diagnostic, undefined);
+  assert.equal(createResultsIndex("full", null, "98", null, evidence).diagnostic, undefined);
 });
 
 test("combined validator and bench refresh preserves runtime provenance for omitted phases", () => {

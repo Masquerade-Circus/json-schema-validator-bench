@@ -1,10 +1,17 @@
 {
-  "resultsVersion": 17,
-  "implementationEvidenceVersion": 3,
-  "implementationInstrumentationVersion": 4,
-  "implementationEvidence": {
-    "path": "implementation-evidence.json",
-    "sha256": "c490557ed3973c0a82435699f2f6fb8afcca1004bc075b1ffdbbd59450b16140"
+  "resultsVersion": 19,
+  "evidence": {
+    "source": {
+      "path": "source-evidence.json",
+      "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+      "version": 2
+    },
+    "runtime": {
+      "path": "implementation-evidence.json",
+      "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+      "version": 4,
+      "instrumentationVersion": 4
+    }
   },
   "benchmarkMode": "full",
   "eligibilityThresholdPercent": "98",

@@ -6,6 +6,12 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import vm from "node:vm";
 import workerThreads, { threadId } from "node:worker_threads";
 
+import {
+  classifyInlineNodeShellCommand,
+  inlineNodeArgumentIndex,
+  inlineNodeArguments
+} from "./node-inline-semantics.js";
+
 const eventPath = process.env.IMPLEMENTATION_EVIDENCE_EVENTS;
 if (typeof eventPath !== "string" || eventPath.length === 0) {
   throw new Error("IMPLEMENTATION_EVIDENCE_EVENTS must name a controlled event file");
@@ -402,154 +408,6 @@ if (typeof OriginalWorker === "function") {
   setCapability("worker", "ready");
 } else {
   setCapability("worker", "unavailable");
-}
-
-function isNodeCommand(command) {
-  return command === process.execPath || /(?:^|[\\/])node(?:\.exe)?$/.test(command);
-}
-
-const nodeOptionsWithSeparateValue = new Set([
-  "--experimental-loader",
-  "--import",
-  "--loader",
-  "--require",
-  "-r"
-]);
-
-function inlineNodeArgumentIndex(args) {
-  if (!Array.isArray(args)) {
-    return -1;
-  }
-  for (let index = 0; index < args.length; index += 1) {
-    const argument = args[index];
-    if (typeof argument !== "string" || argument === "--") {
-      return -1;
-    }
-    if (["-e", "--eval", "-p", "--print"].includes(argument)) {
-      return typeof args[index + 1] === "string" ? index : -1;
-    }
-    if (
-      ["-e=", "--eval=", "-p=", "--print="].some((prefix) =>
-        argument.startsWith(prefix)
-      )
-    ) {
-      return index;
-    }
-    if (nodeOptionsWithSeparateValue.has(argument)) {
-      if (typeof args[index + 1] !== "string") {
-        return -1;
-      }
-      index += 1;
-      continue;
-    }
-    if (argument === "-" || !argument.startsWith("-")) {
-      return -1;
-    }
-  }
-  return -1;
-}
-
-function inlineNodeArguments(command, args) {
-  if (!isNodeCommand(command) || !Array.isArray(args)) {
-    return null;
-  }
-  return inlineNodeArgumentIndex(args) === -1 ? null : args;
-}
-
-function looksLikeInlineNodeShellCommand(command) {
-  if (typeof command !== "string") {
-    return false;
-  }
-  const hasNodeCommand = command.includes(process.execPath) ||
-    /(?:^|[\s"';&|])node(?:\.exe)?(?:\s|$)/.test(command);
-  return hasNodeCommand && /(?:^|\s)(?:-e|--eval|-p|--print)(?:=|\s)/.test(command);
-}
-
-function tokenizeSimpleShellCommand(command) {
-  const tokens = [];
-  let token = "";
-  let quote = null;
-  let escaped = false;
-  const pushToken = () => {
-    if (token.length > 0) {
-      tokens.push(token);
-      token = "";
-    }
-  };
-
-  for (let index = 0; index < command.length; index += 1) {
-    const character = command[index];
-    if (escaped) {
-      token += character;
-      escaped = false;
-      continue;
-    }
-    if (quote === "'") {
-      if (character === "'") {
-        quote = null;
-      } else {
-        token += character;
-      }
-      continue;
-    }
-    if (quote === '"') {
-      if (character === '"') {
-        quote = null;
-      } else if (character === "\\") {
-        escaped = true;
-      } else {
-        token += character;
-      }
-      continue;
-    }
-    if (character === "'" || character === '"') {
-      quote = character;
-      continue;
-    }
-    if (character === "\\") {
-      escaped = true;
-      continue;
-    }
-    if (/\s/.test(character)) {
-      pushToken();
-      continue;
-    }
-    if (
-      ";&|<>`".includes(character) ||
-      (character === "$" && command[index + 1] === "(")
-    ) {
-      return null;
-    }
-    token += character;
-  }
-  if (quote !== null || escaped) {
-    return null;
-  }
-  pushToken();
-  return tokens;
-}
-
-function classifyInlineNodeShellCommand(command) {
-  if (typeof command !== "string") {
-    return "other";
-  }
-  const tokens = tokenizeSimpleShellCommand(command);
-  if (tokens !== null && isNodeCommand(tokens[0])) {
-    for (const token of tokens.slice(1)) {
-      if (
-        ["-e", "--eval", "-p", "--print"].includes(token) ||
-        ["-e=", "--eval=", "-p=", "--print="].some((prefix) =>
-          token.startsWith(prefix)
-        )
-      ) {
-        return "inline-node";
-      }
-      if (token === "--" || !token.startsWith("-")) {
-        break;
-      }
-    }
-  }
-  return looksLikeInlineNodeShellCommand(command) ? "ambiguous-node" : "other";
 }
 
 function environmentWithPreload(environment = process.env) {

@@ -11,7 +11,7 @@ import {
 import { runChildProcess } from "./child-process.js";
 import {
   implementationEvidenceVersion,
-  implementationDynamicCodePhases,
+  implementationRuntimeObservationPhases,
   implementationInstrumentationCapabilities,
   implementationInstrumentationVersion,
   implementationProbeProcesses,
@@ -82,7 +82,7 @@ function parseEvents(serialized) {
   return serialized.trim().split("\n").map((line) => JSON.parse(line));
 }
 
-export function summarizeDynamicCode(events) {
+export function summarizeRuntimeObservation(events) {
   const requiredProcesses = (phase) => Object.entries(implementationProbeProcesses)
     .filter(([, phases]) => phases.includes(phase))
     .map(([processIdentity]) => processIdentity);
@@ -94,7 +94,7 @@ export function summarizeDynamicCode(events) {
         capability: "inconclusive",
         limitation: null,
         phases: Object.fromEntries(
-          implementationDynamicCodePhases.map((phase) => [
+          implementationRuntimeObservationPhases.map((phase) => [
             phase,
             {
               readiness: "not-entered",
@@ -135,7 +135,7 @@ export function summarizeDynamicCode(events) {
     if (
       event.rootProcess === true &&
       event.threadId === 0 &&
-      implementationDynamicCodePhases.includes(event.phase) &&
+      implementationRuntimeObservationPhases.includes(event.phase) &&
       Object.hasOwn(implementationProbeProcesses, event.processIdentity) &&
       implementationProbeProcesses[event.processIdentity].includes(event.phase)
     ) {
@@ -154,7 +154,7 @@ export function summarizeDynamicCode(events) {
       event.event === "capability" &&
       event.rootProcess === true &&
       event.threadId === 0 &&
-      implementationDynamicCodePhases.includes(event.phase) &&
+      implementationRuntimeObservationPhases.includes(event.phase) &&
       Object.hasOwn(implementationProbeProcesses, event.processIdentity) &&
       implementationProbeProcesses[event.processIdentity].includes(event.phase) &&
       ["ready", "limited", "unavailable"].includes(event.status)
@@ -175,7 +175,7 @@ export function summarizeDynamicCode(events) {
     }
     if (
       event.event === "mechanism" &&
-      implementationDynamicCodePhases.includes(event.phase) &&
+      implementationRuntimeObservationPhases.includes(event.phase) &&
       ["runner", "dependency"].includes(event.attribution) &&
       ["attempted", "succeeded", "failed"].includes(event.outcome)
     ) {
@@ -192,7 +192,7 @@ export function summarizeDynamicCode(events) {
   for (const [mechanism, summary] of Object.entries(mechanisms)) {
     const mechanismReadiness = [];
     const limitations = new Set();
-    for (const phase of implementationDynamicCodePhases) {
+    for (const phase of implementationRuntimeObservationPhases) {
       const phaseSummary = summary.phases[phase];
       const processReadiness = [];
       for (const processIdentity of requiredProcesses(phase)) {
@@ -410,7 +410,7 @@ export async function captureImplementationEvidence({
         events.push(...parseEvents(await readFile(eventPath, "utf8")));
       }
       const isolation = classifyIsolationControls(controls);
-      const dynamicCode = summarizeDynamicCode(events);
+      const runtimeObservation = summarizeRuntimeObservation(events);
       scopes[draft] = {
         evidenceIdentitySha256,
         adapterSourceSha256,
@@ -420,16 +420,16 @@ export async function captureImplementationEvidence({
         api: { evidence: "observed", value: probe.api },
         isolation: { evidence: "observed", value: isolation.value },
         isolationControls: controls,
-        dynamicCode: {
+        runtimeObservation: {
           evidence: "observed",
-          value: dynamicCode.value
+          value: runtimeObservation.value,
+          routes: runtimeObservation.routes,
+          mechanisms: runtimeObservation.mechanisms
         },
-        dynamicCodeRoutes: dynamicCode.routes,
-        dynamicCodeMechanisms: dynamicCode.mechanisms,
         diagnostics: [
           ...probe.diagnostics,
           ...isolation.diagnostics,
-          ...dynamicCode.diagnostics
+          ...runtimeObservation.diagnostics
         ]
       };
       captured += 1;

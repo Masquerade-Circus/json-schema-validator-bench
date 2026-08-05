@@ -5,7 +5,7 @@ import path from "node:path";
 
 import { getResultsRoot } from "./paths.js";
 
-export const implementationEvidenceVersion = 3;
+export const implementationEvidenceVersion = 4;
 export const implementationInstrumentationVersion = 4;
 export const implementationProbeContractFiles = Object.freeze([
   "adapter-api.js",
@@ -14,7 +14,8 @@ export const implementationProbeContractFiles = Object.freeze([
   "implementation-isolation.js",
   "implementation-loader-hooks.js",
   "implementation-probe-child.js",
-  "implementation-probe.js"
+  "implementation-probe.js",
+  "node-inline-semantics.js"
 ]);
 export const implementationInstrumentationCapabilities = Object.freeze([
   "eval",
@@ -29,7 +30,7 @@ export const implementationInstrumentationCapabilities = Object.freeze([
   "data-import",
   "propagation"
 ]);
-export const implementationDynamicCodePhases = Object.freeze([
+export const implementationRuntimeObservationPhases = Object.freeze([
   "adapter-import",
   "api-setup",
   "api-validation",
@@ -54,7 +55,7 @@ const isolationValues = new Set([
   "self-instability-observed",
   "inconclusive"
 ]);
-const dynamicCodeValues = new Set([
+const runtimeObservationValues = new Set([
   "observed",
   "not-observed",
   "limited",
@@ -187,6 +188,13 @@ export function validateImplementationEvidence(artifact) {
     for (const [draft, scope] of Object.entries(participant.scopes)) {
       const prefix = `implementation scope ${validator}/${draft}`;
       assertObject(scope, prefix);
+      if (
+        ["dynamicCode", "dynamicCodeRoutes", "dynamicCodeMechanisms"].some(
+          (field) => Object.hasOwn(scope, field)
+        )
+      ) {
+        throw new Error(`${prefix} contains a legacy dynamic code field`);
+      }
       assertHash(scope.evidenceIdentitySha256, `${prefix} evidence identity`);
       assertHash(scope.adapterSourceSha256, `${prefix} adapter source identity`);
       assertHash(scope.validatorRuntimeSha256, `${prefix} runtime identity`);
@@ -235,13 +243,18 @@ export function validateImplementationEvidence(artifact) {
           throw new Error(`${prefix} isolation control ${control} diagnostic is invalid`);
         }
       }
-      validateObservation(scope.dynamicCode, `${prefix} dynamic code`, dynamicCodeValues);
+      validateObservation(
+        scope.runtimeObservation,
+        `${prefix} runtime observation`,
+        runtimeObservationValues
+      );
       let hasReadinessFailure = false;
       let hasKnownLimitation = false;
       if (
-        !Array.isArray(scope.dynamicCodeRoutes) ||
-        new Set(scope.dynamicCodeRoutes).size !== scope.dynamicCodeRoutes.length ||
-        scope.dynamicCodeRoutes.some(
+        !Array.isArray(scope.runtimeObservation.routes) ||
+        new Set(scope.runtimeObservation.routes).size !==
+          scope.runtimeObservation.routes.length ||
+        scope.runtimeObservation.routes.some(
           (route) =>
             typeof route !== "string" ||
             !implementationInstrumentationCapabilities.includes(route)
@@ -249,15 +262,18 @@ export function validateImplementationEvidence(artifact) {
       ) {
         throw new Error(`${prefix} dynamic code routes are invalid`);
       }
-      assertObject(scope.dynamicCodeMechanisms, `${prefix} dynamic code mechanisms`);
+      assertObject(
+        scope.runtimeObservation.mechanisms,
+        `${prefix} runtime observation mechanisms`
+      );
       if (
-        Object.keys(scope.dynamicCodeMechanisms).length !==
+        Object.keys(scope.runtimeObservation.mechanisms).length !==
         implementationInstrumentationCapabilities.length
       ) {
         throw new Error(`${prefix} dynamic code mechanisms are incomplete`);
       }
       for (const mechanism of implementationInstrumentationCapabilities) {
-        const summary = scope.dynamicCodeMechanisms[mechanism];
+        const summary = scope.runtimeObservation.mechanisms[mechanism];
         assertObject(summary, `${prefix} ${mechanism} summary`);
         if (!["ready", "limited", "inconclusive"].includes(summary.capability)) {
           throw new Error(`${prefix} ${mechanism} capability is invalid`);
@@ -267,14 +283,14 @@ export function validateImplementationEvidence(artifact) {
         }
         assertObject(summary.phases, `${prefix} ${mechanism} phases`);
         if (
-          Object.keys(summary.phases).length !== implementationDynamicCodePhases.length ||
-          implementationDynamicCodePhases.some(
+          Object.keys(summary.phases).length !== implementationRuntimeObservationPhases.length ||
+          implementationRuntimeObservationPhases.some(
             (phase) => !Object.hasOwn(summary.phases, phase)
           )
         ) {
           throw new Error(`${prefix} ${mechanism} phase readiness is incomplete`);
         }
-        for (const phase of implementationDynamicCodePhases) {
+        for (const phase of implementationRuntimeObservationPhases) {
           const phaseSummary = summary.phases[phase];
           assertObject(phaseSummary, `${prefix} ${mechanism} ${phase}`);
           if (
@@ -359,14 +375,14 @@ export function validateImplementationEvidence(artifact) {
           }
         }
       }
-      if (hasReadinessFailure && scope.dynamicCode.value !== "inconclusive") {
-        throw new Error(`${prefix} dynamic code must be inconclusive when readiness fails`);
+      if (hasReadinessFailure && scope.runtimeObservation.value !== "inconclusive") {
+        throw new Error(`${prefix} runtime observation must be inconclusive when readiness fails`);
       }
       if (
-        scope.dynamicCode.value === "limited" &&
+        scope.runtimeObservation.value === "limited" &&
         (!hasKnownLimitation || hasReadinessFailure)
       ) {
-        throw new Error(`${prefix} dynamic code limited verdict is invalid`);
+        throw new Error(`${prefix} runtime observation limited verdict is invalid`);
       }
       if (
         !Array.isArray(scope.diagnostics) ||
@@ -408,11 +424,23 @@ export function coldEvidenceDecision(
     return { eligible: false, reason: "implementation evidence is stale" };
   }
   if (
-    scope.api.value === "inconclusive" ||
-    scope.isolation.value === "inconclusive" ||
-    scope.dynamicCode.value === "inconclusive"
+    scope.api?.evidence !== "observed" ||
+    !apiValues.has(scope.api.value)
   ) {
-    return { eligible: false, reason: "implementation evidence is inconclusive" };
+    return {
+      eligible: false,
+      reason: "implementation API evidence is absent or inconclusive"
+    };
+  }
+  if (
+    scope.isolation?.evidence !== "observed" ||
+    !isolationValues.has(scope.isolation.value) ||
+    scope.isolation.value === "inconclusive"
+  ) {
+    return {
+      eligible: false,
+      reason: "implementation isolation evidence is inconclusive"
+    };
   }
   if (scope.isolation.value === "interference-observed") {
     return { eligible: false, reason: "provider state interference was observed" };

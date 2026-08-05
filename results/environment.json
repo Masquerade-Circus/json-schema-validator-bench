@@ -1,7 +1,7 @@
 {
-  "startedAt": "2026-08-05T07:11:48.552Z",
-  "endedAt": "2026-08-05T07:12:13.311Z",
-  "durationMilliseconds": 24759,
+  "startedAt": "2026-08-05T18:50:24.206Z",
+  "endedAt": "2026-08-05T18:50:50.919Z",
+  "durationMilliseconds": 26713,
   "node": {
     "version": "v24.18.0",
     "v8": "13.6.233.17-node.50"
@@ -19,9 +19,9 @@
   "powerState": null,
   "lastRun": {
     "mode": "full",
-    "completedAt": "2026-08-05T07:12:13.311Z",
-    "totalDurationMilliseconds": 1585380,
-    "peakBenchmarkRssBytes": 466616320
+    "completedAt": "2026-08-05T17:55:18.025Z",
+    "totalDurationMilliseconds": 1701885,
+    "peakBenchmarkRssBytes": 472039424
   },
   "packages": {
     "@cfworker/json-schema": {
@@ -168,7 +168,9 @@
     "tree": "58b582c8c67aae71d27aafba0fb7120037289d4d"
   },
   "hashes": {
-    "packageLock": "1a6ce0b8f5b9a18467f8ea76d9e627ab16c6bd911ddb5ecc0246669c4d96b411",
+    "packageLock": "84b4ffe6300edb96823a37a9e06d353d60d4973617b3d12c43064742f5cac09d",
+    "sourceEvidence": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+    "implementationEvidence": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
     "suiteLock": "70fb662fad5d0dd329ecda51db2eb572726b275e866a6897810c67131e57cb4a",
     "suiteManifest": "4be736c32a78981386365b82390a9df2df102e0b4645627b06f8157110db7033",
     "conformance": {
@@ -218,7 +220,7 @@
     },
     "performance": {
       "draft4/setup": {
-        "setupSamples": "e3e7fc0ff39ebd0795334f1b0b78a73ceedc72b64a8632746db83e528cb33f66",
+        "setupSamples": "3beeb5f926211a80c837e4173f00b183c02c32cf5b41e89078107aceffe29b08",
         "intersections": {
           "setup": "0816be890ce22b08ad1efb04de2a41bdd9c80209d024ed807b540aa70b9dfdc8"
         },
@@ -227,8 +229,8 @@
         }
       },
       "draft4/base": {
-        "executionSamples": "3f9e620a9ebcc71a268d668c8d8f2af514903ac5d62b8f7434c537b425b6b269",
-        "coldExecutionSamples": "d1e10e4b0744cc0492b92e6868585279fdea15b0a2d325106dafd42510450412",
+        "executionSamples": "3d414746b50176adba1bb5720fba6bc98ac763e4c76682024b1d8eb664bc518a",
+        "coldExecutionSamples": "63abde7a57c85190ffa61f6026a9333b46d3afc01b38a5b264a6ea494d84b5f4",
         "intersections": {
           "execution": "9a92a1c10f1f7beb865061368ccba64ac393e1dba8d9c2d5105c88b8fa990474",
           "cold-execution": "f5a5a506fc50ede54d98b60336457237b348474ef7c916baa92b3487c759d3f2"
@@ -239,8 +241,8 @@
         }
       },
       "draft4/format-assertion": {
-        "executionSamples": "1e61e7173cd111bcedcfdb4b306c845a8cc72d0c77209689242a0fe6de2a278b",
-        "coldExecutionSamples": "596f90f960f639cce7646e529dcf6d8d981fc92086bc2a8a9a26602c577bb4dc",
+        "executionSamples": "9cb95bd924ba706a7c145983f4b2fa9a9720fe68e954a4d969cdb4a3693f39dc",
+        "coldExecutionSamples": "56ff9cd91ec3501a408c6c06c6892c3e55f8011ef7c295d31b1b402944647e57",
         "intersections": {
           "execution": "b32bfdf2c9eb15d5b254f9cf895383d4581e23cf0b13316a03e200bea8ab30dd",
           "cold-execution": "32dae50dee9cc4bda929a8535f00b759e61afd7c0cd54203f9d0b035d396cdac"
@@ -251,7 +253,7 @@
         }
       },
       "draft6/setup": {
-        "setupSamples": "77b8e6820a353923b7aa52b8c0fa66276b9d9c334039dbfa621e049c85c1bbc2",
+        "setupSamples": "bd28f5ede34732055d8607fc50a94201911902c80d36bc2e10e438bd223b5cd8",
         "intersections": {
           "setup": "ec873c2c5810f2ad2f81a6c24cd725d4925beb289fb21cae3fbdecf1c9e1c8e0"
         },
@@ -260,8 +262,8 @@
         }
       },
       "draft6/base": {
-        "executionSamples": "7ae5ceec81227d8e3acd77272b4e9ee82d78f5309bd0fef02c504a457224a955",
-        "coldExecutionSamples": "603474de033a335a1eee758218b27c77c91664503924cd4fd853abc9475d26c5",
+        "executionSamples": "9916aa737af38387a95de6ddd90aaa051cfd61c470e0ab584d57d914eb94c2e4",
+        "coldExecutionSamples": "af1be19076c92afbec3f8c9fe59b8f59bdab6ae9e346024b41ed54d427c8d664",
         "intersections": {
           "execution": "ff0eea7ec6ab072be07c64d7331f85795ea51d7b8f25adb7dee30a5eed7e4c32",
           "cold-execution": "e102061896fd271915a182e4a951d5e1fcfa78940971436e59ef49ec1c2174ba"
@@ -272,8 +274,8 @@
         }
       },
       "draft6/format-assertion": {
-        "executionSamples": "fb1f59589d7066345d38ac26ad98ac58a94a118397ede2e66ce1274e20a470e9",
-        "coldExecutionSamples": "b152207f1ac6293d83e4ddc9d2ba98f7765cfb9511980d8435936a1ab358c2fb",
+        "executionSamples": "95f63a3632c6cb526bcaf47f2a4010d27e5807c2b6c4b7fc3d9b3d9ca01331d8",
+        "coldExecutionSamples": "bb09008a71eaa7054fbb547e86385261929f3f4b22f439a2c247d28977d1db93",
         "intersections": {
           "execution": "70f006a595db167b22ee438af5a2e573f80e0f7833b521a114a0ab3becfd2dbd",
           "cold-execution": "89d197659950a537e6f938d1e81ae64b527b73bb9c1ca1783adf17b51063eecc"
@@ -284,7 +286,7 @@
         }
       },
       "draft7/setup": {
-        "setupSamples": "784d919d3293830f9bb28bed756f4f8f8e5f6da77a8be21c9a262ce5a459386f",
+        "setupSamples": "f374eb9184e491917eebecb718441fbecc3264c31d5d1e2db2288785de41ea58",
         "intersections": {
           "setup": "22b64d890a06a2db01b82e6efe30ef5a2f46892a78d0e48cafd527fa0be270ec"
         },
@@ -293,8 +295,8 @@
         }
       },
       "draft7/base": {
-        "executionSamples": "f7e3c8a0291d3bdcdeb8cf816b255965ca99b3f68e08c0849f57d650358b11a6",
-        "coldExecutionSamples": "b1531b838d9ac6821d6331a50a13cf29a6818e32ae00a9c098913590f6609d43",
+        "executionSamples": "18a27e2087f8f574410fcc701d18d6a482f6d0f3e478bdef11a5e3b901877ceb",
+        "coldExecutionSamples": "6bfd4e979e02939d36c4c2bf1bde96c1cfff47c5ca0e5282afe9e0164ce30cf4",
         "intersections": {
           "execution": "cf0a348c0a06ec8c6492643f91dc1245a75a251aa447ab854b022832f4aa67de",
           "cold-execution": "a1792e44e2923f06aee11d72548dc6e0c77346c2e96dbdbdf28f455c3b7fb522"
@@ -305,8 +307,8 @@
         }
       },
       "draft7/format-assertion": {
-        "executionSamples": "c4cb40f02a4dcfe2263fee4b7229a54b33494626a44a14a79086fc0b4f8e80c1",
-        "coldExecutionSamples": "a9633028e834cda739027c00d6122da8b1a19df87b486682e20f75bf1260db35",
+        "executionSamples": "ef556a44064c79e50f8b398ea6694b24d9604a63a20527ee156610bf711a0210",
+        "coldExecutionSamples": "5937216f7839f0ee351de9ae68239c4cd569c2884874b6aa71dd045c6b3c3681",
         "intersections": {
           "execution": "776cc61b6654d304bed2c9c46f3dabb04cb38b2430eff933dac79be83cf87daf",
           "cold-execution": "c398b6e840677d8651b7876532800da928cb41b54274dd4c5298bb8f6d072882"
@@ -317,7 +319,7 @@
         }
       },
       "draft2019-09/setup": {
-        "setupSamples": "1c239514808339f3a64c29cf9a835548d7c8988cea59e37af32aac2519460c5d",
+        "setupSamples": "f6cd10db612d5611bcb106673c3277a61c4a707149da08e9ffe03026ec8d8577",
         "intersections": {
           "setup": "ef41a7730b9befe8e01d58984fcb3b18e48d50d1f4952d3e39aaca73c55e08da"
         },
@@ -326,8 +328,8 @@
         }
       },
       "draft2019-09/base": {
-        "executionSamples": "59edb0627a7bf4a45ade99a893a1bcdacd240c85ff6eff2ec6e2f7f3f2b24d7f",
-        "coldExecutionSamples": "a231f8f8acf21a44508183f4dc764568c0d1d66563f3afa72a6747ba63b3e94e",
+        "executionSamples": "2c5443e0dc85ff9fd8cda254209e25db870e209781d6e99039fb12cc816cb0ca",
+        "coldExecutionSamples": "93862524145e407dbf1f15b0dc105cd521be64804631e16116ddb65fbbc5fac2",
         "intersections": {
           "execution": "bc76adf40c55484763e1866324cf09f57a1f104afd8ff191ece03cf58d8a267d",
           "cold-execution": "289962d7875f4444cdedbf884573d6087aa4eb1858895f79b0707deeeb84410b"
@@ -338,8 +340,8 @@
         }
       },
       "draft2019-09/format-assertion": {
-        "executionSamples": "7046e2bfa63e89882969ea78a6854d8ecec9449fb91652a4c518f62775cedf87",
-        "coldExecutionSamples": "49ba1583444cad970190c8085767ffe25e340959a5c1eac138b19b4de36f52cb",
+        "executionSamples": "9f5e0cf5a448314b9a65b50c53df1bd32cc8a36954b1cea8339a957c6acad660",
+        "coldExecutionSamples": "8a8381fea736962450002733d1aeebabbf017bf3746f0a3e26f2080e702f0add",
         "intersections": {
           "execution": "0abf0606e185839f3944989f2316cdd1e39dae307ed7555bcb97bf27fb7db69c",
           "cold-execution": "2e249f6cab0c5f75d3596f8df066af0581534527311195a801136dab80c673e0"
@@ -350,7 +352,7 @@
         }
       },
       "draft2020-12/setup": {
-        "setupSamples": "d83820f8a463a432c6897ef77f3e4bc91770a03aefb75d56641688857cbf7099",
+        "setupSamples": "255421f43a67e29a308fd95efa6dbb301af1392b7fa9a053d39af4b040152b1d",
         "intersections": {
           "setup": "67af09fe650b3ae8ba542c1af88a61b3915137002ac007169795f9fa4754ed37"
         },
@@ -359,8 +361,8 @@
         }
       },
       "draft2020-12/base": {
-        "executionSamples": "56e3c5570562342334f919873e8a3b3acaafd644dd658b054d11fd29292c9971",
-        "coldExecutionSamples": "efd43c5a3456d2a402b70e6d38aae50e0f81c4744ba7455a461bcda90ff97fdf",
+        "executionSamples": "9377d6ada1b2f315bddfe68e62653abc39149b779b5e7fd8e4553fa33212fc3a",
+        "coldExecutionSamples": "d779997f91313e094b254846f6121a8f835e67b1b1eb7a79736f991889ed00c8",
         "intersections": {
           "execution": "d35e9ec4953402e1bbcb3fa967e397c4efd7eaabb2b62011f67109bcf5ee73b6",
           "cold-execution": "9bbab2cb53c9bedcf3ab7b42f6af14b5813dabfa20ae0218b69107b7042781c0"
@@ -371,8 +373,8 @@
         }
       },
       "draft2020-12/format-assertion": {
-        "executionSamples": "4bb1180ce38358fd3ffbdb03606d5a026fb69e8868783b3dc5718a2aed31e388",
-        "coldExecutionSamples": "21cda5b9bdc4cb8cc7f80af5b6e4234e2ecc79d765dfc5cb3c6f21749fccf254",
+        "executionSamples": "96a96b44f54f7900fd399267ab08be30ec439c74a465b02bb322b3715072f997",
+        "coldExecutionSamples": "dbad1d4d898d9c0b7a35f812361fbcc4095c47029aff9f8a0707ac8554aa7dc9",
         "intersections": {
           "execution": "c99da6d021271d6d02d7f9bd603009e2543325f404a4d23f4b80e75715d32b0c",
           "cold-execution": "83ad793ed9a478ea23c9fdb10063a94bc0cb8c18d49302b8e39d661b54af95cd"
@@ -389,6 +391,19 @@
         "mutations/cfworker-json-schema-4bd87c51443c94f8.md": "d3b3641b6db4621776e1eb92d56bbe8271c1be4566d2cffe7d8dfad76b8894cc",
         "mutations/jsonschema-9bbbc0e7d004cda6.md": "6bd8ef50df14bc03b7117606a5bf53c7f4580e9e9f023fb5913795f1b8dda098"
       }
+    }
+  },
+  "evidence": {
+    "source": {
+      "path": "source-evidence.json",
+      "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+      "version": 2
+    },
+    "runtime": {
+      "path": "implementation-evidence.json",
+      "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+      "version": 4,
+      "instrumentationVersion": 4
     }
   },
   "performanceCorpora": {
@@ -580,7 +595,7 @@
   },
   "sampleAcquisition": {
     "policy": "current-run-only",
-    "runStartedAt": "2026-08-05T06:45:47.931Z",
+    "runStartedAt": "2026-08-05T17:26:56.140Z",
     "measuredSamples": 450,
     "resumedSamples": 0,
     "retainedSamples": 0,
@@ -616,7 +631,7 @@
     "benchmarkContractSha256": "b19df5e8c4791c49d9cc98e9ba4760cc6952fbca1685d96e76e11230952433e1",
     "eligibilityThresholdPercent": "98",
     "sharedHarnessSha256": "c88cc95e32b61da5e3c789919d2646259240c3ed5fe19e1cdc2d540b8194b824",
-    "packageLockSha256": "1a6ce0b8f5b9a18467f8ea76d9e627ab16c6bd911ddb5ecc0246669c4d96b411",
+    "packageLockSha256": "84b4ffe6300edb96823a37a9e06d353d60d4973617b3d12c43064742f5cac09d",
     "npmSnapshotLockSha256": "1632757c5aeba315fc47e8ee2501b35f5c1aa48f00764c8fbe4de451dd4187a3",
     "suiteLockSha256": "70fb662fad5d0dd329ecda51db2eb572726b275e866a6897810c67131e57cb4a",
     "runtimeEnvironment": {

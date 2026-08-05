@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, readFile, rm } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -8,6 +8,7 @@ import {
   coldEvidenceDecision,
   createImplementationRunIdentity,
   createImplementationScopeIdentity,
+  implementationProbeContractFiles,
   loadImplementationEvidenceSync,
   validateImplementationEvidence
 } from "../src/implementation-evidence.js";
@@ -15,7 +16,7 @@ import {
   classifyIsolationControls,
   captureImplementationEvidence,
   runInstrumentedModule,
-  summarizeDynamicCode
+  summarizeRuntimeObservation
 } from "../src/implementation-probe.js";
 import {
   adapterRegistry,
@@ -66,7 +67,7 @@ function evidence(overrides = {}) {
   const adapterSourceSha256 = "1".repeat(64);
   const validatorRuntimeSha256 = "d".repeat(64);
   return {
-    implementationEvidenceVersion: 3,
+    implementationEvidenceVersion: 4,
     instrumentationVersion: 4,
     instrumentationCapabilities: [
       "eval",
@@ -117,9 +118,11 @@ function evidence(overrides = {}) {
                 { status: "passed", diagnostic: null }
               ])
             ),
-            dynamicCode: { evidence: "observed", value: "limited" },
-            dynamicCodeRoutes: [],
-            dynamicCodeMechanisms: Object.fromEntries([
+            runtimeObservation: {
+              evidence: "observed",
+              value: "limited",
+              routes: [],
+              mechanisms: Object.fromEntries([
               "eval",
               "function",
               "async-function",
@@ -153,7 +156,8 @@ function evidence(overrides = {}) {
                   runner: { attempted: 0, succeeded: 0, failed: 0 },
                   dependency: { attempted: 0, succeeded: 0, failed: 0 }
                 }]))
-            }])),
+              }]))
+            },
             diagnostics: []
           }
         }
@@ -180,22 +184,32 @@ test("implementation evidence rejects declared, inferred, stale, and inconclusiv
       /observed evidence/
     );
   }
+  for (const field of [
+    "dynamicCode",
+    "dynamicCodeRoutes",
+    "dynamicCodeMechanisms"
+  ]) {
+    const legacy = evidence();
+    legacy.participants.fixture.scopes.draft7[field] = {};
+    assert.throws(
+      () => validateImplementationEvidence(legacy),
+      /legacy dynamic code field/
+    );
+  }
 
   const inconclusive = evidence();
-  inconclusive.participants.fixture.scopes.draft7.dynamicCode = {
-    evidence: "observed",
-    value: "inconclusive"
-  };
+  inconclusive.participants.fixture.scopes.draft7.runtimeObservation.value =
+    "inconclusive";
   assert.deepEqual(
     coldEvidenceDecision(
       validateImplementationEvidence(inconclusive),
       "fixture",
       "draft7"
     ),
-    { eligible: false, reason: "implementation evidence is inconclusive" }
+    { eligible: true, reason: null }
   );
   const hiddenUnavailable = evidence();
-  hiddenUnavailable.participants.fixture.scopes.draft7.dynamicCodeMechanisms
+  hiddenUnavailable.participants.fixture.scopes.draft7.runtimeObservation.mechanisms
     .webassembly.phases["api-validation"].processes.api.readiness = "unavailable";
   assert.throws(
     () => validateImplementationEvidence(hiddenUnavailable),
@@ -212,7 +226,7 @@ test("implementation evidence rejects declared, inferred, stale, and inconclusiv
       "fixture",
       "draft7"
     ),
-    { eligible: false, reason: "implementation evidence is inconclusive" }
+    { eligible: false, reason: "implementation isolation evidence is inconclusive" }
   );
   const unstableIsolation = evidence();
   unstableIsolation.participants.fixture.scopes.draft7.isolation = {
@@ -240,6 +254,33 @@ test("implementation evidence rejects declared, inferred, stale, and inconclusiv
       expectedPackageLockSha256: "e".repeat(64)
     }),
     { eligible: false, reason: "implementation evidence is stale" }
+  );
+});
+
+test("Cold eligibility ignores source and runtime verdicts but fails closed on API or isolation", () => {
+  const artifact = validateImplementationEvidence(evidence());
+  const scope = artifact.participants.fixture.scopes.draft7;
+
+  for (const runtimeValue of ["observed", "not-observed", "limited", "inconclusive"]) {
+    scope.runtimeObservation.value = runtimeValue;
+    assert.deepEqual(coldEvidenceDecision(artifact, "fixture", "draft7"), {
+      eligible: true,
+      reason: null
+    });
+  }
+  const missingApi = structuredClone(artifact);
+  delete missingApi.participants.fixture.scopes.draft7.api;
+  assert.deepEqual(coldEvidenceDecision(missingApi, "fixture", "draft7"), {
+    eligible: false,
+    reason: "implementation API evidence is absent or inconclusive"
+  });
+
+  const inconclusiveIsolation = structuredClone(artifact);
+  inconclusiveIsolation.participants.fixture.scopes.draft7.isolation.value =
+    "inconclusive";
+  assert.deepEqual(
+    coldEvidenceDecision(inconclusiveIsolation, "fixture", "draft7"),
+    { eligible: false, reason: "implementation isolation evidence is inconclusive" }
   );
 });
 
@@ -491,8 +532,8 @@ test("instrumentation observes every supported dynamic-code route and propagatio
     failed: 1
   });
   assert.deepEqual(routeOutcomes("node-inline-child", "execSync"), {
-    attempted: 2,
-    succeeded: 1,
+    attempted: 3,
+    succeeded: 2,
     failed: 1
   });
   assert.deepEqual(routeOutcomes("propagation", "fork"), {
@@ -537,7 +578,7 @@ test("instrumentation observes every supported dynamic-code route and propagatio
       event.route === "execSync" &&
       event.outcome === "attempted"
     ).length,
-    2,
+    3,
     "non-Node and ambiguous shell commands are not attributed"
   );
   for (const mechanism of ["node-inline-child", "propagation"]) {
@@ -549,8 +590,8 @@ test("instrumentation observes every supported dynamic-code route and propagatio
         event.route === "execSync" &&
         event.limitation.includes("ambiguous")
       ).length,
-      2,
-      `${mechanism} records ambiguous direct and wrapped shell routes`
+      0,
+      `${mechanism} does not misclassify quoted non-Node shell text`
     );
   }
   assert.equal(
@@ -563,7 +604,7 @@ test("instrumentation observes every supported dynamic-code route and propagatio
     true,
     "Worker construction failure downgrades its propagation capability"
   );
-  const propagationSummary = summarizeDynamicCode(events);
+  const propagationSummary = summarizeRuntimeObservation(events);
   assert.equal(propagationSummary.value, "inconclusive");
   assert.equal(propagationSummary.mechanisms.propagation.capability, "inconclusive");
   assert.equal(
@@ -673,7 +714,7 @@ test("one unavailable required phase makes the scope inconclusive", () => {
     }
   }
 
-  const summary = summarizeDynamicCode(events);
+  const summary = summarizeRuntimeObservation(events);
   assert.equal(summary.value, "inconclusive");
   assert.equal(
     summary.mechanisms.webassembly.phases["isolation-bb"]
@@ -693,14 +734,17 @@ test("one unavailable required phase makes the scope inconclusive", () => {
 
   const artifact = evidence();
   const scope = artifact.participants.fixture.scopes.draft7;
-  scope.dynamicCode = { evidence: "observed", value: summary.value };
-  scope.dynamicCodeRoutes = summary.routes;
-  scope.dynamicCodeMechanisms = summary.mechanisms;
+  scope.runtimeObservation = {
+    evidence: "observed",
+    value: summary.value,
+    routes: summary.routes,
+    mechanisms: summary.mechanisms
+  };
   scope.diagnostics = summary.diagnostics;
   const validated = validateImplementationEvidence(artifact);
   assert.deepEqual(coldEvidenceDecision(validated, "fixture", "draft7"), {
-    eligible: false,
-    reason: "implementation evidence is inconclusive"
+    eligible: true,
+    reason: null
   });
 
   events.push({
@@ -714,7 +758,7 @@ test("one unavailable required phase makes the scope inconclusive", () => {
     status: "ready",
     limitation: null
   });
-  const contradictory = summarizeDynamicCode(events);
+  const contradictory = summarizeRuntimeObservation(events);
   assert.equal(contradictory.value, "inconclusive");
   assert.equal(
     contradictory.mechanisms.webassembly.phases["isolation-bb"]
@@ -782,7 +826,7 @@ test("failed real mechanisms never become successful dynamic-code routes", async
     .trim()
     .split("\n")
     .map((line) => JSON.parse(line));
-  const summary = summarizeDynamicCode(events);
+  const summary = summarizeRuntimeObservation(events);
 
   assert.equal(result.stdout, "failed-as-expected\n");
   assert.deepEqual(summary.routes, []);
@@ -845,6 +889,59 @@ test("scope cache identity changes with platform, architecture, and effective fl
       createImplementationScopeIdentity({ ...base, ...changed }),
       identity
     );
+  }
+});
+
+test("node inline semantics changes invalidate the probe contract and cached scope", async () => {
+  const root = path.join(temporaryRoot, `probe-contract-${process.pid}`);
+  const sourceRoot = path.join(root, "src");
+  const helperName = "node-inline-semantics.js";
+  await rm(root, { recursive: true, force: true });
+  try {
+    await mkdir(sourceRoot, { recursive: true });
+    await writeFile(path.join(root, "package-lock.json"), "{}\n", "utf8");
+    for (const name of new Set([...implementationProbeContractFiles, helperName])) {
+      await writeFile(
+        path.join(sourceRoot, name),
+        await readFile(path.join(projectRoot, "src", name))
+      );
+    }
+
+    assert.equal(implementationProbeContractFiles.includes(helperName), true);
+    const before = loadImplementationEvidenceSync({ projectRoot: root })
+      .context.probeContractSha256;
+    await writeFile(
+      path.join(sourceRoot, helperName),
+      `${await readFile(path.join(sourceRoot, helperName), "utf8")}\n// changed\n`,
+      "utf8"
+    );
+    const after = loadImplementationEvidenceSync({ projectRoot: root })
+      .context.probeContractSha256;
+    assert.notEqual(after, before);
+
+    const identityInput = {
+      nodeVersion: "v24.18.0",
+      platform: "linux",
+      architecture: "x64",
+      effectiveExecArgv: [],
+      effectiveNodeOptionsSha256: null,
+      validator: "fixture",
+      draft: "draft7",
+      adapterSourceSha256: "1".repeat(64),
+      validatorRuntimeSha256: "2".repeat(64)
+    };
+    assert.notEqual(
+      createImplementationScopeIdentity({
+        ...identityInput,
+        probeContractSha256: before
+      }),
+      createImplementationScopeIdentity({
+        ...identityInput,
+        probeContractSha256: after
+      })
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
   }
 });
 
@@ -1007,9 +1104,9 @@ test("capture publishes per-mechanism readiness and attributes successful depend
   const { artifact } = await captureImplementationEvidence(options);
   const scope = artifact.participants.djv.scopes.draft6;
 
-  assert.equal(scope.dynamicCode.value, "observed");
+  assert.equal(scope.runtimeObservation.value, "observed");
   for (const mechanism of artifact.instrumentationCapabilities) {
-    const summary = scope.dynamicCodeMechanisms[mechanism];
+    const summary = scope.runtimeObservation.mechanisms[mechanism];
     assert.equal(["ready", "limited"].includes(summary.capability), true);
     assert.equal(Object.keys(summary.phases).length > 0, true);
     for (const phase of Object.values(summary.phases)) {
@@ -1022,7 +1119,7 @@ test("capture publishes per-mechanism readiness and attributes successful depend
     }
   }
   assert.equal(
-    Object.values(scope.dynamicCodeMechanisms).some(
+    Object.values(scope.runtimeObservation.mechanisms).some(
       ({ phases }) => Object.values(phases).some(
         ({ dependency }) => dependency.succeeded > 0
       )
@@ -1054,7 +1151,8 @@ test("published evidence covers every declared scope and controls Cold fail-clos
         "bab",
         "bb"
       ]);
-      assert.equal(scope.dynamicCode.evidence, "observed");
+      assert.equal(scope.runtimeObservation.evidence, "observed");
+      assert.equal(Object.hasOwn(scope, "dynamicCode"), false);
     }
   }
   for (const draft of [

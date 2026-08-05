@@ -40,6 +40,12 @@ import {
   loadImplementationEvidenceSync,
   validateImplementationEvidence
 } from "./implementation-evidence.js";
+import {
+  createSourceEvidenceContext,
+  loadSourceEvidenceSync,
+  sourceEvidenceVersion,
+  validateSourceEvidence
+} from "./source-evidence.js";
 import { canonicalJson, sha256 } from "./suite.js";
 import { getResultsRoot } from "./paths.js";
 import { derivePerformanceCorpus } from "./performance-corpus.js";
@@ -644,7 +650,139 @@ export function renderConformanceMarkdown(report) {
   return `${lines.join("\n")}\n`;
 }
 
-export function createValidatorProfiles(reports) {
+function publicYesNo(value, field) {
+  if (value === "yes") {
+    return "Yes";
+  }
+  if (value === "no") {
+    return "No";
+  }
+  throw new Error(`${field} must be yes or no`);
+}
+
+function publicSourceFinding(finding) {
+  return {
+    mechanism: finding.mechanism,
+    operation: finding.operation,
+    ownerType: finding.owner.type,
+    packageName: finding.owner.package,
+    packageVersion: finding.owner.version,
+    relativePath: finding.relativePath,
+    line: finding.line,
+    column: finding.column,
+    reachableFromEntrypoint: finding.reachableFromEntrypoint,
+    representation: finding.representation,
+    fileSha256: finding.fileSha256
+  };
+}
+
+function publicPackageEvidence(reference, packages) {
+  const component = packages[reference.identitySha256];
+  if (component === null || typeof component !== "object") {
+    throw new Error(`source package evidence is absent: ${reference.packageName}`);
+  }
+  return {
+    ownerType: reference.ownerType,
+    authority: reference.authority,
+    packageName: reference.packageName,
+    packageVersion: reference.version,
+    identitySha256: reference.identitySha256,
+    packageBytesSha256: component.provenance.packageBytesSha256,
+    dynamicCodeInImplementation: publicYesNo(
+      component.value,
+      `${reference.packageName} source verdict`
+    ),
+    findings: component.findings.map(publicSourceFinding)
+  };
+}
+
+function publicSourceFamily(sourceEvidence, validator) {
+  const family = sourceEvidence.validators[validator];
+  if (family === null || typeof family !== "object") {
+    throw new Error(`source evidence is absent for ${validator}`);
+  }
+  return {
+    primary: publicPackageEvidence(family.primary, sourceEvidence.packages),
+    companions: family.companions.map((reference) =>
+      publicPackageEvidence(reference, sourceEvidence.packages)
+    ),
+    transitives: family.transitives.map((dependency) => ({
+      ownerType: "transitive",
+      authority: "excluded",
+      scanStatus: "excluded",
+      packageName: dependency.packageName,
+      packageVersion: dependency.version,
+      findings: []
+    })),
+    adapters: family.adapters.map((adapter) => ({
+      ownerType: "adapter",
+      authority: "excluded",
+      packageName: adapter.owner.package,
+      packageVersion: adapter.owner.version,
+      dynamicCodeInImplementation: publicYesNo(
+        adapter.value,
+        `${validator} adapter source verdict`
+      ),
+      findings: adapter.findings.map(publicSourceFinding)
+    }))
+  };
+}
+
+function successfulRuntimeMechanisms(scope) {
+  if (scope === null || typeof scope !== "object") {
+    throw new Error("runtime evidence scope is absent");
+  }
+  return Object.entries(scope.runtimeObservation.mechanisms)
+    .filter(([, mechanism]) =>
+      Object.values(mechanism.phases).some(
+        (phase) => phase.dependency.succeeded > 0
+      )
+    )
+    .map(([mechanism]) => mechanism)
+    .sort();
+}
+
+export function createPublishedEvidenceReferences({
+  sourceEvidenceSha256,
+  implementationEvidenceSha256
+}) {
+  for (const [field, value] of [
+    ["source evidence", sourceEvidenceSha256],
+    ["runtime evidence", implementationEvidenceSha256]
+  ]) {
+    if (typeof value !== "string" || !/^[a-f0-9]{64}$/.test(value)) {
+      throw new Error(`${field} hash must be SHA-256`);
+    }
+  }
+  return {
+    source: {
+      path: "source-evidence.json",
+      sha256: sourceEvidenceSha256,
+      version: sourceEvidenceVersion
+    },
+    runtime: {
+      path: "implementation-evidence.json",
+      sha256: implementationEvidenceSha256,
+      version: implementationEvidenceVersion,
+      instrumentationVersion: implementationInstrumentationVersion
+    }
+  };
+}
+
+export function createValidatorProfiles(
+  reports,
+  { sourceEvidence, implementationEvidence, evidence }
+) {
+  if (
+    evidence === null ||
+    typeof evidence !== "object" ||
+    evidence.source === null ||
+    typeof evidence.source !== "object" ||
+    evidence.runtime === null ||
+    typeof evidence.runtime !== "object"
+  ) {
+    throw new Error("published evidence references are required");
+  }
   return Object.fromEntries(
     [...reports]
       .sort((left, right) => {
@@ -654,14 +792,38 @@ export function createValidatorProfiles(reports) {
           ? compareValidatorIds(left.validator, right.validator)
           : draftDifference;
       })
-      .map((report) => [
-        `${report.draft}/${report.validator}`,
-        {
-          version: report.version,
-          reportOptions: report.reportOptions,
-          reportOptionsSha256: report.reportOptionsSha256
+      .map((report) => {
+        const sourceScope = sourceEvidence.validators[report.validator]
+          ?.scopes?.[report.draft];
+        const runtimeScope = implementationEvidence.participants[report.validator]
+          ?.scopes?.[report.draft];
+        if (sourceScope === undefined || runtimeScope === undefined) {
+          throw new Error(
+            `published evidence is absent for ${report.validator}/${report.draft}`
+          );
         }
-      ])
+        const successfulMechanisms = successfulRuntimeMechanisms(runtimeScope);
+        return [
+          `${report.draft}/${report.validator}`,
+          {
+            validatorProfileVersion: 2,
+            version: report.version,
+            reportOptions: report.reportOptions,
+            reportOptionsSha256: report.reportOptionsSha256,
+            implementation: {
+              dynamicCodeInImplementation: publicYesNo(
+                sourceScope.dynamicCode,
+                `${report.validator}/${report.draft} source verdict`
+              ),
+              executedDuringBenchmark:
+                successfulMechanisms.length > 0 ? "Yes" : "No",
+              successfulRuntimeMechanisms: successfulMechanisms
+            },
+            family: publicSourceFamily(sourceEvidence, report.validator),
+            evidence
+          }
+        ];
+      })
   );
 }
 
@@ -1927,7 +2089,7 @@ export function createGlobalPerformanceSummary(
     phases[phase] = createRanking();
   }
   return {
-    globalSummaryVersion: 17,
+    globalSummaryVersion: 19,
     drafts: draftIds,
     requiredCoverageByPhase: {
       setup: `${draftIds.length}/${draftIds.length}`,
@@ -2594,6 +2756,70 @@ export function performanceTable(
   return lines.join("\n");
 }
 
+function sourceDetailRows(participant, family) {
+  const rows = [];
+  for (const component of [family.primary, ...family.companions, ...family.adapters]) {
+    for (const finding of component.findings) {
+      rows.push([
+        participant.id,
+        component.ownerType,
+        component.packageName,
+        `${finding.mechanism} ${finding.operation}`,
+        `${finding.relativePath}:${finding.line}`,
+        finding.reachableFromEntrypoint ? "Reachable" : "Not reachable",
+        finding.representation
+      ]);
+    }
+  }
+  return rows;
+}
+
+function familyOwnershipRow(participant, family) {
+  const list = (entries) => entries.length === 0
+    ? "None"
+    : entries.map(({ packageName }) => packageName).join(", ");
+  return [
+    participant.id,
+    `${family.primary.packageName} (${family.primary.dynamicCodeInImplementation})`,
+    list(family.companions),
+    list(family.transitives),
+    list(family.adapters)
+  ];
+}
+
+export function dynamicCodeEvidenceDetails(
+  participants,
+  _draft = null,
+  { sourceEvidence = null } = {}
+) {
+  const artifact = sourceEvidence ?? loadSourceEvidenceSync().artifact;
+  if (artifact === null) {
+    throw new Error("stored source evidence is unavailable");
+  }
+  const families = participants.map((participant) => [
+    participant,
+    publicSourceFamily(artifact, participant.id)
+  ]);
+  const rows = families.flatMap(([participant, family]) =>
+    sourceDetailRows(participant, family)
+  );
+  return [
+    "#### Dynamic-code source evidence details",
+    "",
+    "The detail uses stored scanner evidence. It never renders distributed source text or runtime payloads.",
+    "",
+    "| Validator | Primary | Companions | Transitives (excluded) | Adapter (excluded) |",
+    "| --- | --- | --- | --- | --- |",
+    ...families.map(([participant, family]) =>
+      `| ${familyOwnershipRow(participant, family).map(markdownCell).join(" | ")} |`
+    ),
+    "",
+    "| Validator | Owner | Package | Mechanism | Location | Reachability | Representation |",
+    "| --- | --- | --- | --- | --- | --- | --- |",
+    ...rows.map((row) => `| ${row.map(markdownCell).join(" | ")} |`)
+  ].join("\n");
+}
+
 export function downloadTable(snapshot, participants, draft = null) {
   const { artifact, context, diagnostic } = loadImplementationEvidenceSync();
   if (artifact === null) {
@@ -2605,40 +2831,62 @@ export function downloadTable(snapshot, participants, draft = null) {
   ) {
     throw new Error("implementation evidence is stale");
   }
+  const sourceLoad = loadSourceEvidenceSync();
+  if (sourceLoad.artifact === null) {
+    throw new Error(`source evidence is unavailable: ${sourceLoad.diagnostic}`);
+  }
+  const sourceArtifact = sourceLoad.artifact;
   const ordered = [...participants].sort(compareIds);
+  const participantRows = ordered.map((participant) => {
+    const scopes = artifact.participants[participant.id]?.scopes ?? null;
+    if (
+      scopes === null ||
+      context.adapterSourceSha256(participant.id) !==
+        Object.values(scopes)[0]?.adapterSourceSha256
+    ) {
+      throw new Error(`implementation evidence is stale or absent for ${participant.id}`);
+    }
+    const selectedScopes = draft === null
+      ? Object.values(scopes)
+      : [scopes[draft]].filter((scope) => scope !== null && typeof scope === "object");
+    if (selectedScopes.length === 0) {
+      throw new Error(`implementation evidence is absent for ${participant.id}/${draft}`);
+    }
+    const value = (field) => {
+      const values = [...new Set(selectedScopes.map((scope) => scope[field].value))];
+      return values.length === 1 ? values[0] : "varies-by-draft";
+    };
+    const implementation = { api: value("api"), isolation: value("isolation") };
+    const sourceFamily = sourceArtifact.validators[participant.id];
+    const sourceDynamicCode = sourceFamily?.dynamicCode;
+    if (!["yes", "no"].includes(sourceDynamicCode)) {
+      throw new Error(`source evidence is absent for ${participant.id}`);
+    }
+    if (
+      draft !== null &&
+      sourceFamily.scopes[draft]?.dynamicCode !== sourceDynamicCode
+    ) {
+      throw new Error(`source scope evidence is absent for ${participant.id}/${draft}`);
+    }
+    const executed = selectedScopes.flatMap(successfulRuntimeMechanisms).length > 0;
+    return {
+      sourceDynamicCode,
+      executed,
+      markdown: `| ${participantLink(participant)} | ${implementation.api} | ${implementation.isolation} | ${publicYesNo(sourceDynamicCode, `${participant.id} source verdict`)} | ${executed ? "Yes" : "No"} | ${number(snapshot.packages[participant.packageName].weeklyDownloads)} |`
+    };
+  });
+  const yesYesCount = participantRows.filter(
+    ({ sourceDynamicCode, executed }) => sourceDynamicCode === "yes" && executed
+  ).length;
+  const noNoCount = participantRows.filter(
+    ({ sourceDynamicCode, executed }) => sourceDynamicCode === "no" && !executed
+  ).length;
   return [
     "Each row binds automatically observed adapter behavior to the pinned package version. Weekly downloads show npm adoption volume for the snapshot period. Cold isolation uses independent clean-process controls A-A, B-B, A-B-A and B-A-B. The controls separate self-instability from cross-instance interference and fail closed when a control throws, cannot establish its canary or lacks complete instrumentation readiness.",
     "",
-    "| Validator | API | Cold isolation | Dynamic code | Weekly downloads |",
-    "| --- | --- | --- | --- | ---: |",
-    ...ordered.map(
-      (participant) => {
-        const scopes = artifact.participants[participant.id]?.scopes ?? null;
-        if (
-          scopes === null ||
-          context.adapterSourceSha256(participant.id) !==
-            Object.values(scopes)[0]?.adapterSourceSha256
-        ) {
-          throw new Error(`implementation evidence is stale or absent for ${participant.id}`);
-        }
-        const selectedScopes = draft === null
-          ? Object.values(scopes)
-          : [scopes[draft]].filter((scope) => scope !== null && typeof scope === "object");
-        if (selectedScopes.length === 0) {
-          throw new Error(`implementation evidence is absent for ${participant.id}/${draft}`);
-        }
-        const value = (field) => {
-          const values = [...new Set(selectedScopes.map((scope) => scope[field].value))];
-          return values.length === 1 ? values[0] : "varies-by-draft";
-        };
-        const implementation = {
-          api: value("api"),
-          isolation: value("isolation"),
-          dynamicCode: value("dynamicCode")
-        };
-        return `| ${participantLink(participant)} | ${implementation.api} | ${implementation.isolation} | ${implementation.dynamicCode} | ${number(snapshot.packages[participant.packageName].weeklyDownloads)} |`;
-      }
-    ),
+    "| Validator | API | Cold isolation | Dynamic-code logic in distributed source | Observed during runtime probe | Weekly downloads |",
+    "| --- | --- | --- | --- | --- | ---: |",
+    ...participantRows.map(({ markdown }) => markdown),
     "",
     "- `reusable-sync`: prepares a reusable callable synchronously.",
     "- `reusable-async`: resolves asynchronous setup before exposing a reusable callable.",
@@ -2647,11 +2895,14 @@ export function downloadTable(snapshot, participants, draft = null) {
     "- `interference-observed`: A-B-A or B-A-B changed the first instance while A-A and B-B stayed stable, so Cold execution is `N/A`.",
     "- `self-instability-observed`: A-A or B-B changed without a cross-provider claim, so Cold execution fails closed for that scope.",
     "- `inconclusive`: a canary failed or a control threw, so Cold execution fails closed for that scope.",
-    "- `observed`: at least one dependency mechanism successfully generated dynamic code on the exercised route.",
-    "- `not-observed`: every required mechanism and phase was ready and no dependency mechanism succeeded.",
-    "- `limited`: every required process and phase confirmed readiness, but transparent instrumentation has a known observation limit. `limited` cannot replace unavailable or missing readiness.",
+    "- `Dynamic-code logic in distributed source` is `Yes` when the distributed code of the installed primary package or an explicit companion contains logic capable of generating or executing dynamic code. It does not by itself show that the logic was invoked. Otherwise it is `No`.",
+    "- `Observed during runtime probe` is `Yes` when the probe records at least one successful dynamic-code execution attributed to the dependency during adapter import, setup, canary validation and isolation controls. Otherwise it is `No`.",
     "",
-    "Dynamic code describes only the instrumented adapter import, setup, validation and isolation phases at the pinned version. API, A-A, B-B, A-B-A and B-A-B publish independent process identities, PIDs and per-phase readiness. One unavailable, contradictory or missing required process makes the scope inconclusive and Cold fails closed. The evidence separates attempted, succeeded and failed generation where each outcome is observable for eval, Function, AsyncFunction, GeneratorFunction, AsyncGeneratorFunction, node:vm, WebAssembly, workers, inline Node subprocesses, data imports and controlled-child propagation. Worker and fork execArgv values preserve caller flags while forcing one preload. Spawn, execFile and shell exec routes cover their sync and async forms. Inspector observation preserves lexical direct eval semantics, but it cannot transparently distinguish direct from indirect eval or confirm completion of an eval body. Loader hooks observe a data URL request while inspector confirms parsed scripts, but they cannot confirm every parse or evaluation failure. Eval and data imports therefore report capability limits instead of simulated coverage. The event log stores outcomes, provenance and attribution, never generated source text."
+    "The source scanner inspects every installed distributed file in each primary package and explicit companion, not only code reached by the benchmark. It parses supported JavaScript and TypeScript representations into an AST, resolves lexical and interfile bindings, converges the call graph to a fixed point and detects the supported dynamic-code sinks. Ownership and reachability remain attached to each finding. Transitive packages and benchmark adapters stay visible as separate owners and cannot elevate the family verdict.",
+    "",
+    `Source logic and runtime probe observation answer different questions. The runtime probe does not observe every branch or the complete timed Full run. \`Yes/No\` can legitimately result from an optional or dormant branch. \`No/Yes\` requires review of the ownership boundary, detector or runtime attribution. The current ${yesYesCount} \`Yes/Yes\` and ${noNoCount} \`No/No\` results are empirical for this cohort, not contractual equivalence. Runtime capability and coverage details remain in \`results/implementation-evidence.json\`; they never change the source \`Yes\` or \`No\`. A source scanner error aborts capture as a runner error and must be fixed before publication. It never becomes a validator state.`,
+    "",
+    dynamicCodeEvidenceDetails(ordered, draft, { sourceEvidence: sourceArtifact })
   ].join("\n");
 }
 
@@ -3154,7 +3405,7 @@ export function renderBenchmarkReadme({
     "",
     "We measure conformance for every configured validator against every discovered case in Base and Formats. We preserve each `PASS`, `WRONG`, `COMPILE`, `RUNTIME` and `UNSUPPORTED` result in the reports and participant matrix.",
     "",
-    `We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured ${thresholdPercent}% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable \`setup()\`. Cold execution also requires current, compatible and conclusive API, isolation and dynamic-code readiness evidence with no reproduced interference or self-instability. Missing, stale, incompatible or inconclusive evidence fails closed. A known \`limited\` capability remains visible and does not block Cold after every required process and phase confirms readiness.`,
+    `We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured ${thresholdPercent}% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable \`setup()\`. Cold execution requires current, compatible and conclusive observed API and isolation evidence with no reproduced interference or self-instability. \`Dynamic-code logic in distributed source\` and \`Observed during runtime probe\` remain separate publication axes and do not control Cold eligibility. Missing, stale, incompatible or inconclusive API or isolation evidence fails closed.`,
     "",
     "We retain every excluded validator and its exact reasons in diagnostic results. We build each common phase corpus from cases where every validator in that phase roster reports `PASS`. A ranking requires at least two qualified competitors. Smaller rosters publish `INSUFFICIENT_COMPETITORS`; competitive leader, relative score, and chart fields start with two competitors.",
     "",
@@ -3232,7 +3483,8 @@ export function renderBenchmarkReadme({
     "",
     "- `results/index.json` records the result format, benchmark mode, drafts and profiles.",
     "- `results/environment.json` records the current runtime, hashes, and sample runtime provenance by scope and validator.",
-    "- `results/implementation-evidence.json` records automatically observed API shape, cross-instance interference, dynamic-code routes, diagnostics and provenance for every adapter and draft.",
+    "- `results/source-evidence.json` records source dynamic-code yes/no verdicts, ownership, findings, reachability and scanner provenance.",
+    "- `results/implementation-evidence.json` records automatically observed API shape, cross-instance interference, runtime observation routes, diagnostics and provenance for every adapter and draft.",
     "- `results/packages.json` records package versions, tarballs, and integrities.",
     "- `results/validators.json` records validator profiles.",
     "- `results/global-summary.json` records All Drafts rankings for Setup, Execution and Cold execution. Setup contains five draft medians, a summed Setup ops/s index and a five-scope geometric score. The other phases retain Base, Formats, Average and Balanced fields.",
@@ -3274,19 +3526,14 @@ export function createResultsIndex(
   mutationManifest = null,
   eligibilityThresholdPercent = defaultEligibilityThresholdPercent,
   diagnostic = null,
-  implementationEvidenceSha256 = null
+  evidence
 ) {
   if (mode !== "quick" && mode !== "full") {
     throw new Error("results index mode must be quick or full");
   }
   return {
-    resultsVersion: 17,
-    implementationEvidenceVersion,
-    implementationInstrumentationVersion,
-    implementationEvidence: {
-      path: "implementation-evidence.json",
-      sha256: implementationEvidenceSha256
-    },
+    resultsVersion: 19,
+    evidence,
     benchmarkMode: mode,
     eligibilityThresholdPercent: parseEligibilityThresholdPercent(
       eligibilityThresholdPercent
@@ -3371,12 +3618,27 @@ export async function generateFinalReport({
     parseEligibilityThresholdPercent(eligibilityThresholdPercent)
   );
   const resultsRoot = getResultsRoot();
+  const sourceEvidenceRaw = await readFile(
+    path.join(resultsRoot, "source-evidence.json"),
+    "utf8"
+  );
+  const sourceEvidence = validateSourceEvidence(
+    JSON.parse(sourceEvidenceRaw),
+    createSourceEvidenceContext({ projectRoot: benchmarksRoot })
+  );
+  const sourceEvidenceSha256 = sha256(sourceEvidenceRaw);
   const implementationEvidenceRaw = await readFile(
     path.join(resultsRoot, "implementation-evidence.json"),
     "utf8"
   );
-  validateImplementationEvidence(JSON.parse(implementationEvidenceRaw));
+  const implementationEvidence = validateImplementationEvidence(
+    JSON.parse(implementationEvidenceRaw)
+  );
   const implementationEvidenceSha256 = sha256(implementationEvidenceRaw);
+  const evidence = createPublishedEvidenceReferences({
+    sourceEvidenceSha256,
+    implementationEvidenceSha256
+  });
   const reportStarted = Date.now();
   const pipelineStartedAt = process.env.BENCHMARK_PIPELINE_STARTED_AT ?? null;
   let previousEnvironment = null;
@@ -3666,7 +3928,11 @@ export async function generateFinalReport({
   const manifestRaw = await readFile(
     path.join(resultsRoot, "suite-manifest.json")
   );
-  const validators = createValidatorProfiles(reports);
+  const validators = createValidatorProfiles(reports, {
+    sourceEvidence,
+    implementationEvidence,
+    evidence
+  });
   const diagnostic = validator === null && bench === null
     ? null
     : {
@@ -3799,11 +4065,14 @@ export async function generateFinalReport({
     },
     hashes: {
       packageLock: sha256(packageLockRaw),
+      sourceEvidence: sourceEvidenceSha256,
+      implementationEvidence: implementationEvidenceSha256,
       suiteLock: sha256(suiteLockRaw),
       suiteManifest: sha256(manifestRaw),
       conformance: reportHashes,
       performance: performanceHashes
     },
+    evidence,
     performanceCorpora: Object.fromEntries(
       [...scopes].map(([key, scope]) => [key, scope.performanceCorpora])
     ),
@@ -3832,6 +4101,7 @@ export async function generateFinalReport({
         current: { validator, bench },
         refreshes: diagnostic.refreshes.map((refresh) => ({ ...refresh }))
       };
+  globalSummary.evidence = evidence;
   const versions = createValidatorVersionMap({
     reports,
     packages: snapshot.packages
@@ -3859,7 +4129,7 @@ export async function generateFinalReport({
     mutationManifest,
     eligibilityThresholdPercent,
     diagnostic,
-    implementationEvidenceSha256
+    evidence
   );
   const summaryMarkdown = renderRootSummary({ environment });
   const readme = renderBenchmarkReadme({
@@ -3882,6 +4152,11 @@ export async function generateFinalReport({
   await cp(
     path.join(resultsRoot, "suite-manifest.json"),
     path.join(stagedResults, "suite-manifest.json")
+  );
+  await writeFile(
+    path.join(stagedResults, "source-evidence.json"),
+    sourceEvidenceRaw,
+    "utf8"
   );
   await writeFile(
     path.join(stagedResults, "implementation-evidence.json"),

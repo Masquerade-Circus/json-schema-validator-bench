@@ -49,6 +49,7 @@ import {
 import {
   createErrorDocuments,
   createGlobalErrorDocuments,
+  createPublishedEvidenceReferences,
   createValidatorProfiles,
   packageInventoryNames,
   renderConformanceMarkdown,
@@ -73,6 +74,7 @@ import {
   runExecutionSample,
   validateWorkerRequest
 } from "../src/worker.js";
+
 import {
   benchmarkConstants,
   benchmarkModes,
@@ -111,6 +113,47 @@ const benchmarkRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   ".."
 );
+
+function validatorProfileEvidence(reports) {
+  const packages = {};
+  const validators = {};
+  const participants = {};
+  for (const [index, report] of reports.entries()) {
+    const identitySha256 = index.toString(16).padStart(64, "0");
+    const packageName = report.packageName ?? report.validator;
+    packages[identitySha256] = {
+      value: "no",
+      findings: [],
+      provenance: { packageBytesSha256: "a".repeat(64) }
+    };
+    validators[report.validator] ??= {
+      primary: {
+        ownerType: "primary",
+        authority: "controls-verdict",
+        packageName,
+        version: report.version,
+        identitySha256
+      },
+      companions: [],
+      transitives: [],
+      adapters: [],
+      scopes: {}
+    };
+    validators[report.validator].scopes[report.draft] = { dynamicCode: "no" };
+    participants[report.validator] ??= { scopes: {} };
+    participants[report.validator].scopes[report.draft] = {
+      runtimeObservation: { mechanisms: {} }
+    };
+  }
+  return {
+    sourceEvidence: { packages, validators },
+    implementationEvidence: { participants },
+    evidence: createPublishedEvidenceReferences({
+      sourceEvidenceSha256: "b".repeat(64),
+      implementationEvidenceSha256: "c".repeat(64)
+    })
+  };
+}
 const fixtureSuiteRoot = path.join(
   benchmarkRoot,
   "test",
@@ -749,7 +792,8 @@ test("non-metric registry, matrix, contract, and validator profile metadata use 
     reportOptionsSha256: {}
   }));
   assert.deepEqual(
-    Object.keys(createValidatorProfiles(reports)).map((key) => key.split("/")[1]),
+    Object.keys(createValidatorProfiles(reports, validatorProfileEvidence(reports)))
+      .map((key) => key.split("/")[1]),
     canonicalIds(getParticipants(draft))
   );
 });
@@ -1915,12 +1959,18 @@ test("flat conformance errors retain report messages and option metadata once", 
   }
   assert.equal(markdown.includes("Mode:"), false);
   assert.equal(markdown.includes("undefined"), false);
-  assert.deepEqual(createValidatorProfiles([report]), {
-    "draft7/fixture": {
-      version: "1.0.0",
-      reportOptions: report.reportOptions,
-      reportOptionsSha256: report.reportOptionsSha256
-    }
+  const profile = createValidatorProfiles(
+    [report],
+    validatorProfileEvidence([report])
+  )["draft7/fixture"];
+  assert.equal(profile.validatorProfileVersion, 2);
+  assert.equal(profile.version, "1.0.0");
+  assert.deepEqual(profile.reportOptions, report.reportOptions);
+  assert.deepEqual(profile.reportOptionsSha256, report.reportOptionsSha256);
+  assert.deepEqual(profile.implementation, {
+    dynamicCodeInImplementation: "No",
+    executedDuringBenchmark: "No",
+    successfulRuntimeMechanisms: []
   });
 });
 

@@ -23,6 +23,10 @@ import {
   implementationInstrumentationVersion,
   loadImplementationEvidenceSync
 } from "./implementation-evidence.js";
+import {
+  loadSourceEvidenceSync,
+  sourceEvidenceVersion
+} from "./source-evidence.js";
 import { canonicalJson, sha256 } from "./suite.js";
 import {
   draftIds,
@@ -36,6 +40,7 @@ const cliPath = path.join(benchmarksRoot, "src", "cli.js");
 export const pipelineCommands = Object.freeze([
   "preflight",
   "suite-ensure",
+  "source-evidence",
   "implementation-evidence",
   "harness",
   "smoke",
@@ -160,6 +165,7 @@ export function pipelineCommandsForBench(bench = null) {
   return Object.freeze([
     "preflight",
     "suite-ensure",
+    "source-evidence",
     "implementation-evidence",
     "harness",
     "smoke",
@@ -307,7 +313,7 @@ export async function assertCompleteDiagnosticBaseline({
       environment.cohortIdentity.rounds < 1 ||
       index === null ||
       typeof index !== "object" ||
-      index.resultsVersion !== 17
+      index.resultsVersion !== 19
     ) {
       throw new Error("baseline index or hash inventory is absent");
     }
@@ -317,12 +323,22 @@ export async function assertCompleteDiagnosticBaseline({
       path.join(resultsRoot, "implementation-evidence.json")
     );
     const implementationEvidenceLoad = loadImplementationEvidenceSync({ resultsRoot });
+    const sourceEvidenceRaw = await readFile(
+      path.join(resultsRoot, "source-evidence.json")
+    );
+    const sourceEvidenceLoad = loadSourceEvidenceSync({ resultsRoot });
     if (
+      sourceEvidenceLoad.artifact === null ||
+      index.evidence?.source?.version !== sourceEvidenceVersion ||
+      index.evidence?.source?.path !== "source-evidence.json" ||
+      index.evidence?.source?.sha256 !== sha256(sourceEvidenceRaw) ||
+      expectedHashes.sourceEvidence !== sha256(sourceEvidenceRaw) ||
       implementationEvidenceLoad.artifact === null ||
-      index.implementationEvidenceVersion !== implementationEvidenceVersion ||
-      index.implementationInstrumentationVersion !== implementationInstrumentationVersion ||
-      index.implementationEvidence?.path !== "implementation-evidence.json" ||
-      index.implementationEvidence?.sha256 !== sha256(implementationEvidenceRaw) ||
+      index.evidence?.runtime?.version !== implementationEvidenceVersion ||
+      index.evidence?.runtime?.instrumentationVersion !==
+        implementationInstrumentationVersion ||
+      index.evidence?.runtime?.path !== "implementation-evidence.json" ||
+      index.evidence?.runtime?.sha256 !== sha256(implementationEvidenceRaw) ||
       implementationEvidenceLoad.artifact.packageLockSha256 !==
         implementationEvidenceLoad.context.packageLockSha256 ||
       implementationEvidenceLoad.artifact.probeContractSha256 !==

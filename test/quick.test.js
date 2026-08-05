@@ -46,6 +46,9 @@ import {
 } from "../src/matrix.js";
 import { derivePerformanceCorpus } from "../src/performance-corpus.js";
 import { createPerformanceEligibilityPolicy } from "../src/eligibility.js";
+import { loadImplementationEvidenceSync } from "../src/implementation-evidence.js";
+import { loadSourceEvidenceSync } from "../src/source-evidence.js";
+import { sha256 } from "../src/suite.js";
 
 const benchmarkRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -859,10 +862,19 @@ test("mutation document inventory hashes and coordinated publication include eve
       const content = await readFile(path.join(currentResults, entry.relativePath), "utf8");
       assert.equal(reportApi.hashMutationDocument(content), entry.sha256);
     }
-    const index = reportApi.createResultsIndex("full", manifest);
-    assert.equal(index.resultsVersion, 17);
-    assert.equal(index.implementationEvidenceVersion, 3);
-    assert.equal(index.implementationInstrumentationVersion, 4);
+    const evidence = reportApi.createPublishedEvidenceReferences({
+      sourceEvidenceSha256: "a".repeat(64),
+      implementationEvidenceSha256: "b".repeat(64)
+    });
+    const index = reportApi.createResultsIndex(
+      "full",
+      manifest,
+      "98",
+      null,
+      evidence
+    );
+    assert.equal(index.resultsVersion, 19);
+    assert.deepEqual(index.evidence, evidence);
     assert.deepEqual(index.performancePhases, [
       "setup",
       "execution",
@@ -1279,7 +1291,7 @@ test("generated participant snapshots are complete and alphabetic while metric t
   );
   const globalParticipantRows = [
     ...globalParticipantSection.matchAll(
-      /^\| \[([^\]]+)\]\(https:\/\/www\.npmjs\.com\/package\/[^)]+\) \([^)]*\) \| [^|]+ \| [^|]+ \| [^|]+ \| ([\d,]+) \|$/gm
+      /^\| \[([^\]]+)\]\(https:\/\/www\.npmjs\.com\/package\/[^)]+\) \([^)]*\) \| [^|]+ \| [^|]+ \| (Yes|No) \| (Yes|No) \| ([\d,]+) \|$/gm
     )
   ];
   assert.deepEqual(
@@ -1293,7 +1305,7 @@ test("generated participant snapshots are complete and alphabetic while metric t
   for (const match of globalParticipantRows) {
     const participant = validators.find(({ id }) => id === match[1]);
     assert.equal(
-      match[2],
+      match[4],
       snapshot.packages[participant.packageName].weeklyDownloads.toLocaleString("en-US")
     );
   }
@@ -1304,16 +1316,25 @@ test("generated participant snapshots are complete and alphabetic while metric t
     "`interference-not-observed`",
     "`interference-observed`",
     "`self-instability-observed`",
-    "`inconclusive`",
-    "`observed`",
-    "`not-observed`",
-    "`limited`"
+    "`inconclusive`"
   ]) {
     assert.equal(globalParticipantSection.includes(label), true, label);
   }
   assert.match(
     globalParticipantSection,
-    /Dynamic code describes only the instrumented adapter import, setup, validation and isolation phases/
+    /inspects every installed distributed file in each primary package and explicit companion/
+  );
+  assert.match(
+    globalParticipantSection,
+    /Dynamic-code logic in distributed source \| Observed during runtime probe/
+  );
+  assert.equal(globalParticipantRows.filter((match) => match[2] === "Yes").length, 4);
+  assert.equal(globalParticipantRows.filter((match) => match[2] === "No").length, 6);
+  assert.equal(globalParticipantRows.filter((match) => match[3] === "Yes").length, 4);
+  assert.equal(globalParticipantRows.filter((match) => match[3] === "No").length, 6);
+  assert.doesNotMatch(
+    globalParticipantRows.map((match) => `${match[2]} ${match[3]}`).join("\n"),
+    /limited|inconclusive|observed|not-observed/
   );
   assert.doesNotMatch(markdown, /sort validators by canonical name/i);
   assert.doesNotMatch(globalParticipantSection, /sort|alphabet/i);
@@ -1472,6 +1493,109 @@ test("generated participant snapshots are complete and alphabetic while metric t
     excluded: []
   });
   assert.ok(global.indexOf("[zulu]") < global.indexOf("[alpha]"));
+});
+
+test("public evidence profiles and Markdown details use stored safe evidence", async () => {
+  assert.equal(typeof reportApi.createPublishedEvidenceReferences, "function");
+  assert.equal(typeof reportApi.dynamicCodeEvidenceDetails, "function");
+  const sourceLoad = loadSourceEvidenceSync();
+  const runtimeLoad = loadImplementationEvidenceSync();
+  assert.equal(sourceLoad.diagnostic, null);
+  assert.equal(runtimeLoad.diagnostic, null);
+  const sourceRaw = await readFile(
+    path.join(benchmarkRoot, "results", "source-evidence.json")
+  );
+  const runtimeRaw = await readFile(
+    path.join(benchmarkRoot, "results", "implementation-evidence.json")
+  );
+  const evidence = reportApi.createPublishedEvidenceReferences({
+    sourceEvidenceSha256: sha256(sourceRaw),
+    implementationEvidenceSha256: sha256(runtimeRaw)
+  });
+  assert.deepEqual(
+    reportApi.createResultsIndex("quick", null, "98", null, evidence).evidence,
+    evidence
+  );
+  assert.throws(
+    () => reportApi.createPublishedEvidenceReferences({
+      sourceEvidenceSha256: "stale",
+      implementationEvidenceSha256: sha256(runtimeRaw)
+    }),
+    /source evidence hash must be SHA-256/
+  );
+  const profiles = reportApi.createValidatorProfiles(reportFixtures(), {
+    sourceEvidence: sourceLoad.artifact,
+    implementationEvidence: runtimeLoad.artifact,
+    evidence
+  });
+  const values = Object.values(profiles);
+  assert.ok(values.length > 0);
+  assert.ok(values.every(({ validatorProfileVersion }) => validatorProfileVersion === 2));
+  assert.ok(values.every(({ implementation }) =>
+    ["Yes", "No"].includes(implementation.dynamicCodeInImplementation) &&
+    ["Yes", "No"].includes(implementation.executedDuringBenchmark)
+  ));
+  assert.ok(values.every(({ evidence: references }) =>
+    references.source.sha256 === evidence.source.sha256 &&
+    references.runtime.sha256 === evidence.runtime.sha256
+  ));
+  const serialized = JSON.stringify(profiles);
+  const serializedFamilies = JSON.stringify(values.map(({ family }) => family));
+  assert.doesNotMatch(
+    serializedFamilies,
+    /"(?:sourceText|content|payload|code)":/
+  );
+  assert.doesNotMatch(
+    serialized,
+    /"dynamicCodeInImplementation":"(?:limited|inconclusive|observed|not-observed)"/
+  );
+
+  const details = reportApi.dynamicCodeEvidenceDetails(validators);
+  assert.match(details, /\| primary \|/);
+  assert.match(details, /Companions/);
+  assert.match(details, /Transitives \(excluded\)/);
+  assert.match(details, /Adapter \(excluded\)/);
+  assert.match(details, /ajv-draft-04, ajv-formats/);
+  assert.match(details, /fast-deep-equal/);
+  assert.match(details, /dist\/compile\/index\.js:89/);
+  assert.match(details, /\| function construct \|/);
+  assert.match(details, /\| Reachable \| source \|/);
+  assert.doesNotMatch(details, /^\| [^\n]+ \| transitive \|/m);
+  assert.doesNotMatch(details, /bindingTrace|sourcesContent|code string|return 1/i);
+});
+
+test("documentation separates distributed source logic from runtime probe observation", async () => {
+  const [readme, guide, reportSource] = await Promise.all([
+    readFile(path.join(benchmarkRoot, "README.md"), "utf8"),
+    readFile(path.join(benchmarkRoot, "contribute.md"), "utf8"),
+    readFile(path.join(benchmarkRoot, "src", "report.js"), "utf8")
+  ]);
+  for (const document of [readme, guide, reportSource]) {
+    assert.match(document, /Dynamic-code logic in distributed source/);
+    assert.match(document, /Observed during runtime probe/);
+    assert.doesNotMatch(document, /Dynamic code in implementation/);
+    assert.doesNotMatch(document, /Executed during benchmark/);
+  }
+  for (const document of [readme, guide]) {
+    assert.match(document, /does not by itself show that the logic was invoked/i);
+    assert.match(document, /adapter import, setup, canary validation and isolation controls/i);
+    assert.match(document, /does not observe every branch or the complete timed Full/i);
+    assert.match(document, /optional or dormant branch/i);
+    assert.match(document, /ownership boundary|detector or runtime attribution/i);
+    assert.match(document, /4 `Yes\/Yes` and 6 `No\/No`/i);
+    assert.match(document, /empirical.*not.*contractual equivalence/i);
+    assert.match(document, /AST|abstract syntax tree/);
+    assert.match(document, /bindings/);
+    assert.match(document, /call graph/);
+    assert.match(document, /fixed point/);
+    assert.match(document, /reachability/);
+    assert.match(document, /runner error/);
+    assert.match(document, /additionalPackages/);
+    assert.match(document, /three rapid stability checks|validates every case three times/);
+    assert.doesNotMatch(document, /Source dynamic code \| Runtime observation/);
+    assert.doesNotMatch(document, /Runtime `(?:observed|not-observed|limited)`/);
+  }
+  assert.doesNotMatch(reportSource, /source-dynamic-code\.js/);
 });
 
 function performanceCorpusFixture(draft = "draft6", formatProfile = "base") {
@@ -1847,6 +1971,27 @@ test("pipeline preserves stage order, propagates mode and stops on failure", asy
   assert.equal(failed.includes("report"), false);
 });
 
+test("source scanner errors abort before metadata and benchmark phases", async () => {
+  const commands = [];
+  await assert.rejects(
+    () => runPipeline({
+      mode: "quick",
+      runCommand: async (command) => {
+        commands.push(command);
+        if (command === "source-evidence") {
+          throw new Error("SOURCE_ANALYSIS_UNRESOLVED: injected scanner failure");
+        }
+      },
+      writeProgress() {}
+    }),
+    /SOURCE_ANALYSIS_UNRESOLVED/
+  );
+  assert.deepEqual(commands, ["preflight", "suite-ensure", "source-evidence"]);
+  assert.equal(commands.includes("implementation-evidence"), false);
+  assert.equal(commands.includes("harness"), false);
+  assert.equal(commands.includes("report"), false);
+});
+
 test("phase refresh validates a complete baseline before running only the selected phase", async () => {
   const events = [];
   await runPipeline({
@@ -1872,6 +2017,7 @@ test("phase refresh validates a complete baseline before running only the select
     [
     "preflight",
     "suite-ensure",
+    "source-evidence",
     "implementation-evidence",
     "harness",
       "smoke",
@@ -1965,7 +2111,7 @@ test("All Drafts normalizes five Setup scopes and ten execution scopes", () => {
     .schemasafe;
 
   const summary = createGlobalPerformanceSummary(scopes);
-  assert.equal(summary.globalSummaryVersion, 17);
+  assert.equal(summary.globalSummaryVersion, 19);
   const setup = summary.phases.setup.included.find(
     ({ id }) => id === "schema-shield"
   );

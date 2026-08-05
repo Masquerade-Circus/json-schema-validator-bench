@@ -77,13 +77,13 @@ npm run benchmark
 ## Last run
 
 - **Mode:** Full
-- **Completed (UTC):** 2026-08-05T07:12:13.311Z
-- **Total duration:** 26 min 25.380 s
+- **Completed (UTC):** 2026-08-05T17:55:18.025Z
+- **Total duration:** 28 min 21.885 s
 - **Node.js version:** v24.18.0
 - **OS/platform:** linux 6.8.0-136-generic (x64)
 - **CPU:** AMD Ryzen 7 7840HS w/ Radeon 780M Graphics (12 logical cores)
 - **System memory total:** 13.5 GiB
-- **Peak benchmark RSS:** 445.0 MiB
+- **Peak benchmark RSS:** 450.2 MiB
 - **Performance samples:** 450 measured, 0 resumed, 0 retained, 450 published
 - **Single-run sample window:** Yes
 - **JSON Schema Test Suite commit:** `0c7b65dc16dd8eaa7bd83e21099c76610c3b246a`
@@ -131,15 +131,15 @@ xychart horizontal
     title "Draft-06 setup (Higher is better)"
     x-axis ["Hyperjump (1.17.7)", "SchemaShield (1.4.0)", "z-schema (12.4.0)", "AJV (8.20.0)"]
     y-axis "Setup score" 0 --> 100
-    bar [100, 96, 61, 2]
+    bar [100, 95, 60, 2]
 ```
 
 | Validator | Setup ops/s | Score | Errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 5,585 | 100% | [6](results/draft6/errors/setup/hyperjump-COMPILE.md) | 0 | 302.6 MiB |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 5,344 | 95.7% | [0](results/draft6/errors/setup/schema-shield-COMPILE.md) | 0 | 288.6 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,398 | 60.8% | [0](results/draft6/errors/setup/z-schema-COMPILE.md) | 0 | 287.1 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 109 | 2.0% | [3](results/draft6/errors/setup/ajv-COMPILE.md) | 0 | 440.5 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 5,093 | 100% | [6](results/draft6/errors/setup/hyperjump-COMPILE.md) | 0 | 294.7 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 4,836 | 94.9% | [0](results/draft6/errors/setup/schema-shield-COMPILE.md) | 0 | 283.1 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,038 | 59.7% | [0](results/draft6/errors/setup/z-schema-COMPILE.md) | 0 | 282.7 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 101 | 2.0% | [3](results/draft6/errors/setup/ajv-COMPILE.md) | 0 | 444.7 MiB |
 
 Excluded from this ranking:
 
@@ -151,22 +151,22 @@ Excluded from this ranking:
 
 ### Draft 6 execution
 
-Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — Balanced score 84.9%
+Leader: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — Balanced score 88.2%
 
 ```mermaid
 xychart horizontal
     title "Draft-06 execution (Higher is better)"
     x-axis ["SchemaShield (1.4.0)", "AJV (8.20.0)", "Hyperjump (1.17.7)", "z-schema (12.4.0)"]
     y-axis "Balanced score" 0 --> 100
-    bar [85, 56, 14, 1]
+    bar [88, 56, 14, 1]
 ```
 
 | Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 2,946,571 | 14,000,467 | 72.1% | 100% | 84.9% | [0](results/draft6/errors/execution/base/schema-shield-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 292.4 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 4,088,308 | 4,453,081 | 100% | 31.8% | 56.4% | [0](results/draft6/errors/execution/base/ajv-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/ajv-RUNTIME.md) | 0 | 339.5 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 593,141 | 1,854,397 | 14.5% | 13.2% | 13.9% | [0](results/draft6/errors/execution/base/hyperjump-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/hyperjump-RUNTIME.md) | 0 | 313.9 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 94,588 | 103,968 | 2.3% | 0.7% | 1.3% | [0](results/draft6/errors/execution/base/z-schema-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/z-schema-RUNTIME.md) | 0 | 310.2 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 2,747,626 | 13,055,658 | 77.7% | 100% | 88.2% | [0](results/draft6/errors/execution/base/schema-shield-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 304.1 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 3,534,731 | 4,166,882 | 100% | 31.9% | 56.5% | [0](results/draft6/errors/execution/base/ajv-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/ajv-RUNTIME.md) | 0 | 395.9 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 545,621 | 1,768,871 | 15.4% | 13.5% | 14.5% | [0](results/draft6/errors/execution/base/hyperjump-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/hyperjump-RUNTIME.md) | 0 | 313.9 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 83,846 | 89,361 | 2.4% | 0.7% | 1.3% | [0](results/draft6/errors/execution/base/z-schema-RUNTIME.md) | [0](results/draft6/errors/execution/format-assertion/z-schema-RUNTIME.md) | 0 | 313.4 MiB |
 
 Excluded from this ranking:
 
@@ -185,14 +185,14 @@ xychart horizontal
     title "Draft-06 Cold execution (Higher is better)"
     x-axis ["SchemaShield (1.4.0)", "z-schema (12.4.0)", "AJV (8.20.0)"]
     y-axis "Balanced score" 0 --> 100
-    bar [100, 45, 1]
+    bar [100, 47, 1]
 ```
 
 | Validator | Base ops/s | Formats ops/s | Base score | Formats score | Balanced score | Base errors | Format errors | Mutations | Peak RSS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 6,850 | 10,117 | 100% | 100% | 100% | [0](results/draft6/errors/cold-execution/base/schema-shield-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 284.8 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,688 | 3,868 | 53.8% | 38.2% | 45.4% | [0](results/draft6/errors/cold-execution/base/z-schema-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/z-schema-RUNTIME.md) | 0 | 289.9 MiB |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 114 | 115 | 1.7% | 1.1% | 1.4% | [0](results/draft6/errors/cold-execution/base/ajv-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/ajv-RUNTIME.md) | 0 | 443.0 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 6,576 | 9,284 | 100% | 100% | 100% | [0](results/draft6/errors/cold-execution/base/schema-shield-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/schema-shield-RUNTIME.md) | 0 | 283.6 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 3,535 | 3,782 | 53.7% | 40.7% | 46.8% | [0](results/draft6/errors/cold-execution/base/z-schema-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/z-schema-RUNTIME.md) | 0 | 292.3 MiB |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | 105 | 110 | 1.6% | 1.2% | 1.4% | [0](results/draft6/errors/cold-execution/base/ajv-RUNTIME.md) | [0](results/draft6/errors/cold-execution/format-assertion/ajv-RUNTIME.md) | 0 | 450.2 MiB |
 
 Excluded from this ranking:
 
@@ -207,21 +207,21 @@ Excluded from this ranking:
 
 ### All Drafts Setup
 
-Leader global: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — Setup score 97.6%
+Leader global: [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) — Setup score 98.3%
 
 ```mermaid
 xychart horizontal
     title "All Drafts Setup Setup score (Higher is better)"
     x-axis ["SchemaShield (1.4.0)", "Hyperjump (1.17.7)", "z-schema (12.4.0)"]
     y-axis "Setup score" 0 --> 100
-    bar [97.593, 95.639, 54.542]
+    bar [98.271, 96.259, 52.298]
 ```
 
 | Validator | Setup ops/s index | Setup score | Errors | Peak RSS |
 | --- | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 23,323 | 97.6% | [0](results/global-errors/setup/setup/schema-shield-COMPILE.md) | 306.9 MiB |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 23,029 | 95.6% | [26](results/global-errors/setup/setup/hyperjump-COMPILE.md) | 312.7 MiB |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 13,547 | 54.5% | [12](results/global-errors/setup/setup/z-schema-COMPILE.md) | 304.3 MiB |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 22,214 | 98.3% | [0](results/global-errors/setup/setup/schema-shield-COMPILE.md) | 311.3 MiB |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 21,974 | 96.3% | [26](results/global-errors/setup/setup/hyperjump-COMPILE.md) | 313.7 MiB |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 12,215 | 52.3% | [12](results/global-errors/setup/setup/z-schema-COMPILE.md) | 320.8 MiB |
 
 Excluded from this ranking:
 
@@ -242,14 +242,14 @@ xychart horizontal
     title "All Drafts Execution Balanced score (Higher is better)"
     x-axis ["SchemaShield (1.4.0)", "Hyperjump (1.17.7)", "z-schema (12.4.0)"]
     y-axis "Balanced score" 0 --> 100
-    bar [100, 10.218, 1.855]
+    bar [100, 10.577, 1.974]
 ```
 
 | Validator | Base ops/s | Formats ops/s | Average ops/s | Base score | Formats score | Balanced score |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 10,087,210 | 63,085,100 | 36,586,155 | 100% | 100% | 100% |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 2,234,525 | 4,443,530 | 3,339,027 | 23.9% | 4.4% | 10.2% |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 430,315 | 450,766 | 440,540 | 4.8% | 0.7% | 1.9% |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 8,897,819 | 58,901,087 | 33,899,453 | 100% | 100% | 100% |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | 2,052,770 | 4,139,394 | 3,096,082 | 25.8% | 4.3% | 10.6% |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 405,768 | 427,622 | 416,695 | 5.4% | 0.7% | 2.0% |
 
 Excluded from this ranking:
 
@@ -270,13 +270,13 @@ xychart horizontal
     title "All Drafts Cold execution Balanced score (Higher is better)"
     x-axis ["SchemaShield (1.4.0)", "z-schema (12.4.0)"]
     y-axis "Balanced score" 0 --> 100
-    bar [100, 38.777]
+    bar [100, 39.092]
 ```
 
 | Validator | Base ops/s | Formats ops/s | Average ops/s | Base score | Formats score | Balanced score |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 30,118 | 47,771 | 38,945 | 100% | 100% | 100% |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 14,686 | 16,045 | 15,365 | 46.8% | 32.2% | 38.8% |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | 28,295 | 45,334 | 36,815 | 100% | 100% | 100% |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | 13,878 | 15,429 | 14,654 | 47.0% | 32.5% | 39.1% |
 
 Excluded from this ranking:
 
@@ -317,18 +317,18 @@ Period: 2026-07-27 through 2026-08-02. Retrieved at 2026-08-04T18:04:08.000Z.
 
 Each row binds automatically observed adapter behavior to the pinned package version. Weekly downloads show npm adoption volume for the snapshot period. Cold isolation uses independent clean-process controls A-A, B-B, A-B-A and B-A-B. The controls separate self-instability from cross-instance interference and fail closed when a control throws, cannot establish its canary or lacks complete instrumentation readiness.
 
-| Validator | API | Cold isolation | Dynamic code | Weekly downloads |
-| --- | --- | --- | --- | ---: |
-| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | reusable-sync | interference-not-observed | observed | 366,039,890 |
-| [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1) | reusable-sync | interference-not-observed | limited | 6,655,864 |
-| [djv](https://www.npmjs.com/package/djv) (2.1.4) | reusable-sync | interference-not-observed | observed | 65,678 |
-| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | reusable-async | interference-observed | limited | 255,244 |
-| [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2) | reusable-sync | interference-not-observed | limited | 532,097 |
-| [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | validate-only | interference-not-observed | limited | 6,186,992 |
-| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | reusable-sync | interference-not-observed | observed | 8,304,494 |
-| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | reusable-sync | interference-not-observed | limited | 279 |
-| [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0) | reusable-sync | interference-not-observed | observed | 4,851,948 |
-| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | reusable-sync | interference-not-observed | limited | 3,261,931 |
+| Validator | API | Cold isolation | Dynamic-code logic in distributed source | Observed during runtime probe | Weekly downloads |
+| --- | --- | --- | --- | --- | ---: |
+| [ajv](https://www.npmjs.com/package/ajv) (8.20.0) | reusable-sync | interference-not-observed | Yes | Yes | 366,039,890 |
+| [cfworker-json-schema](https://www.npmjs.com/package/@cfworker/json-schema) (4.1.1) | reusable-sync | interference-not-observed | No | No | 6,655,864 |
+| [djv](https://www.npmjs.com/package/djv) (2.1.4) | reusable-sync | interference-not-observed | Yes | Yes | 65,678 |
+| [hyperjump](https://www.npmjs.com/package/@hyperjump/json-schema) (1.17.7) | reusable-async | interference-observed | No | No | 255,244 |
+| [json-schema-library](https://www.npmjs.com/package/json-schema-library) (11.6.2) | reusable-sync | interference-not-observed | No | No | 532,097 |
+| [jsonschema](https://www.npmjs.com/package/jsonschema) (1.5.0) | validate-only | interference-not-observed | No | No | 6,186,992 |
+| [redocly-ajv](https://www.npmjs.com/package/@redocly/ajv) (8.18.3) | reusable-sync | interference-not-observed | Yes | Yes | 8,304,494 |
+| [schema-shield](https://www.npmjs.com/package/schema-shield) (1.4.0) | reusable-sync | interference-not-observed | No | No | 279 |
+| [schemasafe](https://www.npmjs.com/package/@exodus/schemasafe) (1.3.0) | reusable-sync | interference-not-observed | Yes | Yes | 4,851,948 |
+| [z-schema](https://www.npmjs.com/package/z-schema) (12.4.0) | reusable-sync | interference-not-observed | No | No | 3,261,931 |
 
 - `reusable-sync`: prepares a reusable callable synchronously.
 - `reusable-async`: resolves asynchronous setup before exposing a reusable callable.
@@ -337,11 +337,58 @@ Each row binds automatically observed adapter behavior to the pinned package ver
 - `interference-observed`: A-B-A or B-A-B changed the first instance while A-A and B-B stayed stable, so Cold execution is `N/A`.
 - `self-instability-observed`: A-A or B-B changed without a cross-provider claim, so Cold execution fails closed for that scope.
 - `inconclusive`: a canary failed or a control threw, so Cold execution fails closed for that scope.
-- `observed`: at least one dependency mechanism successfully generated dynamic code on the exercised route.
-- `not-observed`: every required mechanism and phase was ready and no dependency mechanism succeeded.
-- `limited`: every required process and phase confirmed readiness, but transparent instrumentation has a known observation limit. `limited` cannot replace unavailable or missing readiness.
+- `Dynamic-code logic in distributed source` is `Yes` when the distributed code of the installed primary package or an explicit companion contains logic capable of generating or executing dynamic code. It does not by itself show that the logic was invoked. Otherwise it is `No`.
+- `Observed during runtime probe` is `Yes` when the probe records at least one successful dynamic-code execution attributed to the dependency during adapter import, setup, canary validation and isolation controls. Otherwise it is `No`.
 
-Dynamic code describes only the instrumented adapter import, setup, validation and isolation phases at the pinned version. API, A-A, B-B, A-B-A and B-A-B publish independent process identities, PIDs and per-phase readiness. One unavailable, contradictory or missing required process makes the scope inconclusive and Cold fails closed. The evidence separates attempted, succeeded and failed generation where each outcome is observable for eval, Function, AsyncFunction, GeneratorFunction, AsyncGeneratorFunction, node:vm, WebAssembly, workers, inline Node subprocesses, data imports and controlled-child propagation. Worker and fork execArgv values preserve caller flags while forcing one preload. Spawn, execFile and shell exec routes cover their sync and async forms. Inspector observation preserves lexical direct eval semantics, but it cannot transparently distinguish direct from indirect eval or confirm completion of an eval body. Loader hooks observe a data URL request while inspector confirms parsed scripts, but they cannot confirm every parse or evaluation failure. Eval and data imports therefore report capability limits instead of simulated coverage. The event log stores outcomes, provenance and attribution, never generated source text.
+The source scanner inspects every installed distributed file in each primary package and explicit companion, not only code reached by the benchmark. It parses supported JavaScript and TypeScript representations into an AST, resolves lexical and interfile bindings, converges the call graph to a fixed point and detects the supported dynamic-code sinks. Ownership and reachability remain attached to each finding. Transitive packages and benchmark adapters stay visible as separate owners and cannot elevate the family verdict.
+
+Source logic and runtime probe observation answer different questions. The runtime probe does not observe every branch or the complete timed Full run. `Yes/No` can legitimately result from an optional or dormant branch. `No/Yes` requires review of the ownership boundary, detector or runtime attribution. The current 4 `Yes/Yes` and 6 `No/No` results are empirical for this cohort, not contractual equivalence. Runtime capability and coverage details remain in `results/implementation-evidence.json`; they never change the source `Yes` or `No`. A source scanner error aborts capture as a runner error and must be fixed before publication. It never becomes a validator state.
+
+#### Dynamic-code source evidence details
+
+The detail uses stored scanner evidence. It never renders distributed source text or runtime payloads.
+
+| Validator | Primary | Companions | Transitives (excluded) | Adapter (excluded) |
+| --- | --- | --- | --- | --- |
+| ajv | ajv (Yes) | ajv-draft-04, ajv-formats | fast-deep-equal, fast-uri, json-schema-traverse, require-from-string | json-schema-validator-bench |
+| cfworker-json-schema | @cfworker/json-schema (No) | None | None | json-schema-validator-bench |
+| djv | djv (Yes) | None | @korzio/djv-draft-04 | json-schema-validator-bench |
+| hyperjump | @hyperjump/json-schema (No) | @hyperjump/browser | @hyperjump/json-pointer, @hyperjump/json-schema-formats, @hyperjump/pact, @hyperjump/uri, content-type, idn-hostname, json-stringify-deterministic, just-curry-it, punycode, uuid | json-schema-validator-bench |
+| json-schema-library | json-schema-library (No) | None | @hyperjump/json-schema-formats, @hyperjump/uri, @sagold/json-pointer, fast-copy, fast-deep-equal, idn-hostname, punycode, uri-js, valid-url | json-schema-validator-bench |
+| jsonschema | jsonschema (No) | None | None | json-schema-validator-bench |
+| redocly-ajv | @redocly/ajv (Yes) | ajv-formats | ajv, fast-deep-equal, fast-uri, json-schema-traverse, require-from-string | json-schema-validator-bench |
+| schema-shield | schema-shield (No) | None | None | json-schema-validator-bench |
+| schemasafe | @exodus/schemasafe (Yes) | None | None | json-schema-validator-bench |
+| z-schema | z-schema (No) | None | commander, punycode, ret, safe-regex2, validator | json-schema-validator-bench |
+
+| Validator | Owner | Package | Mechanism | Location | Reachability | Representation |
+| --- | --- | --- | --- | --- | --- | --- |
+| ajv | primary | ajv | function construct | dist/compile/index.js:89 | Reachable | source |
+| ajv | primary | ajv | function construct | dist/compile/jtd/parse.js:50 | Not reachable | source |
+| ajv | primary | ajv | function construct | dist/compile/jtd/serialize.js:50 | Not reachable | source |
+| ajv | primary | ajv | function construct | lib/compile/index.ts:171 | Not reachable | source |
+| ajv | primary | ajv | function construct | lib/compile/jtd/parse.ts:69 | Not reachable | source |
+| ajv | primary | ajv | function construct | lib/compile/jtd/serialize.ts:65 | Not reachable | source |
+| djv | primary | djv | function construct | djv.js:1 | Reachable | source |
+| djv | primary | djv | function invoke | lib/djv.js:201 | Reachable | source |
+| djv | primary | djv | function invoke | lib/utils/state.js:52 | Reachable | source |
+| djv | primary | djv | function invoke | lib/utils/state.js:79 | Reachable | source |
+| djv | primary | djv | function construct | lib/utils/template.js:143 | Reachable | source |
+| redocly-ajv | primary | @redocly/ajv | function construct | dist/compile/index.js:89 | Reachable | source |
+| redocly-ajv | primary | @redocly/ajv | function construct | dist/compile/jtd/parse.js:50 | Not reachable | source |
+| redocly-ajv | primary | @redocly/ajv | function construct | dist/compile/jtd/serialize.js:50 | Not reachable | source |
+| redocly-ajv | primary | @redocly/ajv | function construct | lib/compile/index.ts:175 | Not reachable | source |
+| redocly-ajv | primary | @redocly/ajv | function construct | lib/compile/jtd/parse.ts:71 | Not reachable | source |
+| redocly-ajv | primary | @redocly/ajv | function construct | lib/compile/jtd/serialize.ts:67 | Not reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/compile.js:176 | Reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/compile.js:1357 | Reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/compile.js:1372 | Reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/generate-function.js:101 | Reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/index.js:33 | Reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/index.js:36 | Reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/index.js:55 | Reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/index.js:90 | Reachable | source |
+| schemasafe | primary | @exodus/schemasafe | function invoke | src/index.js:95 | Reachable | source |
 
 ### Participants by draft
 
@@ -386,7 +433,7 @@ flowchart TD
 
 We measure conformance for every configured validator against every discovered case in Base and Formats. We preserve each `PASS`, `WRONG`, `COMPILE`, `RUNTIME` and `UNSUPPORTED` result in the reports and participant matrix.
 
-We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured 98% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable `setup()`. Cold execution also requires current, compatible and conclusive API, isolation and dynamic-code readiness evidence with no reproduced interference or self-instability. Missing, stale, incompatible or inconclusive evidence fails closed. A known `limited` capability remains visible and does not block Cold after every required process and phase confirms readiness.
+We calculate the Base and Formats PASS fractions independently. We compare exact integer fractions and require each fraction to reach the configured 98% gate. Every non-PASS status reduces its profile fraction. We add a validator to one atomic draft roster when both profiles reach the gate. Execution uses that roster directly. Setup intersects it with validators that expose reusable `setup()`. Cold execution requires current, compatible and conclusive observed API and isolation evidence with no reproduced interference or self-instability. `Dynamic-code logic in distributed source` and `Observed during runtime probe` remain separate publication axes and do not control Cold eligibility. Missing, stale, incompatible or inconclusive API or isolation evidence fails closed.
 
 We retain every excluded validator and its exact reasons in diagnostic results. We build each common phase corpus from cases where every validator in that phase roster reports `PASS`. A ranking requires at least two qualified competitors. Smaller rosters publish `INSUFFICIENT_COMPETITORS`; competitive leader, relative score, and chart fields start with two competitors.
 
@@ -462,7 +509,8 @@ The global conformance table reports PASS percentage for every draft and profile
 
 - `results/index.json` records the result format, benchmark mode, drafts and profiles.
 - `results/environment.json` records the current runtime, hashes, and sample runtime provenance by scope and validator.
-- `results/implementation-evidence.json` records automatically observed API shape, cross-instance interference, dynamic-code routes, diagnostics and provenance for every adapter and draft.
+- `results/source-evidence.json` records source dynamic-code yes/no verdicts, ownership, findings, reachability and scanner provenance.
+- `results/implementation-evidence.json` records automatically observed API shape, cross-instance interference, runtime observation routes, diagnostics and provenance for every adapter and draft.
 - `results/packages.json` records package versions, tarballs, and integrities.
 - `results/validators.json` records validator profiles.
 - `results/global-summary.json` records All Drafts rankings for Setup, Execution and Cold execution. Setup contains five draft medians, a summed Setup ops/s index and a five-scope geometric score. The other phases retain Base, Formats, Average and Balanced fields.

@@ -46,6 +46,7 @@ import {
 } from "./diagnostic.js";
 import { getResultsRoot } from "./paths.js";
 import { captureImplementationEvidence } from "./implementation-probe.js";
+import { captureSourceEvidence } from "./source-evidence.js";
 
 const benchmarksRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const suiteLockPath = path.join(benchmarksRoot, "suite-lock.json");
@@ -538,6 +539,17 @@ async function main() {
         captured: result.captured,
         reused: result.reused,
         runIdentitySha256: result.artifact.runIdentitySha256
+      })}\n`
+    );
+    return;
+  }
+  if (command === "source-evidence") {
+    const result = await captureSourceEvidence();
+    process.stdout.write(
+      `${JSON.stringify({
+        validators: Object.keys(result.artifact.validators).length,
+        packageIdentities: Object.keys(result.artifact.packages).length,
+        reusedPackages: result.artifact.cache.reusedPackages
       })}\n`
     );
     return;

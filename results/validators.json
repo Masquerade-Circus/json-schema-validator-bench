@@ -1,5 +1,6 @@
 {
   "draft4/cfworker-json-schema": {
+    "validatorProfileVersion": 2,
     "version": "4.1.1",
     "reportOptions": {
       "base": {
@@ -16,9 +17,52 @@
     "reportOptionsSha256": {
       "base": "9dac22846732aa36f3cfba116b7fb084206df4488df74b5d97da58d5032d12de",
       "format-assertion": "e8fb29ec6dae2965356ba160c983cf90859d3cc5af4abe68fd2ad9e2d83c5ed7"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@cfworker/json-schema",
+        "packageVersion": "4.1.1",
+        "identitySha256": "881cdb2e94fd8cb158860ca28ea178d362af23f821346cd83b58bf7ac349fe50",
+        "packageBytesSha256": "4f4d360a683a7d1cbc4bdfc39c0b99ecd4131850b76e5089d2906d29607459d3",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft4/ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.20.0",
     "reportOptions": {
       "base": {
@@ -135,9 +179,187 @@
     "reportOptionsSha256": {
       "base": "a17645765859603a6077320f6679761b732d1baa158dd3539b144a0a90264557",
       "format-assertion": "279317a09508bc5bc202c96556f7030097e52cade9870ff7add527d8abc99dca"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "ajv",
+        "packageVersion": "8.20.0",
+        "identitySha256": "827941f9f0dda6da07c9d77afa3f192ceb681e3ffe098a7868295e31c04f8b36",
+        "packageBytesSha256": "a0e139f046466e6a2eb97c12a584e64ceb91997bd49a395426e7676e428095d5",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "05b34da22814f3787bfa3ac68dad59c9047f56e55a607e0a20719ebf5afe69ac"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "548b7e6ee5558360945f261e092cd328662868995877140ed2ae7ff981300b7f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "1f8b1873fbd899240cd625144d3cd10630b3cf1b0c69c640566f6e25c80765c0"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/index.ts",
+            "line": 171,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "fd39c4872a98fd27d899345d92da8b5e9c92a3b311a9f91e156080349f85c869"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 69,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "3f987db29f450b9463fc64a2d594325d21155d3e7934a143ab1a744ce0d7ecd6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 65,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "f523467687cad8197f51828d97dba711087fd7fb7447626a672823fcc227f6b7"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-draft-04",
+          "packageVersion": "1.0.0",
+          "identitySha256": "5c26c10b1e0da58b8b61bae2b00fdc5919dcddbed515ae02d1932527c28bab85",
+          "packageBytesSha256": "db6a89b713fcc3744eafbbe37b30c4878ddbe88375b194d655f6017f4663d734",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        },
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft4/hyperjump": {
+    "validatorProfileVersion": 2,
     "version": "1.17.7",
     "reportOptions": {
       "base": {
@@ -156,9 +378,144 @@
     "reportOptionsSha256": {
       "base": "f78a8ab3794e6a0770182869b14d0c06c5f3f7cfaeafcc00e17a7ee7afbb4964",
       "format-assertion": "b2b13ed13976775f770990672618d4a4fb2b2348fdebbc12bbca838355fd267c"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@hyperjump/json-schema",
+        "packageVersion": "1.17.7",
+        "identitySha256": "ccc061a9baf0e6924f1117dc70b5232039412429a123f91ed63d3e008ec696bd",
+        "packageBytesSha256": "65e1f3253682acf6d2edd2f64af6369247383954f61050845c13c14419c390ec",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "@hyperjump/browser",
+          "packageVersion": "1.4.0",
+          "identitySha256": "d07f083a71c4cf786f8b0d2b683383237c025e433990ca17bf56be5b5092c426",
+          "packageBytesSha256": "a0312fbccb581e106c31436de01de5231027c26901cfebb58c4f1c6bac598314",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-pointer",
+          "packageVersion": "1.1.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/pact",
+          "packageVersion": "1.4.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "content-type",
+          "packageVersion": "1.0.5",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-stringify-deterministic",
+          "packageVersion": "1.0.14",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "just-curry-it",
+          "packageVersion": "5.3.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uuid",
+          "packageVersion": "14.0.1",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft4/redocly-ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.18.3",
     "reportOptions": {
       "base": {
@@ -275,9 +632,185 @@
     "reportOptionsSha256": {
       "base": "fd5d2de14d206b4d9dc7cdcd252ef3add8324ff378833822a69088d103ecafee",
       "format-assertion": "2b073c77922d4bd5e0438da349dbc3c94fa1fe6e2203e39aceb9d4dfd6275b1b"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@redocly/ajv",
+        "packageVersion": "8.18.3",
+        "identitySha256": "60a5c22aac1955826bbdd310fc0c500d85f561ae67e7b6a3859e82b4d2239392",
+        "packageBytesSha256": "9a975b21ab7d176fad87ebd134d8fc478c7e96e0a3bebf7b428c50c2b446d87b",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "be6d4c49aada85e933e9c0da0a7d3817b2f9c06b506fa0d8778c3bab38a281e8"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "a2126956830bf99eef4401a1a1d87cb04f230aea7d5913b5d80934ac096849e6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b194cc6a46784394d4a6494d8b2acb7e58fe5772c1e6ca9bc7a35be1ae81fbb3"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/index.ts",
+            "line": 175,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "0412c3f72037399d2b196285b9822a370832e93cb20866f62543584c37bebbed"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 71,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "5c2513e3aaaf10a371f875ed77bc381a56aedd20de3e3aec957217e8ba6e0e34"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 67,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b01bfa2d2d2fe9f4ca63e83fd6e60dde9483a8ad9f3fca5c2ddde3bcecfe738d"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ajv",
+          "packageVersion": "8.20.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft4/schema-shield": {
+    "validatorProfileVersion": 2,
     "version": "1.4.0",
     "reportOptions": {
       "base": {
@@ -328,9 +861,52 @@
     "reportOptionsSha256": {
       "base": "6f649feb56623651b00f8c88040c7d0e03118d9445171c35b7c48b9b7703f8d2",
       "format-assertion": "60a246532325ea31401aa1d288a5442490642ec5a2c9bd40ce22dc6774462299"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "schema-shield",
+        "packageVersion": "1.4.0",
+        "identitySha256": "e8096b7817d694b973987ed264d3bbb4522176acadc410bfe1932aa409416d21",
+        "packageBytesSha256": "598e3baa7a76480d28edd21e614a8160eedc52a6669d09f1d02a64d6b548241d",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft4/json-schema-library": {
+    "validatorProfileVersion": 2,
     "version": "11.6.2",
     "reportOptions": {
       "base": {
@@ -355,9 +931,125 @@
     "reportOptionsSha256": {
       "base": "974dcc1d72e2bfcccf5b7ec74537381cf75fbb8c490b3bb3caff2acc7cf33df7",
       "format-assertion": "974dcc1d72e2bfcccf5b7ec74537381cf75fbb8c490b3bb3caff2acc7cf33df7"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "json-schema-library",
+        "packageVersion": "11.6.2",
+        "identitySha256": "ee8f3275ec9f6397f387aff240acb34cb2697465f94dc7416772acbda5bff1ed",
+        "packageBytesSha256": "2dfdb9b347fd3b9a6e84ef9d05a7652a695cd9702bd4bf410a7d8f819fcd9ca7",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@sagold/json-pointer",
+          "packageVersion": "7.2.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-copy",
+          "packageVersion": "4.0.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uri-js",
+          "packageVersion": "4.4.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "valid-url",
+          "packageVersion": "1.0.9",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft4/jsonschema": {
+    "validatorProfileVersion": 2,
     "version": "1.5.0",
     "reportOptions": {
       "base": {
@@ -372,9 +1064,52 @@
     "reportOptionsSha256": {
       "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
       "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "jsonschema",
+        "packageVersion": "1.5.0",
+        "identitySha256": "f834530f48470f8adbadda4d4db0fa82331aea8629e5b79348bbcfc94b88632b",
+        "packageBytesSha256": "f79ea6b38a2667cac456ca71e9dc1bf9a9ee2bdc0b4924bc06b815d39f6d87c2",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft4/schemasafe": {
+    "validatorProfileVersion": 2,
     "version": "1.3.0",
     "reportOptions": {
       "base": {
@@ -447,9 +1182,172 @@
     "reportOptionsSha256": {
       "base": "380ab6e5445baac0132e74391ccde9319d2ffee9318fde14e2acc3bccc0fd669",
       "format-assertion": "459ad82c5fa713fdc594a38f289503fe886cf85fb53c3a949aa0574432a4f96a"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@exodus/schemasafe",
+        "packageVersion": "1.3.0",
+        "identitySha256": "df1896ef5fc5255288c131d02900d01bf8e2d43faee762985a5fa04077d1d5b4",
+        "packageBytesSha256": "8ae67d11b2eb01c687e76878c36493c81ac4fba6cf2e32a97342009165688658",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 176,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1357,
+            "column": 16,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1372,
+            "column": 50,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/generate-function.js",
+            "line": 101,
+            "column": 14,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "5ee6a751633f2b09131babb871911e346f2e4033f95623143db4bcbb07cacb68"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 33,
+            "column": 27,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 36,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 55,
+            "column": 20,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 90,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 95,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          }
+        ]
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft4/z-schema": {
+    "validatorProfileVersion": 2,
     "version": "12.4.0",
     "reportOptions": {
       "base": {
@@ -474,9 +1372,93 @@
     "reportOptionsSha256": {
       "base": "33f0bf01c495e68e9a6e4c9bea30a30d62ecd190d068d787e23ab8c1524c67d6",
       "format-assertion": "3c355174d5ff56ef75002c317f3085457c3188d9a4f2a3b5028d872eccb68fdf"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "z-schema",
+        "packageVersion": "12.4.0",
+        "identitySha256": "86392ffe1e8702d012e7976ba5c0cb88123de01bc8ce1aae8009d361850699d1",
+        "packageBytesSha256": "d50efedf606d9bc730bcd7426c244645afa123248d883c2845a7a2125f28631b",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "commander",
+          "packageVersion": "15.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ret",
+          "packageVersion": "0.5.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "safe-regex2",
+          "packageVersion": "5.1.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "validator",
+          "packageVersion": "13.15.35",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.20.0",
     "reportOptions": {
       "base": {
@@ -593,9 +1575,187 @@
     "reportOptionsSha256": {
       "base": "c8b0934d88ac5e2e09e1233275f893178f8220c36d35ba6f9d04234e53839917",
       "format-assertion": "700c34e907e07de49b8404ec82dfb21269fcdfdde0f5851e25a7cab5c270f1f1"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "ajv",
+        "packageVersion": "8.20.0",
+        "identitySha256": "827941f9f0dda6da07c9d77afa3f192ceb681e3ffe098a7868295e31c04f8b36",
+        "packageBytesSha256": "a0e139f046466e6a2eb97c12a584e64ceb91997bd49a395426e7676e428095d5",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "05b34da22814f3787bfa3ac68dad59c9047f56e55a607e0a20719ebf5afe69ac"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "548b7e6ee5558360945f261e092cd328662868995877140ed2ae7ff981300b7f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "1f8b1873fbd899240cd625144d3cd10630b3cf1b0c69c640566f6e25c80765c0"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/index.ts",
+            "line": 171,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "fd39c4872a98fd27d899345d92da8b5e9c92a3b311a9f91e156080349f85c869"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 69,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "3f987db29f450b9463fc64a2d594325d21155d3e7934a143ab1a744ce0d7ecd6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 65,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "f523467687cad8197f51828d97dba711087fd7fb7447626a672823fcc227f6b7"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-draft-04",
+          "packageVersion": "1.0.0",
+          "identitySha256": "5c26c10b1e0da58b8b61bae2b00fdc5919dcddbed515ae02d1932527c28bab85",
+          "packageBytesSha256": "db6a89b713fcc3744eafbbe37b30c4878ddbe88375b194d655f6017f4663d734",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        },
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/hyperjump": {
+    "validatorProfileVersion": 2,
     "version": "1.17.7",
     "reportOptions": {
       "base": {
@@ -614,9 +1774,144 @@
     "reportOptionsSha256": {
       "base": "c518206085df7bd6fadfaa45fd126b151f414c72e2d30552a90f3ee1fbc6d05c",
       "format-assertion": "a2ee8fbf1dba732e73aab59f92c4dc3b7210deae2f485e80600c1bdbff92676a"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@hyperjump/json-schema",
+        "packageVersion": "1.17.7",
+        "identitySha256": "ccc061a9baf0e6924f1117dc70b5232039412429a123f91ed63d3e008ec696bd",
+        "packageBytesSha256": "65e1f3253682acf6d2edd2f64af6369247383954f61050845c13c14419c390ec",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "@hyperjump/browser",
+          "packageVersion": "1.4.0",
+          "identitySha256": "d07f083a71c4cf786f8b0d2b683383237c025e433990ca17bf56be5b5092c426",
+          "packageBytesSha256": "a0312fbccb581e106c31436de01de5231027c26901cfebb58c4f1c6bac598314",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-pointer",
+          "packageVersion": "1.1.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/pact",
+          "packageVersion": "1.4.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "content-type",
+          "packageVersion": "1.0.5",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-stringify-deterministic",
+          "packageVersion": "1.0.14",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "just-curry-it",
+          "packageVersion": "5.3.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uuid",
+          "packageVersion": "14.0.1",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/redocly-ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.18.3",
     "reportOptions": {
       "base": {
@@ -733,9 +2028,185 @@
     "reportOptionsSha256": {
       "base": "5a606b6fe0f574b46c6ac6365316a913465751751d7bd07c193cc2af779bc413",
       "format-assertion": "82a91ee132191bb3e1f442b7474fb5c2017317c6931a8c29c7055187de738868"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@redocly/ajv",
+        "packageVersion": "8.18.3",
+        "identitySha256": "60a5c22aac1955826bbdd310fc0c500d85f561ae67e7b6a3859e82b4d2239392",
+        "packageBytesSha256": "9a975b21ab7d176fad87ebd134d8fc478c7e96e0a3bebf7b428c50c2b446d87b",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "be6d4c49aada85e933e9c0da0a7d3817b2f9c06b506fa0d8778c3bab38a281e8"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "a2126956830bf99eef4401a1a1d87cb04f230aea7d5913b5d80934ac096849e6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b194cc6a46784394d4a6494d8b2acb7e58fe5772c1e6ca9bc7a35be1ae81fbb3"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/index.ts",
+            "line": 175,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "0412c3f72037399d2b196285b9822a370832e93cb20866f62543584c37bebbed"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 71,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "5c2513e3aaaf10a371f875ed77bc381a56aedd20de3e3aec957217e8ba6e0e34"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 67,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b01bfa2d2d2fe9f4ca63e83fd6e60dde9483a8ad9f3fca5c2ddde3bcecfe738d"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ajv",
+          "packageVersion": "8.20.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/schema-shield": {
+    "validatorProfileVersion": 2,
     "version": "1.4.0",
     "reportOptions": {
       "base": {
@@ -786,9 +2257,52 @@
     "reportOptionsSha256": {
       "base": "f57d007517dccb83e3c0734810a2f69db384621525d455700588d9ebc2b75401",
       "format-assertion": "2d9a179b89b7b42eaea10fbf5ab5d8919e97b30663b93a021b9ec7958bf7895a"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "schema-shield",
+        "packageVersion": "1.4.0",
+        "identitySha256": "e8096b7817d694b973987ed264d3bbb4522176acadc410bfe1932aa409416d21",
+        "packageBytesSha256": "598e3baa7a76480d28edd21e614a8160eedc52a6669d09f1d02a64d6b548241d",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/djv": {
+    "validatorProfileVersion": 2,
     "version": "2.1.4",
     "reportOptions": {
       "base": {
@@ -803,9 +2317,129 @@
     "reportOptionsSha256": {
       "base": "7c5dd4b23815e3dcd63a401cc6651900cd9a9e67d7f1726b2ed0937e66e2054e",
       "format-assertion": "b26c80e9f4478f71b3b2aa9cc859835a6e18c1c2c9827b0a1db2abbe72e214cc"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "djv",
+        "packageVersion": "2.1.4",
+        "identitySha256": "67238f9ae430270c2e2e5719da54633cf0de8f5650e6262eb1fa534d1ec12c31",
+        "packageBytesSha256": "c364e1b0db89d1d72f9e0e8d6ed2a8e72978e00d2d1c19fd5292df5d5cf77639",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "djv",
+            "packageVersion": "2.1.4",
+            "relativePath": "djv.js",
+            "line": 1,
+            "column": 3824,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "b7de2951fce4254cca31cf5c98f52279c9ddeb3e0442b837638b5e66671ab374"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "djv",
+            "packageVersion": "2.1.4",
+            "relativePath": "lib/djv.js",
+            "line": 201,
+            "column": 18,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "62973642fc1138a57e29466c61c1c0c4017bbeaad158b0c56de3550be990649e"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "djv",
+            "packageVersion": "2.1.4",
+            "relativePath": "lib/utils/state.js",
+            "line": 52,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "c60fc76198b781f058dde7f19f077ef08400701d3d13407c636389bb8f8fe06c"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "djv",
+            "packageVersion": "2.1.4",
+            "relativePath": "lib/utils/state.js",
+            "line": 79,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "c60fc76198b781f058dde7f19f077ef08400701d3d13407c636389bb8f8fe06c"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "djv",
+            "packageVersion": "2.1.4",
+            "relativePath": "lib/utils/template.js",
+            "line": 143,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "fd78e9237874b6d98de12291c48ffcfaf7c8e727b62f5629bb2c0bcdde00b567"
+          }
+        ]
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@korzio/djv-draft-04",
+          "packageVersion": "2.0.1",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/json-schema-library": {
+    "validatorProfileVersion": 2,
     "version": "11.6.2",
     "reportOptions": {
       "base": {
@@ -830,9 +2464,125 @@
     "reportOptionsSha256": {
       "base": "c4db81528153f9a735c36d6dffef67d1d8570cef0a5a95b03eb7115d954c8df2",
       "format-assertion": "c4db81528153f9a735c36d6dffef67d1d8570cef0a5a95b03eb7115d954c8df2"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "json-schema-library",
+        "packageVersion": "11.6.2",
+        "identitySha256": "ee8f3275ec9f6397f387aff240acb34cb2697465f94dc7416772acbda5bff1ed",
+        "packageBytesSha256": "2dfdb9b347fd3b9a6e84ef9d05a7652a695cd9702bd4bf410a7d8f819fcd9ca7",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@sagold/json-pointer",
+          "packageVersion": "7.2.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-copy",
+          "packageVersion": "4.0.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uri-js",
+          "packageVersion": "4.4.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "valid-url",
+          "packageVersion": "1.0.9",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/jsonschema": {
+    "validatorProfileVersion": 2,
     "version": "1.5.0",
     "reportOptions": {
       "base": {
@@ -847,9 +2597,52 @@
     "reportOptionsSha256": {
       "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
       "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "jsonschema",
+        "packageVersion": "1.5.0",
+        "identitySha256": "f834530f48470f8adbadda4d4db0fa82331aea8629e5b79348bbcfc94b88632b",
+        "packageBytesSha256": "f79ea6b38a2667cac456ca71e9dc1bf9a9ee2bdc0b4924bc06b815d39f6d87c2",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/schemasafe": {
+    "validatorProfileVersion": 2,
     "version": "1.3.0",
     "reportOptions": {
       "base": {
@@ -922,9 +2715,172 @@
     "reportOptionsSha256": {
       "base": "ca89bc215a1f351a18515bcec41850fa95a1bd128f58721d6fecc42f83ad4068",
       "format-assertion": "0f425a34879369dfec286c584e6d6251c60ebe768991c25f91d3e04b112f48c7"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@exodus/schemasafe",
+        "packageVersion": "1.3.0",
+        "identitySha256": "df1896ef5fc5255288c131d02900d01bf8e2d43faee762985a5fa04077d1d5b4",
+        "packageBytesSha256": "8ae67d11b2eb01c687e76878c36493c81ac4fba6cf2e32a97342009165688658",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 176,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1357,
+            "column": 16,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1372,
+            "column": 50,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/generate-function.js",
+            "line": 101,
+            "column": 14,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "5ee6a751633f2b09131babb871911e346f2e4033f95623143db4bcbb07cacb68"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 33,
+            "column": 27,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 36,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 55,
+            "column": 20,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 90,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 95,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          }
+        ]
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft6/z-schema": {
+    "validatorProfileVersion": 2,
     "version": "12.4.0",
     "reportOptions": {
       "base": {
@@ -949,9 +2905,93 @@
     "reportOptionsSha256": {
       "base": "a2ce2f647920d58aa4612db4022ae09a365ddfd2c18964ce02cc111267a219f9",
       "format-assertion": "e53f1d7312ba5665459937c815062818a598e541fd536582542d03a10afc897c"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "z-schema",
+        "packageVersion": "12.4.0",
+        "identitySha256": "86392ffe1e8702d012e7976ba5c0cb88123de01bc8ce1aae8009d361850699d1",
+        "packageBytesSha256": "d50efedf606d9bc730bcd7426c244645afa123248d883c2845a7a2125f28631b",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "commander",
+          "packageVersion": "15.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ret",
+          "packageVersion": "0.5.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "safe-regex2",
+          "packageVersion": "5.1.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "validator",
+          "packageVersion": "13.15.35",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/cfworker-json-schema": {
+    "validatorProfileVersion": 2,
     "version": "4.1.1",
     "reportOptions": {
       "base": {
@@ -968,9 +3008,52 @@
     "reportOptionsSha256": {
       "base": "3c3be95d3b7336b88a4477e891cadc86f4b749b328ec4edf183d8aba3311da88",
       "format-assertion": "6886d26e75cc388763c454add3cd3d3d370df9dc2e5f5245f83b778f1142b385"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@cfworker/json-schema",
+        "packageVersion": "4.1.1",
+        "identitySha256": "881cdb2e94fd8cb158860ca28ea178d362af23f821346cd83b58bf7ac349fe50",
+        "packageBytesSha256": "4f4d360a683a7d1cbc4bdfc39c0b99ecd4131850b76e5089d2906d29607459d3",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.20.0",
     "reportOptions": {
       "base": {
@@ -1087,9 +3170,187 @@
     "reportOptionsSha256": {
       "base": "c8b0934d88ac5e2e09e1233275f893178f8220c36d35ba6f9d04234e53839917",
       "format-assertion": "700c34e907e07de49b8404ec82dfb21269fcdfdde0f5851e25a7cab5c270f1f1"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "ajv",
+        "packageVersion": "8.20.0",
+        "identitySha256": "827941f9f0dda6da07c9d77afa3f192ceb681e3ffe098a7868295e31c04f8b36",
+        "packageBytesSha256": "a0e139f046466e6a2eb97c12a584e64ceb91997bd49a395426e7676e428095d5",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "05b34da22814f3787bfa3ac68dad59c9047f56e55a607e0a20719ebf5afe69ac"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "548b7e6ee5558360945f261e092cd328662868995877140ed2ae7ff981300b7f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "1f8b1873fbd899240cd625144d3cd10630b3cf1b0c69c640566f6e25c80765c0"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/index.ts",
+            "line": 171,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "fd39c4872a98fd27d899345d92da8b5e9c92a3b311a9f91e156080349f85c869"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 69,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "3f987db29f450b9463fc64a2d594325d21155d3e7934a143ab1a744ce0d7ecd6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 65,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "f523467687cad8197f51828d97dba711087fd7fb7447626a672823fcc227f6b7"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-draft-04",
+          "packageVersion": "1.0.0",
+          "identitySha256": "5c26c10b1e0da58b8b61bae2b00fdc5919dcddbed515ae02d1932527c28bab85",
+          "packageBytesSha256": "db6a89b713fcc3744eafbbe37b30c4878ddbe88375b194d655f6017f4663d734",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        },
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/hyperjump": {
+    "validatorProfileVersion": 2,
     "version": "1.17.7",
     "reportOptions": {
       "base": {
@@ -1108,9 +3369,144 @@
     "reportOptionsSha256": {
       "base": "02edf4ec6981477a43acf50b51d1e3d8735538a4deadc5b5db034ce76988cdd9",
       "format-assertion": "703cb013fc5e07f4858487288a5466773c9f3808b4ddd6e98655f61357de5717"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@hyperjump/json-schema",
+        "packageVersion": "1.17.7",
+        "identitySha256": "ccc061a9baf0e6924f1117dc70b5232039412429a123f91ed63d3e008ec696bd",
+        "packageBytesSha256": "65e1f3253682acf6d2edd2f64af6369247383954f61050845c13c14419c390ec",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "@hyperjump/browser",
+          "packageVersion": "1.4.0",
+          "identitySha256": "d07f083a71c4cf786f8b0d2b683383237c025e433990ca17bf56be5b5092c426",
+          "packageBytesSha256": "a0312fbccb581e106c31436de01de5231027c26901cfebb58c4f1c6bac598314",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-pointer",
+          "packageVersion": "1.1.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/pact",
+          "packageVersion": "1.4.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "content-type",
+          "packageVersion": "1.0.5",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-stringify-deterministic",
+          "packageVersion": "1.0.14",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "just-curry-it",
+          "packageVersion": "5.3.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uuid",
+          "packageVersion": "14.0.1",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/redocly-ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.18.3",
     "reportOptions": {
       "base": {
@@ -1227,9 +3623,185 @@
     "reportOptionsSha256": {
       "base": "5a606b6fe0f574b46c6ac6365316a913465751751d7bd07c193cc2af779bc413",
       "format-assertion": "82a91ee132191bb3e1f442b7474fb5c2017317c6931a8c29c7055187de738868"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@redocly/ajv",
+        "packageVersion": "8.18.3",
+        "identitySha256": "60a5c22aac1955826bbdd310fc0c500d85f561ae67e7b6a3859e82b4d2239392",
+        "packageBytesSha256": "9a975b21ab7d176fad87ebd134d8fc478c7e96e0a3bebf7b428c50c2b446d87b",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "be6d4c49aada85e933e9c0da0a7d3817b2f9c06b506fa0d8778c3bab38a281e8"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "a2126956830bf99eef4401a1a1d87cb04f230aea7d5913b5d80934ac096849e6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b194cc6a46784394d4a6494d8b2acb7e58fe5772c1e6ca9bc7a35be1ae81fbb3"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/index.ts",
+            "line": 175,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "0412c3f72037399d2b196285b9822a370832e93cb20866f62543584c37bebbed"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 71,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "5c2513e3aaaf10a371f875ed77bc381a56aedd20de3e3aec957217e8ba6e0e34"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 67,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b01bfa2d2d2fe9f4ca63e83fd6e60dde9483a8ad9f3fca5c2ddde3bcecfe738d"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ajv",
+          "packageVersion": "8.20.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/schema-shield": {
+    "validatorProfileVersion": 2,
     "version": "1.4.0",
     "reportOptions": {
       "base": {
@@ -1280,9 +3852,52 @@
     "reportOptionsSha256": {
       "base": "03b36eadec424053c7d5731d13b0096759ad2ea215ae77f75fef59a97694ff99",
       "format-assertion": "a6411a9509bca5e90c2d1dd2d82c1043edafb03967445af0ef859eef06e10f72"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "schema-shield",
+        "packageVersion": "1.4.0",
+        "identitySha256": "e8096b7817d694b973987ed264d3bbb4522176acadc410bfe1932aa409416d21",
+        "packageBytesSha256": "598e3baa7a76480d28edd21e614a8160eedc52a6669d09f1d02a64d6b548241d",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/json-schema-library": {
+    "validatorProfileVersion": 2,
     "version": "11.6.2",
     "reportOptions": {
       "base": {
@@ -1307,9 +3922,125 @@
     "reportOptionsSha256": {
       "base": "f145b7391d02a28a1a767da1f09a97a47aaa004f0e0fe95c387a6ed336d3633b",
       "format-assertion": "f145b7391d02a28a1a767da1f09a97a47aaa004f0e0fe95c387a6ed336d3633b"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "json-schema-library",
+        "packageVersion": "11.6.2",
+        "identitySha256": "ee8f3275ec9f6397f387aff240acb34cb2697465f94dc7416772acbda5bff1ed",
+        "packageBytesSha256": "2dfdb9b347fd3b9a6e84ef9d05a7652a695cd9702bd4bf410a7d8f819fcd9ca7",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@sagold/json-pointer",
+          "packageVersion": "7.2.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-copy",
+          "packageVersion": "4.0.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uri-js",
+          "packageVersion": "4.4.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "valid-url",
+          "packageVersion": "1.0.9",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/jsonschema": {
+    "validatorProfileVersion": 2,
     "version": "1.5.0",
     "reportOptions": {
       "base": {
@@ -1324,9 +4055,52 @@
     "reportOptionsSha256": {
       "base": "f3f56475d9760630f9fb6f9dd18ebc23bea360fca7f0aeb432849172230714ca",
       "format-assertion": "ffcd045c69dc72b783b4f23af1311b6107c545aac0ed13eac87058014e9e57c7"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "jsonschema",
+        "packageVersion": "1.5.0",
+        "identitySha256": "f834530f48470f8adbadda4d4db0fa82331aea8629e5b79348bbcfc94b88632b",
+        "packageBytesSha256": "f79ea6b38a2667cac456ca71e9dc1bf9a9ee2bdc0b4924bc06b815d39f6d87c2",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/schemasafe": {
+    "validatorProfileVersion": 2,
     "version": "1.3.0",
     "reportOptions": {
       "base": {
@@ -1399,9 +4173,172 @@
     "reportOptionsSha256": {
       "base": "32390da3ea71cf7e5443df76b58f3fe823c782628889ac58bcd1349569eac4a7",
       "format-assertion": "395fc540d9026ca3d902f298535976a96d19373fc44fefd60aa1e71ba847a1e0"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@exodus/schemasafe",
+        "packageVersion": "1.3.0",
+        "identitySha256": "df1896ef5fc5255288c131d02900d01bf8e2d43faee762985a5fa04077d1d5b4",
+        "packageBytesSha256": "8ae67d11b2eb01c687e76878c36493c81ac4fba6cf2e32a97342009165688658",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 176,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1357,
+            "column": 16,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1372,
+            "column": 50,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/generate-function.js",
+            "line": 101,
+            "column": 14,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "5ee6a751633f2b09131babb871911e346f2e4033f95623143db4bcbb07cacb68"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 33,
+            "column": 27,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 36,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 55,
+            "column": 20,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 90,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 95,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          }
+        ]
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft7/z-schema": {
+    "validatorProfileVersion": 2,
     "version": "12.4.0",
     "reportOptions": {
       "base": {
@@ -1426,9 +4363,93 @@
     "reportOptionsSha256": {
       "base": "b1c0ce5d4e150e9a418f7385a28416f99622436075cd5336c82b74f473503939",
       "format-assertion": "982c6a4de44b6ef2cc445013d704b94ebc5f52c41e0b1cb433130fa4be030fad"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "z-schema",
+        "packageVersion": "12.4.0",
+        "identitySha256": "86392ffe1e8702d012e7976ba5c0cb88123de01bc8ce1aae8009d361850699d1",
+        "packageBytesSha256": "d50efedf606d9bc730bcd7426c244645afa123248d883c2845a7a2125f28631b",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "commander",
+          "packageVersion": "15.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ret",
+          "packageVersion": "0.5.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "safe-regex2",
+          "packageVersion": "5.1.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "validator",
+          "packageVersion": "13.15.35",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2019-09/cfworker-json-schema": {
+    "validatorProfileVersion": 2,
     "version": "4.1.1",
     "reportOptions": {
       "base": {
@@ -1445,9 +4466,52 @@
     "reportOptionsSha256": {
       "base": "375ed37365f681f4b1fb7077566c3d44a75847f0faf92503fab1928df0418abc",
       "format-assertion": "d2ce8f41640bf6aa0ee3d7f0264cb236f51fa2dfc8a964e958dd15db0c235501"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@cfworker/json-schema",
+        "packageVersion": "4.1.1",
+        "identitySha256": "881cdb2e94fd8cb158860ca28ea178d362af23f821346cd83b58bf7ac349fe50",
+        "packageBytesSha256": "4f4d360a683a7d1cbc4bdfc39c0b99ecd4131850b76e5089d2906d29607459d3",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2019-09/ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.20.0",
     "reportOptions": {
       "base": {
@@ -1564,9 +4628,187 @@
     "reportOptionsSha256": {
       "base": "953dac931e61f3e7249df04fbbfcccf462a893e7851809ef350f27b2d3bf8fa7",
       "format-assertion": "11cc2884c31ad97d6e9a888ea752169c54115f9202fee4c270718840da3dce8a"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "ajv",
+        "packageVersion": "8.20.0",
+        "identitySha256": "827941f9f0dda6da07c9d77afa3f192ceb681e3ffe098a7868295e31c04f8b36",
+        "packageBytesSha256": "a0e139f046466e6a2eb97c12a584e64ceb91997bd49a395426e7676e428095d5",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "05b34da22814f3787bfa3ac68dad59c9047f56e55a607e0a20719ebf5afe69ac"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "548b7e6ee5558360945f261e092cd328662868995877140ed2ae7ff981300b7f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "1f8b1873fbd899240cd625144d3cd10630b3cf1b0c69c640566f6e25c80765c0"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/index.ts",
+            "line": 171,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "fd39c4872a98fd27d899345d92da8b5e9c92a3b311a9f91e156080349f85c869"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 69,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "3f987db29f450b9463fc64a2d594325d21155d3e7934a143ab1a744ce0d7ecd6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 65,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "f523467687cad8197f51828d97dba711087fd7fb7447626a672823fcc227f6b7"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-draft-04",
+          "packageVersion": "1.0.0",
+          "identitySha256": "5c26c10b1e0da58b8b61bae2b00fdc5919dcddbed515ae02d1932527c28bab85",
+          "packageBytesSha256": "db6a89b713fcc3744eafbbe37b30c4878ddbe88375b194d655f6017f4663d734",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        },
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2019-09/hyperjump": {
+    "validatorProfileVersion": 2,
     "version": "1.17.7",
     "reportOptions": {
       "base": {
@@ -1585,9 +4827,144 @@
     "reportOptionsSha256": {
       "base": "e9ed494d7948cfd0ddaf014efc9ee7e28be3d84d67c00c891a5ca30f4065da18",
       "format-assertion": "06fc668d4fbb1dea73f7c9eb365262525ee8a4f76acac962a8ae1787f6668932"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@hyperjump/json-schema",
+        "packageVersion": "1.17.7",
+        "identitySha256": "ccc061a9baf0e6924f1117dc70b5232039412429a123f91ed63d3e008ec696bd",
+        "packageBytesSha256": "65e1f3253682acf6d2edd2f64af6369247383954f61050845c13c14419c390ec",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "@hyperjump/browser",
+          "packageVersion": "1.4.0",
+          "identitySha256": "d07f083a71c4cf786f8b0d2b683383237c025e433990ca17bf56be5b5092c426",
+          "packageBytesSha256": "a0312fbccb581e106c31436de01de5231027c26901cfebb58c4f1c6bac598314",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-pointer",
+          "packageVersion": "1.1.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/pact",
+          "packageVersion": "1.4.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "content-type",
+          "packageVersion": "1.0.5",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-stringify-deterministic",
+          "packageVersion": "1.0.14",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "just-curry-it",
+          "packageVersion": "5.3.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uuid",
+          "packageVersion": "14.0.1",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2019-09/redocly-ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.18.3",
     "reportOptions": {
       "base": {
@@ -1704,9 +5081,185 @@
     "reportOptionsSha256": {
       "base": "e4a189f2d61f9dcfa73ed39a31e8afd9b6b41f2f6b93bb53191d555b87de2eb9",
       "format-assertion": "01287da24ead7fcc71280f9106f5dcaab0a639312fec450a2301680019665198"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@redocly/ajv",
+        "packageVersion": "8.18.3",
+        "identitySha256": "60a5c22aac1955826bbdd310fc0c500d85f561ae67e7b6a3859e82b4d2239392",
+        "packageBytesSha256": "9a975b21ab7d176fad87ebd134d8fc478c7e96e0a3bebf7b428c50c2b446d87b",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "be6d4c49aada85e933e9c0da0a7d3817b2f9c06b506fa0d8778c3bab38a281e8"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "a2126956830bf99eef4401a1a1d87cb04f230aea7d5913b5d80934ac096849e6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b194cc6a46784394d4a6494d8b2acb7e58fe5772c1e6ca9bc7a35be1ae81fbb3"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/index.ts",
+            "line": 175,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "0412c3f72037399d2b196285b9822a370832e93cb20866f62543584c37bebbed"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 71,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "5c2513e3aaaf10a371f875ed77bc381a56aedd20de3e3aec957217e8ba6e0e34"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 67,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b01bfa2d2d2fe9f4ca63e83fd6e60dde9483a8ad9f3fca5c2ddde3bcecfe738d"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ajv",
+          "packageVersion": "8.20.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2019-09/schema-shield": {
+    "validatorProfileVersion": 2,
     "version": "1.4.0",
     "reportOptions": {
       "base": {
@@ -1757,9 +5310,52 @@
     "reportOptionsSha256": {
       "base": "f65099cbfa1b7da67e15ba56da1582ad1ea04b16e401714e2ee6564b371a6d1d",
       "format-assertion": "c7ae4dc73faba6d13b3c5d276d7e51fbcf8cb4582701ab55dbb986ccac437e05"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "schema-shield",
+        "packageVersion": "1.4.0",
+        "identitySha256": "e8096b7817d694b973987ed264d3bbb4522176acadc410bfe1932aa409416d21",
+        "packageBytesSha256": "598e3baa7a76480d28edd21e614a8160eedc52a6669d09f1d02a64d6b548241d",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2019-09/json-schema-library": {
+    "validatorProfileVersion": 2,
     "version": "11.6.2",
     "reportOptions": {
       "base": {
@@ -1784,9 +5380,125 @@
     "reportOptionsSha256": {
       "base": "c05f1a1cd84bd434a9fb111f6782d7a229f97bdf58c46800713ba3266d814dc1",
       "format-assertion": "9e5d608fcaa899d38387f2e6ae2ae85a9d3a970a76f29ab70d7e55edd680fb52"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "json-schema-library",
+        "packageVersion": "11.6.2",
+        "identitySha256": "ee8f3275ec9f6397f387aff240acb34cb2697465f94dc7416772acbda5bff1ed",
+        "packageBytesSha256": "2dfdb9b347fd3b9a6e84ef9d05a7652a695cd9702bd4bf410a7d8f819fcd9ca7",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@sagold/json-pointer",
+          "packageVersion": "7.2.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-copy",
+          "packageVersion": "4.0.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uri-js",
+          "packageVersion": "4.4.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "valid-url",
+          "packageVersion": "1.0.9",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2019-09/schemasafe": {
+    "validatorProfileVersion": 2,
     "version": "1.3.0",
     "reportOptions": {
       "base": {
@@ -1859,9 +5571,172 @@
     "reportOptionsSha256": {
       "base": "77775f36b816c327a96503729169dd795a08a77060a5dc2c3f90dc13fef13c72",
       "format-assertion": "790e9b22f5a73d10177a6146f8f9d584ea1145a24c2fb57566cd83748698e816"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@exodus/schemasafe",
+        "packageVersion": "1.3.0",
+        "identitySha256": "df1896ef5fc5255288c131d02900d01bf8e2d43faee762985a5fa04077d1d5b4",
+        "packageBytesSha256": "8ae67d11b2eb01c687e76878c36493c81ac4fba6cf2e32a97342009165688658",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 176,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1357,
+            "column": 16,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1372,
+            "column": 50,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/generate-function.js",
+            "line": 101,
+            "column": 14,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "5ee6a751633f2b09131babb871911e346f2e4033f95623143db4bcbb07cacb68"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 33,
+            "column": 27,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 36,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 55,
+            "column": 20,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 90,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 95,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          }
+        ]
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2019-09/z-schema": {
+    "validatorProfileVersion": 2,
     "version": "12.4.0",
     "reportOptions": {
       "base": {
@@ -1886,9 +5761,93 @@
     "reportOptionsSha256": {
       "base": "0c0f7b5b613aee5a29b4b3c79dd0f2fdfea870c3147377a6759e0e144a4b398b",
       "format-assertion": "c3598a24c5fe8f7eced7bdb60b5e2e7c64f43e9a5e92dc6e6b78fea1b515acc6"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "z-schema",
+        "packageVersion": "12.4.0",
+        "identitySha256": "86392ffe1e8702d012e7976ba5c0cb88123de01bc8ce1aae8009d361850699d1",
+        "packageBytesSha256": "d50efedf606d9bc730bcd7426c244645afa123248d883c2845a7a2125f28631b",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "commander",
+          "packageVersion": "15.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ret",
+          "packageVersion": "0.5.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "safe-regex2",
+          "packageVersion": "5.1.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "validator",
+          "packageVersion": "13.15.35",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2020-12/cfworker-json-schema": {
+    "validatorProfileVersion": 2,
     "version": "4.1.1",
     "reportOptions": {
       "base": {
@@ -1905,9 +5864,52 @@
     "reportOptionsSha256": {
       "base": "a1c7b2a5d8a66dbe01b639293a687bae6e613a7b62cbce06acb94574bef8ffab",
       "format-assertion": "0c6bf1ff7f5659d16f3801a92c4cc9a29e2a1540aa19fffe9b8e1ce94ca6bdd5"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@cfworker/json-schema",
+        "packageVersion": "4.1.1",
+        "identitySha256": "881cdb2e94fd8cb158860ca28ea178d362af23f821346cd83b58bf7ac349fe50",
+        "packageBytesSha256": "4f4d360a683a7d1cbc4bdfc39c0b99ecd4131850b76e5089d2906d29607459d3",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2020-12/ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.20.0",
     "reportOptions": {
       "base": {
@@ -2024,9 +6026,187 @@
     "reportOptionsSha256": {
       "base": "02336c49dfcdd160ecdd020b33a622146a60a4c32503514a4a2f96f73afc994d",
       "format-assertion": "ce7ae2848d46799708a4168d352a6953f9084d10c326cd2a694d0af066abe5c3"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "ajv",
+        "packageVersion": "8.20.0",
+        "identitySha256": "827941f9f0dda6da07c9d77afa3f192ceb681e3ffe098a7868295e31c04f8b36",
+        "packageBytesSha256": "a0e139f046466e6a2eb97c12a584e64ceb91997bd49a395426e7676e428095d5",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "05b34da22814f3787bfa3ac68dad59c9047f56e55a607e0a20719ebf5afe69ac"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "548b7e6ee5558360945f261e092cd328662868995877140ed2ae7ff981300b7f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "1f8b1873fbd899240cd625144d3cd10630b3cf1b0c69c640566f6e25c80765c0"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/index.ts",
+            "line": 171,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "fd39c4872a98fd27d899345d92da8b5e9c92a3b311a9f91e156080349f85c869"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 69,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "3f987db29f450b9463fc64a2d594325d21155d3e7934a143ab1a744ce0d7ecd6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "ajv",
+            "packageVersion": "8.20.0",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 65,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "f523467687cad8197f51828d97dba711087fd7fb7447626a672823fcc227f6b7"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-draft-04",
+          "packageVersion": "1.0.0",
+          "identitySha256": "5c26c10b1e0da58b8b61bae2b00fdc5919dcddbed515ae02d1932527c28bab85",
+          "packageBytesSha256": "db6a89b713fcc3744eafbbe37b30c4878ddbe88375b194d655f6017f4663d734",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        },
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2020-12/hyperjump": {
+    "validatorProfileVersion": 2,
     "version": "1.17.7",
     "reportOptions": {
       "base": {
@@ -2045,9 +6225,144 @@
     "reportOptionsSha256": {
       "base": "167a97c413cae73a692ab6d745cd5c19553b2d88fa17fd785865ec610f65157b",
       "format-assertion": "023620bcd2fe5213aba4b3bf811a2ef8d3ec6dbf2c72d7ce5b8bfa9f3613bb69"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@hyperjump/json-schema",
+        "packageVersion": "1.17.7",
+        "identitySha256": "ccc061a9baf0e6924f1117dc70b5232039412429a123f91ed63d3e008ec696bd",
+        "packageBytesSha256": "65e1f3253682acf6d2edd2f64af6369247383954f61050845c13c14419c390ec",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "@hyperjump/browser",
+          "packageVersion": "1.4.0",
+          "identitySha256": "d07f083a71c4cf786f8b0d2b683383237c025e433990ca17bf56be5b5092c426",
+          "packageBytesSha256": "a0312fbccb581e106c31436de01de5231027c26901cfebb58c4f1c6bac598314",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-pointer",
+          "packageVersion": "1.1.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/pact",
+          "packageVersion": "1.4.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "content-type",
+          "packageVersion": "1.0.5",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-stringify-deterministic",
+          "packageVersion": "1.0.14",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "just-curry-it",
+          "packageVersion": "5.3.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uuid",
+          "packageVersion": "14.0.1",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2020-12/redocly-ajv": {
+    "validatorProfileVersion": 2,
     "version": "8.18.3",
     "reportOptions": {
       "base": {
@@ -2164,9 +6479,185 @@
     "reportOptionsSha256": {
       "base": "4e07aded74a929b75d99d23a9bfd2c9738e936dbe43197971b60490a1d6292d1",
       "format-assertion": "7fdb2e56b1a7b25615c1a6a8fada4e01af4ecf46e9b57ad195f360a3a47633f5"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@redocly/ajv",
+        "packageVersion": "8.18.3",
+        "identitySha256": "60a5c22aac1955826bbdd310fc0c500d85f561ae67e7b6a3859e82b4d2239392",
+        "packageBytesSha256": "9a975b21ab7d176fad87ebd134d8fc478c7e96e0a3bebf7b428c50c2b446d87b",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/index.js",
+            "line": 89,
+            "column": 30,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "be6d4c49aada85e933e9c0da0a7d3817b2f9c06b506fa0d8778c3bab38a281e8"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/parse.js",
+            "line": 50,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "a2126956830bf99eef4401a1a1d87cb04f230aea7d5913b5d80934ac096849e6"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "dist/compile/jtd/serialize.js",
+            "line": 50,
+            "column": 31,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b194cc6a46784394d4a6494d8b2acb7e58fe5772c1e6ca9bc7a35be1ae81fbb3"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/index.ts",
+            "line": 175,
+            "column": 26,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "0412c3f72037399d2b196285b9822a370832e93cb20866f62543584c37bebbed"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/parse.ts",
+            "line": 71,
+            "column": 23,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "5c2513e3aaaf10a371f875ed77bc381a56aedd20de3e3aec957217e8ba6e0e34"
+          },
+          {
+            "mechanism": "function",
+            "operation": "construct",
+            "ownerType": "primary",
+            "packageName": "@redocly/ajv",
+            "packageVersion": "8.18.3",
+            "relativePath": "lib/compile/jtd/serialize.ts",
+            "line": 67,
+            "column": 27,
+            "reachableFromEntrypoint": false,
+            "representation": "source",
+            "fileSha256": "b01bfa2d2d2fe9f4ca63e83fd6e60dde9483a8ad9f3fca5c2ddde3bcecfe738d"
+          }
+        ]
+      },
+      "companions": [
+        {
+          "ownerType": "companion",
+          "authority": "controls-verdict",
+          "packageName": "ajv-formats",
+          "packageVersion": "3.0.1",
+          "identitySha256": "9f70cbde3bf6f4874ad7882f49abaca1da87c86e3a9f2c3ed659cf222453e86e",
+          "packageBytesSha256": "9a50cc3c7af2d9f54264b983c4ba654b63d5c8b75f8b0251f13f2d862656bf70",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ajv",
+          "packageVersion": "8.20.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-uri",
+          "packageVersion": "3.1.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "json-schema-traverse",
+          "packageVersion": "1.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "require-from-string",
+          "packageVersion": "2.0.2",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2020-12/schema-shield": {
+    "validatorProfileVersion": 2,
     "version": "1.4.0",
     "reportOptions": {
       "base": {
@@ -2217,9 +6708,52 @@
     "reportOptionsSha256": {
       "base": "6e165f353ef67ad11f6a9471325584627793098e0b2b0d20429b1faf88c74124",
       "format-assertion": "e97e7b5b57eeac11d97b7ea5eae2c1e9997920f233d86275ae3382cc2f9b1acc"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "schema-shield",
+        "packageVersion": "1.4.0",
+        "identitySha256": "e8096b7817d694b973987ed264d3bbb4522176acadc410bfe1932aa409416d21",
+        "packageBytesSha256": "598e3baa7a76480d28edd21e614a8160eedc52a6669d09f1d02a64d6b548241d",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2020-12/json-schema-library": {
+    "validatorProfileVersion": 2,
     "version": "11.6.2",
     "reportOptions": {
       "base": {
@@ -2244,9 +6778,125 @@
     "reportOptionsSha256": {
       "base": "4bde5d6a708b4bbc06eebae619404e93a3a94170325d399cf8097abcf22a20b9",
       "format-assertion": "2c39fceb62757a8cb2464139645d1d79aa68ee041639c7b3faf0f04ec2c7406e"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "json-schema-library",
+        "packageVersion": "11.6.2",
+        "identitySha256": "ee8f3275ec9f6397f387aff240acb34cb2697465f94dc7416772acbda5bff1ed",
+        "packageBytesSha256": "2dfdb9b347fd3b9a6e84ef9d05a7652a695cd9702bd4bf410a7d8f819fcd9ca7",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/json-schema-formats",
+          "packageVersion": "1.0.2",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@hyperjump/uri",
+          "packageVersion": "1.3.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "@sagold/json-pointer",
+          "packageVersion": "7.2.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-copy",
+          "packageVersion": "4.0.4",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "fast-deep-equal",
+          "packageVersion": "3.1.3",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "idn-hostname",
+          "packageVersion": "15.1.10",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "uri-js",
+          "packageVersion": "4.4.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "valid-url",
+          "packageVersion": "1.0.9",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2020-12/schemasafe": {
+    "validatorProfileVersion": 2,
     "version": "1.3.0",
     "reportOptions": {
       "base": {
@@ -2319,9 +6969,172 @@
     "reportOptionsSha256": {
       "base": "d11f9b583d672640cd6d2af7b437927f3ac1cd8a1856d5d4373018b948e6f664",
       "format-assertion": "09315961e7d34f25dd7e8dc86955755394bf24eb426243f520295ee90630e5d5"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "Yes",
+      "executedDuringBenchmark": "Yes",
+      "successfulRuntimeMechanisms": [
+        "function"
+      ]
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "@exodus/schemasafe",
+        "packageVersion": "1.3.0",
+        "identitySha256": "df1896ef5fc5255288c131d02900d01bf8e2d43faee762985a5fa04077d1d5b4",
+        "packageBytesSha256": "8ae67d11b2eb01c687e76878c36493c81ac4fba6cf2e32a97342009165688658",
+        "dynamicCodeInImplementation": "Yes",
+        "findings": [
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 176,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1357,
+            "column": 16,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/compile.js",
+            "line": 1372,
+            "column": 50,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "58df504e475cd0849897a30ff0ceded347ec7915595b9f818b24bd9ad825eb78"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/generate-function.js",
+            "line": 101,
+            "column": 14,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "5ee6a751633f2b09131babb871911e346f2e4033f95623143db4bcbb07cacb68"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 33,
+            "column": 27,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 36,
+            "column": 15,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 55,
+            "column": 20,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 90,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          },
+          {
+            "mechanism": "function",
+            "operation": "invoke",
+            "ownerType": "primary",
+            "packageName": "@exodus/schemasafe",
+            "packageVersion": "1.3.0",
+            "relativePath": "src/index.js",
+            "line": 95,
+            "column": 10,
+            "reachableFromEntrypoint": true,
+            "representation": "source",
+            "fileSha256": "52f53884c11a18332cea2b690845bb14d8d9a71a2d080a146b3647b4de40243f"
+          }
+        ]
+      },
+      "companions": [],
+      "transitives": [],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   },
   "draft2020-12/z-schema": {
+    "validatorProfileVersion": 2,
     "version": "12.4.0",
     "reportOptions": {
       "base": {
@@ -2346,6 +7159,89 @@
     "reportOptionsSha256": {
       "base": "03e12040a358d0f04e7f3b77b61720b04d1859382959017b911c27d55fc4462f",
       "format-assertion": "e864ac82ccf03360de57a6b02cbf0369fe1e94f99df3e339f2934590611ee64f"
+    },
+    "implementation": {
+      "dynamicCodeInImplementation": "No",
+      "executedDuringBenchmark": "No",
+      "successfulRuntimeMechanisms": []
+    },
+    "family": {
+      "primary": {
+        "ownerType": "primary",
+        "authority": "controls-verdict",
+        "packageName": "z-schema",
+        "packageVersion": "12.4.0",
+        "identitySha256": "86392ffe1e8702d012e7976ba5c0cb88123de01bc8ce1aae8009d361850699d1",
+        "packageBytesSha256": "d50efedf606d9bc730bcd7426c244645afa123248d883c2845a7a2125f28631b",
+        "dynamicCodeInImplementation": "No",
+        "findings": []
+      },
+      "companions": [],
+      "transitives": [
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "commander",
+          "packageVersion": "15.0.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "punycode",
+          "packageVersion": "2.3.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "ret",
+          "packageVersion": "0.5.0",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "safe-regex2",
+          "packageVersion": "5.1.1",
+          "findings": []
+        },
+        {
+          "ownerType": "transitive",
+          "authority": "excluded",
+          "scanStatus": "excluded",
+          "packageName": "validator",
+          "packageVersion": "13.15.35",
+          "findings": []
+        }
+      ],
+      "adapters": [
+        {
+          "ownerType": "adapter",
+          "authority": "excluded",
+          "packageName": "json-schema-validator-bench",
+          "packageVersion": "1.0.0",
+          "dynamicCodeInImplementation": "No",
+          "findings": []
+        }
+      ]
+    },
+    "evidence": {
+      "source": {
+        "path": "source-evidence.json",
+        "sha256": "1e3cd5222db8b93f011a4509f7068443586fa7340b43a5f818e25209d2660423",
+        "version": 2
+      },
+      "runtime": {
+        "path": "implementation-evidence.json",
+        "sha256": "35a3454e02c04ed3c54d21b661be003c3cf254109260222c083b3c46d429e68c",
+        "version": 4,
+        "instrumentationVersion": 4
+      }
     }
   }
 }

@@ -3,9 +3,9 @@
   "phase": "cold-execution",
   "draft": "draft7",
   "formatProfile": "base",
-  "startedAt": "2026-08-05T07:08:38.766Z",
-  "endedAt": "2026-08-05T07:09:08.719Z",
-  "durationMilliseconds": 29953,
+  "startedAt": "2026-08-05T17:51:29.584Z",
+  "endedAt": "2026-08-05T17:52:00.874Z",
+  "durationMilliseconds": 31290,
   "benchmarkMode": "full",
   "constants": {
     "mode": "full",
@@ -102,7 +102,7 @@
     }
   ],
   "sampleAcquisition": {
-    "runStartedAt": "2026-08-05T06:45:47.931Z",
+    "runStartedAt": "2026-08-05T17:26:56.140Z",
     "measuredSamples": 12,
     "resumedSamples": 0,
     "publishedSamples": 12
@@ -116,41 +116,41 @@
       "formatProfile": "base",
       "round": 1,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 261.31926300000646,
+      "warmupMilliseconds": 306.3138949999932,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 296.7070510000067,
+      "actualElapsedMilliseconds": 316.51601400000027,
       "singlePassExceededTarget": false,
       "passes": 2,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 2088,
-      "seconds": 0.29670705100000666,
-      "throughput": 7037.244288474806,
-      "nanosecondsPerOperation": 142101.0780651373,
+      "seconds": 0.3165160140000003,
+      "throughput": 6596.822617638544,
+      "nanosecondsPerOperation": 151588.12931034496,
       "checksum": 5171796,
       "memory": {
         "start": {
-          "rss": 273072128,
-          "heapUsed": 50547880,
-          "heapTotal": 177471488,
-          "external": 17442549
+          "rss": 233701376,
+          "heapUsed": 49177816,
+          "heapTotal": 184479744,
+          "external": 17441368
         },
         "end": {
-          "rss": 298823680,
-          "heapUsed": 40835896,
-          "heapTotal": 172060672,
-          "external": 4085259
+          "rss": 297988096,
+          "heapUsed": 45110784,
+          "heapTotal": 180355072,
+          "external": 4609413
         },
         "peak": {
-          "rss": 298823680,
-          "heapUsed": 50547880,
-          "heapTotal": 177471488,
-          "external": 17442549
+          "rss": 297988096,
+          "heapUsed": 111002912,
+          "heapTotal": 184479744,
+          "external": 17441368
         },
-        "sustainedGrowthPasses": 0,
+        "sustainedGrowthPasses": 3,
         "observedAt": "complete-pass-boundary"
       },
       "sampleContractVersion": 30,
@@ -168,38 +168,38 @@
       "formatProfile": "base",
       "round": 1,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 404.5977160000018,
+      "warmupMilliseconds": 444.84167600000114,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 357.09160999999744,
+      "actualElapsedMilliseconds": 312.427762999999,
       "singlePassExceededTarget": true,
       "passes": 1,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 1044,
-      "seconds": 0.35709160999999745,
-      "throughput": 2923.6195160116126,
-      "nanosecondsPerOperation": 342041.7720306489,
+      "seconds": 0.312427762999999,
+      "throughput": 3341.5724325369997,
+      "nanosecondsPerOperation": 299260.3093869723,
       "checksum": 2585898,
       "memory": {
         "start": {
-          "rss": 272646144,
-          "heapUsed": 50566584,
-          "heapTotal": 178520064,
+          "rss": 277377024,
+          "heapUsed": 51473112,
+          "heapTotal": 176422912,
           "external": 17442549
         },
         "end": {
-          "rss": 294322176,
-          "heapUsed": 70240920,
-          "heapTotal": 169177088,
+          "rss": 300650496,
+          "heapUsed": 71079048,
+          "heapTotal": 169963520,
           "external": 4085210
         },
         "peak": {
-          "rss": 294322176,
-          "heapUsed": 86429384,
-          "heapTotal": 178520064,
+          "rss": 300650496,
+          "heapUsed": 87273024,
+          "heapTotal": 176422912,
           "external": 17442549
         },
         "sustainedGrowthPasses": 0,
@@ -220,39 +220,39 @@
       "formatProfile": "base",
       "round": 2,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 401.2537540000044,
+      "warmupMilliseconds": 469.719169999996,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 304.90765499999384,
+      "actualElapsedMilliseconds": 308.2793169999975,
       "singlePassExceededTarget": true,
       "passes": 1,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 1044,
-      "seconds": 0.30490765499999384,
-      "throughput": 3423.987502052125,
-      "nanosecondsPerOperation": 292057.1408045918,
+      "seconds": 0.3082793169999975,
+      "throughput": 3386.539227346246,
+      "nanosecondsPerOperation": 295286.7021072773,
       "checksum": 2585898,
       "memory": {
         "start": {
-          "rss": 277094400,
-          "heapUsed": 50671392,
-          "heapTotal": 177209344,
-          "external": 17442549
+          "rss": 240246784,
+          "heapUsed": 49305104,
+          "heapTotal": 183693312,
+          "external": 17441368
         },
         "end": {
-          "rss": 300343296,
-          "heapUsed": 70246768,
-          "heapTotal": 169439232,
-          "external": 4085210
+          "rss": 302927872,
+          "heapUsed": 76617408,
+          "heapTotal": 181936128,
+          "external": 4610196
         },
         "peak": {
-          "rss": 300343296,
-          "heapUsed": 84510648,
-          "heapTotal": 177209344,
-          "external": 17442549
+          "rss": 302927872,
+          "heapUsed": 92705944,
+          "heapTotal": 183693312,
+          "external": 17441368
         },
         "sustainedGrowthPasses": 0,
         "observedAt": "complete-pass-boundary"
@@ -272,41 +272,41 @@
       "formatProfile": "base",
       "round": 2,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 267.9637569999993,
+      "warmupMilliseconds": 271.10605599999485,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 289.46836100000723,
+      "actualElapsedMilliseconds": 307.9018890000061,
       "singlePassExceededTarget": false,
       "passes": 2,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 2088,
-      "seconds": 0.2894683610000072,
-      "throughput": 7213.223555025926,
-      "nanosecondsPerOperation": 138634.272509582,
+      "seconds": 0.30790188900000615,
+      "throughput": 6781.380935275646,
+      "nanosecondsPerOperation": 147462.59051724433,
       "checksum": 5171796,
       "memory": {
         "start": {
-          "rss": 279449600,
-          "heapUsed": 50657624,
-          "heapTotal": 178520064,
+          "rss": 277647360,
+          "heapUsed": 50550104,
+          "heapTotal": 177209344,
           "external": 17442549
         },
         "end": {
-          "rss": 302985216,
-          "heapUsed": 41229960,
-          "heapTotal": 171798528,
+          "rss": 290959360,
+          "heapUsed": 40941448,
+          "heapTotal": 171274240,
           "external": 4085259
         },
         "peak": {
-          "rss": 302985216,
-          "heapUsed": 50657624,
-          "heapTotal": 178520064,
+          "rss": 290959360,
+          "heapUsed": 50550104,
+          "heapTotal": 177209344,
           "external": 17442549
         },
-        "sustainedGrowthPasses": 0,
+        "sustainedGrowthPasses": 3,
         "observedAt": "complete-pass-boundary"
       },
       "sampleContractVersion": 30,
@@ -324,41 +324,41 @@
       "formatProfile": "base",
       "round": 3,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 262.1724050000023,
+      "warmupMilliseconds": 311.59649400000217,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 289.40304800000354,
+      "actualElapsedMilliseconds": 306.10364499999673,
       "singlePassExceededTarget": false,
       "passes": 2,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 2088,
-      "seconds": 0.28940304800000355,
-      "throughput": 7214.851448281825,
-      "nanosecondsPerOperation": 138602.99233716645,
+      "seconds": 0.3061036449999967,
+      "throughput": 6821.219002472259,
+      "nanosecondsPerOperation": 146601.36254789116,
       "checksum": 5171796,
       "memory": {
         "start": {
-          "rss": 269488128,
-          "heapUsed": 50844848,
-          "heapTotal": 177209344,
-          "external": 17442549
+          "rss": 231329792,
+          "heapUsed": 49078872,
+          "heapTotal": 182906880,
+          "external": 17441368
         },
         "end": {
-          "rss": 296026112,
-          "heapUsed": 40907960,
-          "heapTotal": 171798528,
-          "external": 4085259
+          "rss": 288632832,
+          "heapUsed": 49166616,
+          "heapTotal": 184819712,
+          "external": 4610245
         },
         "peak": {
-          "rss": 296026112,
-          "heapUsed": 50844848,
-          "heapTotal": 177209344,
-          "external": 17442549
+          "rss": 301101056,
+          "heapUsed": 115240248,
+          "heapTotal": 184819712,
+          "external": 17441368
         },
-        "sustainedGrowthPasses": 3,
+        "sustainedGrowthPasses": 1,
         "observedAt": "complete-pass-boundary"
       },
       "sampleContractVersion": 30,
@@ -376,39 +376,39 @@
       "formatProfile": "base",
       "round": 3,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 406.5579059999975,
+      "warmupMilliseconds": 468.92722300000037,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 296.3653389999938,
+      "actualElapsedMilliseconds": 316.4158090000035,
       "singlePassExceededTarget": true,
       "passes": 1,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 1044,
-      "seconds": 0.2963653389999938,
-      "throughput": 3522.6791483872607,
-      "nanosecondsPerOperation": 283874.84578543465,
+      "seconds": 0.3164158090000035,
+      "throughput": 3299.4558751645322,
+      "nanosecondsPerOperation": 303080.27681992674,
       "checksum": 2585898,
       "memory": {
         "start": {
-          "rss": 256212992,
-          "heapUsed": 51200120,
-          "heapTotal": 179212288,
-          "external": 17477175
+          "rss": 244748288,
+          "heapUsed": 49073824,
+          "heapTotal": 182644736,
+          "external": 17441368
         },
         "end": {
-          "rss": 288391168,
-          "heapUsed": 69135256,
-          "heapTotal": 169869312,
-          "external": 4119836
+          "rss": 305008640,
+          "heapUsed": 71509640,
+          "heapTotal": 176418816,
+          "external": 4609156
         },
         "peak": {
-          "rss": 288391168,
-          "heapUsed": 85268208,
-          "heapTotal": 179212288,
-          "external": 17477175
+          "rss": 305008640,
+          "heapUsed": 87617112,
+          "heapTotal": 182644736,
+          "external": 17441368
         },
         "sustainedGrowthPasses": 0,
         "observedAt": "complete-pass-boundary"
@@ -428,39 +428,39 @@
       "formatProfile": "base",
       "round": 4,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 428.15554099999736,
+      "warmupMilliseconds": 454.92920999999797,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 292.02018899999644,
+      "actualElapsedMilliseconds": 320.51991599999974,
       "singlePassExceededTarget": true,
       "passes": 1,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 1044,
-      "seconds": 0.29202018899999643,
-      "throughput": 3575.09528219644,
-      "nanosecondsPerOperation": 279712.82471264026,
+      "seconds": 0.32051991599999974,
+      "throughput": 3257.207892192262,
+      "nanosecondsPerOperation": 307011.4137931032,
       "checksum": 2585898,
       "memory": {
         "start": {
-          "rss": 272617472,
-          "heapUsed": 50630216,
-          "heapTotal": 176685056,
-          "external": 17442549
+          "rss": 277057536,
+          "heapUsed": 50516688,
+          "heapTotal": 177733632,
+          "external": 17442133
         },
         "end": {
-          "rss": 293744640,
-          "heapUsed": 70169328,
+          "rss": 300425216,
+          "heapUsed": 70210024,
           "heapTotal": 168914944,
-          "external": 4085210
+          "external": 4084794
         },
         "peak": {
-          "rss": 293744640,
-          "heapUsed": 86387200,
-          "heapTotal": 176685056,
-          "external": 17442549
+          "rss": 300425216,
+          "heapUsed": 86439656,
+          "heapTotal": 177733632,
+          "external": 17442133
         },
         "sustainedGrowthPasses": 0,
         "observedAt": "complete-pass-boundary"
@@ -480,39 +480,39 @@
       "formatProfile": "base",
       "round": 4,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 270.51847000000043,
+      "warmupMilliseconds": 314.7651250000058,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 309.5091930000003,
+      "actualElapsedMilliseconds": 313.06727000000865,
       "singlePassExceededTarget": false,
       "passes": 2,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 2088,
-      "seconds": 0.30950919300000035,
-      "throughput": 6746.164725388295,
-      "nanosecondsPerOperation": 148232.37212643694,
+      "seconds": 0.31306727000000867,
+      "throughput": 6669.4931092603265,
+      "nanosecondsPerOperation": 149936.43199234133,
       "checksum": 5171796,
       "memory": {
         "start": {
-          "rss": 268566528,
-          "heapUsed": 50655976,
-          "heapTotal": 177471488,
-          "external": 17442549
+          "rss": 247345152,
+          "heapUsed": 49160624,
+          "heapTotal": 182644736,
+          "external": 17441368
         },
         "end": {
-          "rss": 292732928,
-          "heapUsed": 41188352,
-          "heapTotal": 171536384,
-          "external": 4085259
+          "rss": 310583296,
+          "heapUsed": 43980896,
+          "heapTotal": 179302400,
+          "external": 4609205
         },
         "peak": {
-          "rss": 292732928,
-          "heapUsed": 50655976,
-          "heapTotal": 177471488,
-          "external": 17442549
+          "rss": 310583296,
+          "heapUsed": 110072728,
+          "heapTotal": 182644736,
+          "external": 17441368
         },
         "sustainedGrowthPasses": 3,
         "observedAt": "complete-pass-boundary"
@@ -532,37 +532,37 @@
       "formatProfile": "base",
       "round": 5,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 444.8995340000022,
+      "warmupMilliseconds": 455.9148330000053,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 295.05378500000256,
+      "actualElapsedMilliseconds": 331.29791599999817,
       "singlePassExceededTarget": true,
       "passes": 1,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 1044,
-      "seconds": 0.29505378500000257,
-      "throughput": 3538.3379338787026,
-      "nanosecondsPerOperation": 282618.5680076653,
+      "seconds": 0.3312979159999982,
+      "throughput": 3151.242279471525,
+      "nanosecondsPerOperation": 317335.1685823737,
       "checksum": 2585898,
       "memory": {
         "start": {
-          "rss": 275873792,
-          "heapUsed": 50542816,
+          "rss": 265076736,
+          "heapUsed": 50692360,
           "heapTotal": 177209344,
           "external": 17442549
         },
         "end": {
-          "rss": 299618304,
-          "heapUsed": 70221048,
-          "heapTotal": 168914944,
+          "rss": 286969856,
+          "heapUsed": 70158400,
+          "heapTotal": 168652800,
           "external": 4085210
         },
         "peak": {
-          "rss": 299618304,
-          "heapUsed": 84470800,
+          "rss": 286969856,
+          "heapUsed": 86331720,
           "heapTotal": 177209344,
           "external": 17442549
         },
@@ -584,39 +584,39 @@
       "formatProfile": "base",
       "round": 5,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 288.4994640000009,
+      "warmupMilliseconds": 296.4186540000039,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 315.33740199999943,
+      "actualElapsedMilliseconds": 307.1858400000017,
       "singlePassExceededTarget": false,
       "passes": 2,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 2088,
-      "seconds": 0.31533740199999943,
-      "throughput": 6621.4790467513385,
-      "nanosecondsPerOperation": 151023.65996168557,
+      "seconds": 0.3071858400000017,
+      "throughput": 6797.188307898529,
+      "nanosecondsPerOperation": 147119.6551724146,
       "checksum": 5171796,
       "memory": {
         "start": {
-          "rss": 244056064,
-          "heapUsed": 49322008,
-          "heapTotal": 182906880,
-          "external": 17441368
+          "rss": 266678272,
+          "heapUsed": 50596224,
+          "heapTotal": 177995776,
+          "external": 17442549
         },
         "end": {
-          "rss": 310312960,
-          "heapUsed": 50416080,
-          "heapTotal": 186130432,
-          "external": 4610453
+          "rss": 293490688,
+          "heapUsed": 40697984,
+          "heapTotal": 172060672,
+          "external": 4085259
         },
         "peak": {
-          "rss": 310312960,
-          "heapUsed": 116481864,
-          "heapTotal": 186130432,
-          "external": 17441368
+          "rss": 293490688,
+          "heapUsed": 50596224,
+          "heapTotal": 177995776,
+          "external": 17442549
         },
         "sustainedGrowthPasses": 3,
         "observedAt": "complete-pass-boundary"
@@ -636,39 +636,39 @@
       "formatProfile": "base",
       "round": 6,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 274.618652000004,
+      "warmupMilliseconds": 283.98158299999704,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 301.3648329999985,
+      "actualElapsedMilliseconds": 313.0266770000055,
       "singlePassExceededTarget": false,
       "passes": 2,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 2088,
-      "seconds": 0.3013648329999985,
-      "throughput": 6928.479276147029,
-      "nanosecondsPerOperation": 144331.8165708805,
+      "seconds": 0.3130266770000055,
+      "throughput": 6670.358002746083,
+      "nanosecondsPerOperation": 149916.99090038578,
       "checksum": 5171796,
       "memory": {
         "start": {
-          "rss": 272642048,
-          "heapUsed": 50534312,
-          "heapTotal": 176947200,
-          "external": 17442341
+          "rss": 271679488,
+          "heapUsed": 50540496,
+          "heapTotal": 177471488,
+          "external": 17442549
         },
         "end": {
-          "rss": 296476672,
-          "heapUsed": 40466224,
+          "rss": 297857024,
+          "heapUsed": 40657968,
           "heapTotal": 172322816,
-          "external": 4085051
+          "external": 4085259
         },
         "peak": {
-          "rss": 296476672,
-          "heapUsed": 50534312,
-          "heapTotal": 176947200,
-          "external": 17442341
+          "rss": 297857024,
+          "heapUsed": 50540496,
+          "heapTotal": 177471488,
+          "external": 17442549
         },
         "sustainedGrowthPasses": 0,
         "observedAt": "complete-pass-boundary"
@@ -688,39 +688,39 @@
       "formatProfile": "base",
       "round": 6,
       "warmupMinimumMilliseconds": 100,
-      "warmupMilliseconds": 454.04778599999895,
+      "warmupMilliseconds": 499.0124089999965,
       "warmupPasses": 1,
       "targetSampleMilliseconds": 250,
       "minimumSampleMilliseconds": 175,
-      "actualElapsedMilliseconds": 328.57863500000553,
+      "actualElapsedMilliseconds": 342.17912899999965,
       "singlePassExceededTarget": true,
       "passes": 1,
       "corpusCases": 1044,
       "validCases": 610,
       "invalidCases": 434,
       "operations": 1044,
-      "seconds": 0.32857863500000556,
-      "throughput": 3177.3216173960377,
-      "nanosecondsPerOperation": 314730.4932950245,
+      "seconds": 0.34217912899999964,
+      "throughput": 3051.033542142195,
+      "nanosecondsPerOperation": 327757.7863984671,
       "checksum": 2585898,
       "memory": {
         "start": {
-          "rss": 273715200,
-          "heapUsed": 50603408,
-          "heapTotal": 177733632,
-          "external": 17442341
+          "rss": 233857024,
+          "heapUsed": 49075080,
+          "heapTotal": 181858304,
+          "external": 17441368
         },
         "end": {
-          "rss": 296472576,
-          "heapUsed": 70179464,
-          "heapTotal": 168914944,
-          "external": 4085002
+          "rss": 299528192,
+          "heapUsed": 75330392,
+          "heapTotal": 180883456,
+          "external": 4609988
         },
         "peak": {
-          "rss": 296472576,
-          "heapUsed": 86376608,
-          "heapTotal": 177733632,
-          "external": 17442341
+          "rss": 299528192,
+          "heapUsed": 91462864,
+          "heapTotal": 181858304,
+          "external": 17441368
         },
         "sustainedGrowthPasses": 0,
         "observedAt": "complete-pass-boundary"
